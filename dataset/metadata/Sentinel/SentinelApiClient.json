@@ -1,0 +1,4715 @@
+[
+    {
+        "name": "SentinelApiClient",
+        "category": "constructor_declaration",
+        "class": "SentinelApiClient",
+        "signature": "SentinelApiClient()",
+        "class_signature": "SentinelApiClient.SentinelApiClient()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        IOReactorConfig ioConfig = IOReactorConfig.custom().setConnectTimeout(3000).setSoTimeout(10000)\n            .setIoThreadCount(Runtime.getRuntime().availableProcessors() * 2).build();\n        httpClient = HttpAsyncClients.custom().setRedirectStrategy(new DefaultRedirectStrategy() {\n            @Override\n            protected boolean isRedirectable(final String method) {\n                return false;\n            }\n        }).setMaxConnTotal(4000).setMaxConnPerRoute(1000).setDefaultIOReactorConfig(ioConfig).build();\n        httpClient.start();\n    }",
+        "position": {
+            "line": 138,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "build",
+                "position": {
+                    "line": 140,
+                    "column": 79
+                }
+            },
+            {
+                "name": "setIoThreadCount",
+                "position": {
+                    "line": 140,
+                    "column": 14
+                }
+            },
+            {
+                "name": "setSoTimeout",
+                "position": {
+                    "line": 139,
+                    "column": 85
+                }
+            },
+            {
+                "name": "setConnectTimeout",
+                "position": {
+                    "line": 139,
+                    "column": 61
+                }
+            },
+            {
+                "name": "custom",
+                "position": {
+                    "line": 139,
+                    "column": 52
+                }
+            },
+            {
+                "name": "availableProcessors",
+                "position": {
+                    "line": 140,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getRuntime",
+                "position": {
+                    "line": 140,
+                    "column": 39
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 146,
+                    "column": 95
+                }
+            },
+            {
+                "name": "setDefaultIOReactorConfig",
+                "position": {
+                    "line": 146,
+                    "column": 59
+                }
+            },
+            {
+                "name": "setMaxConnPerRoute",
+                "position": {
+                    "line": 146,
+                    "column": 34
+                }
+            },
+            {
+                "name": "setMaxConnTotal",
+                "position": {
+                    "line": 146,
+                    "column": 12
+                }
+            },
+            {
+                "name": "setRedirectStrategy",
+                "position": {
+                    "line": 141,
+                    "column": 48
+                }
+            },
+            {
+                "name": "custom",
+                "position": {
+                    "line": 141,
+                    "column": 39
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 147,
+                    "column": 20
+                }
+            },
+            {
+                "name": "DefaultRedirectStrategy",
+                "position": {
+                    "line": 141,
+                    "column": 72
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "isRedirectable",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "isRedirectable(String method)",
+        "class_signature": "SentinelApiClient.isRedirectable(String method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n                return false;\n            }",
+        "position": {
+            "line": 143,
+            "column": 31
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "isSuccess",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "isSuccess(int statusCode)",
+        "class_signature": "SentinelApiClient.isSuccess(int statusCode)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "statusCode"
+            ]
+        ],
+        "methodBody": "{\n        return statusCode >= 200 && statusCode < 300;\n    }",
+        "position": {
+            "line": 150,
+            "column": 21
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 46
+    },
+    {
+        "name": "isCommandNotFound",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "isCommandNotFound(int statusCode, String body)",
+        "class_signature": "SentinelApiClient.isCommandNotFound(int statusCode, String body)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "statusCode"
+            ],
+            [
+                "String",
+                "body"
+            ]
+        ],
+        "methodBody": "{\n        return statusCode == 400 && StringUtil.isNotEmpty(body) && body.contains(CommandConstants.MSG_UNKNOWN_COMMAND_PREFIX);\n    }",
+        "position": {
+            "line": 154,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 155,
+                    "column": 48
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 155,
+                    "column": 73
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 47
+    },
+    {
+        "name": "isSupportPost",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "isSupportPost(String app, String ip, int port)",
+        "class_signature": "SentinelApiClient.isSupportPost(String app, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        return StringUtil.isNotEmpty(app) && Optional.ofNullable(appManagement.getDetailApp(app))\n                .flatMap(e -> e.getMachine(ip, port))\n                .flatMap(m -> VersionUtils.parseVersion(m.getVersion())\n                    .map(v -> v.greaterOrEqual(version160)))\n                .orElse(false);\n    }",
+        "position": {
+            "line": 158,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 159,
+                    "column": 27
+                }
+            },
+            {
+                "name": "orElse",
+                "position": {
+                    "line": 163,
+                    "column": 18
+                }
+            },
+            {
+                "name": "flatMap",
+                "position": {
+                    "line": 161,
+                    "column": 18
+                }
+            },
+            {
+                "name": "flatMap",
+                "position": {
+                    "line": 160,
+                    "column": 18
+                }
+            },
+            {
+                "name": "ofNullable",
+                "position": {
+                    "line": 159,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getDetailApp",
+                "position": {
+                    "line": 159,
+                    "column": 80
+                }
+            },
+            {
+                "name": "getMachine",
+                "position": {
+                    "line": 160,
+                    "column": 33
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 162,
+                    "column": 22
+                }
+            },
+            {
+                "name": "parseVersion",
+                "position": {
+                    "line": 161,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getVersion",
+                "position": {
+                    "line": 161,
+                    "column": 59
+                }
+            },
+            {
+                "name": "greaterOrEqual",
+                "position": {
+                    "line": 162,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 39
+    },
+    {
+        "name": "isSupportEnhancedContentType",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "isSupportEnhancedContentType(String app, String ip, int port)",
+        "class_signature": "SentinelApiClient.isSupportEnhancedContentType(String app, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        return StringUtil.isNotEmpty(app) && Optional.ofNullable(appManagement.getDetailApp(app))\n                .flatMap(e -> e.getMachine(ip, port))\n                .flatMap(m -> VersionUtils.parseVersion(m.getVersion())\n                    .map(v -> v.greaterOrEqual(version171)))\n                .orElse(false);\n    }",
+        "position": {
+            "line": 174,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 175,
+                    "column": 27
+                }
+            },
+            {
+                "name": "orElse",
+                "position": {
+                    "line": 179,
+                    "column": 18
+                }
+            },
+            {
+                "name": "flatMap",
+                "position": {
+                    "line": 177,
+                    "column": 18
+                }
+            },
+            {
+                "name": "flatMap",
+                "position": {
+                    "line": 176,
+                    "column": 18
+                }
+            },
+            {
+                "name": "ofNullable",
+                "position": {
+                    "line": 175,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getDetailApp",
+                "position": {
+                    "line": 175,
+                    "column": 80
+                }
+            },
+            {
+                "name": "getMachine",
+                "position": {
+                    "line": 176,
+                    "column": 33
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 178,
+                    "column": 22
+                }
+            },
+            {
+                "name": "parseVersion",
+                "position": {
+                    "line": 177,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getVersion",
+                "position": {
+                    "line": 177,
+                    "column": 59
+                }
+            },
+            {
+                "name": "greaterOrEqual",
+                "position": {
+                    "line": 178,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 43
+    },
+    {
+        "name": "queryString",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "queryString(Map<String, String> params)",
+        "class_signature": "SentinelApiClient.queryString(Map<String, String> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Map<String, String>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        StringBuilder queryStringBuilder = new StringBuilder();\n        for (Entry<String, String> entry : params.entrySet()) {\n            if (StringUtil.isEmpty(entry.getValue())) {\n                continue;\n            }\n            String name = urlEncode(entry.getKey());\n            String value = urlEncode(entry.getValue());\n            if (name != null && value != null) {\n                if (queryStringBuilder.length() > 0) {\n                    queryStringBuilder.append('&');\n                }\n                queryStringBuilder.append(name).append('=').append(value);\n            }\n        }\n        return queryStringBuilder;\n    }",
+        "position": {
+            "line": 182,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 184,
+                    "column": 51
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 185,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 185,
+                    "column": 42
+                }
+            },
+            {
+                "name": "urlEncode",
+                "position": {
+                    "line": 188,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 188,
+                    "column": 43
+                }
+            },
+            {
+                "name": "urlEncode",
+                "position": {
+                    "line": 189,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 189,
+                    "column": 44
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 191,
+                    "column": 40
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 192,
+                    "column": 40
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 194,
+                    "column": 61
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 194,
+                    "column": 49
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 194,
+                    "column": 36
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 183,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.urlEncode(String str)",
+            "SentinelApiClient.urlEncode(String str)"
+        ],
+        "priority": 40
+    },
+    {
+        "name": "postRequest",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "postRequest(String url, Map<String, String> params, boolean supportEnhancedContentType)",
+        "class_signature": "SentinelApiClient.postRequest(String url, Map<String, String> params, boolean supportEnhancedContentType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Map<String, String>",
+                "params"
+            ],
+            [
+                "boolean",
+                "supportEnhancedContentType"
+            ]
+        ],
+        "methodBody": "{\n        HttpPost httpPost = new HttpPost(url);\n        if (params != null && params.size() > 0) {\n            List<NameValuePair> list = new ArrayList<>(params.size());\n            for (Entry<String, String> entry : params.entrySet()) {\n                list.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));\n            }\n            httpPost.setEntity(new UrlEncodedFormEntity(list, Consts.UTF_8));\n            if (!supportEnhancedContentType) {\n                httpPost.setHeader(HTTP_HEADER_CONTENT_TYPE, HTTP_HEADER_CONTENT_TYPE_URLENCODED);\n            }\n        }\n        return httpPost;\n    }",
+        "position": {
+            "line": 208,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 210,
+                    "column": 38
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 211,
+                    "column": 63
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 212,
+                    "column": 55
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 213,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 213,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 213,
+                    "column": 71
+                }
+            },
+            {
+                "name": "setEntity",
+                "position": {
+                    "line": 215,
+                    "column": 22
+                }
+            },
+            {
+                "name": "setHeader",
+                "position": {
+                    "line": 217,
+                    "column": 26
+                }
+            },
+            {
+                "name": "HttpPost",
+                "position": {
+                    "line": 209,
+                    "column": 33
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 211,
+                    "column": 44
+                }
+            },
+            {
+                "name": "BasicNameValuePair",
+                "position": {
+                    "line": 213,
+                    "column": 30
+                }
+            },
+            {
+                "name": "UrlEncodedFormEntity",
+                "position": {
+                    "line": 215,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 42
+    },
+    {
+        "name": "urlEncode",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "urlEncode(String str)",
+        "class_signature": "SentinelApiClient.urlEncode(String str)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "str"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            return URLEncoder.encode(str, DEFAULT_CHARSET.name());\n        } catch (UnsupportedEncodingException e) {\n            logger.info(\"encode string error: {}\", str, e);\n            return null;\n        }\n    }",
+        "position": {
+            "line": 223,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encode",
+                "position": {
+                    "line": 225,
+                    "column": 31
+                }
+            },
+            {
+                "name": "name",
+                "position": {
+                    "line": 225,
+                    "column": 59
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 227,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 44
+    },
+    {
+        "name": "getBody",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "getBody(HttpResponse response)",
+        "class_signature": "SentinelApiClient.getBody(HttpResponse response)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "HttpResponse",
+                "response"
+            ]
+        ],
+        "methodBody": "{\n        Charset charset = null;\n        try {\n            String contentTypeStr = response.getFirstHeader(HTTP_HEADER_CONTENT_TYPE).getValue();\n            if (StringUtil.isNotEmpty(contentTypeStr)) {\n                ContentType contentType = ContentType.parse(contentTypeStr);\n                charset = contentType.getCharset();\n            }\n        } catch (Exception ignore) {\n        }\n        return EntityUtils.toString(response.getEntity(), charset != null ? charset : DEFAULT_CHARSET);\n    }",
+        "position": {
+            "line": 232,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 235,
+                    "column": 87
+                }
+            },
+            {
+                "name": "getFirstHeader",
+                "position": {
+                    "line": 235,
+                    "column": 46
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 236,
+                    "column": 28
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 237,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getCharset",
+                "position": {
+                    "line": 238,
+                    "column": 39
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 242,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getEntity",
+                "position": {
+                    "line": 242,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 45
+    },
+    {
+        "name": "executeCommand",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "executeCommand(String ip, int port, String api, boolean useHttpPost)",
+        "class_signature": "SentinelApiClient.executeCommand(String ip, int port, String api, boolean useHttpPost)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "api"
+            ],
+            [
+                "boolean",
+                "useHttpPost"
+            ]
+        ],
+        "methodBody": "{\n        return executeCommand(ip, port, api, null, useHttpPost);\n    }",
+        "position": {
+            "line": 253,
+            "column": 39
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 254,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 34
+    },
+    {
+        "name": "executeCommand",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "executeCommand(String ip, int port, String api, Map<String, String> params, boolean useHttpPost)",
+        "class_signature": "SentinelApiClient.executeCommand(String ip, int port, String api, Map<String, String> params, boolean useHttpPost)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "api"
+            ],
+            [
+                "Map<String, String>",
+                "params"
+            ],
+            [
+                "boolean",
+                "useHttpPost"
+            ]
+        ],
+        "methodBody": "{\n        return executeCommand(null, ip, port, api, params, useHttpPost);\n    }",
+        "position": {
+            "line": 266,
+            "column": 39
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 267,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 37
+    },
+    {
+        "name": "executeCommand",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)",
+        "class_signature": "SentinelApiClient.executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "api"
+            ],
+            [
+                "Map<String, String>",
+                "params"
+            ],
+            [
+                "boolean",
+                "useHttpPost"
+            ]
+        ],
+        "methodBody": "{\n        CompletableFuture<String> future = new CompletableFuture<>();\n        if (StringUtil.isBlank(ip) || StringUtil.isBlank(api)) {\n            future.completeExceptionally(new IllegalArgumentException(\"Bad URL or command name\"));\n            return future;\n        }\n        if (!InetAddressUtils.isIPv4Address(ip) && !InetAddressUtils.isIPv6Address(ip)) {\n            future.completeExceptionally(new IllegalArgumentException(\"Bad IP\"));\n            return future;\n        }\n        if (!StringUtil.isEmpty(app) && !appManagement.isValidMachineOfApp(app, ip)) {\n            future.completeExceptionally(new IllegalArgumentException(\"Given ip does not belong to given app\"));\n            return future;\n        }\n        StringBuilder urlBuilder = new StringBuilder();\n        urlBuilder.append(\"http://\");\n        urlBuilder.append(ip).append(':').append(port).append('/').append(api);\n        if (params == null) {\n            params = Collections.emptyMap();\n        }\n        if (!useHttpPost || !isSupportPost(app, ip, port)) {\n            // Using GET in older versions, append parameters after url\n            if (!params.isEmpty()) {\n                if (urlBuilder.indexOf(\"?\") == -1) {\n                    urlBuilder.append('?');\n                } else {\n                    urlBuilder.append('&');\n                }\n                urlBuilder.append(queryString(params));\n            }\n            return executeCommand(new HttpGet(urlBuilder.toString()));\n        } else {\n            // Using POST\n            return executeCommand(\n                    postRequest(urlBuilder.toString(), params, isSupportEnhancedContentType(app, ip, port)));\n        }\n    }",
+        "position": {
+            "line": 280,
+            "column": 39
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 282,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 282,
+                    "column": 50
+                }
+            },
+            {
+                "name": "completeExceptionally",
+                "position": {
+                    "line": 283,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isIPv4Address",
+                "position": {
+                    "line": 286,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isIPv6Address",
+                "position": {
+                    "line": 286,
+                    "column": 70
+                }
+            },
+            {
+                "name": "completeExceptionally",
+                "position": {
+                    "line": 287,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 290,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isValidMachineOfApp",
+                "position": {
+                    "line": 290,
+                    "column": 56
+                }
+            },
+            {
+                "name": "completeExceptionally",
+                "position": {
+                    "line": 291,
+                    "column": 20
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 295,
+                    "column": 20
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 296,
+                    "column": 68
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 296,
+                    "column": 56
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 296,
+                    "column": 43
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 296,
+                    "column": 31
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 296,
+                    "column": 20
+                }
+            },
+            {
+                "name": "emptyMap",
+                "position": {
+                    "line": 298,
+                    "column": 34
+                }
+            },
+            {
+                "name": "isSupportPost",
+                "position": {
+                    "line": 300,
+                    "column": 30
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 302,
+                    "column": 25
+                }
+            },
+            {
+                "name": "indexOf",
+                "position": {
+                    "line": 303,
+                    "column": 32
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 304,
+                    "column": 32
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 306,
+                    "column": 32
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 308,
+                    "column": 28
+                }
+            },
+            {
+                "name": "queryString",
+                "position": {
+                    "line": 308,
+                    "column": 35
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 310,
+                    "column": 20
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 310,
+                    "column": 58
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 313,
+                    "column": 20
+                }
+            },
+            {
+                "name": "postRequest",
+                "position": {
+                    "line": 314,
+                    "column": 21
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 314,
+                    "column": 44
+                }
+            },
+            {
+                "name": "isSupportEnhancedContentType",
+                "position": {
+                    "line": 314,
+                    "column": 64
+                }
+            },
+            {
+                "name": "CompletableFuture<>",
+                "position": {
+                    "line": 281,
+                    "column": 48
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 283,
+                    "column": 46
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 287,
+                    "column": 46
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 291,
+                    "column": 46
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 294,
+                    "column": 40
+                }
+            },
+            {
+                "name": "HttpGet",
+                "position": {
+                    "line": 310,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.isSupportPost(String app, String ip, int port)",
+            "SentinelApiClient.queryString(Map<String, String> params)",
+            "SentinelApiClient.executeCommand(HttpUriRequest request)",
+            "SentinelApiClient.executeCommand(HttpUriRequest request)",
+            "SentinelApiClient.postRequest(String url, Map<String, String> params, boolean supportEnhancedContentType)",
+            "SentinelApiClient.isSupportEnhancedContentType(String app, String ip, int port)"
+        ],
+        "priority": 38
+    },
+    {
+        "name": "executeCommand",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "executeCommand(HttpUriRequest request)",
+        "class_signature": "SentinelApiClient.executeCommand(HttpUriRequest request)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "HttpUriRequest",
+                "request"
+            ]
+        ],
+        "methodBody": "{\n        CompletableFuture<String> future = new CompletableFuture<>();\n        httpClient.execute(request, new FutureCallback<HttpResponse>() {\n            @Override\n            public void completed(final HttpResponse response) {\n                int statusCode = response.getStatusLine().getStatusCode();\n                try {\n                    String value = getBody(response);\n                    if (isSuccess(statusCode)) {\n                        future.complete(value);\n                    } else {\n                        if (isCommandNotFound(statusCode, value)) {\n                            future.completeExceptionally(new CommandNotFoundException(request.getURI().getPath()));\n                        } else {\n                            future.completeExceptionally(new CommandFailedException(value));\n                        }\n                    }\n\n                } catch (Exception ex) {\n                    future.completeExceptionally(ex);\n                    logger.error(\"HTTP request failed: {}\", request.getURI().toString(), ex);\n                }\n            }\n\n            @Override\n            public void failed(final Exception ex) {\n                future.completeExceptionally(ex);\n                logger.error(\"HTTP request failed: {}\", request.getURI().toString(), ex);\n            }\n\n            @Override\n            public void cancelled() {\n                future.complete(null);\n            }\n        });\n        return future;\n    }",
+        "position": {
+            "line": 318,
+            "column": 39
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 320,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getStatusCode",
+                "position": {
+                    "line": 323,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getStatusLine",
+                "position": {
+                    "line": 323,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getBody",
+                "position": {
+                    "line": 325,
+                    "column": 36
+                }
+            },
+            {
+                "name": "isSuccess",
+                "position": {
+                    "line": 326,
+                    "column": 25
+                }
+            },
+            {
+                "name": "complete",
+                "position": {
+                    "line": 327,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isCommandNotFound",
+                "position": {
+                    "line": 329,
+                    "column": 29
+                }
+            },
+            {
+                "name": "completeExceptionally",
+                "position": {
+                    "line": 330,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getPath",
+                "position": {
+                    "line": 330,
+                    "column": 104
+                }
+            },
+            {
+                "name": "getURI",
+                "position": {
+                    "line": 330,
+                    "column": 95
+                }
+            },
+            {
+                "name": "completeExceptionally",
+                "position": {
+                    "line": 332,
+                    "column": 36
+                }
+            },
+            {
+                "name": "completeExceptionally",
+                "position": {
+                    "line": 337,
+                    "column": 28
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 338,
+                    "column": 28
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 338,
+                    "column": 78
+                }
+            },
+            {
+                "name": "getURI",
+                "position": {
+                    "line": 338,
+                    "column": 69
+                }
+            },
+            {
+                "name": "completeExceptionally",
+                "position": {
+                    "line": 344,
+                    "column": 24
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 345,
+                    "column": 24
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 345,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getURI",
+                "position": {
+                    "line": 345,
+                    "column": 65
+                }
+            },
+            {
+                "name": "complete",
+                "position": {
+                    "line": 350,
+                    "column": 24
+                }
+            },
+            {
+                "name": "CompletableFuture<>",
+                "position": {
+                    "line": 319,
+                    "column": 48
+                }
+            },
+            {
+                "name": "FutureCallback<HttpResponse>",
+                "position": {
+                    "line": 320,
+                    "column": 41
+                }
+            },
+            {
+                "name": "CommandNotFoundException",
+                "position": {
+                    "line": 330,
+                    "column": 62
+                }
+            },
+            {
+                "name": "CommandFailedException",
+                "position": {
+                    "line": 332,
+                    "column": 62
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.getBody(HttpResponse response)",
+            "SentinelApiClient.isSuccess(int statusCode)",
+            "SentinelApiClient.isCommandNotFound(int statusCode, String body)"
+        ],
+        "priority": 41
+    },
+    {
+        "name": "completed",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "completed(HttpResponse response)",
+        "class_signature": "SentinelApiClient.completed(HttpResponse response)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "HttpResponse",
+                "response"
+            ]
+        ],
+        "methodBody": "{\n                int statusCode = response.getStatusLine().getStatusCode();\n                try {\n                    String value = getBody(response);\n                    if (isSuccess(statusCode)) {\n                        future.complete(value);\n                    } else {\n                        if (isCommandNotFound(statusCode, value)) {\n                            future.completeExceptionally(new CommandNotFoundException(request.getURI().getPath()));\n                        } else {\n                            future.completeExceptionally(new CommandFailedException(value));\n                        }\n                    }\n\n                } catch (Exception ex) {\n                    future.completeExceptionally(ex);\n                    logger.error(\"HTTP request failed: {}\", request.getURI().toString(), ex);\n                }\n            }",
+        "position": {
+            "line": 322,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getStatusCode",
+                "position": {
+                    "line": 323,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getStatusLine",
+                "position": {
+                    "line": 323,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getBody",
+                "position": {
+                    "line": 325,
+                    "column": 36
+                }
+            },
+            {
+                "name": "isSuccess",
+                "position": {
+                    "line": 326,
+                    "column": 25
+                }
+            },
+            {
+                "name": "complete",
+                "position": {
+                    "line": 327,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isCommandNotFound",
+                "position": {
+                    "line": 329,
+                    "column": 29
+                }
+            },
+            {
+                "name": "completeExceptionally",
+                "position": {
+                    "line": 330,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getPath",
+                "position": {
+                    "line": 330,
+                    "column": 104
+                }
+            },
+            {
+                "name": "getURI",
+                "position": {
+                    "line": 330,
+                    "column": 95
+                }
+            },
+            {
+                "name": "completeExceptionally",
+                "position": {
+                    "line": 332,
+                    "column": 36
+                }
+            },
+            {
+                "name": "completeExceptionally",
+                "position": {
+                    "line": 337,
+                    "column": 28
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 338,
+                    "column": 28
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 338,
+                    "column": 78
+                }
+            },
+            {
+                "name": "getURI",
+                "position": {
+                    "line": 338,
+                    "column": 69
+                }
+            },
+            {
+                "name": "CommandNotFoundException",
+                "position": {
+                    "line": 330,
+                    "column": 62
+                }
+            },
+            {
+                "name": "CommandFailedException",
+                "position": {
+                    "line": 332,
+                    "column": 62
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.getBody(HttpResponse response)",
+            "SentinelApiClient.isSuccess(int statusCode)",
+            "SentinelApiClient.isCommandNotFound(int statusCode, String body)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "failed",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "failed(Exception ex)",
+        "class_signature": "SentinelApiClient.failed(Exception ex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Exception",
+                "ex"
+            ]
+        ],
+        "methodBody": "{\n                future.completeExceptionally(ex);\n                logger.error(\"HTTP request failed: {}\", request.getURI().toString(), ex);\n            }",
+        "position": {
+            "line": 343,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "completeExceptionally",
+                "position": {
+                    "line": 344,
+                    "column": 24
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 345,
+                    "column": 24
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 345,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getURI",
+                "position": {
+                    "line": 345,
+                    "column": 65
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "cancelled",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "cancelled()",
+        "class_signature": "SentinelApiClient.cancelled()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n                future.complete(null);\n            }",
+        "position": {
+            "line": 349,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "complete",
+                "position": {
+                    "line": 350,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "close",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "close()",
+        "class_signature": "SentinelApiClient.close()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        httpClient.close();\n    }",
+        "position": {
+            "line": 356,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "close",
+                "position": {
+                    "line": 357,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "fetchItemsAsync",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchItemsAsync(String ip, int port, String api, String type, Class<T> ruleType)",
+        "class_signature": "SentinelApiClient.fetchItemsAsync(String ip, int port, String api, String type, Class<T> ruleType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "api"
+            ],
+            [
+                "String",
+                "type"
+            ],
+            [
+                "Class<T>",
+                "ruleType"
+            ]
+        ],
+        "methodBody": "{\n        AssertUtil.notEmpty(ip, \"Bad machine IP\");\n        AssertUtil.isTrue(port > 0, \"Bad machine port\");\n        Map<String, String> params = null;\n        if (StringUtil.isNotEmpty(type)) {\n            params = new HashMap<>(1);\n            params.put(\"type\", type);\n        }\n        return executeCommand(ip, port, api, params, false)\n                .thenApply(json -> JSON.parseArray(json, ruleType));\n    }",
+        "position": {
+            "line": 361,
+            "column": 44
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 362,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isTrue",
+                "position": {
+                    "line": 363,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 365,
+                    "column": 24
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 367,
+                    "column": 20
+                }
+            },
+            {
+                "name": "thenApply",
+                "position": {
+                    "line": 370,
+                    "column": 18
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 369,
+                    "column": 16
+                }
+            },
+            {
+                "name": "parseArray",
+                "position": {
+                    "line": 370,
+                    "column": 41
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 366,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 36
+    },
+    {
+        "name": "fetchItems",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchItems(String ip, int port, String api, String type, Class<T> ruleType)",
+        "class_signature": "SentinelApiClient.fetchItems(String ip, int port, String api, String type, Class<T> ruleType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "api"
+            ],
+            [
+                "String",
+                "type"
+            ],
+            [
+                "Class<T>",
+                "ruleType"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            AssertUtil.notEmpty(ip, \"Bad machine IP\");\n            AssertUtil.isTrue(port > 0, \"Bad machine port\");\n            Map<String, String> params = null;\n            if (StringUtil.isNotEmpty(type)) {\n                params = new HashMap<>(1);\n                params.put(\"type\", type);\n            }\n            return fetchItemsAsync(ip, port, api, type, ruleType).get();\n        } catch (InterruptedException | ExecutionException e) {\n            logger.error(\"Error when fetching items from api: {} -> {}\", api, type, e);\n            return null;\n        } catch (Exception e) {\n            logger.error(\"Error when fetching items: {} -> {}\", api, type, e);\n            return null;\n        }\n    }",
+        "position": {
+            "line": 374,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 376,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isTrue",
+                "position": {
+                    "line": 377,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 379,
+                    "column": 28
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 381,
+                    "column": 24
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 383,
+                    "column": 67
+                }
+            },
+            {
+                "name": "fetchItemsAsync",
+                "position": {
+                    "line": 383,
+                    "column": 20
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 385,
+                    "column": 20
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 388,
+                    "column": 20
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 380,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.fetchItemsAsync(String ip, int port, String api, String type, Class<T> ruleType)"
+        ],
+        "priority": 35
+    },
+    {
+        "name": "fetchRules",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchRules(String ip, int port, String type, Class<T> ruleType)",
+        "class_signature": "SentinelApiClient.fetchRules(String ip, int port, String type, Class<T> ruleType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "type"
+            ],
+            [
+                "Class<T>",
+                "ruleType"
+            ]
+        ],
+        "methodBody": "{\n        return fetchItems(ip, port, GET_RULES_PATH, type, ruleType);\n    }",
+        "position": {
+            "line": 393,
+            "column": 38
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "fetchItems",
+                "position": {
+                    "line": 394,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.fetchItems(String ip, int port, String api, String type, Class<T> ruleType)"
+        ],
+        "priority": 31
+    },
+    {
+        "name": "setRules",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "setRules(String app, String ip, int port, String type, List<? extends RuleEntity> entities)",
+        "class_signature": "SentinelApiClient.setRules(String app, String ip, int port, String type, List<? extends RuleEntity> entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "type"
+            ],
+            [
+                "List<? extends RuleEntity>",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        if (entities == null) {\n            return true;\n        }\n        try {\n            AssertUtil.notEmpty(app, \"Bad app name\");\n            AssertUtil.notEmpty(ip, \"Bad machine IP\");\n            AssertUtil.isTrue(port > 0, \"Bad machine port\");\n            String data = JSON.toJSONString(\n                    entities.stream().map(r -> r.toRule()).collect(Collectors.toList()));\n            Map<String, String> params = new HashMap<>(2);\n            params.put(\"type\", type);\n            params.put(\"data\", data);\n            String result = executeCommand(app, ip, port, SET_RULES_PATH, params, true).get();\n            logger.info(\"setRules result: {}, type={}\", result, type);\n            return true;\n        } catch (InterruptedException e) {\n            logger.warn(\"setRules API failed: {}\", type, e);\n            return false;\n        } catch (ExecutionException e) {\n            logger.warn(\"setRules API failed: {}\", type, e.getCause());\n            return false;\n        } catch (Exception e) {\n            logger.error(\"setRules API failed, type={}\", type, e);\n            return false;\n        }\n    }",
+        "position": {
+            "line": 397,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 402,
+                    "column": 24
+                }
+            },
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 403,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isTrue",
+                "position": {
+                    "line": 404,
+                    "column": 24
+                }
+            },
+            {
+                "name": "toJSONString",
+                "position": {
+                    "line": 405,
+                    "column": 32
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 406,
+                    "column": 60
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 406,
+                    "column": 39
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 406,
+                    "column": 30
+                }
+            },
+            {
+                "name": "toRule",
+                "position": {
+                    "line": 406,
+                    "column": 50
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 406,
+                    "column": 79
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 408,
+                    "column": 20
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 409,
+                    "column": 20
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 410,
+                    "column": 89
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 410,
+                    "column": 29
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 411,
+                    "column": 20
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 414,
+                    "column": 20
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 417,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getCause",
+                "position": {
+                    "line": 417,
+                    "column": 60
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 420,
+                    "column": 20
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 407,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 33
+    },
+    {
+        "name": "setRulesAsync",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "setRulesAsync(String app, String ip, int port, String type, List<? extends RuleEntity> entities)",
+        "class_signature": "SentinelApiClient.setRulesAsync(String app, String ip, int port, String type, List<? extends RuleEntity> entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "type"
+            ],
+            [
+                "List<? extends RuleEntity>",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            AssertUtil.notNull(entities, \"rules cannot be null\");\n            AssertUtil.notEmpty(app, \"Bad app name\");\n            AssertUtil.notEmpty(ip, \"Bad machine IP\");\n            AssertUtil.isTrue(port > 0, \"Bad machine port\");\n            String data = JSON.toJSONString(\n                entities.stream().map(r -> r.toRule()).collect(Collectors.toList()));\n            Map<String, String> params = new HashMap<>(2);\n            params.put(\"type\", type);\n            params.put(\"data\", data);\n            return executeCommand(app, ip, port, SET_RULES_PATH, params, true)\n                .thenCompose(r -> {\n                    if (\"success\".equalsIgnoreCase(r.trim())) {\n                        return CompletableFuture.completedFuture(null);\n                    }\n                    return AsyncUtils.newFailedFuture(new CommandFailedException(r));\n                });\n        } catch (Exception e) {\n            logger.error(\"setRulesAsync API failed, type={}\", type, e);\n            return AsyncUtils.newFailedFuture(e);\n        }\n    }",
+        "position": {
+            "line": 425,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notNull",
+                "position": {
+                    "line": 427,
+                    "column": 24
+                }
+            },
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 428,
+                    "column": 24
+                }
+            },
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 429,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isTrue",
+                "position": {
+                    "line": 430,
+                    "column": 24
+                }
+            },
+            {
+                "name": "toJSONString",
+                "position": {
+                    "line": 431,
+                    "column": 32
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 432,
+                    "column": 56
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 432,
+                    "column": 35
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 432,
+                    "column": 26
+                }
+            },
+            {
+                "name": "toRule",
+                "position": {
+                    "line": 432,
+                    "column": 46
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 432,
+                    "column": 75
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 434,
+                    "column": 20
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 435,
+                    "column": 20
+                }
+            },
+            {
+                "name": "thenCompose",
+                "position": {
+                    "line": 437,
+                    "column": 18
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 436,
+                    "column": 20
+                }
+            },
+            {
+                "name": "equalsIgnoreCase",
+                "position": {
+                    "line": 438,
+                    "column": 35
+                }
+            },
+            {
+                "name": "trim",
+                "position": {
+                    "line": 438,
+                    "column": 54
+                }
+            },
+            {
+                "name": "completedFuture",
+                "position": {
+                    "line": 439,
+                    "column": 50
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 441,
+                    "column": 39
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 444,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 445,
+                    "column": 31
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 433,
+                    "column": 46
+                }
+            },
+            {
+                "name": "CommandFailedException",
+                "position": {
+                    "line": 441,
+                    "column": 59
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 32
+    },
+    {
+        "name": "fetchResourceOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchResourceOfMachine(String ip, int port, String type)",
+        "class_signature": "SentinelApiClient.fetchResourceOfMachine(String ip, int port, String type)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "type"
+            ]
+        ],
+        "methodBody": "{\n        return fetchItems(ip, port, RESOURCE_URL_PATH, type, NodeVo.class);\n    }",
+        "position": {
+            "line": 449,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "fetchItems",
+                "position": {
+                    "line": 450,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.fetchItems(String ip, int port, String api, String type, Class<T> ruleType)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "fetchClusterNodeOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchClusterNodeOfMachine(String ip, int port, boolean includeZero)",
+        "class_signature": "SentinelApiClient.fetchClusterNodeOfMachine(String ip, int port, boolean includeZero)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "boolean",
+                "includeZero"
+            ]
+        ],
+        "methodBody": "{\n        String type = \"notZero\";\n        if (includeZero) {\n            type = \"zero\";\n        }\n        return fetchItems(ip, port, CLUSTER_NODE_PATH, type, NodeVo.class);\n    }",
+        "position": {
+            "line": 461,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "fetchItems",
+                "position": {
+                    "line": 466,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.fetchItems(String ip, int port, String api, String type, Class<T> ruleType)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "fetchFlowRuleOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchFlowRuleOfMachine(String app, String ip, int port)",
+        "class_signature": "SentinelApiClient.fetchFlowRuleOfMachine(String app, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        List<FlowRule> rules = fetchRules(ip, port, FLOW_RULE_TYPE, FlowRule.class);\n        if (rules != null) {\n            return rules.stream().map(rule -> FlowRuleEntity.fromFlowRule(app, ip, port, rule))\n                .collect(Collectors.toList());\n        } else {\n            return null;\n        }\n    }",
+        "position": {
+            "line": 469,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "fetchRules",
+                "position": {
+                    "line": 470,
+                    "column": 32
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 473,
+                    "column": 18
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 472,
+                    "column": 35
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 472,
+                    "column": 26
+                }
+            },
+            {
+                "name": "fromFlowRule",
+                "position": {
+                    "line": 472,
+                    "column": 62
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 473,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.fetchRules(String ip, int port, String type, Class<T> ruleType)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "fetchDegradeRuleOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchDegradeRuleOfMachine(String app, String ip, int port)",
+        "class_signature": "SentinelApiClient.fetchDegradeRuleOfMachine(String app, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        List<DegradeRule> rules = fetchRules(ip, port, DEGRADE_RULE_TYPE, DegradeRule.class);\n        if (rules != null) {\n            return rules.stream().map(rule -> DegradeRuleEntity.fromDegradeRule(app, ip, port, rule))\n                .collect(Collectors.toList());\n        } else {\n            return null;\n        }\n    }",
+        "position": {
+            "line": 479,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "fetchRules",
+                "position": {
+                    "line": 480,
+                    "column": 35
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 483,
+                    "column": 18
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 482,
+                    "column": 35
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 482,
+                    "column": 26
+                }
+            },
+            {
+                "name": "fromDegradeRule",
+                "position": {
+                    "line": 482,
+                    "column": 65
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 483,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.fetchRules(String ip, int port, String type, Class<T> ruleType)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "fetchSystemRuleOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchSystemRuleOfMachine(String app, String ip, int port)",
+        "class_signature": "SentinelApiClient.fetchSystemRuleOfMachine(String app, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        List<SystemRule> rules = fetchRules(ip, port, SYSTEM_RULE_TYPE, SystemRule.class);\n        if (rules != null) {\n            return rules.stream().map(rule -> SystemRuleEntity.fromSystemRule(app, ip, port, rule))\n                .collect(Collectors.toList());\n        } else {\n            return null;\n        }\n    }",
+        "position": {
+            "line": 489,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "fetchRules",
+                "position": {
+                    "line": 490,
+                    "column": 34
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 493,
+                    "column": 18
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 492,
+                    "column": 35
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 492,
+                    "column": 26
+                }
+            },
+            {
+                "name": "fromSystemRule",
+                "position": {
+                    "line": 492,
+                    "column": 64
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 493,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.fetchRules(String ip, int port, String type, Class<T> ruleType)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "fetchParamFlowRulesOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchParamFlowRulesOfMachine(String app, String ip, int port)",
+        "class_signature": "SentinelApiClient.fetchParamFlowRulesOfMachine(String app, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            AssertUtil.notEmpty(app, \"Bad app name\");\n            AssertUtil.notEmpty(ip, \"Bad machine IP\");\n            AssertUtil.isTrue(port > 0, \"Bad machine port\");\n            return fetchItemsAsync(ip, port, GET_PARAM_RULE_PATH, null, ParamFlowRule.class)\n                .thenApply(rules -> rules.stream()\n                    .map(e -> ParamFlowRuleEntity.fromParamFlowRule(app, ip, port, e))\n                    .collect(Collectors.toList())\n                );\n        } catch (Exception e) {\n            logger.error(\"Error when fetching parameter flow rules\", e);\n            return AsyncUtils.newFailedFuture(e);\n        }\n    }",
+        "position": {
+            "line": 508,
+            "column": 57
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 510,
+                    "column": 24
+                }
+            },
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 511,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isTrue",
+                "position": {
+                    "line": 512,
+                    "column": 24
+                }
+            },
+            {
+                "name": "thenApply",
+                "position": {
+                    "line": 514,
+                    "column": 18
+                }
+            },
+            {
+                "name": "fetchItemsAsync",
+                "position": {
+                    "line": 513,
+                    "column": 20
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 516,
+                    "column": 22
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 515,
+                    "column": 22
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 514,
+                    "column": 43
+                }
+            },
+            {
+                "name": "fromParamFlowRule",
+                "position": {
+                    "line": 515,
+                    "column": 51
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 516,
+                    "column": 41
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 519,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 520,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.fetchItemsAsync(String ip, int port, String api, String type, Class<T> ruleType)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "fetchAuthorityRulesOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchAuthorityRulesOfMachine(String app, String ip, int port)",
+        "class_signature": "SentinelApiClient.fetchAuthorityRulesOfMachine(String app, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        AssertUtil.notEmpty(app, \"Bad app name\");\n        AssertUtil.notEmpty(ip, \"Bad machine IP\");\n        AssertUtil.isTrue(port > 0, \"Bad machine port\");\n        Map<String, String> params = new HashMap<>(1);\n        params.put(\"type\", AUTHORITY_TYPE);\n        List<AuthorityRule> rules = fetchRules(ip, port, AUTHORITY_TYPE, AuthorityRule.class);\n        return Optional.ofNullable(rules).map(r -> r.stream()\n                    .map(e -> AuthorityRuleEntity.fromAuthorityRule(app, ip, port, e))\n                    .collect(Collectors.toList())\n                ).orElse(null);\n    }",
+        "position": {
+            "line": 533,
+            "column": 38
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 534,
+                    "column": 20
+                }
+            },
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 535,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isTrue",
+                "position": {
+                    "line": 536,
+                    "column": 20
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 538,
+                    "column": 16
+                }
+            },
+            {
+                "name": "fetchRules",
+                "position": {
+                    "line": 539,
+                    "column": 37
+                }
+            },
+            {
+                "name": "orElse",
+                "position": {
+                    "line": 543,
+                    "column": 19
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 540,
+                    "column": 43
+                }
+            },
+            {
+                "name": "ofNullable",
+                "position": {
+                    "line": 540,
+                    "column": 25
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 542,
+                    "column": 22
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 541,
+                    "column": 22
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 540,
+                    "column": 54
+                }
+            },
+            {
+                "name": "fromAuthorityRule",
+                "position": {
+                    "line": 541,
+                    "column": 51
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 542,
+                    "column": 41
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 537,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.fetchRules(String ip, int port, String type, Class<T> ruleType)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "setFlowRuleOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "setFlowRuleOfMachine(String app, String ip, int port, List<FlowRuleEntity> rules)",
+        "class_signature": "SentinelApiClient.setFlowRuleOfMachine(String app, String ip, int port, List<FlowRuleEntity> rules)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "List<FlowRuleEntity>",
+                "rules"
+            ]
+        ],
+        "methodBody": "{\n        return setRules(app, ip, port, FLOW_RULE_TYPE, rules);\n    }",
+        "position": {
+            "line": 556,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setRules",
+                "position": {
+                    "line": 557,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.setRules(String app, String ip, int port, String type, List<? extends RuleEntity> entities)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "setFlowRuleOfMachineAsync",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "setFlowRuleOfMachineAsync(String app, String ip, int port, List<FlowRuleEntity> rules)",
+        "class_signature": "SentinelApiClient.setFlowRuleOfMachineAsync(String app, String ip, int port, List<FlowRuleEntity> rules)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "List<FlowRuleEntity>",
+                "rules"
+            ]
+        ],
+        "methodBody": "{\n        return setRulesAsync(app, ip, port, FLOW_RULE_TYPE, rules);\n    }",
+        "position": {
+            "line": 560,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setRulesAsync",
+                "position": {
+                    "line": 561,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.setRulesAsync(String app, String ip, int port, String type, List<? extends RuleEntity> entities)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "setDegradeRuleOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "setDegradeRuleOfMachine(String app, String ip, int port, List<DegradeRuleEntity> rules)",
+        "class_signature": "SentinelApiClient.setDegradeRuleOfMachine(String app, String ip, int port, List<DegradeRuleEntity> rules)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "List<DegradeRuleEntity>",
+                "rules"
+            ]
+        ],
+        "methodBody": "{\n        return setRules(app, ip, port, DEGRADE_RULE_TYPE, rules);\n    }",
+        "position": {
+            "line": 574,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setRules",
+                "position": {
+                    "line": 575,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.setRules(String app, String ip, int port, String type, List<? extends RuleEntity> entities)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "setSystemRuleOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "setSystemRuleOfMachine(String app, String ip, int port, List<SystemRuleEntity> rules)",
+        "class_signature": "SentinelApiClient.setSystemRuleOfMachine(String app, String ip, int port, List<SystemRuleEntity> rules)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "List<SystemRuleEntity>",
+                "rules"
+            ]
+        ],
+        "methodBody": "{\n        return setRules(app, ip, port, SYSTEM_RULE_TYPE, rules);\n    }",
+        "position": {
+            "line": 588,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setRules",
+                "position": {
+                    "line": 589,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.setRules(String app, String ip, int port, String type, List<? extends RuleEntity> entities)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "setAuthorityRuleOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "setAuthorityRuleOfMachine(String app, String ip, int port, List<AuthorityRuleEntity> rules)",
+        "class_signature": "SentinelApiClient.setAuthorityRuleOfMachine(String app, String ip, int port, List<AuthorityRuleEntity> rules)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "List<AuthorityRuleEntity>",
+                "rules"
+            ]
+        ],
+        "methodBody": "{\n        return setRules(app, ip, port, AUTHORITY_TYPE, rules);\n    }",
+        "position": {
+            "line": 592,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setRules",
+                "position": {
+                    "line": 593,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.setRules(String app, String ip, int port, String type, List<? extends RuleEntity> entities)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "setParamFlowRuleOfMachine",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "setParamFlowRuleOfMachine(String app, String ip, int port, List<ParamFlowRuleEntity> rules)",
+        "class_signature": "SentinelApiClient.setParamFlowRuleOfMachine(String app, String ip, int port, List<ParamFlowRuleEntity> rules)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "List<ParamFlowRuleEntity>",
+                "rules"
+            ]
+        ],
+        "methodBody": "{\n        if (rules == null) {\n            return CompletableFuture.completedFuture(null);\n        }\n        if (StringUtil.isBlank(ip) || port <= 0) {\n            return AsyncUtils.newFailedFuture(new IllegalArgumentException(\"Invalid parameter\"));\n        }\n        try {\n            String data = JSON.toJSONString(\n                rules.stream().map(ParamFlowRuleEntity::getRule).collect(Collectors.toList())\n            );\n            Map<String, String> params = new HashMap<>(1);\n            params.put(\"data\", data);\n            return executeCommand(app, ip, port, SET_PARAM_RULE_PATH, params, true)\n                .thenCompose(e -> {\n                    if (CommandConstants.MSG_SUCCESS.equals(e)) {\n                        return CompletableFuture.completedFuture(null);\n                    } else {\n                        logger.warn(\"Push parameter flow rules to client failed: \" + e);\n                        return AsyncUtils.newFailedFuture(new RuntimeException(e));\n                    }\n                });\n        } catch (Exception ex) {\n            logger.warn(\"Error when setting parameter flow rule\", ex);\n            return AsyncUtils.newFailedFuture(ex);\n        }\n    }",
+        "position": {
+            "line": 596,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "completedFuture",
+                "position": {
+                    "line": 598,
+                    "column": 38
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 600,
+                    "column": 24
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 601,
+                    "column": 31
+                }
+            },
+            {
+                "name": "toJSONString",
+                "position": {
+                    "line": 604,
+                    "column": 32
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 605,
+                    "column": 66
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 605,
+                    "column": 32
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 605,
+                    "column": 23
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 605,
+                    "column": 85
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 608,
+                    "column": 20
+                }
+            },
+            {
+                "name": "thenCompose",
+                "position": {
+                    "line": 610,
+                    "column": 18
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 609,
+                    "column": 20
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 611,
+                    "column": 54
+                }
+            },
+            {
+                "name": "completedFuture",
+                "position": {
+                    "line": 612,
+                    "column": 50
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 614,
+                    "column": 32
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 615,
+                    "column": 43
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 619,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 620,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 601,
+                    "column": 51
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 607,
+                    "column": 46
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 615,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "fetchClusterMode",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchClusterMode(String ip, int port)",
+        "class_signature": "SentinelApiClient.fetchClusterMode(String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(ip) || port <= 0) {\n            return AsyncUtils.newFailedFuture(new IllegalArgumentException(\"Invalid parameter\"));\n        }\n        try {\n            return executeCommand(ip, port, FETCH_CLUSTER_MODE_PATH, false)\n                .thenApply(r -> JSON.parseObject(r, ClusterStateSimpleEntity.class));\n        } catch (Exception ex) {\n            logger.warn(\"Error when fetching cluster mode\", ex);\n            return AsyncUtils.newFailedFuture(ex);\n        }\n    }",
+        "position": {
+            "line": 626,
+            "column": 56
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 627,
+                    "column": 24
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 628,
+                    "column": 31
+                }
+            },
+            {
+                "name": "thenApply",
+                "position": {
+                    "line": 632,
+                    "column": 18
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 631,
+                    "column": 20
+                }
+            },
+            {
+                "name": "parseObject",
+                "position": {
+                    "line": 632,
+                    "column": 38
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 634,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 635,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 628,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String ip, int port, String api, boolean useHttpPost)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "modifyClusterMode",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "modifyClusterMode(String ip, int port, int mode)",
+        "class_signature": "SentinelApiClient.modifyClusterMode(String ip, int port, int mode)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "int",
+                "mode"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(ip) || port <= 0) {\n            return AsyncUtils.newFailedFuture(new IllegalArgumentException(\"Invalid parameter\"));\n        }\n        try {\n            Map<String, String> params = new HashMap<>(1);\n            params.put(\"mode\", String.valueOf(mode));\n            return executeCommand(ip, port, MODIFY_CLUSTER_MODE_PATH, params, false)\n                .thenCompose(e -> {\n                    if (CommandConstants.MSG_SUCCESS.equals(e)) {\n                        return CompletableFuture.completedFuture(null);\n                    } else {\n                        logger.warn(\"Error when modifying cluster mode: \" + e);\n                        return AsyncUtils.newFailedFuture(new RuntimeException(e));\n                    }\n                });\n        } catch (Exception ex) {\n            logger.warn(\"Error when modifying cluster mode\", ex);\n            return AsyncUtils.newFailedFuture(ex);\n        }\n    }",
+        "position": {
+            "line": 639,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 640,
+                    "column": 24
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 641,
+                    "column": 31
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 645,
+                    "column": 20
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 645,
+                    "column": 39
+                }
+            },
+            {
+                "name": "thenCompose",
+                "position": {
+                    "line": 647,
+                    "column": 18
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 646,
+                    "column": 20
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 648,
+                    "column": 54
+                }
+            },
+            {
+                "name": "completedFuture",
+                "position": {
+                    "line": 649,
+                    "column": 50
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 651,
+                    "column": 32
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 652,
+                    "column": 43
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 656,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 657,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 641,
+                    "column": 51
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 644,
+                    "column": 46
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 652,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "fetchClusterClientInfoAndConfig",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchClusterClientInfoAndConfig(String ip, int port)",
+        "class_signature": "SentinelApiClient.fetchClusterClientInfoAndConfig(String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(ip) || port <= 0) {\n            return AsyncUtils.newFailedFuture(new IllegalArgumentException(\"Invalid parameter\"));\n        }\n        try {\n            return executeCommand(ip, port, FETCH_CLUSTER_CLIENT_CONFIG_PATH, false)\n                .thenApply(r -> JSON.parseObject(r, ClusterClientInfoVO.class));\n        } catch (Exception ex) {\n            logger.warn(\"Error when fetching cluster client config\", ex);\n            return AsyncUtils.newFailedFuture(ex);\n        }\n    }",
+        "position": {
+            "line": 661,
+            "column": 51
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 662,
+                    "column": 24
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 663,
+                    "column": 31
+                }
+            },
+            {
+                "name": "thenApply",
+                "position": {
+                    "line": 667,
+                    "column": 18
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 666,
+                    "column": 20
+                }
+            },
+            {
+                "name": "parseObject",
+                "position": {
+                    "line": 667,
+                    "column": 38
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 669,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 670,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 663,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String ip, int port, String api, boolean useHttpPost)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "modifyClusterClientConfig",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "modifyClusterClientConfig(String app, String ip, int port, ClusterClientConfig config)",
+        "class_signature": "SentinelApiClient.modifyClusterClientConfig(String app, String ip, int port, ClusterClientConfig config)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "ClusterClientConfig",
+                "config"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(ip) || port <= 0) {\n            return AsyncUtils.newFailedFuture(new IllegalArgumentException(\"Invalid parameter\"));\n        }\n        try {\n            Map<String, String> params = new HashMap<>(1);\n            params.put(\"data\", JSON.toJSONString(config));\n            return executeCommand(app, ip, port, MODIFY_CLUSTER_CLIENT_CONFIG_PATH, params, true)\n                .thenCompose(e -> {\n                    if (CommandConstants.MSG_SUCCESS.equals(e)) {\n                        return CompletableFuture.completedFuture(null);\n                    } else {\n                        logger.warn(\"Error when modifying cluster client config: \" + e);\n                        return AsyncUtils.newFailedFuture(new RuntimeException(e));\n                    }\n                });\n        } catch (Exception ex) {\n            logger.warn(\"Error when modifying cluster client config\", ex);\n            return AsyncUtils.newFailedFuture(ex);\n        }\n    }",
+        "position": {
+            "line": 674,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 675,
+                    "column": 24
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 676,
+                    "column": 31
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 680,
+                    "column": 20
+                }
+            },
+            {
+                "name": "toJSONString",
+                "position": {
+                    "line": 680,
+                    "column": 37
+                }
+            },
+            {
+                "name": "thenCompose",
+                "position": {
+                    "line": 682,
+                    "column": 18
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 681,
+                    "column": 20
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 683,
+                    "column": 54
+                }
+            },
+            {
+                "name": "completedFuture",
+                "position": {
+                    "line": 684,
+                    "column": 50
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 686,
+                    "column": 32
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 687,
+                    "column": 43
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 691,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 692,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 676,
+                    "column": 51
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 679,
+                    "column": 46
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 687,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "modifyClusterServerFlowConfig",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "modifyClusterServerFlowConfig(String app, String ip, int port, ServerFlowConfig config)",
+        "class_signature": "SentinelApiClient.modifyClusterServerFlowConfig(String app, String ip, int port, ServerFlowConfig config)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "ServerFlowConfig",
+                "config"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(ip) || port <= 0) {\n            return AsyncUtils.newFailedFuture(new IllegalArgumentException(\"Invalid parameter\"));\n        }\n        try {\n            Map<String, String> params = new HashMap<>(1);\n            params.put(\"data\", JSON.toJSONString(config));\n            return executeCommand(app, ip, port, MODIFY_CLUSTER_SERVER_FLOW_CONFIG_PATH, params, true)\n                .thenCompose(e -> {\n                    if (CommandConstants.MSG_SUCCESS.equals(e)) {\n                        return CompletableFuture.completedFuture(null);\n                    } else {\n                        logger.warn(\"Error when modifying cluster server flow config: \" + e);\n                        return AsyncUtils.newFailedFuture(new RuntimeException(e));\n                    }\n                });\n        } catch (Exception ex) {\n            logger.warn(\"Error when modifying cluster server flow config\", ex);\n            return AsyncUtils.newFailedFuture(ex);\n        }\n    }",
+        "position": {
+            "line": 696,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 697,
+                    "column": 24
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 698,
+                    "column": 31
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 702,
+                    "column": 20
+                }
+            },
+            {
+                "name": "toJSONString",
+                "position": {
+                    "line": 702,
+                    "column": 37
+                }
+            },
+            {
+                "name": "thenCompose",
+                "position": {
+                    "line": 704,
+                    "column": 18
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 703,
+                    "column": 20
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 705,
+                    "column": 54
+                }
+            },
+            {
+                "name": "completedFuture",
+                "position": {
+                    "line": 706,
+                    "column": 50
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 708,
+                    "column": 32
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 709,
+                    "column": 43
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 713,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 714,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 698,
+                    "column": 51
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 701,
+                    "column": 46
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 709,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "modifyClusterServerTransportConfig",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "modifyClusterServerTransportConfig(String app, String ip, int port, ServerTransportConfig config)",
+        "class_signature": "SentinelApiClient.modifyClusterServerTransportConfig(String app, String ip, int port, ServerTransportConfig config)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "ServerTransportConfig",
+                "config"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(ip) || port <= 0) {\n            return AsyncUtils.newFailedFuture(new IllegalArgumentException(\"Invalid parameter\"));\n        }\n        try {\n            Map<String, String> params = new HashMap<>(2);\n            params.put(\"port\", config.getPort().toString());\n            params.put(\"idleSeconds\", config.getIdleSeconds().toString());\n            return executeCommand(app, ip, port, MODIFY_CLUSTER_SERVER_TRANSPORT_CONFIG_PATH, params, false)\n                .thenCompose(e -> {\n                    if (CommandConstants.MSG_SUCCESS.equals(e)) {\n                        return CompletableFuture.completedFuture(null);\n                    } else {\n                        logger.warn(\"Error when modifying cluster server transport config: \" + e);\n                        return AsyncUtils.newFailedFuture(new RuntimeException(e));\n                    }\n                });\n        } catch (Exception ex) {\n            logger.warn(\"Error when modifying cluster server transport config\", ex);\n            return AsyncUtils.newFailedFuture(ex);\n        }\n    }",
+        "position": {
+            "line": 718,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 719,
+                    "column": 24
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 720,
+                    "column": 31
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 724,
+                    "column": 20
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 724,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 724,
+                    "column": 39
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 725,
+                    "column": 20
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 725,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getIdleSeconds",
+                "position": {
+                    "line": 725,
+                    "column": 46
+                }
+            },
+            {
+                "name": "thenCompose",
+                "position": {
+                    "line": 727,
+                    "column": 18
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 726,
+                    "column": 20
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 728,
+                    "column": 54
+                }
+            },
+            {
+                "name": "completedFuture",
+                "position": {
+                    "line": 729,
+                    "column": 50
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 731,
+                    "column": 32
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 732,
+                    "column": 43
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 736,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 737,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 720,
+                    "column": 51
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 723,
+                    "column": 46
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 732,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "modifyClusterServerNamespaceSet",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "modifyClusterServerNamespaceSet(String app, String ip, int port, Set<String> set)",
+        "class_signature": "SentinelApiClient.modifyClusterServerNamespaceSet(String app, String ip, int port, Set<String> set)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "Set<String>",
+                "set"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(ip) || port <= 0) {\n            return AsyncUtils.newFailedFuture(new IllegalArgumentException(\"Invalid parameter\"));\n        }\n        try {\n            Map<String, String> params = new HashMap<>(1);\n            params.put(\"data\", JSON.toJSONString(set));\n            return executeCommand(app, ip, port, MODIFY_CLUSTER_SERVER_NAMESPACE_SET_PATH, params, true)\n                .thenCompose(e -> {\n                    if (CommandConstants.MSG_SUCCESS.equals(e)) {\n                        return CompletableFuture.completedFuture(null);\n                    } else {\n                        logger.warn(\"Error when modifying cluster server NamespaceSet\", e);\n                        return AsyncUtils.newFailedFuture(new RuntimeException(e));\n                    }\n                });\n        } catch (Exception ex) {\n            logger.warn(\"Error when modifying cluster server NamespaceSet\", ex);\n            return AsyncUtils.newFailedFuture(ex);\n        }\n    }",
+        "position": {
+            "line": 741,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 742,
+                    "column": 24
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 743,
+                    "column": 31
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 747,
+                    "column": 20
+                }
+            },
+            {
+                "name": "toJSONString",
+                "position": {
+                    "line": 747,
+                    "column": 37
+                }
+            },
+            {
+                "name": "thenCompose",
+                "position": {
+                    "line": 749,
+                    "column": 18
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 748,
+                    "column": 20
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 750,
+                    "column": 54
+                }
+            },
+            {
+                "name": "completedFuture",
+                "position": {
+                    "line": 751,
+                    "column": 50
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 753,
+                    "column": 32
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 754,
+                    "column": 43
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 758,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 759,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 743,
+                    "column": 51
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 746,
+                    "column": 46
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 754,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 25
+    },
+    {
+        "name": "fetchClusterServerBasicInfo",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchClusterServerBasicInfo(String ip, int port)",
+        "class_signature": "SentinelApiClient.fetchClusterServerBasicInfo(String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(ip) || port <= 0) {\n            return AsyncUtils.newFailedFuture(new IllegalArgumentException(\"Invalid parameter\"));\n        }\n        try {\n            return executeCommand(ip, port, FETCH_CLUSTER_SERVER_BASIC_INFO_PATH, false)\n                .thenApply(r -> JSON.parseObject(r, ClusterServerStateVO.class));\n        } catch (Exception ex) {\n            logger.warn(\"Error when fetching cluster sever all config and basic info\", ex);\n            return AsyncUtils.newFailedFuture(ex);\n        }\n    }",
+        "position": {
+            "line": 763,
+            "column": 52
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 764,
+                    "column": 24
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 765,
+                    "column": 31
+                }
+            },
+            {
+                "name": "thenApply",
+                "position": {
+                    "line": 769,
+                    "column": 18
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 768,
+                    "column": 20
+                }
+            },
+            {
+                "name": "parseObject",
+                "position": {
+                    "line": 769,
+                    "column": 38
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 771,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 772,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 765,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String ip, int port, String api, boolean useHttpPost)"
+        ],
+        "priority": 26
+    },
+    {
+        "name": "fetchApis",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchApis(String app, String ip, int port)",
+        "class_signature": "SentinelApiClient.fetchApis(String app, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(ip) || port <= 0) {\n            return AsyncUtils.newFailedFuture(new IllegalArgumentException(\"Invalid parameter\"));\n        }\n\n        try {\n            return executeCommand(ip, port, FETCH_GATEWAY_API_PATH, false)\n                    .thenApply(r -> {\n                        List<ApiDefinitionEntity> entities = JSON.parseArray(r, ApiDefinitionEntity.class);\n                        if (entities != null) {\n                            for (ApiDefinitionEntity entity : entities) {\n                                entity.setApp(app);\n                                entity.setIp(ip);\n                                entity.setPort(port);\n                            }\n                        }\n                        return entities;\n                    });\n        } catch (Exception ex) {\n            logger.warn(\"Error when fetching gateway apis\", ex);\n            return AsyncUtils.newFailedFuture(ex);\n        }\n    }",
+        "position": {
+            "line": 776,
+            "column": 57
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 777,
+                    "column": 24
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 778,
+                    "column": 31
+                }
+            },
+            {
+                "name": "thenApply",
+                "position": {
+                    "line": 783,
+                    "column": 22
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 782,
+                    "column": 20
+                }
+            },
+            {
+                "name": "parseArray",
+                "position": {
+                    "line": 784,
+                    "column": 67
+                }
+            },
+            {
+                "name": "setApp",
+                "position": {
+                    "line": 787,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setIp",
+                "position": {
+                    "line": 788,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setPort",
+                "position": {
+                    "line": 789,
+                    "column": 40
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 795,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 796,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 778,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String ip, int port, String api, boolean useHttpPost)"
+        ],
+        "priority": 27
+    },
+    {
+        "name": "modifyApis",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "modifyApis(String app, String ip, int port, List<ApiDefinitionEntity> apis)",
+        "class_signature": "SentinelApiClient.modifyApis(String app, String ip, int port, List<ApiDefinitionEntity> apis)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "List<ApiDefinitionEntity>",
+                "apis"
+            ]
+        ],
+        "methodBody": "{\n        if (apis == null) {\n            return true;\n        }\n\n        try {\n            AssertUtil.notEmpty(app, \"Bad app name\");\n            AssertUtil.notEmpty(ip, \"Bad machine IP\");\n            AssertUtil.isTrue(port > 0, \"Bad machine port\");\n            String data = JSON.toJSONString(\n                    apis.stream().map(r -> r.toApiDefinition()).collect(Collectors.toList()));\n            Map<String, String> params = new HashMap<>(2);\n            params.put(\"data\", data);\n            String result = executeCommand(app, ip, port, MODIFY_GATEWAY_API_PATH, params, true).get();\n            logger.info(\"Modify gateway apis: {}\", result);\n            return true;\n        } catch (Exception e) {\n            logger.warn(\"Error when modifying gateway apis\", e);\n            return false;\n        }\n    }",
+        "position": {
+            "line": 800,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 806,
+                    "column": 24
+                }
+            },
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 807,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isTrue",
+                "position": {
+                    "line": 808,
+                    "column": 24
+                }
+            },
+            {
+                "name": "toJSONString",
+                "position": {
+                    "line": 809,
+                    "column": 32
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 810,
+                    "column": 65
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 810,
+                    "column": 35
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 810,
+                    "column": 26
+                }
+            },
+            {
+                "name": "toApiDefinition",
+                "position": {
+                    "line": 810,
+                    "column": 46
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 810,
+                    "column": 84
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 812,
+                    "column": 20
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 813,
+                    "column": 98
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 813,
+                    "column": 29
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 814,
+                    "column": 20
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 817,
+                    "column": 20
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 811,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 28
+    },
+    {
+        "name": "fetchGatewayFlowRules",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "fetchGatewayFlowRules(String app, String ip, int port)",
+        "class_signature": "SentinelApiClient.fetchGatewayFlowRules(String app, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(ip) || port <= 0) {\n            return AsyncUtils.newFailedFuture(new IllegalArgumentException(\"Invalid parameter\"));\n        }\n\n        try {\n            return executeCommand(ip, port, FETCH_GATEWAY_FLOW_RULE_PATH, false)\n                    .thenApply(r -> {\n                        List<GatewayFlowRule> gatewayFlowRules = JSON.parseArray(r, GatewayFlowRule.class);\n                        List<GatewayFlowRuleEntity> entities = gatewayFlowRules.stream().map(rule -> GatewayFlowRuleEntity.fromGatewayFlowRule(app, ip, port, rule)).collect(Collectors.toList());\n                        return entities;\n                    });\n        } catch (Exception ex) {\n            logger.warn(\"Error when fetching gateway flow rules\", ex);\n            return AsyncUtils.newFailedFuture(ex);\n        }\n    }",
+        "position": {
+            "line": 822,
+            "column": 59
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 823,
+                    "column": 24
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 824,
+                    "column": 31
+                }
+            },
+            {
+                "name": "thenApply",
+                "position": {
+                    "line": 829,
+                    "column": 22
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 828,
+                    "column": 20
+                }
+            },
+            {
+                "name": "parseArray",
+                "position": {
+                    "line": 830,
+                    "column": 71
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 831,
+                    "column": 166
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 831,
+                    "column": 90
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 831,
+                    "column": 81
+                }
+            },
+            {
+                "name": "fromGatewayFlowRule",
+                "position": {
+                    "line": 831,
+                    "column": 124
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 831,
+                    "column": 185
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 835,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 836,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 824,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String ip, int port, String api, boolean useHttpPost)"
+        ],
+        "priority": 29
+    },
+    {
+        "name": "modifyGatewayFlowRules",
+        "category": "method_declaration",
+        "class": "SentinelApiClient",
+        "signature": "modifyGatewayFlowRules(String app, String ip, int port, List<GatewayFlowRuleEntity> rules)",
+        "class_signature": "SentinelApiClient.modifyGatewayFlowRules(String app, String ip, int port, List<GatewayFlowRuleEntity> rules)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "app"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "List<GatewayFlowRuleEntity>",
+                "rules"
+            ]
+        ],
+        "methodBody": "{\n        if (rules == null) {\n            return true;\n        }\n\n        try {\n            AssertUtil.notEmpty(app, \"Bad app name\");\n            AssertUtil.notEmpty(ip, \"Bad machine IP\");\n            AssertUtil.isTrue(port > 0, \"Bad machine port\");\n            String data = JSON.toJSONString(\n                    rules.stream().map(r -> r.toGatewayFlowRule()).collect(Collectors.toList()));\n            Map<String, String> params = new HashMap<>(2);\n            params.put(\"data\", data);\n            String result = executeCommand(app, ip, port, MODIFY_GATEWAY_FLOW_RULE_PATH, params, true).get();\n            logger.info(\"Modify gateway flow rules: {}\", result);\n            return true;\n        } catch (Exception e) {\n            logger.warn(\"Error when modifying gateway apis\", e);\n            return false;\n        }\n    }",
+        "position": {
+            "line": 840,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 846,
+                    "column": 24
+                }
+            },
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 847,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isTrue",
+                "position": {
+                    "line": 848,
+                    "column": 24
+                }
+            },
+            {
+                "name": "toJSONString",
+                "position": {
+                    "line": 849,
+                    "column": 32
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 850,
+                    "column": 68
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 850,
+                    "column": 36
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 850,
+                    "column": 27
+                }
+            },
+            {
+                "name": "toGatewayFlowRule",
+                "position": {
+                    "line": 850,
+                    "column": 47
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 850,
+                    "column": 87
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 852,
+                    "column": 20
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 853,
+                    "column": 104
+                }
+            },
+            {
+                "name": "executeCommand",
+                "position": {
+                    "line": 853,
+                    "column": 29
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 854,
+                    "column": 20
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 857,
+                    "column": 20
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 851,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "SentinelApiClient.executeCommand(String app, String ip, int port, String api, Map<String, String> params, boolean useHttpPost)"
+        ],
+        "priority": 30
+    }
+]

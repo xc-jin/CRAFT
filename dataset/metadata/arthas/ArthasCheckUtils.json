@@ -1,0 +1,74 @@
+[
+    {
+        "name": "isIn",
+        "category": "method_declaration",
+        "class": "ArthasCheckUtils",
+        "signature": "isIn(E e, E... s)",
+        "class_signature": "ArthasCheckUtils.isIn(E e, E... s)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "E",
+                "e"
+            ],
+            [
+                "E...",
+                "s"
+            ]
+        ],
+        "methodBody": "{\n\n        if (null != s) {\n            for (E es : s) {\n                if (isEquals(e, es)) {\n                    return true;\n                }\n            }\n        }\n\n        return false;\n\n    }",
+        "position": {
+            "line": 21,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEquals",
+                "position": {
+                    "line": 25,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArthasCheckUtils.isEquals(E src, E target)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "isEquals",
+        "category": "method_declaration",
+        "class": "ArthasCheckUtils",
+        "signature": "isEquals(E src, E target)",
+        "class_signature": "ArthasCheckUtils.isEquals(E src, E target)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "E",
+                "src"
+            ],
+            [
+                "E",
+                "target"
+            ]
+        ],
+        "methodBody": "{\n\n        return null == src\n                && null == target\n                || null != src\n                && null != target\n                && src.equals(target);\n\n    }",
+        "position": {
+            "line": 48,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 54,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    }
+]

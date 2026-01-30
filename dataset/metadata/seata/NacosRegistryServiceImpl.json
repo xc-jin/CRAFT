@@ -1,0 +1,1951 @@
+[
+    {
+        "name": "NacosRegistryServiceImpl",
+        "category": "constructor_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "NacosRegistryServiceImpl()",
+        "class_signature": "NacosRegistryServiceImpl.NacosRegistryServiceImpl()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        String configForNacosSLB = FILE_CONFIG.getConfig(getNacosUrlPatternOfSLB());\n        Pattern patternOfNacosRegistryForSLB = StringUtils.isBlank(configForNacosSLB)\n                ? DEFAULT_SLB_REGISTRY_PATTERN\n                : Pattern.compile(configForNacosSLB);\n        useSLBWay = patternOfNacosRegistryForSLB.matcher(getNamingProperties().getProperty(PRO_SERVER_ADDR_KEY)).matches();\n    }",
+        "position": {
+            "line": 87,
+            "column": 13
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 88,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getNacosUrlPatternOfSLB",
+                "position": {
+                    "line": 88,
+                    "column": 58
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 89,
+                    "column": 60
+                }
+            },
+            {
+                "name": "compile",
+                "position": {
+                    "line": 91,
+                    "column": 27
+                }
+            },
+            {
+                "name": "matches",
+                "position": {
+                    "line": 92,
+                    "column": 114
+                }
+            },
+            {
+                "name": "matcher",
+                "position": {
+                    "line": 92,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 92,
+                    "column": 80
+                }
+            },
+            {
+                "name": "getNamingProperties",
+                "position": {
+                    "line": 92,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNacosUrlPatternOfSLB()",
+            "NacosRegistryServiceImpl.getNamingProperties()"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "getInstance",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getInstance()",
+        "class_signature": "NacosRegistryServiceImpl.getInstance()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (instance == null) {\n            synchronized (NacosRegistryServiceImpl.class) {\n                if (instance == null) {\n                    instance = new NacosRegistryServiceImpl();\n                }\n            }\n        }\n        return instance;\n    }",
+        "position": {
+            "line": 100,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "NacosRegistryServiceImpl",
+                "position": {
+                    "line": 104,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.NacosRegistryServiceImpl()"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "register",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "register(InetSocketAddress address)",
+        "class_signature": "NacosRegistryServiceImpl.register(InetSocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetSocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        NetUtil.validAddress(address);\n        getNamingInstance().registerInstance(getServiceName(), getServiceGroup(), address.getAddress().getHostAddress(), address.getPort(), getClusterName());\n    }",
+        "position": {
+            "line": 112,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "validAddress",
+                "position": {
+                    "line": 113,
+                    "column": 17
+                }
+            },
+            {
+                "name": "registerInstance",
+                "position": {
+                    "line": 114,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getNamingInstance",
+                "position": {
+                    "line": 114,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 114,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getServiceGroup",
+                "position": {
+                    "line": 114,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getHostAddress",
+                "position": {
+                    "line": 114,
+                    "column": 104
+                }
+            },
+            {
+                "name": "getAddress",
+                "position": {
+                    "line": 114,
+                    "column": 91
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 114,
+                    "column": 130
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 114,
+                    "column": 141
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNamingInstance()",
+            "NacosRegistryServiceImpl.getServiceName()",
+            "NacosRegistryServiceImpl.getServiceGroup()",
+            "NacosRegistryServiceImpl.getClusterName()"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "unregister",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "unregister(InetSocketAddress address)",
+        "class_signature": "NacosRegistryServiceImpl.unregister(InetSocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetSocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        NetUtil.validAddress(address);\n        getNamingInstance().deregisterInstance(getServiceName(), getServiceGroup(), address.getAddress().getHostAddress(), address.getPort(), getClusterName());\n    }",
+        "position": {
+            "line": 118,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "validAddress",
+                "position": {
+                    "line": 119,
+                    "column": 17
+                }
+            },
+            {
+                "name": "deregisterInstance",
+                "position": {
+                    "line": 120,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getNamingInstance",
+                "position": {
+                    "line": 120,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 120,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getServiceGroup",
+                "position": {
+                    "line": 120,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getHostAddress",
+                "position": {
+                    "line": 120,
+                    "column": 106
+                }
+            },
+            {
+                "name": "getAddress",
+                "position": {
+                    "line": 120,
+                    "column": 93
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 120,
+                    "column": 132
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 120,
+                    "column": 143
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNamingInstance()",
+            "NacosRegistryServiceImpl.getServiceName()",
+            "NacosRegistryServiceImpl.getServiceGroup()",
+            "NacosRegistryServiceImpl.getClusterName()"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "subscribe",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "subscribe(String cluster, EventListener listener)",
+        "class_signature": "NacosRegistryServiceImpl.subscribe(String cluster, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "cluster"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        List<String> clusters = new ArrayList<>();\n        clusters.add(cluster);\n        LISTENER_SERVICE_MAP.computeIfAbsent(cluster, key -> new ArrayList<>())\n                .add(listener);\n        getNamingInstance().subscribe(getServiceName(), getServiceGroup(), clusters, listener);\n    }",
+        "position": {
+            "line": 124,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "add",
+                "position": {
+                    "line": 126,
+                    "column": 18
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 128,
+                    "column": 18
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 127,
+                    "column": 30
+                }
+            },
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 129,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getNamingInstance",
+                "position": {
+                    "line": 129,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 129,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getServiceGroup",
+                "position": {
+                    "line": 129,
+                    "column": 57
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 125,
+                    "column": 37
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 127,
+                    "column": 66
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNamingInstance()",
+            "NacosRegistryServiceImpl.getServiceName()",
+            "NacosRegistryServiceImpl.getServiceGroup()"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "unsubscribe",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "unsubscribe(String cluster, EventListener listener)",
+        "class_signature": "NacosRegistryServiceImpl.unsubscribe(String cluster, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "cluster"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        List<String> clusters = new ArrayList<>();\n        clusters.add(cluster);\n        List<EventListener> subscribeList = LISTENER_SERVICE_MAP.get(cluster);\n        if (subscribeList != null) {\n            List<EventListener> newSubscribeList = subscribeList.stream()\n                    .filter(eventListener -> !eventListener.equals(listener))\n                    .collect(Collectors.toList());\n            LISTENER_SERVICE_MAP.put(cluster, newSubscribeList);\n        }\n        getNamingInstance().unsubscribe(getServiceName(), getServiceGroup(), clusters, listener);\n    }",
+        "position": {
+            "line": 133,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "add",
+                "position": {
+                    "line": 135,
+                    "column": 18
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 136,
+                    "column": 66
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 140,
+                    "column": 22
+                }
+            },
+            {
+                "name": "filter",
+                "position": {
+                    "line": 139,
+                    "column": 22
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 138,
+                    "column": 66
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 139,
+                    "column": 61
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 140,
+                    "column": 41
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 141,
+                    "column": 34
+                }
+            },
+            {
+                "name": "unsubscribe",
+                "position": {
+                    "line": 143,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getNamingInstance",
+                "position": {
+                    "line": 143,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 143,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getServiceGroup",
+                "position": {
+                    "line": 143,
+                    "column": 59
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 134,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNamingInstance()",
+            "NacosRegistryServiceImpl.getServiceName()",
+            "NacosRegistryServiceImpl.getServiceGroup()"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "lookup",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "lookup(String key)",
+        "class_signature": "NacosRegistryServiceImpl.lookup(String key)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "key"
+            ]
+        ],
+        "methodBody": "{\n        String clusterName = getServiceGroup(key);\n        if (clusterName == null) {\n            String missingDataId = PREFIX_SERVICE_ROOT + CONFIG_SPLIT_CHAR + PREFIX_SERVICE_MAPPING + key;\n            throw new ConfigNotFoundException(\"%s configuration item is required\", missingDataId);\n        }\n        if (useSLBWay) {\n            if (LOGGER.isDebugEnabled()) {\n                LOGGER.debug(\"look up service address of SLB by nacos\");\n            }\n            if (!CLUSTER_ADDRESS_MAP.containsKey(PUBLIC_NAMING_ADDRESS_PREFIX + clusterName)) {\n                Service service = getNamingMaintainInstance().queryService(DEFAULT_APPLICATION, clusterName);\n                String pubnetIp = service.getMetadata().get(PUBLIC_NAMING_SERVICE_META_IP_KEY);\n                String pubnetPort = service.getMetadata().get(PUBLIC_NAMING_SERVICE_META_PORT_KEY);\n                if (StringUtils.isBlank(pubnetIp) || StringUtils.isBlank(pubnetPort)) {\n                    throw new Exception(\"cannot find service address from nacos naming mata-data\");\n                }\n                InetSocketAddress publicAddress = new InetSocketAddress(pubnetIp,\n                        Integer.valueOf(pubnetPort));\n                List<InetSocketAddress> publicAddressList = Arrays.asList(publicAddress);\n                CLUSTER_ADDRESS_MAP.put(PUBLIC_NAMING_ADDRESS_PREFIX + clusterName, publicAddressList);\n                return publicAddressList;\n            }\n            return CLUSTER_ADDRESS_MAP.get(PUBLIC_NAMING_ADDRESS_PREFIX + clusterName);\n        }\n        if (!LISTENER_SERVICE_MAP.containsKey(clusterName)) {\n            synchronized (LOCK_OBJ) {\n                if (!LISTENER_SERVICE_MAP.containsKey(clusterName)) {\n                    List<String> clusters = new ArrayList<>();\n                    clusters.add(clusterName);\n                    List<Instance> firstAllInstances = getNamingInstance().getAllInstances(getServiceName(), getServiceGroup(), clusters);\n                    if (null != firstAllInstances) {\n                        List<InetSocketAddress> newAddressList = firstAllInstances.stream()\n                                .filter(eachInstance -> eachInstance.isEnabled() && eachInstance.isHealthy())\n                                .map(eachInstance -> new InetSocketAddress(eachInstance.getIp(), eachInstance.getPort()))\n                                .collect(Collectors.toList());\n                        CLUSTER_ADDRESS_MAP.put(clusterName, newAddressList);\n                    }\n                    subscribe(clusterName, event -> {\n                        List<Instance> instances = ((NamingEvent) event).getInstances();\n                        if (CollectionUtils.isEmpty(instances) && null != CLUSTER_ADDRESS_MAP.get(clusterName)) {\n                            LOGGER.info(\"receive empty server list,cluster:{}\", clusterName);\n                        } else {\n                            List<InetSocketAddress> newAddressList = instances.stream()\n                                    .filter(eachInstance -> eachInstance.isEnabled() && eachInstance.isHealthy())\n                                    .map(eachInstance -> new InetSocketAddress(eachInstance.getIp(), eachInstance.getPort()))\n                                    .collect(Collectors.toList());\n                            CLUSTER_ADDRESS_MAP.put(clusterName, newAddressList);\n\n                            removeOfflineAddressesIfNecessary(clusterName, newAddressList);\n                        }\n                    });\n                }\n            }\n        }\n        return CLUSTER_ADDRESS_MAP.get(clusterName);\n    }",
+        "position": {
+            "line": 147,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceGroup",
+                "position": {
+                    "line": 148,
+                    "column": 30
+                }
+            },
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 154,
+                    "column": 24
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 155,
+                    "column": 24
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 157,
+                    "column": 38
+                }
+            },
+            {
+                "name": "queryService",
+                "position": {
+                    "line": 158,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getNamingMaintainInstance",
+                "position": {
+                    "line": 158,
+                    "column": 35
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 159,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getMetadata",
+                "position": {
+                    "line": 159,
+                    "column": 43
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 160,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getMetadata",
+                "position": {
+                    "line": 160,
+                    "column": 45
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 161,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 161,
+                    "column": 66
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 165,
+                    "column": 33
+                }
+            },
+            {
+                "name": "asList",
+                "position": {
+                    "line": 166,
+                    "column": 68
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 167,
+                    "column": 37
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 170,
+                    "column": 40
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 172,
+                    "column": 35
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 174,
+                    "column": 43
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 176,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getAllInstances",
+                "position": {
+                    "line": 177,
+                    "column": 76
+                }
+            },
+            {
+                "name": "getNamingInstance",
+                "position": {
+                    "line": 177,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 177,
+                    "column": 92
+                }
+            },
+            {
+                "name": "getServiceGroup",
+                "position": {
+                    "line": 177,
+                    "column": 110
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 182,
+                    "column": 34
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 181,
+                    "column": 34
+                }
+            },
+            {
+                "name": "filter",
+                "position": {
+                    "line": 180,
+                    "column": 34
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 179,
+                    "column": 84
+                }
+            },
+            {
+                "name": "isEnabled",
+                "position": {
+                    "line": 180,
+                    "column": 70
+                }
+            },
+            {
+                "name": "isHealthy",
+                "position": {
+                    "line": 180,
+                    "column": 98
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 181,
+                    "column": 89
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 181,
+                    "column": 111
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 182,
+                    "column": 53
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 183,
+                    "column": 45
+                }
+            },
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 185,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getInstances",
+                "position": {
+                    "line": 186,
+                    "column": 74
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 187,
+                    "column": 45
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 187,
+                    "column": 95
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 188,
+                    "column": 36
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 193,
+                    "column": 38
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 192,
+                    "column": 38
+                }
+            },
+            {
+                "name": "filter",
+                "position": {
+                    "line": 191,
+                    "column": 38
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 190,
+                    "column": 80
+                }
+            },
+            {
+                "name": "isEnabled",
+                "position": {
+                    "line": 191,
+                    "column": 74
+                }
+            },
+            {
+                "name": "isHealthy",
+                "position": {
+                    "line": 191,
+                    "column": 102
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 192,
+                    "column": 93
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 192,
+                    "column": 115
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 193,
+                    "column": 57
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 194,
+                    "column": 49
+                }
+            },
+            {
+                "name": "removeOfflineAddressesIfNecessary",
+                "position": {
+                    "line": 196,
+                    "column": 29
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 202,
+                    "column": 36
+                }
+            },
+            {
+                "name": "ConfigNotFoundException",
+                "position": {
+                    "line": 151,
+                    "column": 23
+                }
+            },
+            {
+                "name": "Exception",
+                "position": {
+                    "line": 162,
+                    "column": 31
+                }
+            },
+            {
+                "name": "InetSocketAddress",
+                "position": {
+                    "line": 164,
+                    "column": 55
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 175,
+                    "column": 49
+                }
+            },
+            {
+                "name": "InetSocketAddress",
+                "position": {
+                    "line": 181,
+                    "column": 58
+                }
+            },
+            {
+                "name": "InetSocketAddress",
+                "position": {
+                    "line": 192,
+                    "column": 62
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNamingMaintainInstance()",
+            "NacosRegistryServiceImpl.getNamingInstance()",
+            "NacosRegistryServiceImpl.getServiceName()",
+            "NacosRegistryServiceImpl.getServiceGroup()",
+            "NacosRegistryServiceImpl.subscribe(String cluster, EventListener listener)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "close",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "close()",
+        "class_signature": "NacosRegistryServiceImpl.close()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n\n    }",
+        "position": {
+            "line": 206,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "getNamingInstance",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNamingInstance()",
+        "class_signature": "NacosRegistryServiceImpl.getNamingInstance()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (naming == null) {\n            synchronized (NacosRegistryServiceImpl.class) {\n                if (naming == null) {\n                    naming = NacosFactory.createNamingService(getNamingProperties());\n                }\n            }\n        }\n        return naming;\n    }",
+        "position": {
+            "line": 216,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "createNamingService",
+                "position": {
+                    "line": 220,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getNamingProperties",
+                "position": {
+                    "line": 220,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNamingProperties()"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "getNamingMaintainInstance",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNamingMaintainInstance()",
+        "class_signature": "NacosRegistryServiceImpl.getNamingMaintainInstance()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (namingMaintain == null) {\n            synchronized (NacosRegistryServiceImpl.class) {\n                if (namingMaintain == null) {\n                    namingMaintain = NacosFactory.createMaintainService(getNamingProperties());\n                }\n            }\n        }\n        return namingMaintain;\n    }",
+        "position": {
+            "line": 227,
+            "column": 41
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "createMaintainService",
+                "position": {
+                    "line": 231,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getNamingProperties",
+                "position": {
+                    "line": 231,
+                    "column": 73
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNamingProperties()"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "getNamingProperties",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNamingProperties()",
+        "class_signature": "NacosRegistryServiceImpl.getNamingProperties()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        Properties properties = new Properties();\n        properties.setProperty(ConfigurationKeys.IS_USE_CLOUD_NAMESPACE_PARSING, USE_PARSE_RULE);\n        properties.setProperty(ConfigurationKeys.IS_USE_ENDPOINT_PARSING_RULE, USE_PARSE_RULE);\n        if (System.getProperty(PRO_SERVER_ADDR_KEY) != null) {\n            properties.setProperty(PRO_SERVER_ADDR_KEY, System.getProperty(PRO_SERVER_ADDR_KEY));\n        } else {\n            String address = FILE_CONFIG.getConfig(getNacosAddrFileKey());\n            if (address != null) {\n                properties.setProperty(PRO_SERVER_ADDR_KEY, address);\n            }\n        }\n        if (System.getProperty(PRO_NAMESPACE_KEY) != null) {\n            properties.setProperty(PRO_NAMESPACE_KEY, System.getProperty(PRO_NAMESPACE_KEY));\n        } else {\n            String namespace = FILE_CONFIG.getConfig(getNacosNameSpaceFileKey());\n            if (namespace == null) {\n                namespace = DEFAULT_NAMESPACE;\n            }\n            properties.setProperty(PRO_NAMESPACE_KEY, namespace);\n        }\n        if (!initNacosAuthProperties(properties)) {\n            LOGGER.info(\"Nacos naming auth properties empty.\");\n        }\n        String contextPath = StringUtils.isNotBlank(System.getProperty(CONTEXT_PATH)) ? System.getProperty(CONTEXT_PATH) : FILE_CONFIG.getConfig(getNacosContextPathKey());\n        if (StringUtils.isNotBlank(contextPath)) {\n            properties.setProperty(CONTEXT_PATH, contextPath);\n        }\n        return properties;\n    }",
+        "position": {
+            "line": 238,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setProperty",
+                "position": {
+                    "line": 240,
+                    "column": 20
+                }
+            },
+            {
+                "name": "setProperty",
+                "position": {
+                    "line": 241,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 242,
+                    "column": 20
+                }
+            },
+            {
+                "name": "setProperty",
+                "position": {
+                    "line": 243,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 243,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 245,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getNacosAddrFileKey",
+                "position": {
+                    "line": 245,
+                    "column": 52
+                }
+            },
+            {
+                "name": "setProperty",
+                "position": {
+                    "line": 247,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 250,
+                    "column": 20
+                }
+            },
+            {
+                "name": "setProperty",
+                "position": {
+                    "line": 251,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 251,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 253,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getNacosNameSpaceFileKey",
+                "position": {
+                    "line": 253,
+                    "column": 54
+                }
+            },
+            {
+                "name": "setProperty",
+                "position": {
+                    "line": 257,
+                    "column": 24
+                }
+            },
+            {
+                "name": "initNacosAuthProperties",
+                "position": {
+                    "line": 259,
+                    "column": 14
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 260,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 262,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 262,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 262,
+                    "column": 96
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 262,
+                    "column": 136
+                }
+            },
+            {
+                "name": "getNacosContextPathKey",
+                "position": {
+                    "line": 262,
+                    "column": 146
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 263,
+                    "column": 25
+                }
+            },
+            {
+                "name": "setProperty",
+                "position": {
+                    "line": 264,
+                    "column": 24
+                }
+            },
+            {
+                "name": "Properties",
+                "position": {
+                    "line": 239,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNacosAddrFileKey()",
+            "NacosRegistryServiceImpl.getNacosNameSpaceFileKey()",
+            "NacosRegistryServiceImpl.initNacosAuthProperties(Properties sourceProperties)",
+            "NacosRegistryServiceImpl.getNacosContextPathKey()"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "initNacosAuthProperties",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "initNacosAuthProperties(Properties sourceProperties)",
+        "class_signature": "NacosRegistryServiceImpl.initNacosAuthProperties(Properties sourceProperties)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Properties",
+                "sourceProperties"
+            ]
+        ],
+        "methodBody": "{\n        String userName = StringUtils.isNotBlank(System.getProperty(USER_NAME)) ? System.getProperty(USER_NAME) : FILE_CONFIG.getConfig(getNacosUserName());\n        if (StringUtils.isNotBlank(userName)) {\n            String password = StringUtils.isNotBlank(System.getProperty(PASSWORD)) ? System.getProperty(PASSWORD) : FILE_CONFIG.getConfig(getNacosPassword());\n            if (StringUtils.isNotBlank(password)) {\n                sourceProperties.setProperty(USER_NAME, userName);\n                sourceProperties.setProperty(PASSWORD, password);\n                LOGGER.info(\"Nacos check auth with userName/password.\");\n                return true;\n            }\n        } else {\n            String accessKey = StringUtils.isNotBlank(System.getProperty(ACCESS_KEY)) ? System.getProperty(ACCESS_KEY) : FILE_CONFIG.getConfig(getNacosAccessKey());\n            String ramRoleName = StringUtils.isNotBlank(System.getProperty(RAM_ROLE_NAME_KEY)) ? System.getProperty(RAM_ROLE_NAME_KEY) : FILE_CONFIG.getConfig(getNacosRamRoleNameKey());\n            if (StringUtils.isNotBlank(accessKey)) {\n                String secretKey = StringUtils.isNotBlank(System.getProperty(SECRET_KEY)) ? System.getProperty(SECRET_KEY) : FILE_CONFIG.getConfig(getNacosSecretKey());\n                if (StringUtils.isNotBlank(secretKey)) {\n                    sourceProperties.put(ACCESS_KEY, accessKey);\n                    sourceProperties.put(SECRET_KEY, secretKey);\n                    LOGGER.info(\"Nacos check auth with ak/sk.\");\n                    return true;\n                }\n            } else if (StringUtils.isNotBlank(ramRoleName)) {\n                sourceProperties.put(RAM_ROLE_NAME_KEY, ramRoleName);\n                LOGGER.info(\"Nacos check auth with ram role.\");\n                return true;\n            }\n        }\n        return false;\n    }",
+        "position": {
+            "line": 276,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 277,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 277,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 277,
+                    "column": 90
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 277,
+                    "column": 127
+                }
+            },
+            {
+                "name": "getNacosUserName",
+                "position": {
+                    "line": 277,
+                    "column": 137
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 278,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 279,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 279,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 279,
+                    "column": 93
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 279,
+                    "column": 129
+                }
+            },
+            {
+                "name": "getNacosPassword",
+                "position": {
+                    "line": 279,
+                    "column": 139
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 280,
+                    "column": 29
+                }
+            },
+            {
+                "name": "setProperty",
+                "position": {
+                    "line": 281,
+                    "column": 34
+                }
+            },
+            {
+                "name": "setProperty",
+                "position": {
+                    "line": 282,
+                    "column": 34
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 283,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 287,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 287,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 287,
+                    "column": 96
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 287,
+                    "column": 134
+                }
+            },
+            {
+                "name": "getNacosAccessKey",
+                "position": {
+                    "line": 287,
+                    "column": 144
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 288,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 288,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 288,
+                    "column": 105
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 288,
+                    "column": 150
+                }
+            },
+            {
+                "name": "getNacosRamRoleNameKey",
+                "position": {
+                    "line": 288,
+                    "column": 160
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 289,
+                    "column": 29
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 290,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 290,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 290,
+                    "column": 100
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 290,
+                    "column": 138
+                }
+            },
+            {
+                "name": "getNacosSecretKey",
+                "position": {
+                    "line": 290,
+                    "column": 148
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 291,
+                    "column": 33
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 292,
+                    "column": 38
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 293,
+                    "column": 38
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 294,
+                    "column": 28
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 297,
+                    "column": 36
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 298,
+                    "column": 34
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 299,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNacosUserName()",
+            "NacosRegistryServiceImpl.getNacosPassword()",
+            "NacosRegistryServiceImpl.getNacosAccessKey()",
+            "NacosRegistryServiceImpl.getNacosRamRoleNameKey()",
+            "NacosRegistryServiceImpl.getNacosSecretKey()"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "getClusterName",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getClusterName()",
+        "class_signature": "NacosRegistryServiceImpl.getClusterName()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return FILE_CONFIG.getConfig(getNacosClusterFileKey(), DEFAULT_CLUSTER);\n    }",
+        "position": {
+            "line": 306,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 307,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getNacosClusterFileKey",
+                "position": {
+                    "line": 307,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNacosClusterFileKey()"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "getServiceName",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getServiceName()",
+        "class_signature": "NacosRegistryServiceImpl.getServiceName()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return FILE_CONFIG.getConfig(getNacosApplicationFileKey(), DEFAULT_APPLICATION);\n    }",
+        "position": {
+            "line": 310,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 311,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getNacosApplicationFileKey",
+                "position": {
+                    "line": 311,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNacosApplicationFileKey()"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "getServiceGroup",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getServiceGroup()",
+        "class_signature": "NacosRegistryServiceImpl.getServiceGroup()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return FILE_CONFIG.getConfig(getNacosApplicationGroupKey(), DEFAULT_GROUP);\n    }",
+        "position": {
+            "line": 314,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 315,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getNacosApplicationGroupKey",
+                "position": {
+                    "line": 315,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistryServiceImpl.getNacosApplicationGroupKey()"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "getNacosAddrFileKey",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosAddrFileKey()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosAddrFileKey()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, PRO_SERVER_ADDR_KEY);\n    }",
+        "position": {
+            "line": 318,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 319,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 19
+    },
+    {
+        "name": "getNacosNameSpaceFileKey",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosNameSpaceFileKey()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosNameSpaceFileKey()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, PRO_NAMESPACE_KEY);\n    }",
+        "position": {
+            "line": 322,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 323,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "getNacosClusterFileKey",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosClusterFileKey()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosClusterFileKey()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, REGISTRY_CLUSTER);\n    }",
+        "position": {
+            "line": 326,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 327,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 12
+    },
+    {
+        "name": "getNacosApplicationFileKey",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosApplicationFileKey()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosApplicationFileKey()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, PRO_APPLICATION_KEY);\n    }",
+        "position": {
+            "line": 330,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 331,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 17
+    },
+    {
+        "name": "getNacosApplicationGroupKey",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosApplicationGroupKey()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosApplicationGroupKey()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, PRO_GROUP_KEY);\n    }",
+        "position": {
+            "line": 334,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 335,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    },
+    {
+        "name": "getNacosUserName",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosUserName()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosUserName()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, USER_NAME);\n    }",
+        "position": {
+            "line": 338,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 339,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 23
+    },
+    {
+        "name": "getNacosPassword",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosPassword()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosPassword()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, PASSWORD);\n    }",
+        "position": {
+            "line": 342,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 343,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 24
+    },
+    {
+        "name": "getNacosAccessKey",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosAccessKey()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosAccessKey()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, ACCESS_KEY);\n    }",
+        "position": {
+            "line": 346,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 347,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 25
+    },
+    {
+        "name": "getNacosSecretKey",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosSecretKey()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosSecretKey()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, SECRET_KEY);\n    }",
+        "position": {
+            "line": 350,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 351,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 27
+    },
+    {
+        "name": "getNacosRamRoleNameKey",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosRamRoleNameKey()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosRamRoleNameKey()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_CONFIG, REGISTRY_TYPE, RAM_ROLE_NAME_KEY);\n    }",
+        "position": {
+            "line": 354,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 355,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 26
+    },
+    {
+        "name": "getClientApplication",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getClientApplication()",
+        "class_signature": "NacosRegistryServiceImpl.getClientApplication()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, PRO_CLIENT_APPLICATION);\n    }",
+        "position": {
+            "line": 358,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 359,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "getNacosUrlPatternOfSLB",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosUrlPatternOfSLB()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosUrlPatternOfSLB()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, SLB_PATTERN);\n    }",
+        "position": {
+            "line": 362,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 363,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "getNacosContextPathKey",
+        "category": "method_declaration",
+        "class": "NacosRegistryServiceImpl",
+        "signature": "getNacosContextPathKey()",
+        "class_signature": "NacosRegistryServiceImpl.getNacosContextPathKey()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, CONTEXT_PATH);\n    }",
+        "position": {
+            "line": 366,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 367,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 22
+    }
+]

@@ -1,0 +1,1090 @@
+[
+    {
+        "name": "toStringAddress",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "toStringAddress(SocketAddress address)",
+        "class_signature": "NetUtil.toStringAddress(SocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "SocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        if (address == null) {\n            return StringUtils.EMPTY;\n        }\n        return toStringAddress((InetSocketAddress) address);\n    }",
+        "position": {
+            "line": 68,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "toStringAddress",
+                "position": {
+                    "line": 72,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NetUtil.toStringAddress(InetSocketAddress address)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "toIpAddress",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "toIpAddress(SocketAddress address)",
+        "class_signature": "NetUtil.toIpAddress(SocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "SocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        InetSocketAddress inetSocketAddress = (InetSocketAddress) address;\n        return inetSocketAddress.getAddress().getHostAddress();\n    }",
+        "position": {
+            "line": 81,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getHostAddress",
+                "position": {
+                    "line": 83,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getAddress",
+                "position": {
+                    "line": 83,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "toStringAddress",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "toStringAddress(InetSocketAddress address)",
+        "class_signature": "NetUtil.toStringAddress(InetSocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetSocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        return address.getAddress().getHostAddress() + \":\" + address.getPort();\n    }",
+        "position": {
+            "line": 92,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getHostAddress",
+                "position": {
+                    "line": 93,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getAddress",
+                "position": {
+                    "line": 93,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 93,
+                    "column": 70
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "toInetSocketAddress",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "toInetSocketAddress(String address)",
+        "class_signature": "NetUtil.toInetSocketAddress(String address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        String[] ipPortStr = splitIPPortStr(address);\n        String host;\n        int port;\n        if (null != ipPortStr) {\n            host = ipPortStr[0];\n            port = Integer.parseInt(ipPortStr[1]);\n        } else {\n            host = address;\n            port = 0;\n        }\n        return new InetSocketAddress(host, port);\n    }",
+        "position": {
+            "line": 102,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "splitIPPortStr",
+                "position": {
+                    "line": 103,
+                    "column": 30
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 108,
+                    "column": 28
+                }
+            },
+            {
+                "name": "InetSocketAddress",
+                "position": {
+                    "line": 113,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "NetUtil.splitIPPortStr(String address)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "splitIPPortStr",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "splitIPPortStr(String address)",
+        "class_signature": "NetUtil.splitIPPortStr(String address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isBlank(address)) {\n            throw new IllegalArgumentException(\"ip and port string cannot be empty!\");\n        }\n        if (address.charAt(0) == '[') {\n            address = removeBrackets(address);\n        }\n        String[] serverAddArr = null;\n        int i = address.lastIndexOf(Constants.IP_PORT_SPLIT_CHAR);\n        if (i > -1) {\n            serverAddArr = new String[2];\n            String hostAddress = address.substring(0,i);\n            if (hostAddress.contains(\"%\")) {\n                hostAddress = hostAddress.substring(0, hostAddress.indexOf(\"%\"));\n            }\n            serverAddArr[0] = hostAddress;\n            serverAddArr[1] = address.substring(i + 1);\n        }\n        return serverAddArr;\n    }",
+        "position": {
+            "line": 116,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 117,
+                    "column": 25
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 120,
+                    "column": 21
+                }
+            },
+            {
+                "name": "removeBrackets",
+                "position": {
+                    "line": 121,
+                    "column": 23
+                }
+            },
+            {
+                "name": "lastIndexOf",
+                "position": {
+                    "line": 124,
+                    "column": 25
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 127,
+                    "column": 42
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 128,
+                    "column": 29
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 129,
+                    "column": 43
+                }
+            },
+            {
+                "name": "indexOf",
+                "position": {
+                    "line": 129,
+                    "column": 68
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 132,
+                    "column": 39
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 118,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "NetUtil.removeBrackets(String str)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "toLong",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "toLong(String address)",
+        "class_signature": "NetUtil.toLong(String address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        InetSocketAddress ad = toInetSocketAddress(address);\n        String[] ip = ad.getAddress().getHostAddress().split(\"\\\\.\");\n        long r = 0;\n        r = r | (Long.parseLong(ip[0]) << 40);\n        r = r | (Long.parseLong(ip[1]) << 32);\n        r = r | (Long.parseLong(ip[2]) << 24);\n        r = r | (Long.parseLong(ip[3]) << 16);\n        r = r | ad.getPort();\n        return r;\n    }",
+        "position": {
+            "line": 143,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "toInetSocketAddress",
+                "position": {
+                    "line": 144,
+                    "column": 32
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 145,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getHostAddress",
+                "position": {
+                    "line": 145,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getAddress",
+                "position": {
+                    "line": 145,
+                    "column": 26
+                }
+            },
+            {
+                "name": "parseLong",
+                "position": {
+                    "line": 147,
+                    "column": 23
+                }
+            },
+            {
+                "name": "parseLong",
+                "position": {
+                    "line": 148,
+                    "column": 23
+                }
+            },
+            {
+                "name": "parseLong",
+                "position": {
+                    "line": 149,
+                    "column": 23
+                }
+            },
+            {
+                "name": "parseLong",
+                "position": {
+                    "line": 150,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 151,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "NetUtil.toInetSocketAddress(String address)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "getLocalIp",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "getLocalIp(String... preferredNetworks)",
+        "class_signature": "NetUtil.getLocalIp(String... preferredNetworks)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String...",
+                "preferredNetworks"
+            ]
+        ],
+        "methodBody": "{\n        InetAddress address = getLocalAddress(preferredNetworks);\n        if (null != address) {\n            String hostAddress = address.getHostAddress();\n            if (address instanceof Inet6Address) {\n                if (hostAddress.contains(\"%\")) {\n                    hostAddress = hostAddress.substring(0, hostAddress.indexOf(\"%\"));\n                }\n            }\n            return hostAddress;\n        }\n        return localIP();\n    }",
+        "position": {
+            "line": 160,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLocalAddress",
+                "position": {
+                    "line": 161,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getHostAddress",
+                "position": {
+                    "line": 163,
+                    "column": 42
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 165,
+                    "column": 33
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 166,
+                    "column": 47
+                }
+            },
+            {
+                "name": "indexOf",
+                "position": {
+                    "line": 166,
+                    "column": 72
+                }
+            },
+            {
+                "name": "localIP",
+                "position": {
+                    "line": 171,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NetUtil.getLocalAddress(String... preferredNetworks)",
+            "NetUtil.localIP()"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "localIP",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "localIP()",
+        "class_signature": "NetUtil.localIP()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (PREFER_IPV6_ADDRESSES) {\n            return LOCALHOST_IPV6;\n        }\n        return LOCALHOST;\n    }",
+        "position": {
+            "line": 174,
+            "column": 26
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "getLocalHost",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "getLocalHost()",
+        "class_signature": "NetUtil.getLocalHost()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        InetAddress address = getLocalAddress();\n        return address == null ? \"localhost\" : address.getHostName();\n    }",
+        "position": {
+            "line": 186,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLocalAddress",
+                "position": {
+                    "line": 187,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getHostName",
+                "position": {
+                    "line": 188,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [
+            "NetUtil.getLocalAddress(String... preferredNetworks)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "getLocalAddress",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "getLocalAddress(String... preferredNetworks)",
+        "class_signature": "NetUtil.getLocalAddress(String... preferredNetworks)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String...",
+                "preferredNetworks"
+            ]
+        ],
+        "methodBody": "{\n        if (LOCAL_ADDRESS != null) {\n            return LOCAL_ADDRESS;\n        }\n        InetAddress localAddress = getLocalAddress0(preferredNetworks);\n        LOCAL_ADDRESS = localAddress;\n        return localAddress;\n    }",
+        "position": {
+            "line": 198,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLocalAddress0",
+                "position": {
+                    "line": 202,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "NetUtil.getLocalAddress0(String... preferredNetworks)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "getLocalAddress0",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "getLocalAddress0(String... preferredNetworks)",
+        "class_signature": "NetUtil.getLocalAddress0(String... preferredNetworks)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String...",
+                "preferredNetworks"
+            ]
+        ],
+        "methodBody": "{\n        InetAddress localAddress = null;\n        try {\n            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();\n            if (interfaces != null) {\n                while (interfaces.hasMoreElements()) {\n                    try {\n                        NetworkInterface network = interfaces.nextElement();\n                        if (network.isUp()) {\n                            Enumeration<InetAddress> addresses = network.getInetAddresses();\n                            while (addresses.hasMoreElements()) {\n                                try {\n                                    InetAddress address = addresses.nextElement();\n                                    if (isValidAddress(address)) {\n                                        if (null == localAddress) {\n                                            localAddress = address;\n                                        }\n                                        //check preferredNetworks\n                                        if (preferredNetworks.length > 0) {\n                                            String ip = address.getHostAddress();\n                                            for (String regex : preferredNetworks) {\n                                                if (StringUtils.isBlank(regex)) {\n                                                    continue;\n                                                }\n                                                if (ip.matches(regex) || ip.startsWith(regex)) {\n                                                    return address;\n                                                }\n                                            }\n                                        } else {\n                                            return address;\n                                        }\n                                    }\n                                } catch (Throwable e) {\n                                    LOGGER.warn(\"Failed to retrieving ip address, {}\", e.getMessage(), e);\n                                }\n                            }\n                        }\n                    } catch (Throwable e) {\n                        LOGGER.warn(\"Failed to retrieving ip address, {}\", e.getMessage(), e);\n                    }\n                }\n            }\n        } catch (Throwable e) {\n            LOGGER.warn(\"Failed to retrieving ip address, {}\", e.getMessage(), e);\n        }\n        if (localAddress == null) {\n            LOGGER.error(\"Could not get local host ip address, will use 127.0.0.1 instead.\");\n        } else {\n            LOGGER.error(\"Could not match ip by preferredNetworks:{}, will use default first ip {} instead.\", Arrays.toString(preferredNetworks), localAddress.getHostAddress());\n        }\n        return localAddress;\n    }",
+        "position": {
+            "line": 207,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getNetworkInterfaces",
+                "position": {
+                    "line": 210,
+                    "column": 73
+                }
+            },
+            {
+                "name": "hasMoreElements",
+                "position": {
+                    "line": 212,
+                    "column": 35
+                }
+            },
+            {
+                "name": "nextElement",
+                "position": {
+                    "line": 214,
+                    "column": 63
+                }
+            },
+            {
+                "name": "isUp",
+                "position": {
+                    "line": 215,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getInetAddresses",
+                "position": {
+                    "line": 216,
+                    "column": 74
+                }
+            },
+            {
+                "name": "hasMoreElements",
+                "position": {
+                    "line": 217,
+                    "column": 46
+                }
+            },
+            {
+                "name": "nextElement",
+                "position": {
+                    "line": 219,
+                    "column": 69
+                }
+            },
+            {
+                "name": "isValidAddress",
+                "position": {
+                    "line": 220,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getHostAddress",
+                "position": {
+                    "line": 226,
+                    "column": 65
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 228,
+                    "column": 65
+                }
+            },
+            {
+                "name": "matches",
+                "position": {
+                    "line": 231,
+                    "column": 56
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 231,
+                    "column": 77
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 240,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 240,
+                    "column": 90
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 245,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 245,
+                    "column": 78
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 250,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 250,
+                    "column": 66
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 253,
+                    "column": 20
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 255,
+                    "column": 20
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 255,
+                    "column": 118
+                }
+            },
+            {
+                "name": "getHostAddress",
+                "position": {
+                    "line": 255,
+                    "column": 160
+                }
+            }
+        ],
+        "calledMethods": [
+            "NetUtil.isValidAddress(InetAddress address)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "validAddress",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "validAddress(InetSocketAddress address)",
+        "class_signature": "NetUtil.validAddress(InetSocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetSocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        if (address.getHostName() == null || 0 == address.getPort()) {\n            throw new IllegalArgumentException(\"invalid address:\" + address);\n        }\n    }",
+        "position": {
+            "line": 265,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getHostName",
+                "position": {
+                    "line": 266,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 266,
+                    "column": 59
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 267,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "isValidAddress",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "isValidAddress(InetAddress address)",
+        "class_signature": "NetUtil.isValidAddress(InetAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        if (address == null || address.isLoopbackAddress()) {\n            return false;\n        }\n        String hostAddress = address.getHostAddress();\n        if (address instanceof Inet6Address) {\n            if (!PREFER_IPV6_ADDRESSES) {\n                return false;\n            }\n            if (address.isAnyLocalAddress() // filter ::/128\n                    || address.isLinkLocalAddress() //filter fe80::/10\n                    || address.isSiteLocalAddress()// filter fec0::/10\n                    || isUniqueLocalAddress(address)) //filter fd00::/8\n            {\n                return false;\n            }\n            return isValidIPv6(hostAddress);\n        }\n        return !FORBIDDEN_HOSTS.contains(hostAddress) && isValidIPv4(hostAddress);\n    }",
+        "position": {
+            "line": 277,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isLoopbackAddress",
+                "position": {
+                    "line": 278,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getHostAddress",
+                "position": {
+                    "line": 281,
+                    "column": 38
+                }
+            },
+            {
+                "name": "isAnyLocalAddress",
+                "position": {
+                    "line": 286,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isLinkLocalAddress",
+                "position": {
+                    "line": 287,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isSiteLocalAddress",
+                "position": {
+                    "line": 288,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isUniqueLocalAddress",
+                "position": {
+                    "line": 289,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isValidIPv6",
+                "position": {
+                    "line": 293,
+                    "column": 20
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 295,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isValidIPv4",
+                "position": {
+                    "line": 295,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [
+            "NetUtil.isUniqueLocalAddress(InetAddress address)",
+            "NetUtil.isValidIPv6(String ip)",
+            "NetUtil.isValidIPv4(String ip)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "isValidIp",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "isValidIp(String ip, boolean validLocalAndAny)",
+        "class_signature": "NetUtil.isValidIp(String ip, boolean validLocalAndAny)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "boolean",
+                "validLocalAndAny"
+            ]
+        ],
+        "methodBody": "{\n        if (ip == null) {\n            return false;\n        }\n        ip = convertIpIfNecessary(ip);\n        if (validLocalAndAny) {\n            return isValidIPv4(ip) || isValidIPv6(ip);\n        } else {\n            return !FORBIDDEN_HOSTS.contains(ip) && (isValidIPv4(ip) || isValidIPv6(ip));\n        }\n    }",
+        "position": {
+            "line": 305,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "convertIpIfNecessary",
+                "position": {
+                    "line": 309,
+                    "column": 14
+                }
+            },
+            {
+                "name": "isValidIPv4",
+                "position": {
+                    "line": 311,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isValidIPv6",
+                "position": {
+                    "line": 311,
+                    "column": 39
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 313,
+                    "column": 37
+                }
+            },
+            {
+                "name": "isValidIPv4",
+                "position": {
+                    "line": 313,
+                    "column": 54
+                }
+            },
+            {
+                "name": "isValidIPv6",
+                "position": {
+                    "line": 313,
+                    "column": 73
+                }
+            }
+        ],
+        "calledMethods": [
+            "NetUtil.convertIpIfNecessary(String ip)",
+            "NetUtil.isValidIPv4(String ip)",
+            "NetUtil.isValidIPv6(String ip)",
+            "NetUtil.isValidIPv4(String ip)",
+            "NetUtil.isValidIPv6(String ip)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "convertIpIfNecessary",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "convertIpIfNecessary(String ip)",
+        "class_signature": "NetUtil.convertIpIfNecessary(String ip)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ]
+        ],
+        "methodBody": "{\n        if (isValidIPv4(ip) || isValidIPv6(ip)) {\n            return ip;\n        } else {\n            try {\n                return InetAddress.getByName(ip).getHostAddress();\n            } catch (UnknownHostException e) {\n                throw new RuntimeException(e);\n            }\n        }\n    }",
+        "position": {
+            "line": 323,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isValidIPv4",
+                "position": {
+                    "line": 324,
+                    "column": 13
+                }
+            },
+            {
+                "name": "isValidIPv6",
+                "position": {
+                    "line": 324,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getHostAddress",
+                "position": {
+                    "line": 328,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getByName",
+                "position": {
+                    "line": 328,
+                    "column": 36
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 330,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [
+            "NetUtil.isValidIPv4(String ip)",
+            "NetUtil.isValidIPv6(String ip)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "isValidIPv4",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "isValidIPv4(String ip)",
+        "class_signature": "NetUtil.isValidIPv4(String ip)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ]
+        ],
+        "methodBody": "{\n        return NetAddressValidatorUtil.isIPv4Address(ip);\n    }",
+        "position": {
+            "line": 335,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isIPv4Address",
+                "position": {
+                    "line": 336,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    },
+    {
+        "name": "isValidIPv6",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "isValidIPv6(String ip)",
+        "class_signature": "NetUtil.isValidIPv6(String ip)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "ip"
+            ]
+        ],
+        "methodBody": "{\n        return NetAddressValidatorUtil.isIPv6Address(ip);\n    }",
+        "position": {
+            "line": 339,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isIPv6Address",
+                "position": {
+                    "line": 340,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 17
+    },
+    {
+        "name": "isUniqueLocalAddress",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "isUniqueLocalAddress(InetAddress address)",
+        "class_signature": "NetUtil.isUniqueLocalAddress(InetAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        byte[] ip = address.getAddress();\n        return (ip[0] & 0xff) == 0xfd;\n    }",
+        "position": {
+            "line": 343,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAddress",
+                "position": {
+                    "line": 344,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "removeBrackets",
+        "category": "method_declaration",
+        "class": "NetUtil",
+        "signature": "removeBrackets(String str)",
+        "class_signature": "NetUtil.removeBrackets(String str)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "str"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isBlank(str)) {\n            return \"\";\n        }\n        return str.replaceAll(\"[\\\\[\\\\]]\", \"\");\n    }",
+        "position": {
+            "line": 348,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 349,
+                    "column": 25
+                }
+            },
+            {
+                "name": "replaceAll",
+                "position": {
+                    "line": 352,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    }
+]

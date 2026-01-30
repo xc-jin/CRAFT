@@ -1,0 +1,1076 @@
+[
+    {
+        "name": "passCheck",
+        "category": "method_declaration",
+        "class": "ParamFlowChecker",
+        "signature": "passCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object... args)",
+        "class_signature": "ParamFlowChecker.passCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object... args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "ParamFlowRule",
+                "rule"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "Object...",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        if (args == null) {\n            return true;\n        }\n\n        int paramIdx = rule.getParamIdx();\n        if (args.length <= paramIdx) {\n            return true;\n        }\n\n        // Get parameter value.\n        Object value = args[paramIdx];\n\n        // Assign value with the result of paramFlowKey method\n        if (value instanceof ParamFlowArgument) {\n            value = ((ParamFlowArgument) value).paramFlowKey();\n        }\n        // If value is null, then pass\n        if (value == null) {\n            return true;\n        }\n\n        if (rule.isClusterMode() && rule.getGrade() == RuleConstant.FLOW_GRADE_QPS) {\n            return passClusterCheck(resourceWrapper, rule, count, value);\n        }\n\n        return passLocalCheck(resourceWrapper, rule, count, value);\n    }",
+        "position": {
+            "line": 45,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParamIdx",
+                "position": {
+                    "line": 51,
+                    "column": 29
+                }
+            },
+            {
+                "name": "paramFlowKey",
+                "position": {
+                    "line": 61,
+                    "column": 49
+                }
+            },
+            {
+                "name": "isClusterMode",
+                "position": {
+                    "line": 68,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getGrade",
+                "position": {
+                    "line": 68,
+                    "column": 42
+                }
+            },
+            {
+                "name": "passClusterCheck",
+                "position": {
+                    "line": 69,
+                    "column": 20
+                }
+            },
+            {
+                "name": "passLocalCheck",
+                "position": {
+                    "line": 72,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowChecker.passClusterCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)",
+            "ParamFlowChecker.passLocalCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "passLocalCheck",
+        "category": "method_declaration",
+        "class": "ParamFlowChecker",
+        "signature": "passLocalCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)",
+        "class_signature": "ParamFlowChecker.passLocalCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "ParamFlowRule",
+                "rule"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "Object",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            if (Collection.class.isAssignableFrom(value.getClass())) {\n                for (Object param : ((Collection) value)) {\n                    if (!passSingleValueCheck(resourceWrapper, rule, count, param)) {\n                        return false;\n                    }\n                }\n            } else if (value.getClass().isArray()) {\n                int length = Array.getLength(value);\n                for (int i = 0; i < length; i++) {\n                    Object param = Array.get(value, i);\n                    if (!passSingleValueCheck(resourceWrapper, rule, count, param)) {\n                        return false;\n                    }\n                }\n            } else {\n                return passSingleValueCheck(resourceWrapper, rule, count, value);\n            }\n        } catch (Throwable e) {\n            RecordLog.warn(\"[ParamFlowChecker] Unexpected error\", e);\n        }\n\n        return true;\n    }",
+        "position": {
+            "line": 75,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAssignableFrom",
+                "position": {
+                    "line": 78,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 78,
+                    "column": 57
+                }
+            },
+            {
+                "name": "passSingleValueCheck",
+                "position": {
+                    "line": 80,
+                    "column": 26
+                }
+            },
+            {
+                "name": "isArray",
+                "position": {
+                    "line": 84,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 84,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getLength",
+                "position": {
+                    "line": 85,
+                    "column": 36
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 87,
+                    "column": 42
+                }
+            },
+            {
+                "name": "passSingleValueCheck",
+                "position": {
+                    "line": 88,
+                    "column": 26
+                }
+            },
+            {
+                "name": "passSingleValueCheck",
+                "position": {
+                    "line": 93,
+                    "column": 24
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 96,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowChecker.passSingleValueCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int acquireCount, Object value)",
+            "ParamFlowChecker.passSingleValueCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int acquireCount, Object value)",
+            "ParamFlowChecker.passSingleValueCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int acquireCount, Object value)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "passSingleValueCheck",
+        "category": "method_declaration",
+        "class": "ParamFlowChecker",
+        "signature": "passSingleValueCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int acquireCount, Object value)",
+        "class_signature": "ParamFlowChecker.passSingleValueCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int acquireCount, Object value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "ParamFlowRule",
+                "rule"
+            ],
+            [
+                "int",
+                "acquireCount"
+            ],
+            [
+                "Object",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        if (rule.getGrade() == RuleConstant.FLOW_GRADE_QPS) {\n            if (rule.getControlBehavior() == RuleConstant.CONTROL_BEHAVIOR_RATE_LIMITER) {\n                return passThrottleLocalCheck(resourceWrapper, rule, acquireCount, value);\n            } else {\n                return passDefaultLocalCheck(resourceWrapper, rule, acquireCount, value);\n            }\n        } else if (rule.getGrade() == RuleConstant.FLOW_GRADE_THREAD) {\n            Set<Object> exclusionItems = rule.getParsedHotItems().keySet();\n            long threadCount = getParameterMetric(resourceWrapper).getThreadCount(rule.getParamIdx(), value);\n            if (exclusionItems.contains(value)) {\n                int itemThreshold = rule.getParsedHotItems().get(value);\n                return ++threadCount <= itemThreshold;\n            }\n            long threshold = (long) rule.getCount();\n            return ++threadCount <= threshold;\n        }\n\n        return true;\n    }",
+        "position": {
+            "line": 102,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getGrade",
+                "position": {
+                    "line": 104,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getControlBehavior",
+                "position": {
+                    "line": 105,
+                    "column": 22
+                }
+            },
+            {
+                "name": "passThrottleLocalCheck",
+                "position": {
+                    "line": 106,
+                    "column": 24
+                }
+            },
+            {
+                "name": "passDefaultLocalCheck",
+                "position": {
+                    "line": 108,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getGrade",
+                "position": {
+                    "line": 110,
+                    "column": 25
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 111,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getParsedHotItems",
+                "position": {
+                    "line": 111,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getThreadCount",
+                "position": {
+                    "line": 112,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getParameterMetric",
+                "position": {
+                    "line": 112,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getParamIdx",
+                "position": {
+                    "line": 112,
+                    "column": 88
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 113,
+                    "column": 32
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 114,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getParsedHotItems",
+                "position": {
+                    "line": 114,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getCount",
+                "position": {
+                    "line": 117,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowChecker.passThrottleLocalCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int acquireCount, Object value)",
+            "ParamFlowChecker.passDefaultLocalCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int acquireCount, Object value)",
+            "ParamFlowChecker.getParameterMetric(ResourceWrapper resourceWrapper)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "passDefaultLocalCheck",
+        "category": "method_declaration",
+        "class": "ParamFlowChecker",
+        "signature": "passDefaultLocalCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int acquireCount, Object value)",
+        "class_signature": "ParamFlowChecker.passDefaultLocalCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int acquireCount, Object value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "ParamFlowRule",
+                "rule"
+            ],
+            [
+                "int",
+                "acquireCount"
+            ],
+            [
+                "Object",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        ParameterMetric metric = getParameterMetric(resourceWrapper);\n        CacheMap<Object, AtomicReference<TokenUpdateStatus>> tokenCounters = metric == null ? null : metric.getRuleStampedTokenCounter(rule);\n\n        DateTimeFormatter dtf = DateTimeFormatter.ISO_DATE_TIME;\n        if (tokenCounters == null) {\n            return true;\n        }\n\n        // Calculate max token count (threshold)\n        Set<Object> exclusionItems = rule.getParsedHotItems().keySet();\n        long tokenCount = (long) rule.getCount();\n        if (exclusionItems.contains(value)) {\n            tokenCount = rule.getParsedHotItems().get(value);\n        }\n\n        if (tokenCount == 0) {\n            return false;\n        }\n\n        long maxCount = tokenCount + rule.getBurstCount();\n        if (acquireCount > maxCount) {\n            return false;\n        }\n\n        while (true) {\n            long currentTime = TimeUtil.currentTimeMillis();\n\n            AtomicReference<TokenUpdateStatus> atomicLastStatus = tokenCounters.putIfAbsent(value, new AtomicReference<>(\n                    new TokenUpdateStatus(currentTime, maxCount - acquireCount)\n            ));\n            if (atomicLastStatus == null) {\n                // Token never added, just replenish the tokens and consume {@code acquireCount} immediately.\n                return true;\n            }\n\n            // Calculate the time duration since last token was added.\n            TokenUpdateStatus lastStatus = atomicLastStatus.get();\n            long passTime = currentTime - lastStatus.getLastAddTokenTime();\n            // A simplified token bucket algorithm that will replenish the tokens only when statistic window has passed.\n            long newQps;\n            if (passTime > rule.getDurationInSec() * 1000) {\n                long restQps = lastStatus.getRestQps();\n                long toAddCount = (passTime * tokenCount) / (rule.getDurationInSec() * 1000);\n                newQps = toAddCount + restQps > maxCount ? (maxCount - acquireCount)\n                        : (restQps + toAddCount - acquireCount);\n\n                if (newQps < 0) {\n                    return false;\n                }\n                TokenUpdateStatus newStatus = new TokenUpdateStatus(currentTime, newQps);\n                if (atomicLastStatus.compareAndSet(lastStatus, newStatus)) {\n                    return true;\n                }\n                Thread.yield();\n            } else {\n                newQps = lastStatus.getRestQps() - acquireCount;\n                if (newQps >= 0) {\n                    TokenUpdateStatus newStatus = new TokenUpdateStatus(lastStatus.getLastAddTokenTime(), newQps);\n                    if (atomicLastStatus.compareAndSet(lastStatus, newStatus)) {\n                        return true;\n                    }\n                } else {\n                    return false;\n                }\n\n                Thread.yield();\n            }\n        }\n    }",
+        "position": {
+            "line": 124,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameterMetric",
+                "position": {
+                    "line": 126,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getRuleStampedTokenCounter",
+                "position": {
+                    "line": 127,
+                    "column": 109
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 135,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getParsedHotItems",
+                "position": {
+                    "line": 135,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getCount",
+                "position": {
+                    "line": 136,
+                    "column": 39
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 137,
+                    "column": 28
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 138,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getParsedHotItems",
+                "position": {
+                    "line": 138,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getBurstCount",
+                "position": {
+                    "line": 145,
+                    "column": 43
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 151,
+                    "column": 41
+                }
+            },
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 153,
+                    "column": 81
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 162,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getLastAddTokenTime",
+                "position": {
+                    "line": 163,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getDurationInSec",
+                "position": {
+                    "line": 166,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getRestQps",
+                "position": {
+                    "line": 167,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getDurationInSec",
+                "position": {
+                    "line": 168,
+                    "column": 67
+                }
+            },
+            {
+                "name": "compareAndSet",
+                "position": {
+                    "line": 176,
+                    "column": 38
+                }
+            },
+            {
+                "name": "yield",
+                "position": {
+                    "line": 179,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getRestQps",
+                "position": {
+                    "line": 181,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getLastAddTokenTime",
+                "position": {
+                    "line": 183,
+                    "column": 84
+                }
+            },
+            {
+                "name": "compareAndSet",
+                "position": {
+                    "line": 184,
+                    "column": 42
+                }
+            },
+            {
+                "name": "yield",
+                "position": {
+                    "line": 191,
+                    "column": 24
+                }
+            },
+            {
+                "name": "AtomicReference<>",
+                "position": {
+                    "line": 153,
+                    "column": 104
+                }
+            },
+            {
+                "name": "TokenUpdateStatus",
+                "position": {
+                    "line": 154,
+                    "column": 25
+                }
+            },
+            {
+                "name": "TokenUpdateStatus",
+                "position": {
+                    "line": 175,
+                    "column": 51
+                }
+            },
+            {
+                "name": "TokenUpdateStatus",
+                "position": {
+                    "line": 183,
+                    "column": 55
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowChecker.getParameterMetric(ResourceWrapper resourceWrapper)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "passThrottleLocalCheck",
+        "category": "method_declaration",
+        "class": "ParamFlowChecker",
+        "signature": "passThrottleLocalCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int acquireCount, Object value)",
+        "class_signature": "ParamFlowChecker.passThrottleLocalCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int acquireCount, Object value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "ParamFlowRule",
+                "rule"
+            ],
+            [
+                "int",
+                "acquireCount"
+            ],
+            [
+                "Object",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        ParameterMetric metric = getParameterMetric(resourceWrapper);\n        CacheMap<Object, AtomicLong> timeRecorderMap = metric == null ? null : metric.getRuleTimeCounter(rule);\n        if (timeRecorderMap == null) {\n            return true;\n        }\n\n        // Calculate max token count (threshold)\n        Set<Object> exclusionItems = rule.getParsedHotItems().keySet();\n        long tokenCount = (long) rule.getCount();\n        if (exclusionItems.contains(value)) {\n            tokenCount = rule.getParsedHotItems().get(value);\n        }\n\n        if (tokenCount == 0) {\n            return false;\n        }\n\n        long costTime = Math.round(1.0 * 1000 * acquireCount * rule.getDurationInSec() / tokenCount);\n        while (true) {\n            long currentTime = TimeUtil.currentTimeMillis();\n            AtomicLong timeRecorder = timeRecorderMap.putIfAbsent(value, new AtomicLong(currentTime));\n            if (timeRecorder == null) {\n                return true;\n            }\n            //AtomicLong timeRecorder = timeRecorderMap.get(value);\n            long lastPassTime = timeRecorder.get();\n            long expectedTime = lastPassTime + costTime;\n\n            if (expectedTime <= currentTime || expectedTime - currentTime < rule.getMaxQueueingTimeMs()) {\n                AtomicLong lastPastTimeRef = timeRecorderMap.get(value);\n                if (lastPastTimeRef.compareAndSet(lastPassTime, currentTime)) {\n                    long waitTime = expectedTime - currentTime;\n                    if (waitTime > 0) {\n                        lastPastTimeRef.set(expectedTime);\n                        try {\n                            TimeUnit.MILLISECONDS.sleep(waitTime);\n                        } catch (InterruptedException e) {\n                            RecordLog.warn(\"passThrottleLocalCheck: wait interrupted\", e);\n                        }\n                    }\n                    return true;\n                } else {\n                    Thread.yield();\n                }\n            } else {\n                return false;\n            }\n        }\n    }",
+        "position": {
+            "line": 196,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameterMetric",
+                "position": {
+                    "line": 198,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getRuleTimeCounter",
+                "position": {
+                    "line": 199,
+                    "column": 87
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 205,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getParsedHotItems",
+                "position": {
+                    "line": 205,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getCount",
+                "position": {
+                    "line": 206,
+                    "column": 39
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 207,
+                    "column": 28
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 208,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getParsedHotItems",
+                "position": {
+                    "line": 208,
+                    "column": 31
+                }
+            },
+            {
+                "name": "round",
+                "position": {
+                    "line": 215,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getDurationInSec",
+                "position": {
+                    "line": 215,
+                    "column": 69
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 217,
+                    "column": 41
+                }
+            },
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 218,
+                    "column": 55
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 223,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getMaxQueueingTimeMs",
+                "position": {
+                    "line": 226,
+                    "column": 82
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 227,
+                    "column": 62
+                }
+            },
+            {
+                "name": "compareAndSet",
+                "position": {
+                    "line": 228,
+                    "column": 37
+                }
+            },
+            {
+                "name": "set",
+                "position": {
+                    "line": 231,
+                    "column": 41
+                }
+            },
+            {
+                "name": "sleep",
+                "position": {
+                    "line": 233,
+                    "column": 51
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 235,
+                    "column": 39
+                }
+            },
+            {
+                "name": "yield",
+                "position": {
+                    "line": 240,
+                    "column": 28
+                }
+            },
+            {
+                "name": "AtomicLong",
+                "position": {
+                    "line": 218,
+                    "column": 78
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowChecker.getParameterMetric(ResourceWrapper resourceWrapper)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "getParameterMetric",
+        "category": "method_declaration",
+        "class": "ParamFlowChecker",
+        "signature": "getParameterMetric(ResourceWrapper resourceWrapper)",
+        "class_signature": "ParamFlowChecker.getParameterMetric(ResourceWrapper resourceWrapper)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ]
+        ],
+        "methodBody": "{\n        // Should not be null.\n        return ParameterMetricStorage.getParamMetric(resourceWrapper);\n    }",
+        "position": {
+            "line": 248,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParamMetric",
+                "position": {
+                    "line": 250,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "toCollection",
+        "category": "method_declaration",
+        "class": "ParamFlowChecker",
+        "signature": "toCollection(Object value)",
+        "class_signature": "ParamFlowChecker.toCollection(Object value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        if (value instanceof Collection) {\n            return (Collection<Object>) value;\n        } else if (value.getClass().isArray()) {\n            List<Object> params = new ArrayList<Object>();\n            int length = Array.getLength(value);\n            for (int i = 0; i < length; i++) {\n                Object param = Array.get(value, i);\n                params.add(param);\n            }\n            return params;\n        } else {\n            return Collections.singletonList(value);\n        }\n    }",
+        "position": {
+            "line": 254,
+            "column": 39
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isArray",
+                "position": {
+                    "line": 257,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 257,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getLength",
+                "position": {
+                    "line": 259,
+                    "column": 32
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 261,
+                    "column": 38
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 262,
+                    "column": 24
+                }
+            },
+            {
+                "name": "singletonList",
+                "position": {
+                    "line": 266,
+                    "column": 32
+                }
+            },
+            {
+                "name": "ArrayList<Object>",
+                "position": {
+                    "line": 258,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "passClusterCheck",
+        "category": "method_declaration",
+        "class": "ParamFlowChecker",
+        "signature": "passClusterCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)",
+        "class_signature": "ParamFlowChecker.passClusterCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "ParamFlowRule",
+                "rule"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "Object",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            Collection<Object> params = toCollection(value);\n\n            TokenService clusterService = pickClusterService();\n            if (clusterService == null) {\n                // No available cluster client or server, fallback to local or\n                // pass in need.\n                return fallbackToLocalOrPass(resourceWrapper, rule, count, params);\n            }\n\n            TokenResult result = clusterService.requestParamToken(rule.getClusterConfig().getFlowId(), count, params);\n            switch (result.getStatus()) {\n                case TokenResultStatus.OK:\n                    return true;\n                case TokenResultStatus.BLOCKED:\n                    return false;\n                default:\n                    return fallbackToLocalOrPass(resourceWrapper, rule, count, params);\n            }\n        } catch (Throwable ex) {\n            RecordLog.warn(\"[ParamFlowChecker] Request cluster token for parameter unexpected failed\", ex);\n            return fallbackToLocalOrPass(resourceWrapper, rule, count, value);\n        }\n    }",
+        "position": {
+            "line": 270,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "toCollection",
+                "position": {
+                    "line": 273,
+                    "column": 41
+                }
+            },
+            {
+                "name": "pickClusterService",
+                "position": {
+                    "line": 275,
+                    "column": 43
+                }
+            },
+            {
+                "name": "fallbackToLocalOrPass",
+                "position": {
+                    "line": 279,
+                    "column": 24
+                }
+            },
+            {
+                "name": "requestParamToken",
+                "position": {
+                    "line": 282,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getFlowId",
+                "position": {
+                    "line": 282,
+                    "column": 91
+                }
+            },
+            {
+                "name": "getClusterConfig",
+                "position": {
+                    "line": 282,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getStatus",
+                "position": {
+                    "line": 283,
+                    "column": 28
+                }
+            },
+            {
+                "name": "fallbackToLocalOrPass",
+                "position": {
+                    "line": 289,
+                    "column": 28
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 292,
+                    "column": 23
+                }
+            },
+            {
+                "name": "fallbackToLocalOrPass",
+                "position": {
+                    "line": 293,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowChecker.toCollection(Object value)",
+            "ParamFlowChecker.pickClusterService()",
+            "ParamFlowChecker.fallbackToLocalOrPass(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)",
+            "ParamFlowChecker.fallbackToLocalOrPass(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)",
+            "ParamFlowChecker.fallbackToLocalOrPass(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "fallbackToLocalOrPass",
+        "category": "method_declaration",
+        "class": "ParamFlowChecker",
+        "signature": "fallbackToLocalOrPass(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)",
+        "class_signature": "ParamFlowChecker.fallbackToLocalOrPass(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "ParamFlowRule",
+                "rule"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "Object",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        if (rule.getClusterConfig().isFallbackToLocalWhenFail()) {\n            return passLocalCheck(resourceWrapper, rule, count, value);\n        } else {\n            // The rule won't be activated, just pass.\n            return true;\n        }\n    }",
+        "position": {
+            "line": 297,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isFallbackToLocalWhenFail",
+                "position": {
+                    "line": 299,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getClusterConfig",
+                "position": {
+                    "line": 299,
+                    "column": 18
+                }
+            },
+            {
+                "name": "passLocalCheck",
+                "position": {
+                    "line": 300,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowChecker.passLocalCheck(ResourceWrapper resourceWrapper, ParamFlowRule rule, int count, Object value)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "pickClusterService",
+        "category": "method_declaration",
+        "class": "ParamFlowChecker",
+        "signature": "pickClusterService()",
+        "class_signature": "ParamFlowChecker.pickClusterService()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (ClusterStateManager.isClient()) {\n            return TokenClientProvider.getClient();\n        }\n        if (ClusterStateManager.isServer()) {\n            return EmbeddedClusterTokenServerProvider.getServer();\n        }\n        return null;\n    }",
+        "position": {
+            "line": 307,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isClient",
+                "position": {
+                    "line": 308,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getClient",
+                "position": {
+                    "line": 309,
+                    "column": 40
+                }
+            },
+            {
+                "name": "isServer",
+                "position": {
+                    "line": 311,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getServer",
+                "position": {
+                    "line": 312,
+                    "column": 55
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "ParamFlowChecker",
+        "category": "constructor_declaration",
+        "class": "ParamFlowChecker",
+        "signature": "ParamFlowChecker()",
+        "class_signature": "ParamFlowChecker.ParamFlowChecker()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n    }",
+        "position": {
+            "line": 317,
+            "column": 13
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 1
+    }
+]

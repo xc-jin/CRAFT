@@ -1,0 +1,1320 @@
+[
+    {
+        "name": "ConnectionProxyXA",
+        "category": "constructor_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "ConnectionProxyXA(Connection originalConnection, XAConnection xaConnection, BaseDataSourceResource resource, String xid)",
+        "class_signature": "ConnectionProxyXA.ConnectionProxyXA(Connection originalConnection, XAConnection xaConnection, BaseDataSourceResource resource, String xid)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Connection",
+                "originalConnection"
+            ],
+            [
+                "XAConnection",
+                "xaConnection"
+            ],
+            [
+                "BaseDataSourceResource",
+                "resource"
+            ],
+            [
+                "String",
+                "xid"
+            ]
+        ],
+        "methodBody": "{\n        super(originalConnection, xaConnection, resource, xid);\n        this.shouldBeHeld = resource.isShouldBeHeld();\n    }",
+        "position": {
+            "line": 80,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isShouldBeHeld",
+                "position": {
+                    "line": 83,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "init",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "init()",
+        "class_signature": "ConnectionProxyXA.init()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        try {\n            this.xaResource = xaConnection.getXAResource();\n            this.currentAutoCommitStatus = this.originalConnection.getAutoCommit();\n            if (!currentAutoCommitStatus) {\n                throw new IllegalStateException(\"Connection[autocommit=false] as default is NOT supported\");\n            }\n        } catch (SQLException e) {\n            throw new RuntimeException(e);\n        }\n\n    }",
+        "position": {
+            "line": 86,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getXAResource",
+                "position": {
+                    "line": 88,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getAutoCommit",
+                "position": {
+                    "line": 89,
+                    "column": 68
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 91,
+                    "column": 27
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 94,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "keepIfNecessary",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "keepIfNecessary()",
+        "class_signature": "ConnectionProxyXA.keepIfNecessary()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (shouldBeHeld()) {\n            resource.hold(xaBranchXid.toString(), this);\n        }\n    }",
+        "position": {
+            "line": 99,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "shouldBeHeld",
+                "position": {
+                    "line": 100,
+                    "column": 13
+                }
+            },
+            {
+                "name": "hold",
+                "position": {
+                    "line": 101,
+                    "column": 22
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 101,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.shouldBeHeld()"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "releaseIfNecessary",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "releaseIfNecessary()",
+        "class_signature": "ConnectionProxyXA.releaseIfNecessary()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (shouldBeHeld()) {\n            if (this.xaBranchXid != null) {\n                String xaBranchXid = this.xaBranchXid.toString();\n                if (isHeld()) {\n                    resource.release(xaBranchXid, this);\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 105,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "shouldBeHeld",
+                "position": {
+                    "line": 106,
+                    "column": 13
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 108,
+                    "column": 55
+                }
+            },
+            {
+                "name": "isHeld",
+                "position": {
+                    "line": 109,
+                    "column": 21
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 110,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.shouldBeHeld()",
+            "ConnectionProxyXA.isHeld()"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "xaEnd",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "xaEnd(XAXid xaXid, int flags)",
+        "class_signature": "ConnectionProxyXA.xaEnd(XAXid xaXid, int flags)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "XAXid",
+                "xaXid"
+            ],
+            [
+                "int",
+                "flags"
+            ]
+        ],
+        "methodBody": "{\n        if (!xaEnded) {\n            xaResource.end(xaXid, flags);\n            xaEnded = true;\n        }\n    }",
+        "position": {
+            "line": 116,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "end",
+                "position": {
+                    "line": 118,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    },
+    {
+        "name": "xaCommit",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "xaCommit(String xid, long branchId, String applicationData)",
+        "class_signature": "ConnectionProxyXA.xaCommit(String xid, long branchId, String applicationData)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "xid"
+            ],
+            [
+                "long",
+                "branchId"
+            ],
+            [
+                "String",
+                "applicationData"
+            ]
+        ],
+        "methodBody": "{\n        XAXid xaXid = XAXidBuilder.build(xid, branchId);\n        xaResource.commit(xaXid, false);\n        releaseIfNecessary();\n    }",
+        "position": {
+            "line": 130,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "build",
+                "position": {
+                    "line": 131,
+                    "column": 36
+                }
+            },
+            {
+                "name": "commit",
+                "position": {
+                    "line": 132,
+                    "column": 20
+                }
+            },
+            {
+                "name": "releaseIfNecessary",
+                "position": {
+                    "line": 133,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.releaseIfNecessary()"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "xaRollback",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "xaRollback(String xid, long branchId, String applicationData)",
+        "class_signature": "ConnectionProxyXA.xaRollback(String xid, long branchId, String applicationData)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "xid"
+            ],
+            [
+                "long",
+                "branchId"
+            ],
+            [
+                "String",
+                "applicationData"
+            ]
+        ],
+        "methodBody": "{\n        XAXid xaXid = XAXidBuilder.build(xid, branchId);\n        xaRollback(xaXid);\n    }",
+        "position": {
+            "line": 142,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "build",
+                "position": {
+                    "line": 143,
+                    "column": 36
+                }
+            },
+            {
+                "name": "xaRollback",
+                "position": {
+                    "line": 144,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.xaRollback(XAXid xaXid)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "xaRollback",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "xaRollback(XAXid xaXid)",
+        "class_signature": "ConnectionProxyXA.xaRollback(XAXid xaXid)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "XAXid",
+                "xaXid"
+            ]
+        ],
+        "methodBody": "{\n        xaResource.rollback(xaXid);\n        releaseIfNecessary();\n    }",
+        "position": {
+            "line": 152,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "rollback",
+                "position": {
+                    "line": 153,
+                    "column": 20
+                }
+            },
+            {
+                "name": "releaseIfNecessary",
+                "position": {
+                    "line": 154,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.releaseIfNecessary()"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "setAutoCommit",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "setAutoCommit(boolean autoCommit)",
+        "class_signature": "ConnectionProxyXA.setAutoCommit(boolean autoCommit)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "autoCommit"
+            ]
+        ],
+        "methodBody": "{\n        if (currentAutoCommitStatus == autoCommit) {\n            return;\n        }\n        if (autoCommit) {\n            // According to JDBC spec:\n            // If this method is called during a transaction and the\n            // auto-commit mode is changed, the transaction is committed.\n            if (xaActive) {\n                commit();\n            }\n        } else {\n            if (xaActive) {\n                throw new SQLException(\"should NEVER happen: setAutoCommit from true to false while xa branch is active\");\n            }\n            // Start a XA branch\n            long branchId;\n            try {\n                // 1. register branch to TC then get the branch message\n                branchRegisterTime = System.currentTimeMillis();\n                branchId = DefaultResourceManager.get().branchRegister(BranchType.XA, resource.getResourceId(), null, xid, null,\n                        null);\n            } catch (TransactionException te) {\n                cleanXABranchContext();\n                throw new SQLException(\"failed to register xa branch \" + xid + \" since \" + te.getCode() + \":\" + te.getMessage(), te);\n            }\n            // 2. build XA-Xid with xid and branchId\n            this.xaBranchXid = XAXidBuilder.build(xid, branchId);\n            // Keep the Connection if necessary\n            keepIfNecessary();\n            try {\n                start();\n            } catch (XAException e) {\n                cleanXABranchContext();\n                throw new SQLException(\"failed to start xa branch \" + xid + \" since \" + e.getMessage(), e);\n            }\n            // 4. XA is active\n            this.xaActive = true;\n\n        }\n\n        currentAutoCommitStatus = autoCommit;\n    }",
+        "position": {
+            "line": 158,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "commit",
+                "position": {
+                    "line": 167,
+                    "column": 17
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 177,
+                    "column": 45
+                }
+            },
+            {
+                "name": "branchRegister",
+                "position": {
+                    "line": 178,
+                    "column": 57
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 178,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getResourceId",
+                "position": {
+                    "line": 178,
+                    "column": 96
+                }
+            },
+            {
+                "name": "cleanXABranchContext",
+                "position": {
+                    "line": 181,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getCode",
+                "position": {
+                    "line": 182,
+                    "column": 95
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 182,
+                    "column": 116
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 185,
+                    "column": 45
+                }
+            },
+            {
+                "name": "keepIfNecessary",
+                "position": {
+                    "line": 187,
+                    "column": 13
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 189,
+                    "column": 17
+                }
+            },
+            {
+                "name": "cleanXABranchContext",
+                "position": {
+                    "line": 191,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 192,
+                    "column": 91
+                }
+            },
+            {
+                "name": "SQLException",
+                "position": {
+                    "line": 171,
+                    "column": 27
+                }
+            },
+            {
+                "name": "SQLException",
+                "position": {
+                    "line": 182,
+                    "column": 27
+                }
+            },
+            {
+                "name": "SQLException",
+                "position": {
+                    "line": 192,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.commit()",
+            "ConnectionProxyXA.cleanXABranchContext()",
+            "ConnectionProxyXA.keepIfNecessary()",
+            "ConnectionProxyXA.start()",
+            "ConnectionProxyXA.cleanXABranchContext()"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "getAutoCommit",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "getAutoCommit()",
+        "class_signature": "ConnectionProxyXA.getAutoCommit()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return currentAutoCommitStatus;\n    }",
+        "position": {
+            "line": 203,
+            "column": 20
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "commit",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "commit()",
+        "class_signature": "ConnectionProxyXA.commit()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (currentAutoCommitStatus) {\n            // Ignore the committing on an autocommit session.\n            return;\n        }\n        if (!xaActive || this.xaBranchXid == null) {\n            throw new SQLException(\"should NOT commit on an inactive session\", SQLSTATE_XA_NOT_END);\n        }\n        try {\n            // XA End: Success\n            try {\n                end(XAResource.TMSUCCESS);\n            } catch (SQLException sqle) {\n                // Rollback immediately before the XA Branch Context is deleted.\n                String xaBranchXid = this.xaBranchXid.toString();\n                rollback();\n                throw new SQLException(\"Branch \" + xaBranchXid + \" was rollbacked on committing since \" + sqle.getMessage(), SQLSTATE_XA_NOT_END, sqle);\n            }\n            long now = System.currentTimeMillis();\n            checkTimeout(now);\n            setPrepareTime(now);\n            xaResource.prepare(xaBranchXid);\n        } catch (XAException xe) {\n            // Branch Report to TC: Failed\n            reportStatusToTC(BranchStatus.PhaseOne_Failed);\n            throw new SQLException(\n                \"Failed to end(TMSUCCESS)/prepare xa branch on \" + xid + \"-\" + xaBranchXid.getBranchId() + \" since \" + xe\n                    .getMessage(), xe);\n        } finally {\n            cleanXABranchContext();\n        }\n    }",
+        "position": {
+            "line": 208,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "end",
+                "position": {
+                    "line": 219,
+                    "column": 17
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 222,
+                    "column": 55
+                }
+            },
+            {
+                "name": "rollback",
+                "position": {
+                    "line": 223,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 224,
+                    "column": 112
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 226,
+                    "column": 31
+                }
+            },
+            {
+                "name": "checkTimeout",
+                "position": {
+                    "line": 227,
+                    "column": 13
+                }
+            },
+            {
+                "name": "setPrepareTime",
+                "position": {
+                    "line": 228,
+                    "column": 13
+                }
+            },
+            {
+                "name": "prepare",
+                "position": {
+                    "line": 229,
+                    "column": 24
+                }
+            },
+            {
+                "name": "reportStatusToTC",
+                "position": {
+                    "line": 232,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getBranchId",
+                "position": {
+                    "line": 234,
+                    "column": 92
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 235,
+                    "column": 22
+                }
+            },
+            {
+                "name": "cleanXABranchContext",
+                "position": {
+                    "line": 237,
+                    "column": 13
+                }
+            },
+            {
+                "name": "SQLException",
+                "position": {
+                    "line": 214,
+                    "column": 23
+                }
+            },
+            {
+                "name": "SQLException",
+                "position": {
+                    "line": 224,
+                    "column": 27
+                }
+            },
+            {
+                "name": "SQLException",
+                "position": {
+                    "line": 233,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.end(int flags)",
+            "ConnectionProxyXA.rollback()",
+            "ConnectionProxyXA.checkTimeout(Long now)",
+            "ConnectionProxyXA.setPrepareTime(Long prepareTime)",
+            "ConnectionProxyXA.reportStatusToTC(BranchStatus status)",
+            "ConnectionProxyXA.cleanXABranchContext()"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "rollback",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "rollback()",
+        "class_signature": "ConnectionProxyXA.rollback()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (currentAutoCommitStatus) {\n            // Ignore the committing on an autocommit session.\n            return;\n        }\n        if (!xaActive || this.xaBranchXid == null) {\n            throw new SQLException(\"should NOT rollback on an inactive session\");\n        }\n        try {\n            if (!rollBacked) {\n                // XA End: Fail\n                xaEnd(xaBranchXid, XAResource.TMFAIL);\n                xaRollback(xaBranchXid);\n            }\n            // Branch Report to TC\n            reportStatusToTC(BranchStatus.PhaseOne_Failed);\n            LOGGER.info(\"{} was rollbacked\", xaBranchXid);\n        } catch (XAException xe) {\n            throw new SQLException(\"Failed to end(TMFAIL) xa branch on \" + xid + \"-\" + xaBranchXid.getBranchId()\n                + \" since \" + xe.getMessage(), xe);\n        } finally {\n            cleanXABranchContext();\n        }\n    }",
+        "position": {
+            "line": 242,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "xaEnd",
+                "position": {
+                    "line": 253,
+                    "column": 17
+                }
+            },
+            {
+                "name": "xaRollback",
+                "position": {
+                    "line": 254,
+                    "column": 17
+                }
+            },
+            {
+                "name": "reportStatusToTC",
+                "position": {
+                    "line": 257,
+                    "column": 13
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 258,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getBranchId",
+                "position": {
+                    "line": 260,
+                    "column": 100
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 261,
+                    "column": 34
+                }
+            },
+            {
+                "name": "cleanXABranchContext",
+                "position": {
+                    "line": 263,
+                    "column": 13
+                }
+            },
+            {
+                "name": "SQLException",
+                "position": {
+                    "line": 248,
+                    "column": 23
+                }
+            },
+            {
+                "name": "SQLException",
+                "position": {
+                    "line": 260,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.xaEnd(XAXid xaXid, int flags)",
+            "ConnectionProxyXA.xaRollback(XAXid xaXid)",
+            "ConnectionProxyXA.reportStatusToTC(BranchStatus status)",
+            "ConnectionProxyXA.cleanXABranchContext()"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "start",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "start()",
+        "class_signature": "ConnectionProxyXA.start()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        // 3. XA Start\n        if (JdbcConstants.ORACLE.equals(resource.getDbType())) {\n            xaResource.start(this.xaBranchXid, SeataXAResource.ORATRANSLOOSE);\n        } else {\n            xaResource.start(this.xaBranchXid, XAResource.TMNOFLAGS);\n        }\n\n        try {\n            termination();\n        } catch (SQLException e) {\n            // the framework layer does not actively call ROLLBACK when setAutoCommit throws an SQL exception\n            xaResource.end(this.xaBranchXid, XAResource.TMFAIL);\n            xaRollback(xaBranchXid);\n            // Branch Report to TC: Failed\n            reportStatusToTC(BranchStatus.PhaseOne_Failed);\n            throw  e;\n        }\n    }",
+        "position": {
+            "line": 267,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 269,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getDbType",
+                "position": {
+                    "line": 269,
+                    "column": 50
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 270,
+                    "column": 24
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 272,
+                    "column": 24
+                }
+            },
+            {
+                "name": "termination",
+                "position": {
+                    "line": 276,
+                    "column": 13
+                }
+            },
+            {
+                "name": "end",
+                "position": {
+                    "line": 279,
+                    "column": 24
+                }
+            },
+            {
+                "name": "xaRollback",
+                "position": {
+                    "line": 280,
+                    "column": 13
+                }
+            },
+            {
+                "name": "reportStatusToTC",
+                "position": {
+                    "line": 282,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.termination()",
+            "ConnectionProxyXA.xaRollback(XAXid xaXid)",
+            "ConnectionProxyXA.reportStatusToTC(BranchStatus status)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "end",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "end(int flags)",
+        "class_signature": "ConnectionProxyXA.end(int flags)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "flags"
+            ]
+        ],
+        "methodBody": "{\n        xaEnd(xaBranchXid, flags);\n        termination();\n    }",
+        "position": {
+            "line": 287,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "xaEnd",
+                "position": {
+                    "line": 288,
+                    "column": 9
+                }
+            },
+            {
+                "name": "termination",
+                "position": {
+                    "line": 289,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.xaEnd(XAXid xaXid, int flags)",
+            "ConnectionProxyXA.termination()"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "cleanXABranchContext",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "cleanXABranchContext()",
+        "class_signature": "ConnectionProxyXA.cleanXABranchContext()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        branchRegisterTime = null;\n        prepareTime = null;\n        xaActive = false;\n        if (!isHeld()) {\n            xaBranchXid = null;\n        }\n    }",
+        "position": {
+            "line": 292,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isHeld",
+                "position": {
+                    "line": 296,
+                    "column": 14
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.isHeld()"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "checkTimeout",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "checkTimeout(Long now)",
+        "class_signature": "ConnectionProxyXA.checkTimeout(Long now)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Long",
+                "now"
+            ]
+        ],
+        "methodBody": "{\n        if (now - branchRegisterTime > TIMEOUT) {\n            xaRollback(xaBranchXid);\n            throw new XAException(\"XA branch timeout error\");\n        }\n    }",
+        "position": {
+            "line": 301,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "xaRollback",
+                "position": {
+                    "line": 303,
+                    "column": 13
+                }
+            },
+            {
+                "name": "XAException",
+                "position": {
+                    "line": 304,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.xaRollback(XAXid xaXid)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "close",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "close()",
+        "class_signature": "ConnectionProxyXA.close()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        rollBacked = false;\n        if (isHeld() && shouldBeHeld()) {\n            // if kept by a keeper, just hold the connection.\n            return;\n        }\n        cleanXABranchContext();\n        originalConnection.close();\n    }",
+        "position": {
+            "line": 309,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isHeld",
+                "position": {
+                    "line": 311,
+                    "column": 13
+                }
+            },
+            {
+                "name": "shouldBeHeld",
+                "position": {
+                    "line": 311,
+                    "column": 25
+                }
+            },
+            {
+                "name": "cleanXABranchContext",
+                "position": {
+                    "line": 315,
+                    "column": 9
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 316,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.isHeld()",
+            "ConnectionProxyXA.shouldBeHeld()",
+            "ConnectionProxyXA.cleanXABranchContext()"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "closeForce",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "closeForce()",
+        "class_signature": "ConnectionProxyXA.closeForce()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        Connection physicalConn = getWrappedConnection();\n        if (physicalConn instanceof PooledConnection) {\n            physicalConn = ((PooledConnection) physicalConn).getConnection();\n        }\n        // Force close the physical connection\n        physicalConn.close();\n        xaEnded = false;\n        rollBacked = false;\n        cleanXABranchContext();\n        originalConnection.close();\n        releaseIfNecessary();\n    }",
+        "position": {
+            "line": 319,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getWrappedConnection",
+                "position": {
+                    "line": 320,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getConnection",
+                "position": {
+                    "line": 322,
+                    "column": 62
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 325,
+                    "column": 22
+                }
+            },
+            {
+                "name": "cleanXABranchContext",
+                "position": {
+                    "line": 328,
+                    "column": 9
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 329,
+                    "column": 28
+                }
+            },
+            {
+                "name": "releaseIfNecessary",
+                "position": {
+                    "line": 330,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.cleanXABranchContext()",
+            "ConnectionProxyXA.releaseIfNecessary()"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "setHeld",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "setHeld(boolean kept)",
+        "class_signature": "ConnectionProxyXA.setHeld(boolean kept)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "kept"
+            ]
+        ],
+        "methodBody": "{\n        this.kept = kept;\n    }",
+        "position": {
+            "line": 334,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "isHeld",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "isHeld()",
+        "class_signature": "ConnectionProxyXA.isHeld()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return kept;\n    }",
+        "position": {
+            "line": 339,
+            "column": 20
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 25
+    },
+    {
+        "name": "shouldBeHeld",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "shouldBeHeld()",
+        "class_signature": "ConnectionProxyXA.shouldBeHeld()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return shouldBeHeld || StringUtils.isBlank(resource.getDbType());\n    }",
+        "position": {
+            "line": 344,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 345,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getDbType",
+                "position": {
+                    "line": 345,
+                    "column": 61
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 24
+    },
+    {
+        "name": "getPrepareTime",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "getPrepareTime()",
+        "class_signature": "ConnectionProxyXA.getPrepareTime()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return prepareTime;\n    }",
+        "position": {
+            "line": 348,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "setPrepareTime",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "setPrepareTime(Long prepareTime)",
+        "class_signature": "ConnectionProxyXA.setPrepareTime(Long prepareTime)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Long",
+                "prepareTime"
+            ]
+        ],
+        "methodBody": "{\n        this.prepareTime = prepareTime;\n    }",
+        "position": {
+            "line": 352,
+            "column": 18
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "termination",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "termination()",
+        "class_signature": "ConnectionProxyXA.termination()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        termination(this.xaBranchXid.toString());\n    }",
+        "position": {
+            "line": 356,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "termination",
+                "position": {
+                    "line": 357,
+                    "column": 9
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 357,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.termination(String xaBranchXid)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "termination",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "termination(String xaBranchXid)",
+        "class_signature": "ConnectionProxyXA.termination(String xaBranchXid)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "xaBranchXid"
+            ]
+        ],
+        "methodBody": "{\n        // if it is not empty, the resource will hang and need to be terminated early\n        BranchStatus branchStatus = BaseDataSourceResource.getBranchStatus(xaBranchXid);\n        if (branchStatus != null) {\n            releaseIfNecessary();\n            throw new SQLException(\"failed xa branch \" + xid\n                    + \" the global transaction has finish, branch status: \" + branchStatus.getCode());\n        }\n    }",
+        "position": {
+            "line": 360,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getBranchStatus",
+                "position": {
+                    "line": 362,
+                    "column": 60
+                }
+            },
+            {
+                "name": "releaseIfNecessary",
+                "position": {
+                    "line": 364,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getCode",
+                "position": {
+                    "line": 366,
+                    "column": 92
+                }
+            },
+            {
+                "name": "SQLException",
+                "position": {
+                    "line": 365,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConnectionProxyXA.releaseIfNecessary()"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "reportStatusToTC",
+        "category": "method_declaration",
+        "class": "ConnectionProxyXA",
+        "signature": "reportStatusToTC(BranchStatus status)",
+        "class_signature": "ConnectionProxyXA.reportStatusToTC(BranchStatus status)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "BranchStatus",
+                "status"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            DefaultResourceManager.get().branchReport(BranchType.XA, xid, xaBranchXid.getBranchId(),\n                    status, null);\n        } catch (TransactionException te) {\n            LOGGER.warn(\"Failed to report XA branch {} on {}-{} since {}:{}\",\n                    status, xid, xaBranchXid.getBranchId(), te.getCode(), te.getMessage());\n        }\n    }",
+        "position": {
+            "line": 375,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "branchReport",
+                "position": {
+                    "line": 377,
+                    "column": 42
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 377,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getBranchId",
+                "position": {
+                    "line": 377,
+                    "column": 87
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 380,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getBranchId",
+                "position": {
+                    "line": 381,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getCode",
+                "position": {
+                    "line": 381,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 381,
+                    "column": 78
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 19
+    }
+]

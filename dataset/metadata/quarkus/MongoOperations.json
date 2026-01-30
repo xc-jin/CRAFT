@@ -1,0 +1,5506 @@
+[
+    {
+        "name": "createQuery",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "createQuery(MongoCollection<?> collection, ClientSession session, Bson query, Bson sortDoc)",
+        "class_signature": "MongoOperations.createQuery(MongoCollection<?> collection, ClientSession session, Bson query, Bson sortDoc)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MongoCollection<?>",
+                "collection"
+            ],
+            [
+                "ClientSession",
+                "session"
+            ],
+            [
+                "Bson",
+                "query"
+            ],
+            [
+                "Bson",
+                "sortDoc"
+            ]
+        ],
+        "methodBody": "",
+        "position": {
+            "line": 61,
+            "column": 34
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 88
+    },
+    {
+        "name": "createUpdate",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "createUpdate(MongoCollection collection, Class<?> entityClass, Bson docUpdate)",
+        "class_signature": "MongoOperations.createUpdate(MongoCollection collection, Class<?> entityClass, Bson docUpdate)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MongoCollection",
+                "collection"
+            ],
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Bson",
+                "docUpdate"
+            ]
+        ],
+        "methodBody": "",
+        "position": {
+            "line": 64,
+            "column": 35
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 83
+    },
+    {
+        "name": "list",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "list(QueryType queryType)",
+        "class_signature": "MongoOperations.list(QueryType queryType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "QueryType",
+                "queryType"
+            ]
+        ],
+        "methodBody": "",
+        "position": {
+            "line": 66,
+            "column": 32
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 70
+    },
+    {
+        "name": "stream",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "stream(QueryType queryType)",
+        "class_signature": "MongoOperations.stream(QueryType queryType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "QueryType",
+                "queryType"
+            ]
+        ],
+        "methodBody": "",
+        "position": {
+            "line": 68,
+            "column": 34
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 72
+    },
+    {
+        "name": "persist",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persist(Object entity)",
+        "class_signature": "MongoOperations.persist(Object entity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "entity"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entity);\n        persist(collection, entity);\n    }",
+        "position": {
+            "line": 70,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 71,
+                    "column": 38
+                }
+            },
+            {
+                "name": "persist",
+                "position": {
+                    "line": 72,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Object entity)",
+            "MongoOperations.persist(MongoCollection collection, Object entity)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "persist",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persist(Iterable<?> entities)",
+        "class_signature": "MongoOperations.persist(Iterable<?> entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Iterable<?>",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        // not all iterables are re-traversal, so we traverse it once for copying inside a list\n        List<Object> objects = new ArrayList<>();\n        for (Object entity : entities) {\n            objects.add(entity);\n        }\n\n        persist(objects);\n    }",
+        "position": {
+            "line": 75,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "add",
+                "position": {
+                    "line": 79,
+                    "column": 21
+                }
+            },
+            {
+                "name": "persist",
+                "position": {
+                    "line": 82,
+                    "column": 9
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 77,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.persist(List<Object> entities)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "persist",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persist(Object firstEntity, Object... entities)",
+        "class_signature": "MongoOperations.persist(Object firstEntity, Object... entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "firstEntity"
+            ],
+            [
+                "Object...",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        if (entities == null || entities.length == 0) {\n            MongoCollection collection = mongoCollection(firstEntity);\n            persist(collection, firstEntity);\n        } else {\n            List<Object> entityList = new ArrayList<>();\n            entityList.add(firstEntity);\n            entityList.addAll(Arrays.asList(entities));\n            persist(entityList);\n        }\n    }",
+        "position": {
+            "line": 85,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 87,
+                    "column": 42
+                }
+            },
+            {
+                "name": "persist",
+                "position": {
+                    "line": 88,
+                    "column": 13
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 91,
+                    "column": 24
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 92,
+                    "column": 24
+                }
+            },
+            {
+                "name": "asList",
+                "position": {
+                    "line": 92,
+                    "column": 38
+                }
+            },
+            {
+                "name": "persist",
+                "position": {
+                    "line": 93,
+                    "column": 13
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 90,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Object entity)",
+            "MongoOperations.persist(MongoCollection collection, Object entity)",
+            "MongoOperations.persist(List<Object> entities)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "persist",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persist(Stream<?> entities)",
+        "class_signature": "MongoOperations.persist(Stream<?> entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Stream<?>",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        List<Object> objects = entities.collect(Collectors.toList());\n        persist(objects);\n    }",
+        "position": {
+            "line": 97,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "collect",
+                "position": {
+                    "line": 98,
+                    "column": 41
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 98,
+                    "column": 60
+                }
+            },
+            {
+                "name": "persist",
+                "position": {
+                    "line": 99,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.persist(List<Object> entities)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "update",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "update(Object entity)",
+        "class_signature": "MongoOperations.update(Object entity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "entity"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entity);\n        update(collection, entity);\n    }",
+        "position": {
+            "line": 102,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 103,
+                    "column": 38
+                }
+            },
+            {
+                "name": "update",
+                "position": {
+                    "line": 104,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Object entity)",
+            "MongoOperations.update(MongoCollection collection, Object entity)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "update",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "update(Iterable<?> entities)",
+        "class_signature": "MongoOperations.update(Iterable<?> entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Iterable<?>",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        // not all iterables are re-traversal, so we traverse it once for copying inside a list\n        List<Object> objects = new ArrayList<>();\n        for (Object entity : entities) {\n            objects.add(entity);\n        }\n\n        if (!objects.isEmpty()) {\n            // get the first entity to be able to retrieve the collection with it\n            Object firstEntity = objects.get(0);\n            MongoCollection collection = mongoCollection(firstEntity);\n            update(collection, objects);\n        }\n    }",
+        "position": {
+            "line": 107,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "add",
+                "position": {
+                    "line": 111,
+                    "column": 21
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 114,
+                    "column": 22
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 116,
+                    "column": 42
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 117,
+                    "column": 42
+                }
+            },
+            {
+                "name": "update",
+                "position": {
+                    "line": 118,
+                    "column": 13
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 109,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Object entity)",
+            "MongoOperations.update(MongoCollection collection, Object entity)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "update",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "update(Object firstEntity, Object... entities)",
+        "class_signature": "MongoOperations.update(Object firstEntity, Object... entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "firstEntity"
+            ],
+            [
+                "Object...",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(firstEntity);\n        if (entities == null || entities.length == 0) {\n            update(collection, firstEntity);\n        } else {\n            List<Object> entityList = new ArrayList<>();\n            entityList.add(firstEntity);\n            entityList.addAll(Arrays.asList(entities));\n            update(collection, entityList);\n        }\n    }",
+        "position": {
+            "line": 122,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 123,
+                    "column": 38
+                }
+            },
+            {
+                "name": "update",
+                "position": {
+                    "line": 125,
+                    "column": 13
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 128,
+                    "column": 24
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 129,
+                    "column": 24
+                }
+            },
+            {
+                "name": "asList",
+                "position": {
+                    "line": 129,
+                    "column": 38
+                }
+            },
+            {
+                "name": "update",
+                "position": {
+                    "line": 130,
+                    "column": 13
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 127,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Object entity)",
+            "MongoOperations.update(MongoCollection collection, Object entity)",
+            "MongoOperations.update(MongoCollection collection, Object entity)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "update",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "update(Stream<?> entities)",
+        "class_signature": "MongoOperations.update(Stream<?> entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Stream<?>",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        List<Object> objects = entities.collect(Collectors.toList());\n        if (!objects.isEmpty()) {\n            // get the first entity to be able to retrieve the collection with it\n            Object firstEntity = objects.get(0);\n            MongoCollection collection = mongoCollection(firstEntity);\n            update(collection, objects);\n        }\n    }",
+        "position": {
+            "line": 134,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "collect",
+                "position": {
+                    "line": 135,
+                    "column": 41
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 135,
+                    "column": 60
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 136,
+                    "column": 22
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 138,
+                    "column": 42
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 139,
+                    "column": 42
+                }
+            },
+            {
+                "name": "update",
+                "position": {
+                    "line": 140,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Object entity)",
+            "MongoOperations.update(MongoCollection collection, Object entity)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "persistOrUpdate",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persistOrUpdate(Object entity)",
+        "class_signature": "MongoOperations.persistOrUpdate(Object entity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "entity"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entity);\n        persistOrUpdate(collection, entity);\n    }",
+        "position": {
+            "line": 144,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 145,
+                    "column": 38
+                }
+            },
+            {
+                "name": "persistOrUpdate",
+                "position": {
+                    "line": 146,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Object entity)",
+            "MongoOperations.persistOrUpdate(MongoCollection collection, Object entity)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "persistOrUpdate",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persistOrUpdate(Iterable<?> entities)",
+        "class_signature": "MongoOperations.persistOrUpdate(Iterable<?> entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Iterable<?>",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        // not all iterables are re-traversal, so we traverse it once for copying inside a list\n        List<Object> objects = new ArrayList<>();\n        for (Object entity : entities) {\n            objects.add(entity);\n        }\n\n        persistOrUpdate(objects);\n    }",
+        "position": {
+            "line": 149,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "add",
+                "position": {
+                    "line": 153,
+                    "column": 21
+                }
+            },
+            {
+                "name": "persistOrUpdate",
+                "position": {
+                    "line": 156,
+                    "column": 9
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 151,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.persistOrUpdate(List<Object> entities)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "persistOrUpdate",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persistOrUpdate(Object firstEntity, Object... entities)",
+        "class_signature": "MongoOperations.persistOrUpdate(Object firstEntity, Object... entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "firstEntity"
+            ],
+            [
+                "Object...",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(firstEntity);\n        if (entities == null || entities.length == 0) {\n            persistOrUpdate(collection, firstEntity);\n        } else {\n            List<Object> entityList = new ArrayList<>();\n            entityList.add(firstEntity);\n            entityList.addAll(Arrays.asList(entities));\n            persistOrUpdate(entityList);\n        }\n    }",
+        "position": {
+            "line": 159,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 160,
+                    "column": 38
+                }
+            },
+            {
+                "name": "persistOrUpdate",
+                "position": {
+                    "line": 162,
+                    "column": 13
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 165,
+                    "column": 24
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 166,
+                    "column": 24
+                }
+            },
+            {
+                "name": "asList",
+                "position": {
+                    "line": 166,
+                    "column": 38
+                }
+            },
+            {
+                "name": "persistOrUpdate",
+                "position": {
+                    "line": 167,
+                    "column": 13
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 164,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Object entity)",
+            "MongoOperations.persistOrUpdate(MongoCollection collection, Object entity)",
+            "MongoOperations.persistOrUpdate(List<Object> entities)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "persistOrUpdate",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persistOrUpdate(Stream<?> entities)",
+        "class_signature": "MongoOperations.persistOrUpdate(Stream<?> entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Stream<?>",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        List<Object> objects = entities.collect(Collectors.toList());\n        persistOrUpdate(objects);\n    }",
+        "position": {
+            "line": 171,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "collect",
+                "position": {
+                    "line": 172,
+                    "column": 41
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 172,
+                    "column": 60
+                }
+            },
+            {
+                "name": "persistOrUpdate",
+                "position": {
+                    "line": 173,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.persistOrUpdate(List<Object> entities)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "delete",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "delete(Object entity)",
+        "class_signature": "MongoOperations.delete(Object entity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "entity"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entity);\n        BsonDocument document = getBsonDocument(collection, entity);\n        BsonValue id = document.get(ID);\n        BsonDocument query = new BsonDocument().append(ID, id);\n        ClientSession session = getSession(entity);\n        if (session == null) {\n            collection.deleteOne(query);\n        } else {\n            collection.deleteOne(session, query);\n        }\n    }",
+        "position": {
+            "line": 176,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 177,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getBsonDocument",
+                "position": {
+                    "line": 178,
+                    "column": 33
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 179,
+                    "column": 33
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 180,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 181,
+                    "column": 33
+                }
+            },
+            {
+                "name": "deleteOne",
+                "position": {
+                    "line": 183,
+                    "column": 24
+                }
+            },
+            {
+                "name": "deleteOne",
+                "position": {
+                    "line": 185,
+                    "column": 24
+                }
+            },
+            {
+                "name": "BsonDocument",
+                "position": {
+                    "line": 180,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Object entity)",
+            "MongoOperations.getBsonDocument(MongoCollection collection, Object entity)",
+            "MongoOperations.getSession(Object entity)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "mongoCollection",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "mongoCollection(Class<?> entityClass)",
+        "class_signature": "MongoOperations.mongoCollection(Class<?> entityClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ]
+        ],
+        "methodBody": "{\n        MongoEntity mongoEntity = entityClass.getAnnotation(MongoEntity.class);\n        MongoDatabase database = mongoDatabase(mongoEntity);\n        if (mongoEntity != null) {\n            MongoCollection collection = mongoEntity.collection().isEmpty()\n                    ? database.getCollection(entityClass.getSimpleName(), entityClass)\n                    : database.getCollection(mongoEntity.collection(), entityClass);\n            if (!mongoEntity.readPreference().isEmpty()) {\n                try {\n                    collection = collection.withReadPreference(ReadPreference.valueOf(mongoEntity.readPreference()));\n                } catch (IllegalArgumentException iae) {\n                    throw new IllegalArgumentException(\"Illegal read preference \" + mongoEntity.readPreference()\n                            + \" configured in the @MongoEntity annotation of \" + entityClass.getName() + \".\"\n                            + \" Supported values are primary|primaryPreferred|secondary|secondaryPreferred|nearest\");\n                }\n            }\n            return collection;\n        }\n        return database.getCollection(entityClass.getSimpleName(), entityClass);\n    }",
+        "position": {
+            "line": 189,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 190,
+                    "column": 47
+                }
+            },
+            {
+                "name": "mongoDatabase",
+                "position": {
+                    "line": 191,
+                    "column": 34
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 193,
+                    "column": 67
+                }
+            },
+            {
+                "name": "collection",
+                "position": {
+                    "line": 193,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getCollection",
+                "position": {
+                    "line": 194,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 194,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getCollection",
+                "position": {
+                    "line": 195,
+                    "column": 32
+                }
+            },
+            {
+                "name": "collection",
+                "position": {
+                    "line": 195,
+                    "column": 58
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 196,
+                    "column": 47
+                }
+            },
+            {
+                "name": "readPreference",
+                "position": {
+                    "line": 196,
+                    "column": 30
+                }
+            },
+            {
+                "name": "withReadPreference",
+                "position": {
+                    "line": 198,
+                    "column": 45
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 198,
+                    "column": 79
+                }
+            },
+            {
+                "name": "readPreference",
+                "position": {
+                    "line": 198,
+                    "column": 99
+                }
+            },
+            {
+                "name": "readPreference",
+                "position": {
+                    "line": 200,
+                    "column": 97
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 201,
+                    "column": 94
+                }
+            },
+            {
+                "name": "getCollection",
+                "position": {
+                    "line": 207,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 207,
+                    "column": 51
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 200,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoDatabase(MongoEntity mongoEntity)"
+        ],
+        "priority": 86
+    },
+    {
+        "name": "mongoDatabase",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "mongoDatabase(Class<?> entityClass)",
+        "class_signature": "MongoOperations.mongoDatabase(Class<?> entityClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ]
+        ],
+        "methodBody": "{\n        MongoEntity mongoEntity = entityClass.getAnnotation(MongoEntity.class);\n        return mongoDatabase(mongoEntity);\n    }",
+        "position": {
+            "line": 210,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 211,
+                    "column": 47
+                }
+            },
+            {
+                "name": "mongoDatabase",
+                "position": {
+                    "line": 212,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoDatabase(MongoEntity mongoEntity)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "persist",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persist(MongoCollection collection, Object entity)",
+        "class_signature": "MongoOperations.persist(MongoCollection collection, Object entity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MongoCollection",
+                "collection"
+            ],
+            [
+                "Object",
+                "entity"
+            ]
+        ],
+        "methodBody": "{\n        ClientSession session = getSession(entity);\n        if (session == null) {\n            collection.insertOne(entity);\n        } else {\n            collection.insertOne(session, entity);\n        }\n    }",
+        "position": {
+            "line": 218,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 219,
+                    "column": 33
+                }
+            },
+            {
+                "name": "insertOne",
+                "position": {
+                    "line": 221,
+                    "column": 24
+                }
+            },
+            {
+                "name": "insertOne",
+                "position": {
+                    "line": 223,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.getSession(Object entity)"
+        ],
+        "priority": 63
+    },
+    {
+        "name": "persist",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persist(List<Object> entities)",
+        "class_signature": "MongoOperations.persist(List<Object> entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<Object>",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        if (!entities.isEmpty()) {\n            // get the first entity to be able to retrieve the collection with it\n            Object firstEntity = entities.get(0);\n            MongoCollection collection = mongoCollection(firstEntity);\n            ClientSession session = getSession(firstEntity);\n            if (session == null) {\n                collection.insertMany(entities);\n            } else {\n                collection.insertMany(session, entities);\n            }\n        }\n    }",
+        "position": {
+            "line": 227,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 228,
+                    "column": 23
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 230,
+                    "column": 43
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 231,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 232,
+                    "column": 37
+                }
+            },
+            {
+                "name": "insertMany",
+                "position": {
+                    "line": 234,
+                    "column": 28
+                }
+            },
+            {
+                "name": "insertMany",
+                "position": {
+                    "line": 236,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Object entity)",
+            "MongoOperations.getSession(Object entity)"
+        ],
+        "priority": 64
+    },
+    {
+        "name": "update",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "update(MongoCollection collection, Object entity)",
+        "class_signature": "MongoOperations.update(MongoCollection collection, Object entity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MongoCollection",
+                "collection"
+            ],
+            [
+                "Object",
+                "entity"
+            ]
+        ],
+        "methodBody": "{\n        //we transform the entity as a document first\n        BsonDocument document = getBsonDocument(collection, entity);\n\n        //then we get its id field and create a new Document with only this one that will be our replace query\n        BsonValue id = document.get(ID);\n        BsonDocument query = new BsonDocument().append(ID, id);\n        ClientSession session = getSession(entity);\n        if (session == null) {\n            collection.replaceOne(query, entity);\n        } else {\n            collection.replaceOne(session, query, entity);\n        }\n    }",
+        "position": {
+            "line": 241,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getBsonDocument",
+                "position": {
+                    "line": 243,
+                    "column": 33
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 246,
+                    "column": 33
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 247,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 248,
+                    "column": 33
+                }
+            },
+            {
+                "name": "replaceOne",
+                "position": {
+                    "line": 250,
+                    "column": 24
+                }
+            },
+            {
+                "name": "replaceOne",
+                "position": {
+                    "line": 252,
+                    "column": 24
+                }
+            },
+            {
+                "name": "BsonDocument",
+                "position": {
+                    "line": 247,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.getBsonDocument(MongoCollection collection, Object entity)",
+            "MongoOperations.getSession(Object entity)"
+        ],
+        "priority": 67
+    },
+    {
+        "name": "update",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "update(MongoCollection collection, List<Object> entities)",
+        "class_signature": "MongoOperations.update(MongoCollection collection, List<Object> entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MongoCollection",
+                "collection"
+            ],
+            [
+                "List<Object>",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        for (Object entity : entities) {\n            update(collection, entity);\n        }\n    }",
+        "position": {
+            "line": 256,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "update",
+                "position": {
+                    "line": 258,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.update(MongoCollection collection, Object entity)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "persistOrUpdate",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persistOrUpdate(MongoCollection collection, Object entity)",
+        "class_signature": "MongoOperations.persistOrUpdate(MongoCollection collection, Object entity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MongoCollection",
+                "collection"
+            ],
+            [
+                "Object",
+                "entity"
+            ]
+        ],
+        "methodBody": "{\n        //we transform the entity as a document first\n        BsonDocument document = getBsonDocument(collection, entity);\n\n        ClientSession session = getSession(entity);\n        //then we get its id field and create a new Document with only this one that will be our replace query\n        BsonValue id = document.get(ID);\n        if (id == null) {\n            //insert with autogenerated ID\n            if (session == null) {\n                collection.insertOne(entity);\n            } else {\n                collection.insertOne(session, entity);\n            }\n        } else {\n            //insert with user provided ID or update\n            BsonDocument query = new BsonDocument().append(ID, id);\n            if (session == null) {\n                collection.replaceOne(query, entity, new ReplaceOptions().upsert(true));\n            } else {\n                collection.replaceOne(session, query, entity, new ReplaceOptions().upsert(true));\n            }\n        }\n    }",
+        "position": {
+            "line": 262,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getBsonDocument",
+                "position": {
+                    "line": 264,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 266,
+                    "column": 33
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 268,
+                    "column": 33
+                }
+            },
+            {
+                "name": "insertOne",
+                "position": {
+                    "line": 272,
+                    "column": 28
+                }
+            },
+            {
+                "name": "insertOne",
+                "position": {
+                    "line": 274,
+                    "column": 28
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 278,
+                    "column": 53
+                }
+            },
+            {
+                "name": "replaceOne",
+                "position": {
+                    "line": 280,
+                    "column": 28
+                }
+            },
+            {
+                "name": "upsert",
+                "position": {
+                    "line": 280,
+                    "column": 75
+                }
+            },
+            {
+                "name": "replaceOne",
+                "position": {
+                    "line": 282,
+                    "column": 28
+                }
+            },
+            {
+                "name": "upsert",
+                "position": {
+                    "line": 282,
+                    "column": 84
+                }
+            },
+            {
+                "name": "BsonDocument",
+                "position": {
+                    "line": 278,
+                    "column": 38
+                }
+            },
+            {
+                "name": "ReplaceOptions",
+                "position": {
+                    "line": 280,
+                    "column": 58
+                }
+            },
+            {
+                "name": "ReplaceOptions",
+                "position": {
+                    "line": 282,
+                    "column": 67
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.getBsonDocument(MongoCollection collection, Object entity)",
+            "MongoOperations.getSession(Object entity)"
+        ],
+        "priority": 65
+    },
+    {
+        "name": "persistOrUpdate",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "persistOrUpdate(List<Object> entities)",
+        "class_signature": "MongoOperations.persistOrUpdate(List<Object> entities)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<Object>",
+                "entities"
+            ]
+        ],
+        "methodBody": "{\n        if (entities.isEmpty()) {\n            return;\n        }\n\n        // get the first entity to be able to retrieve the collection with it\n        Object firstEntity = entities.get(0);\n        MongoCollection collection = mongoCollection(firstEntity);\n        ClientSession session = getSession(firstEntity);\n\n        //this will be an ordered bulk: it's less performant than an unordered one but will fail at the first failed write\n        List<WriteModel> bulk = new ArrayList<>();\n        for (Object entity : entities) {\n            //we transform the entity as a document first\n            BsonDocument document = getBsonDocument(collection, entity);\n\n            //then we get its id field and create a new Document with only this one that will be our replace query\n            BsonValue id = document.get(ID);\n            if (id == null) {\n                //insert with autogenerated ID\n                bulk.add(new InsertOneModel(entity));\n            } else {\n                //insert with user provided ID or update\n                BsonDocument query = new BsonDocument().append(ID, id);\n                bulk.add(new ReplaceOneModel(query, entity,\n                        new ReplaceOptions().upsert(true)));\n            }\n        }\n\n        if (session == null) {\n            collection.bulkWrite(bulk);\n        } else {\n            collection.bulkWrite(session, bulk);\n        }\n    }",
+        "position": {
+            "line": 287,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 288,
+                    "column": 22
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 293,
+                    "column": 39
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 294,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 295,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getBsonDocument",
+                "position": {
+                    "line": 301,
+                    "column": 37
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 304,
+                    "column": 37
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 307,
+                    "column": 22
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 310,
+                    "column": 57
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 311,
+                    "column": 22
+                }
+            },
+            {
+                "name": "upsert",
+                "position": {
+                    "line": 312,
+                    "column": 46
+                }
+            },
+            {
+                "name": "bulkWrite",
+                "position": {
+                    "line": 317,
+                    "column": 24
+                }
+            },
+            {
+                "name": "bulkWrite",
+                "position": {
+                    "line": 319,
+                    "column": 24
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 298,
+                    "column": 37
+                }
+            },
+            {
+                "name": "InsertOneModel",
+                "position": {
+                    "line": 307,
+                    "column": 30
+                }
+            },
+            {
+                "name": "BsonDocument",
+                "position": {
+                    "line": 310,
+                    "column": 42
+                }
+            },
+            {
+                "name": "ReplaceOneModel",
+                "position": {
+                    "line": 311,
+                    "column": 30
+                }
+            },
+            {
+                "name": "ReplaceOptions",
+                "position": {
+                    "line": 312,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Object entity)",
+            "MongoOperations.getSession(Object entity)",
+            "MongoOperations.getBsonDocument(MongoCollection collection, Object entity)"
+        ],
+        "priority": 66
+    },
+    {
+        "name": "getBsonDocument",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "getBsonDocument(MongoCollection collection, Object entity)",
+        "class_signature": "MongoOperations.getBsonDocument(MongoCollection collection, Object entity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MongoCollection",
+                "collection"
+            ],
+            [
+                "Object",
+                "entity"
+            ]
+        ],
+        "methodBody": "{\n        BsonDocument document = new BsonDocument();\n        Codec codec = collection.getCodecRegistry().get(entity.getClass());\n        codec.encode(new BsonDocumentWriter(document), entity, EncoderContext.builder().build());\n        return document;\n    }",
+        "position": {
+            "line": 323,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 325,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getCodecRegistry",
+                "position": {
+                    "line": 325,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 325,
+                    "column": 64
+                }
+            },
+            {
+                "name": "encode",
+                "position": {
+                    "line": 326,
+                    "column": 15
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 326,
+                    "column": 89
+                }
+            },
+            {
+                "name": "builder",
+                "position": {
+                    "line": 326,
+                    "column": 79
+                }
+            },
+            {
+                "name": "BsonDocument",
+                "position": {
+                    "line": 324,
+                    "column": 37
+                }
+            },
+            {
+                "name": "BsonDocumentWriter",
+                "position": {
+                    "line": 326,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 78
+    },
+    {
+        "name": "getSession",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "getSession(Object entity)",
+        "class_signature": "MongoOperations.getSession(Object entity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "entity"
+            ]
+        ],
+        "methodBody": "{\n        return getSession(entity.getClass());\n    }",
+        "position": {
+            "line": 330,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 331,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 331,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 79
+    },
+    {
+        "name": "getSession",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "getSession(Class<?> entityClass)",
+        "class_signature": "MongoOperations.getSession(Class<?> entityClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ]
+        ],
+        "methodBody": "{\n        ClientSession clientSession = null;\n        InstanceHandle<TransactionSynchronizationRegistry> instance = Arc.container()\n                .instance(TransactionSynchronizationRegistry.class);\n        if (instance.isAvailable()) {\n            TransactionSynchronizationRegistry registry = instance.get();\n            if (registry.getTransactionStatus() == Status.STATUS_ACTIVE) {\n                clientSession = (ClientSession) registry.getResource(SESSION_KEY);\n                if (clientSession == null) {\n                    MongoEntity mongoEntity = entityClass == null ? null : entityClass.getAnnotation(MongoEntity.class);\n                    return registerClientSession(mongoEntity, registry);\n                }\n            }\n        }\n        return clientSession;\n    }",
+        "position": {
+            "line": 334,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "instance",
+                "position": {
+                    "line": 337,
+                    "column": 18
+                }
+            },
+            {
+                "name": "container",
+                "position": {
+                    "line": 336,
+                    "column": 75
+                }
+            },
+            {
+                "name": "isAvailable",
+                "position": {
+                    "line": 338,
+                    "column": 22
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 339,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getTransactionStatus",
+                "position": {
+                    "line": 340,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getResource",
+                "position": {
+                    "line": 341,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 343,
+                    "column": 88
+                }
+            },
+            {
+                "name": "registerClientSession",
+                "position": {
+                    "line": 344,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.registerClientSession(MongoEntity mongoEntity, TransactionSynchronizationRegistry registry)"
+        ],
+        "priority": 87
+    },
+    {
+        "name": "getSession",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "getSession()",
+        "class_signature": "MongoOperations.getSession()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return getSession(null);\n    }",
+        "position": {
+            "line": 351,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 352,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "registerClientSession",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "registerClientSession(MongoEntity mongoEntity, TransactionSynchronizationRegistry registry)",
+        "class_signature": "MongoOperations.registerClientSession(MongoEntity mongoEntity, TransactionSynchronizationRegistry registry)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MongoEntity",
+                "mongoEntity"
+            ],
+            [
+                "TransactionSynchronizationRegistry",
+                "registry"
+            ]
+        ],
+        "methodBody": "{\n        TransactionManager transactionManager = Arc.container().instance(TransactionManager.class).get();\n        MongoClient client = BeanUtils.clientFromArc(mongoEntity, MongoClient.class, false);\n        ClientSession clientSession = client.startSession();\n        clientSession.startTransaction();//TODO add txoptions from annotation\n        registry.putResource(SESSION_KEY, clientSession);\n        registry.registerInterposedSynchronization(new Synchronization() {\n            @Override\n            public void beforeCompletion() {\n            }\n\n            @Override\n            public void afterCompletion(int i) {\n                try {\n                    if (transactionManager.getStatus() == Status.STATUS_ROLLEDBACK) {\n                        try {\n                            clientSession.abortTransaction();\n                        } finally {\n                            clientSession.close();\n                        }\n                    } else {\n                        try {\n                            clientSession.commitTransaction();\n                        } finally {\n                            clientSession.close();\n                        }\n                    }\n                } catch (SystemException e) {\n                    throw new MongoTransactionException(e);\n                }\n            }\n        });\n        return clientSession;\n    }",
+        "position": {
+            "line": 355,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 357,
+                    "column": 100
+                }
+            },
+            {
+                "name": "instance",
+                "position": {
+                    "line": 357,
+                    "column": 65
+                }
+            },
+            {
+                "name": "container",
+                "position": {
+                    "line": 357,
+                    "column": 53
+                }
+            },
+            {
+                "name": "clientFromArc",
+                "position": {
+                    "line": 358,
+                    "column": 40
+                }
+            },
+            {
+                "name": "startSession",
+                "position": {
+                    "line": 359,
+                    "column": 46
+                }
+            },
+            {
+                "name": "startTransaction",
+                "position": {
+                    "line": 360,
+                    "column": 23
+                }
+            },
+            {
+                "name": "putResource",
+                "position": {
+                    "line": 361,
+                    "column": 18
+                }
+            },
+            {
+                "name": "registerInterposedSynchronization",
+                "position": {
+                    "line": 362,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getStatus",
+                "position": {
+                    "line": 370,
+                    "column": 44
+                }
+            },
+            {
+                "name": "abortTransaction",
+                "position": {
+                    "line": 372,
+                    "column": 43
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 374,
+                    "column": 43
+                }
+            },
+            {
+                "name": "commitTransaction",
+                "position": {
+                    "line": 378,
+                    "column": 43
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 380,
+                    "column": 43
+                }
+            },
+            {
+                "name": "Synchronization",
+                "position": {
+                    "line": 362,
+                    "column": 56
+                }
+            },
+            {
+                "name": "MongoTransactionException",
+                "position": {
+                    "line": 384,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 93
+    },
+    {
+        "name": "beforeCompletion",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "beforeCompletion()",
+        "class_signature": "MongoOperations.beforeCompletion()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            }",
+        "position": {
+            "line": 364,
+            "column": 25
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "afterCompletion",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "afterCompletion(int i)",
+        "class_signature": "MongoOperations.afterCompletion(int i)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "i"
+            ]
+        ],
+        "methodBody": "{\n                try {\n                    if (transactionManager.getStatus() == Status.STATUS_ROLLEDBACK) {\n                        try {\n                            clientSession.abortTransaction();\n                        } finally {\n                            clientSession.close();\n                        }\n                    } else {\n                        try {\n                            clientSession.commitTransaction();\n                        } finally {\n                            clientSession.close();\n                        }\n                    }\n                } catch (SystemException e) {\n                    throw new MongoTransactionException(e);\n                }\n            }",
+        "position": {
+            "line": 368,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getStatus",
+                "position": {
+                    "line": 370,
+                    "column": 44
+                }
+            },
+            {
+                "name": "abortTransaction",
+                "position": {
+                    "line": 372,
+                    "column": 43
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 374,
+                    "column": 43
+                }
+            },
+            {
+                "name": "commitTransaction",
+                "position": {
+                    "line": 378,
+                    "column": 43
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 380,
+                    "column": 43
+                }
+            },
+            {
+                "name": "MongoTransactionException",
+                "position": {
+                    "line": 384,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 17
+    },
+    {
+        "name": "mongoCollection",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "mongoCollection(Object entity)",
+        "class_signature": "MongoOperations.mongoCollection(Object entity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "entity"
+            ]
+        ],
+        "methodBody": "{\n        Class<?> entityClass = entity.getClass();\n        return mongoCollection(entityClass);\n    }",
+        "position": {
+            "line": 391,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 392,
+                    "column": 39
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 393,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Class<?> entityClass)"
+        ],
+        "priority": 77
+    },
+    {
+        "name": "mongoDatabase",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "mongoDatabase(MongoEntity mongoEntity)",
+        "class_signature": "MongoOperations.mongoDatabase(MongoEntity mongoEntity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MongoEntity",
+                "mongoEntity"
+            ]
+        ],
+        "methodBody": "{\n        MongoClient mongoClient = BeanUtils.clientFromArc(mongoEntity, MongoClient.class, false);\n        if (mongoEntity != null && !mongoEntity.database().isEmpty()) {\n            return mongoClient.getDatabase(mongoEntity.database());\n        }\n        String databaseName = BeanUtils.getDatabaseNameFromResolver().orElseGet(() -> getDefaultDatabaseName(mongoEntity));\n        return mongoClient.getDatabase(databaseName);\n    }",
+        "position": {
+            "line": 396,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "clientFromArc",
+                "position": {
+                    "line": 397,
+                    "column": 45
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 398,
+                    "column": 60
+                }
+            },
+            {
+                "name": "database",
+                "position": {
+                    "line": 398,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getDatabase",
+                "position": {
+                    "line": 399,
+                    "column": 32
+                }
+            },
+            {
+                "name": "database",
+                "position": {
+                    "line": 399,
+                    "column": 56
+                }
+            },
+            {
+                "name": "orElseGet",
+                "position": {
+                    "line": 401,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getDatabaseNameFromResolver",
+                "position": {
+                    "line": 401,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getDefaultDatabaseName",
+                "position": {
+                    "line": 401,
+                    "column": 87
+                }
+            },
+            {
+                "name": "getDatabase",
+                "position": {
+                    "line": 402,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.getDefaultDatabaseName(MongoEntity mongoEntity)"
+        ],
+        "priority": 92
+    },
+    {
+        "name": "getDefaultDatabaseName",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "getDefaultDatabaseName(MongoEntity mongoEntity)",
+        "class_signature": "MongoOperations.getDefaultDatabaseName(MongoEntity mongoEntity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MongoEntity",
+                "mongoEntity"
+            ]
+        ],
+        "methodBody": "{\n        return defaultDatabaseName.computeIfAbsent(BeanUtils.beanName(mongoEntity),\n                new Function<String, String>() {\n                    @Override\n                    public String apply(String beanName) {\n                        return BeanUtils.getDatabaseName(mongoEntity, beanName);\n                    }\n                });\n    }",
+        "position": {
+            "line": 405,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 406,
+                    "column": 36
+                }
+            },
+            {
+                "name": "beanName",
+                "position": {
+                    "line": 406,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getDatabaseName",
+                "position": {
+                    "line": 410,
+                    "column": 42
+                }
+            },
+            {
+                "name": "Function<String, String>",
+                "position": {
+                    "line": 407,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 94
+    },
+    {
+        "name": "apply",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "apply(String beanName)",
+        "class_signature": "MongoOperations.apply(String beanName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "beanName"
+            ]
+        ],
+        "methodBody": "{\n                        return BeanUtils.getDatabaseName(mongoEntity, beanName);\n                    }",
+        "position": {
+            "line": 409,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDatabaseName",
+                "position": {
+                    "line": 410,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    },
+    {
+        "name": "findById",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "findById(Class<?> entityClass, Object id)",
+        "class_signature": "MongoOperations.findById(Class<?> entityClass, Object id)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Object",
+                "id"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entityClass);\n        ClientSession session = getSession(entityClass);\n        return session == null ? collection.find(new Document(ID, id)).first()\n                : collection.find(session, new Document(ID, id)).first();\n    }",
+        "position": {
+            "line": 417,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 418,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 419,
+                    "column": 33
+                }
+            },
+            {
+                "name": "first",
+                "position": {
+                    "line": 420,
+                    "column": 72
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 420,
+                    "column": 45
+                }
+            },
+            {
+                "name": "first",
+                "position": {
+                    "line": 421,
+                    "column": 66
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 421,
+                    "column": 30
+                }
+            },
+            {
+                "name": "Document",
+                "position": {
+                    "line": 420,
+                    "column": 54
+                }
+            },
+            {
+                "name": "Document",
+                "position": {
+                    "line": 421,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 68
+    },
+    {
+        "name": "findByIdOptional",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "findByIdOptional(Class<?> entityClass, Object id)",
+        "class_signature": "MongoOperations.findByIdOptional(Class<?> entityClass, Object id)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Object",
+                "id"
+            ]
+        ],
+        "methodBody": "{\n        return Optional.ofNullable(findById(entityClass, id));\n    }",
+        "position": {
+            "line": 424,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ofNullable",
+                "position": {
+                    "line": 425,
+                    "column": 25
+                }
+            },
+            {
+                "name": "findById",
+                "position": {
+                    "line": 425,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.findById(Class<?> entityClass, Object id)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "find",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "find(Class<?> entityClass, String query, Object... params)",
+        "class_signature": "MongoOperations.find(Class<?> entityClass, String query, Object... params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Object...",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return find(entityClass, query, null, params);\n    }",
+        "position": {
+            "line": 428,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "find",
+                "position": {
+                    "line": 429,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "find",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "find(Class<?> entityClass, String query, Sort sort, Object... params)",
+        "class_signature": "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Sort",
+                "sort"
+            ],
+            [
+                "Object...",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindQuery = bindFilter(entityClass, query, params);\n        Bson docQuery = Document.parse(bindQuery);\n        Bson docSort = sortToDocument(sort);\n        MongoCollection collection = mongoCollection(entityClass);\n        ClientSession session = getSession(entityClass);\n        return createQuery(collection, session, docQuery, docSort);\n    }",
+        "position": {
+            "line": 432,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindFilter",
+                "position": {
+                    "line": 433,
+                    "column": 28
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 434,
+                    "column": 34
+                }
+            },
+            {
+                "name": "sortToDocument",
+                "position": {
+                    "line": 435,
+                    "column": 24
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 436,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 437,
+                    "column": 33
+                }
+            },
+            {
+                "name": "createQuery",
+                "position": {
+                    "line": 438,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindFilter(Class<?> clazz, String query, Object[] params)",
+            "MongoOperations.sortToDocument(Sort sort)",
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)",
+            "MongoOperations.createQuery(MongoCollection<?> collection, ClientSession session, Bson query, Bson sortDoc)"
+        ],
+        "priority": 80
+    },
+    {
+        "name": "bindFilter",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "bindFilter(Class<?> clazz, String query, Object[] params)",
+        "class_signature": "MongoOperations.bindFilter(Class<?> clazz, String query, Object[] params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Object[]",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindQuery = bindQuery(clazz, query, params);\n        LOGGER.debug(bindQuery);\n        return bindQuery;\n    }",
+        "position": {
+            "line": 445,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindQuery",
+                "position": {
+                    "line": 446,
+                    "column": 28
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 447,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindQuery(Class<?> clazz, String query, Object[] params)"
+        ],
+        "priority": 84
+    },
+    {
+        "name": "bindFilter",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "bindFilter(Class<?> clazz, String query, Map<String, Object> params)",
+        "class_signature": "MongoOperations.bindFilter(Class<?> clazz, String query, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindQuery = bindQuery(clazz, query, params);\n        LOGGER.debug(bindQuery);\n        return bindQuery;\n    }",
+        "position": {
+            "line": 455,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindQuery",
+                "position": {
+                    "line": 456,
+                    "column": 28
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 457,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindQuery(Class<?> clazz, String query, Map<String, Object> params)"
+        ],
+        "priority": 74
+    },
+    {
+        "name": "bindUpdate",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "bindUpdate(Class<?> clazz, String query, Object[] params)",
+        "class_signature": "MongoOperations.bindUpdate(Class<?> clazz, String query, Object[] params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Object[]",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindUpdate = bindQuery(clazz, query, params);\n        if (!containsUpdateOperator(query)) {\n            bindUpdate = \"{'$set':\" + bindUpdate + \"}\";\n        }\n        LOGGER.debug(bindUpdate);\n        return bindUpdate;\n    }",
+        "position": {
+            "line": 466,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindQuery",
+                "position": {
+                    "line": 467,
+                    "column": 29
+                }
+            },
+            {
+                "name": "containsUpdateOperator",
+                "position": {
+                    "line": 468,
+                    "column": 14
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 471,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindQuery(Class<?> clazz, String query, Object[] params)",
+            "MongoOperations.containsUpdateOperator(String update)"
+        ],
+        "priority": 82
+    },
+    {
+        "name": "bindUpdate",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "bindUpdate(Class<?> clazz, String query, Map<String, Object> params)",
+        "class_signature": "MongoOperations.bindUpdate(Class<?> clazz, String query, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindUpdate = bindQuery(clazz, query, params);\n        if (!containsUpdateOperator(query)) {\n            bindUpdate = \"{'$set':\" + bindUpdate + \"}\";\n        }\n        LOGGER.debug(bindUpdate);\n        return bindUpdate;\n    }",
+        "position": {
+            "line": 480,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindQuery",
+                "position": {
+                    "line": 481,
+                    "column": 29
+                }
+            },
+            {
+                "name": "containsUpdateOperator",
+                "position": {
+                    "line": 482,
+                    "column": 14
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 485,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindQuery(Class<?> clazz, String query, Map<String, Object> params)",
+            "MongoOperations.containsUpdateOperator(String update)"
+        ],
+        "priority": 81
+    },
+    {
+        "name": "containsUpdateOperator",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "containsUpdateOperator(String update)",
+        "class_signature": "MongoOperations.containsUpdateOperator(String update)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "update"
+            ]
+        ],
+        "methodBody": "{\n        for (String operator : UPDATE_OPERATORS) {\n            if (update.contains(operator)) {\n                return true;\n            }\n        }\n        return false;\n    }",
+        "position": {
+            "line": 489,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "contains",
+                "position": {
+                    "line": 491,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 90
+    },
+    {
+        "name": "bindQuery",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "bindQuery(Class<?> clazz, String query, Object[] params)",
+        "class_signature": "MongoOperations.bindQuery(Class<?> clazz, String query, Object[] params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Object[]",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindQuery = null;\n        //determine the type of the query\n        if (query.charAt(0) == '{') {\n            //this is a native query\n            bindQuery = NativeQueryBinder.bindQuery(query, params);\n        } else {\n            //this is a PanacheQL query\n            bindQuery = PanacheQlQueryBinder.bindQuery(clazz, query, params);\n        }\n        return bindQuery;\n    }",
+        "position": {
+            "line": 498,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 501,
+                    "column": 19
+                }
+            },
+            {
+                "name": "bindQuery",
+                "position": {
+                    "line": 503,
+                    "column": 43
+                }
+            },
+            {
+                "name": "bindQuery",
+                "position": {
+                    "line": 506,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 91
+    },
+    {
+        "name": "bindQuery",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "bindQuery(Class<?> clazz, String query, Map<String, Object> params)",
+        "class_signature": "MongoOperations.bindQuery(Class<?> clazz, String query, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindQuery = null;\n        //determine the type of the query\n        if (query.charAt(0) == '{') {\n            //this is a native query\n            bindQuery = NativeQueryBinder.bindQuery(query, params);\n        } else {\n            //this is a PanacheQL query\n            bindQuery = PanacheQlQueryBinder.bindQuery(clazz, query, params);\n        }\n        return bindQuery;\n    }",
+        "position": {
+            "line": 511,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 514,
+                    "column": 19
+                }
+            },
+            {
+                "name": "bindQuery",
+                "position": {
+                    "line": 516,
+                    "column": 43
+                }
+            },
+            {
+                "name": "bindQuery",
+                "position": {
+                    "line": 519,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 89
+    },
+    {
+        "name": "find",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "find(Class<?> entityClass, String query, Map<String, Object> params)",
+        "class_signature": "MongoOperations.find(Class<?> entityClass, String query, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return find(entityClass, query, null, params);\n    }",
+        "position": {
+            "line": 524,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "find",
+                "position": {
+                    "line": 525,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "find",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "find(Class<?> entityClass, String query, Sort sort, Map<String, Object> params)",
+        "class_signature": "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Sort",
+                "sort"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindQuery = bindFilter(entityClass, query, params);\n        Bson docQuery = Document.parse(bindQuery);\n        Bson docSort = sortToDocument(sort);\n        MongoCollection collection = mongoCollection(entityClass);\n        ClientSession session = getSession(entityClass);\n        return createQuery(collection, session, docQuery, docSort);\n    }",
+        "position": {
+            "line": 528,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindFilter",
+                "position": {
+                    "line": 529,
+                    "column": 28
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 530,
+                    "column": 34
+                }
+            },
+            {
+                "name": "sortToDocument",
+                "position": {
+                    "line": 531,
+                    "column": 24
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 532,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 533,
+                    "column": 33
+                }
+            },
+            {
+                "name": "createQuery",
+                "position": {
+                    "line": 534,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindFilter(Class<?> clazz, String query, Map<String, Object> params)",
+            "MongoOperations.sortToDocument(Sort sort)",
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)",
+            "MongoOperations.createQuery(MongoCollection<?> collection, ClientSession session, Bson query, Bson sortDoc)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "find",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "find(Class<?> entityClass, String query, Parameters params)",
+        "class_signature": "MongoOperations.find(Class<?> entityClass, String query, Parameters params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Parameters",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return find(entityClass, query, null, params.map());\n    }",
+        "position": {
+            "line": 537,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "find",
+                "position": {
+                    "line": 538,
+                    "column": 16
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 538,
+                    "column": 54
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "find",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "find(Class<?> entityClass, String query, Sort sort, Parameters params)",
+        "class_signature": "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Parameters params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Sort",
+                "sort"
+            ],
+            [
+                "Parameters",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return find(entityClass, query, sort, params.map());\n    }",
+        "position": {
+            "line": 541,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "find",
+                "position": {
+                    "line": 542,
+                    "column": 16
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 542,
+                    "column": 54
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "find",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "find(Class<?> entityClass, Bson query, Sort sort)",
+        "class_signature": "MongoOperations.find(Class<?> entityClass, Bson query, Sort sort)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Bson",
+                "query"
+            ],
+            [
+                "Sort",
+                "sort"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entityClass);\n        Bson sortDoc = sortToDocument(sort);\n        ClientSession session = getSession(entityClass);\n        return createQuery(collection, session, query, sortDoc);\n    }",
+        "position": {
+            "line": 545,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 546,
+                    "column": 38
+                }
+            },
+            {
+                "name": "sortToDocument",
+                "position": {
+                    "line": 547,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 548,
+                    "column": 33
+                }
+            },
+            {
+                "name": "createQuery",
+                "position": {
+                    "line": 549,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.sortToDocument(Sort sort)",
+            "MongoOperations.getSession(Class<?> entityClass)",
+            "MongoOperations.createQuery(MongoCollection<?> collection, ClientSession session, Bson query, Bson sortDoc)"
+        ],
+        "priority": 25
+    },
+    {
+        "name": "find",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "find(Class<?> entityClass, Bson query, Bson sort)",
+        "class_signature": "MongoOperations.find(Class<?> entityClass, Bson query, Bson sort)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Bson",
+                "query"
+            ],
+            [
+                "Bson",
+                "sort"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entityClass);\n        ClientSession session = getSession(entityClass);\n        return createQuery(collection, session, query, sort);\n    }",
+        "position": {
+            "line": 552,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 553,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 554,
+                    "column": 33
+                }
+            },
+            {
+                "name": "createQuery",
+                "position": {
+                    "line": 555,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)",
+            "MongoOperations.createQuery(MongoCollection<?> collection, ClientSession session, Bson query, Bson sortDoc)"
+        ],
+        "priority": 26
+    },
+    {
+        "name": "find",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "find(Class<?> entityClass, Bson query)",
+        "class_signature": "MongoOperations.find(Class<?> entityClass, Bson query)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Bson",
+                "query"
+            ]
+        ],
+        "methodBody": "{\n        return find(entityClass, query, (Document) null);\n    }",
+        "position": {
+            "line": 558,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "find",
+                "position": {
+                    "line": 559,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 69
+    },
+    {
+        "name": "list",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "list(Class<?> entityClass, String query, Object... params)",
+        "class_signature": "MongoOperations.list(Class<?> entityClass, String query, Object... params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Object...",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return list(find(entityClass, query, params));\n    }",
+        "position": {
+            "line": 562,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "list",
+                "position": {
+                    "line": 563,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 563,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.list(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 27
+    },
+    {
+        "name": "list",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "list(Class<?> entityClass, String query, Sort sort, Object... params)",
+        "class_signature": "MongoOperations.list(Class<?> entityClass, String query, Sort sort, Object... params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Sort",
+                "sort"
+            ],
+            [
+                "Object...",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return list(find(entityClass, query, sort, params));\n    }",
+        "position": {
+            "line": 566,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "list",
+                "position": {
+                    "line": 567,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 567,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.list(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 28
+    },
+    {
+        "name": "list",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "list(Class<?> entityClass, String query, Map<String, Object> params)",
+        "class_signature": "MongoOperations.list(Class<?> entityClass, String query, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return list(find(entityClass, query, params));\n    }",
+        "position": {
+            "line": 570,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "list",
+                "position": {
+                    "line": 571,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 571,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.list(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 29
+    },
+    {
+        "name": "list",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "list(Class<?> entityClass, String query, Sort sort, Map<String, Object> params)",
+        "class_signature": "MongoOperations.list(Class<?> entityClass, String query, Sort sort, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Sort",
+                "sort"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return list(find(entityClass, query, sort, params));\n    }",
+        "position": {
+            "line": 574,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "list",
+                "position": {
+                    "line": 575,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 575,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.list(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 30
+    },
+    {
+        "name": "list",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "list(Class<?> entityClass, String query, Parameters params)",
+        "class_signature": "MongoOperations.list(Class<?> entityClass, String query, Parameters params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Parameters",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return list(find(entityClass, query, params));\n    }",
+        "position": {
+            "line": 578,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "list",
+                "position": {
+                    "line": 579,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 579,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.list(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 31
+    },
+    {
+        "name": "list",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "list(Class<?> entityClass, String query, Sort sort, Parameters params)",
+        "class_signature": "MongoOperations.list(Class<?> entityClass, String query, Sort sort, Parameters params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Sort",
+                "sort"
+            ],
+            [
+                "Parameters",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return list(find(entityClass, query, sort, params));\n    }",
+        "position": {
+            "line": 582,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "list",
+                "position": {
+                    "line": 583,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 583,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.list(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 32
+    },
+    {
+        "name": "list",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "list(Class<?> entityClass, Bson query)",
+        "class_signature": "MongoOperations.list(Class<?> entityClass, Bson query)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Bson",
+                "query"
+            ]
+        ],
+        "methodBody": "{\n        return list(find(entityClass, query));\n    }",
+        "position": {
+            "line": 587,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "list",
+                "position": {
+                    "line": 588,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 588,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.list(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, Bson query)"
+        ],
+        "priority": 33
+    },
+    {
+        "name": "list",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "list(Class<?> entityClass, Bson query, Bson sort)",
+        "class_signature": "MongoOperations.list(Class<?> entityClass, Bson query, Bson sort)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Bson",
+                "query"
+            ],
+            [
+                "Bson",
+                "sort"
+            ]
+        ],
+        "methodBody": "{\n        return list(find(entityClass, query, sort));\n    }",
+        "position": {
+            "line": 592,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "list",
+                "position": {
+                    "line": 593,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 593,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.list(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 34
+    },
+    {
+        "name": "stream",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "stream(Class<?> entityClass, String query, Object... params)",
+        "class_signature": "MongoOperations.stream(Class<?> entityClass, String query, Object... params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Object...",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return stream(find(entityClass, query, params));\n    }",
+        "position": {
+            "line": 596,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "stream",
+                "position": {
+                    "line": 597,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 597,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.stream(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 35
+    },
+    {
+        "name": "stream",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "stream(Class<?> entityClass, String query, Sort sort, Object... params)",
+        "class_signature": "MongoOperations.stream(Class<?> entityClass, String query, Sort sort, Object... params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Sort",
+                "sort"
+            ],
+            [
+                "Object...",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return stream(find(entityClass, query, sort, params));\n    }",
+        "position": {
+            "line": 600,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "stream",
+                "position": {
+                    "line": 601,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 601,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.stream(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 36
+    },
+    {
+        "name": "stream",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "stream(Class<?> entityClass, String query, Map<String, Object> params)",
+        "class_signature": "MongoOperations.stream(Class<?> entityClass, String query, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return stream(find(entityClass, query, params));\n    }",
+        "position": {
+            "line": 604,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "stream",
+                "position": {
+                    "line": 605,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 605,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.stream(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 37
+    },
+    {
+        "name": "stream",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "stream(Class<?> entityClass, String query, Sort sort, Map<String, Object> params)",
+        "class_signature": "MongoOperations.stream(Class<?> entityClass, String query, Sort sort, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Sort",
+                "sort"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return stream(find(entityClass, query, sort, params));\n    }",
+        "position": {
+            "line": 608,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "stream",
+                "position": {
+                    "line": 609,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 609,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.stream(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 38
+    },
+    {
+        "name": "stream",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "stream(Class<?> entityClass, String query, Parameters params)",
+        "class_signature": "MongoOperations.stream(Class<?> entityClass, String query, Parameters params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Parameters",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return stream(find(entityClass, query, params));\n    }",
+        "position": {
+            "line": 612,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "stream",
+                "position": {
+                    "line": 613,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 613,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.stream(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 39
+    },
+    {
+        "name": "stream",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "stream(Class<?> entityClass, String query, Sort sort, Parameters params)",
+        "class_signature": "MongoOperations.stream(Class<?> entityClass, String query, Sort sort, Parameters params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Sort",
+                "sort"
+            ],
+            [
+                "Parameters",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return stream(find(entityClass, query, sort, params));\n    }",
+        "position": {
+            "line": 616,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "stream",
+                "position": {
+                    "line": 617,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 617,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.stream(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 40
+    },
+    {
+        "name": "stream",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "stream(Class<?> entityClass, Bson query)",
+        "class_signature": "MongoOperations.stream(Class<?> entityClass, Bson query)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Bson",
+                "query"
+            ]
+        ],
+        "methodBody": "{\n        return stream(find(entityClass, query));\n    }",
+        "position": {
+            "line": 621,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "stream",
+                "position": {
+                    "line": 622,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 622,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.stream(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, Bson query)"
+        ],
+        "priority": 41
+    },
+    {
+        "name": "stream",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "stream(Class<?> entityClass, Bson query, Bson sort)",
+        "class_signature": "MongoOperations.stream(Class<?> entityClass, Bson query, Bson sort)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Bson",
+                "query"
+            ],
+            [
+                "Bson",
+                "sort"
+            ]
+        ],
+        "methodBody": "{\n        return stream(find(entityClass, query, sort));\n    }",
+        "position": {
+            "line": 626,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "stream",
+                "position": {
+                    "line": 627,
+                    "column": 16
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 627,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.stream(QueryType queryType)",
+            "MongoOperations.find(Class<?> entityClass, String query, Sort sort, Object... params)"
+        ],
+        "priority": 42
+    },
+    {
+        "name": "findAll",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "findAll(Class<?> entityClass)",
+        "class_signature": "MongoOperations.findAll(Class<?> entityClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entityClass);\n        ClientSession session = getSession(entityClass);\n        return createQuery(collection, session, null, null);\n    }",
+        "position": {
+            "line": 630,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 631,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 632,
+                    "column": 33
+                }
+            },
+            {
+                "name": "createQuery",
+                "position": {
+                    "line": 633,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)",
+            "MongoOperations.createQuery(MongoCollection<?> collection, ClientSession session, Bson query, Bson sortDoc)"
+        ],
+        "priority": 71
+    },
+    {
+        "name": "findAll",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "findAll(Class<?> entityClass, Sort sort)",
+        "class_signature": "MongoOperations.findAll(Class<?> entityClass, Sort sort)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Sort",
+                "sort"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entityClass);\n        Bson sortDoc = sortToDocument(sort);\n        ClientSession session = getSession(entityClass);\n        return createQuery(collection, session, null, sortDoc);\n    }",
+        "position": {
+            "line": 636,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 637,
+                    "column": 38
+                }
+            },
+            {
+                "name": "sortToDocument",
+                "position": {
+                    "line": 638,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 639,
+                    "column": 33
+                }
+            },
+            {
+                "name": "createQuery",
+                "position": {
+                    "line": 640,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.sortToDocument(Sort sort)",
+            "MongoOperations.getSession(Class<?> entityClass)",
+            "MongoOperations.createQuery(MongoCollection<?> collection, ClientSession session, Bson query, Bson sortDoc)"
+        ],
+        "priority": 73
+    },
+    {
+        "name": "sortToDocument",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "sortToDocument(Sort sort)",
+        "class_signature": "MongoOperations.sortToDocument(Sort sort)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Sort",
+                "sort"
+            ]
+        ],
+        "methodBody": "{\n        if (sort == null) {\n            return null;\n        }\n\n        Document sortDoc = new Document();\n        for (Sort.Column col : sort.getColumns()) {\n            sortDoc.append(col.getName(), col.getDirection() == Sort.Direction.Ascending ? 1 : -1);\n            if (col.getNullPrecedence() != null) {\n                throw new UnsupportedOperationException(\"Cannot sort by nulls first or nulls last\");\n            }\n        }\n        return sortDoc;\n    }",
+        "position": {
+            "line": 643,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getColumns",
+                "position": {
+                    "line": 649,
+                    "column": 37
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 650,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 650,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getDirection",
+                "position": {
+                    "line": 650,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getNullPrecedence",
+                "position": {
+                    "line": 651,
+                    "column": 21
+                }
+            },
+            {
+                "name": "Document",
+                "position": {
+                    "line": 648,
+                    "column": 32
+                }
+            },
+            {
+                "name": "UnsupportedOperationException",
+                "position": {
+                    "line": 652,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 85
+    },
+    {
+        "name": "listAll",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "listAll(Class<?> entityClass)",
+        "class_signature": "MongoOperations.listAll(Class<?> entityClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ]
+        ],
+        "methodBody": "{\n        return list(findAll(entityClass));\n    }",
+        "position": {
+            "line": 658,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "list",
+                "position": {
+                    "line": 659,
+                    "column": 16
+                }
+            },
+            {
+                "name": "findAll",
+                "position": {
+                    "line": 659,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.list(QueryType queryType)",
+            "MongoOperations.findAll(Class<?> entityClass)"
+        ],
+        "priority": 43
+    },
+    {
+        "name": "listAll",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "listAll(Class<?> entityClass, Sort sort)",
+        "class_signature": "MongoOperations.listAll(Class<?> entityClass, Sort sort)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Sort",
+                "sort"
+            ]
+        ],
+        "methodBody": "{\n        return list(findAll(entityClass, sort));\n    }",
+        "position": {
+            "line": 662,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "list",
+                "position": {
+                    "line": 663,
+                    "column": 16
+                }
+            },
+            {
+                "name": "findAll",
+                "position": {
+                    "line": 663,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.list(QueryType queryType)",
+            "MongoOperations.findAll(Class<?> entityClass, Sort sort)"
+        ],
+        "priority": 44
+    },
+    {
+        "name": "streamAll",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "streamAll(Class<?> entityClass)",
+        "class_signature": "MongoOperations.streamAll(Class<?> entityClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ]
+        ],
+        "methodBody": "{\n        return stream(findAll(entityClass));\n    }",
+        "position": {
+            "line": 666,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "stream",
+                "position": {
+                    "line": 667,
+                    "column": 16
+                }
+            },
+            {
+                "name": "findAll",
+                "position": {
+                    "line": 667,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.stream(QueryType queryType)",
+            "MongoOperations.findAll(Class<?> entityClass)"
+        ],
+        "priority": 45
+    },
+    {
+        "name": "streamAll",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "streamAll(Class<?> entityClass, Sort sort)",
+        "class_signature": "MongoOperations.streamAll(Class<?> entityClass, Sort sort)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Sort",
+                "sort"
+            ]
+        ],
+        "methodBody": "{\n        return stream(findAll(entityClass, sort));\n    }",
+        "position": {
+            "line": 670,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "stream",
+                "position": {
+                    "line": 671,
+                    "column": 16
+                }
+            },
+            {
+                "name": "findAll",
+                "position": {
+                    "line": 671,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.stream(QueryType queryType)",
+            "MongoOperations.findAll(Class<?> entityClass, Sort sort)"
+        ],
+        "priority": 46
+    },
+    {
+        "name": "count",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "count(Class<?> entityClass)",
+        "class_signature": "MongoOperations.count(Class<?> entityClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entityClass);\n        ClientSession session = getSession(entityClass);\n        return session == null ? collection.countDocuments() : collection.countDocuments(session);\n    }",
+        "position": {
+            "line": 674,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 675,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 676,
+                    "column": 33
+                }
+            },
+            {
+                "name": "countDocuments",
+                "position": {
+                    "line": 677,
+                    "column": 45
+                }
+            },
+            {
+                "name": "countDocuments",
+                "position": {
+                    "line": 677,
+                    "column": 75
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 47
+    },
+    {
+        "name": "count",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "count(Class<?> entityClass, String query, Object... params)",
+        "class_signature": "MongoOperations.count(Class<?> entityClass, String query, Object... params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Object...",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindQuery = bindFilter(entityClass, query, params);\n        BsonDocument docQuery = BsonDocument.parse(bindQuery);\n        MongoCollection collection = mongoCollection(entityClass);\n\n        ClientSession session = getSession(entityClass);\n        return session == null ? collection.countDocuments(docQuery) : collection.countDocuments(session, docQuery);\n    }",
+        "position": {
+            "line": 680,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindFilter",
+                "position": {
+                    "line": 681,
+                    "column": 28
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 682,
+                    "column": 46
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 683,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 685,
+                    "column": 33
+                }
+            },
+            {
+                "name": "countDocuments",
+                "position": {
+                    "line": 686,
+                    "column": 45
+                }
+            },
+            {
+                "name": "countDocuments",
+                "position": {
+                    "line": 686,
+                    "column": 83
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindFilter(Class<?> clazz, String query, Object[] params)",
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 48
+    },
+    {
+        "name": "count",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "count(Class<?> entityClass, String query, Map<String, Object> params)",
+        "class_signature": "MongoOperations.count(Class<?> entityClass, String query, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindQuery = bindFilter(entityClass, query, params);\n        BsonDocument docQuery = BsonDocument.parse(bindQuery);\n        MongoCollection collection = mongoCollection(entityClass);\n\n        ClientSession session = getSession(entityClass);\n        return session == null ? collection.countDocuments(docQuery) : collection.countDocuments(session, docQuery);\n    }",
+        "position": {
+            "line": 689,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindFilter",
+                "position": {
+                    "line": 690,
+                    "column": 28
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 691,
+                    "column": 46
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 692,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 694,
+                    "column": 33
+                }
+            },
+            {
+                "name": "countDocuments",
+                "position": {
+                    "line": 695,
+                    "column": 45
+                }
+            },
+            {
+                "name": "countDocuments",
+                "position": {
+                    "line": 695,
+                    "column": 83
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindFilter(Class<?> clazz, String query, Map<String, Object> params)",
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 49
+    },
+    {
+        "name": "count",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "count(Class<?> entityClass, String query, Parameters params)",
+        "class_signature": "MongoOperations.count(Class<?> entityClass, String query, Parameters params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Parameters",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return count(entityClass, query, params.map());\n    }",
+        "position": {
+            "line": 698,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "count",
+                "position": {
+                    "line": 699,
+                    "column": 16
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 699,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.count(Class<?> entityClass, String query, Parameters params)"
+        ],
+        "priority": 50
+    },
+    {
+        "name": "count",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "count(Class<?> entityClass, Bson query)",
+        "class_signature": "MongoOperations.count(Class<?> entityClass, Bson query)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Bson",
+                "query"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entityClass);\n        ClientSession session = getSession(entityClass);\n        return session == null ? collection.countDocuments(query) : collection.countDocuments(session, query);\n    }",
+        "position": {
+            "line": 703,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 704,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 705,
+                    "column": 33
+                }
+            },
+            {
+                "name": "countDocuments",
+                "position": {
+                    "line": 706,
+                    "column": 45
+                }
+            },
+            {
+                "name": "countDocuments",
+                "position": {
+                    "line": 706,
+                    "column": 80
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 51
+    },
+    {
+        "name": "deleteAll",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "deleteAll(Class<?> entityClass)",
+        "class_signature": "MongoOperations.deleteAll(Class<?> entityClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entityClass);\n        ClientSession session = getSession(entityClass);\n        return session == null ? collection.deleteMany(new Document()).getDeletedCount()\n                : collection.deleteMany(session, new Document()).getDeletedCount();\n    }",
+        "position": {
+            "line": 709,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 710,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 711,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getDeletedCount",
+                "position": {
+                    "line": 712,
+                    "column": 72
+                }
+            },
+            {
+                "name": "deleteMany",
+                "position": {
+                    "line": 712,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getDeletedCount",
+                "position": {
+                    "line": 713,
+                    "column": 66
+                }
+            },
+            {
+                "name": "deleteMany",
+                "position": {
+                    "line": 713,
+                    "column": 30
+                }
+            },
+            {
+                "name": "Document",
+                "position": {
+                    "line": 712,
+                    "column": 60
+                }
+            },
+            {
+                "name": "Document",
+                "position": {
+                    "line": 713,
+                    "column": 54
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 52
+    },
+    {
+        "name": "deleteById",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "deleteById(Class<?> entityClass, Object id)",
+        "class_signature": "MongoOperations.deleteById(Class<?> entityClass, Object id)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Object",
+                "id"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entityClass);\n        Bson query = new Document().append(ID, id);\n        ClientSession session = getSession(entityClass);\n        DeleteResult results = session == null ? collection.deleteOne(query) : collection.deleteOne(session, query);\n        return results.getDeletedCount() == 1;\n    }",
+        "position": {
+            "line": 716,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 717,
+                    "column": 38
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 718,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 719,
+                    "column": 33
+                }
+            },
+            {
+                "name": "deleteOne",
+                "position": {
+                    "line": 720,
+                    "column": 61
+                }
+            },
+            {
+                "name": "deleteOne",
+                "position": {
+                    "line": 720,
+                    "column": 91
+                }
+            },
+            {
+                "name": "getDeletedCount",
+                "position": {
+                    "line": 721,
+                    "column": 24
+                }
+            },
+            {
+                "name": "Document",
+                "position": {
+                    "line": 718,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 53
+    },
+    {
+        "name": "delete",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "delete(Class<?> entityClass, String query, Object... params)",
+        "class_signature": "MongoOperations.delete(Class<?> entityClass, String query, Object... params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Object...",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindQuery = bindFilter(entityClass, query, params);\n        BsonDocument docQuery = BsonDocument.parse(bindQuery);\n        MongoCollection collection = mongoCollection(entityClass);\n        ClientSession session = getSession(entityClass);\n        return session == null ? collection.deleteMany(docQuery).getDeletedCount()\n                : collection.deleteMany(session, docQuery).getDeletedCount();\n    }",
+        "position": {
+            "line": 724,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindFilter",
+                "position": {
+                    "line": 725,
+                    "column": 28
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 726,
+                    "column": 46
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 727,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 728,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getDeletedCount",
+                "position": {
+                    "line": 729,
+                    "column": 66
+                }
+            },
+            {
+                "name": "deleteMany",
+                "position": {
+                    "line": 729,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getDeletedCount",
+                "position": {
+                    "line": 730,
+                    "column": 60
+                }
+            },
+            {
+                "name": "deleteMany",
+                "position": {
+                    "line": 730,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindFilter(Class<?> clazz, String query, Object[] params)",
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 54
+    },
+    {
+        "name": "delete",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "delete(Class<?> entityClass, String query, Map<String, Object> params)",
+        "class_signature": "MongoOperations.delete(Class<?> entityClass, String query, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindQuery = bindFilter(entityClass, query, params);\n        BsonDocument docQuery = BsonDocument.parse(bindQuery);\n        MongoCollection collection = mongoCollection(entityClass);\n        ClientSession session = getSession(entityClass);\n        return session == null ? collection.deleteMany(docQuery).getDeletedCount()\n                : collection.deleteMany(session, docQuery).getDeletedCount();\n    }",
+        "position": {
+            "line": 733,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindFilter",
+                "position": {
+                    "line": 734,
+                    "column": 28
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 735,
+                    "column": 46
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 736,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 737,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getDeletedCount",
+                "position": {
+                    "line": 738,
+                    "column": 66
+                }
+            },
+            {
+                "name": "deleteMany",
+                "position": {
+                    "line": 738,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getDeletedCount",
+                "position": {
+                    "line": 739,
+                    "column": 60
+                }
+            },
+            {
+                "name": "deleteMany",
+                "position": {
+                    "line": 739,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindFilter(Class<?> clazz, String query, Map<String, Object> params)",
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 55
+    },
+    {
+        "name": "delete",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "delete(Class<?> entityClass, String query, Parameters params)",
+        "class_signature": "MongoOperations.delete(Class<?> entityClass, String query, Parameters params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "query"
+            ],
+            [
+                "Parameters",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return delete(entityClass, query, params.map());\n    }",
+        "position": {
+            "line": 742,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "delete",
+                "position": {
+                    "line": 743,
+                    "column": 16
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 743,
+                    "column": 50
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.delete(Class<?> entityClass, String query, Parameters params)"
+        ],
+        "priority": 56
+    },
+    {
+        "name": "delete",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "delete(Class<?> entityClass, Bson query)",
+        "class_signature": "MongoOperations.delete(Class<?> entityClass, Bson query)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Bson",
+                "query"
+            ]
+        ],
+        "methodBody": "{\n        MongoCollection collection = mongoCollection(entityClass);\n        ClientSession session = getSession(entityClass);\n        return session == null ? collection.deleteMany(query).getDeletedCount()\n                : collection.deleteMany(session, query).getDeletedCount();\n    }",
+        "position": {
+            "line": 747,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 748,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getSession",
+                "position": {
+                    "line": 749,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getDeletedCount",
+                "position": {
+                    "line": 750,
+                    "column": 63
+                }
+            },
+            {
+                "name": "deleteMany",
+                "position": {
+                    "line": 750,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getDeletedCount",
+                "position": {
+                    "line": 751,
+                    "column": 57
+                }
+            },
+            {
+                "name": "deleteMany",
+                "position": {
+                    "line": 751,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.mongoCollection(Class<?> entityClass)",
+            "MongoOperations.getSession(Class<?> entityClass)"
+        ],
+        "priority": 57
+    },
+    {
+        "name": "update",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "update(Class<?> entityClass, String update, Map<String, Object> params)",
+        "class_signature": "MongoOperations.update(Class<?> entityClass, String update, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "update"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return executeUpdate(entityClass, update, params);\n    }",
+        "position": {
+            "line": 754,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "executeUpdate",
+                "position": {
+                    "line": 755,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.executeUpdate(Class<?> entityClass, String update, Map<String, Object> params)"
+        ],
+        "priority": 58
+    },
+    {
+        "name": "update",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "update(Class<?> entityClass, String update, Parameters params)",
+        "class_signature": "MongoOperations.update(Class<?> entityClass, String update, Parameters params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "update"
+            ],
+            [
+                "Parameters",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return update(entityClass, update, params.map());\n    }",
+        "position": {
+            "line": 758,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "update",
+                "position": {
+                    "line": 759,
+                    "column": 16
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 759,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.update(Class<?> entityClass, String update, Parameters params)"
+        ],
+        "priority": 59
+    },
+    {
+        "name": "update",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "update(Class<?> entityClass, String update, Object... params)",
+        "class_signature": "MongoOperations.update(Class<?> entityClass, String update, Object... params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "update"
+            ],
+            [
+                "Object...",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        return executeUpdate(entityClass, update, params);\n    }",
+        "position": {
+            "line": 762,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "executeUpdate",
+                "position": {
+                    "line": 763,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.executeUpdate(Class<?> entityClass, String update, Object... params)"
+        ],
+        "priority": 60
+    },
+    {
+        "name": "update",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "update(Class<?> entityClass, Bson update)",
+        "class_signature": "MongoOperations.update(Class<?> entityClass, Bson update)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "Bson",
+                "update"
+            ]
+        ],
+        "methodBody": "{\n        return createUpdate(mongoCollection(entityClass), entityClass, update);\n    }",
+        "position": {
+            "line": 766,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "createUpdate",
+                "position": {
+                    "line": 767,
+                    "column": 16
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 767,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.createUpdate(MongoCollection collection, Class<?> entityClass, Bson docUpdate)",
+            "MongoOperations.mongoCollection(Class<?> entityClass)"
+        ],
+        "priority": 61
+    },
+    {
+        "name": "executeUpdate",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "executeUpdate(Class<?> entityClass, String update, Object... params)",
+        "class_signature": "MongoOperations.executeUpdate(Class<?> entityClass, String update, Object... params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "update"
+            ],
+            [
+                "Object...",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindUpdate = bindUpdate(entityClass, update, params);\n        Bson docUpdate = Document.parse(bindUpdate);\n        return createUpdate(mongoCollection(entityClass), entityClass, docUpdate);\n    }",
+        "position": {
+            "line": 770,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindUpdate",
+                "position": {
+                    "line": 771,
+                    "column": 29
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 772,
+                    "column": 35
+                }
+            },
+            {
+                "name": "createUpdate",
+                "position": {
+                    "line": 773,
+                    "column": 16
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 773,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindUpdate(Class<?> clazz, String query, Object[] params)",
+            "MongoOperations.createUpdate(MongoCollection collection, Class<?> entityClass, Bson docUpdate)",
+            "MongoOperations.mongoCollection(Class<?> entityClass)"
+        ],
+        "priority": 76
+    },
+    {
+        "name": "executeUpdate",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "executeUpdate(Class<?> entityClass, String update, Map<String, Object> params)",
+        "class_signature": "MongoOperations.executeUpdate(Class<?> entityClass, String update, Map<String, Object> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "entityClass"
+            ],
+            [
+                "String",
+                "update"
+            ],
+            [
+                "Map<String, Object>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        String bindUpdate = bindUpdate(entityClass, update, params);\n        Bson docUpdate = Document.parse(bindUpdate);\n        return createUpdate(mongoCollection(entityClass), entityClass, docUpdate);\n    }",
+        "position": {
+            "line": 776,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "bindUpdate",
+                "position": {
+                    "line": 777,
+                    "column": 29
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 778,
+                    "column": 35
+                }
+            },
+            {
+                "name": "createUpdate",
+                "position": {
+                    "line": 779,
+                    "column": 16
+                }
+            },
+            {
+                "name": "mongoCollection",
+                "position": {
+                    "line": 779,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoOperations.bindUpdate(Class<?> clazz, String query, Map<String, Object> params)",
+            "MongoOperations.createUpdate(MongoCollection collection, Class<?> entityClass, Bson docUpdate)",
+            "MongoOperations.mongoCollection(Class<?> entityClass)"
+        ],
+        "priority": 75
+    },
+    {
+        "name": "implementationInjectionMissing",
+        "category": "method_declaration",
+        "class": "MongoOperations",
+        "signature": "implementationInjectionMissing()",
+        "class_signature": "MongoOperations.implementationInjectionMissing()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return new IllegalStateException(\n                \"This method is normally automatically overridden in subclasses\");\n    }",
+        "position": {
+            "line": 782,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 783,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 62
+    }
+]

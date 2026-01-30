@@ -1,0 +1,1095 @@
+[
+    {
+        "name": "isValidRule",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "isValidRule(ParamFlowRule rule)",
+        "class_signature": "ParamFlowRuleUtil.isValidRule(ParamFlowRule rule)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ParamFlowRule",
+                "rule"
+            ]
+        ],
+        "methodBody": "{\n        return rule != null && !StringUtil.isBlank(rule.getResource()) && rule.getCount() >= 0\n            && rule.getGrade() >= 0 && rule.getParamIdx() != null\n            && rule.getBurstCount() >= 0 && rule.getControlBehavior() >= 0\n            && rule.getDurationInSec() > 0 && rule.getMaxQueueingTimeMs() >= 0\n            && checkCluster(rule) & checkRegexField(rule);\n    }",
+        "position": {
+            "line": 47,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 48,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getResource",
+                "position": {
+                    "line": 48,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getCount",
+                "position": {
+                    "line": 48,
+                    "column": 80
+                }
+            },
+            {
+                "name": "getGrade",
+                "position": {
+                    "line": 49,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getParamIdx",
+                "position": {
+                    "line": 49,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getBurstCount",
+                "position": {
+                    "line": 50,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getControlBehavior",
+                "position": {
+                    "line": 50,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getDurationInSec",
+                "position": {
+                    "line": 51,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getMaxQueueingTimeMs",
+                "position": {
+                    "line": 51,
+                    "column": 52
+                }
+            },
+            {
+                "name": "checkCluster",
+                "position": {
+                    "line": 52,
+                    "column": 16
+                }
+            },
+            {
+                "name": "checkRegexField",
+                "position": {
+                    "line": 52,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowRuleUtil.checkCluster(ParamFlowRule rule)",
+            "ParamFlowRuleUtil.checkRegexField(ParamFlowRule rule)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "checkCluster",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "checkCluster(ParamFlowRule rule)",
+        "class_signature": "ParamFlowRuleUtil.checkCluster(ParamFlowRule rule)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ParamFlowRule",
+                "rule"
+            ]
+        ],
+        "methodBody": "{\n        if (!rule.isClusterMode()) {\n            return true;\n        }\n        ParamFlowClusterConfig clusterConfig = rule.getClusterConfig();\n        if (clusterConfig == null) {\n            return false;\n        }\n        if (!FlowRuleUtil.isWindowConfigValid(clusterConfig.getSampleCount(), clusterConfig.getWindowIntervalMs())) {\n            return false;\n        }\n        return validClusterRuleId(clusterConfig.getFlowId());\n    }",
+        "position": {
+            "line": 55,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isClusterMode",
+                "position": {
+                    "line": 56,
+                    "column": 19
+                }
+            },
+            {
+                "name": "getClusterConfig",
+                "position": {
+                    "line": 59,
+                    "column": 53
+                }
+            },
+            {
+                "name": "isWindowConfigValid",
+                "position": {
+                    "line": 63,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getSampleCount",
+                "position": {
+                    "line": 63,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getWindowIntervalMs",
+                "position": {
+                    "line": 63,
+                    "column": 93
+                }
+            },
+            {
+                "name": "validClusterRuleId",
+                "position": {
+                    "line": 66,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getFlowId",
+                "position": {
+                    "line": 66,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowRuleUtil.validClusterRuleId(Long id)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "checkRegexField",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "checkRegexField(ParamFlowRule rule)",
+        "class_signature": "ParamFlowRuleUtil.checkRegexField(ParamFlowRule rule)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ParamFlowRule",
+                "rule"
+            ]
+        ],
+        "methodBody": "{\n        if (!RuleManager.checkRegexResourceField(rule)) {\n            return false;\n        }\n        if (rule.isRegex()) {\n            return !rule.isClusterMode() && rule.getControlBehavior() == RuleConstant.CONTROL_BEHAVIOR_DEFAULT;\n        }\n        return true;\n    }",
+        "position": {
+            "line": 69,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkRegexResourceField",
+                "position": {
+                    "line": 70,
+                    "column": 26
+                }
+            },
+            {
+                "name": "isRegex",
+                "position": {
+                    "line": 73,
+                    "column": 18
+                }
+            },
+            {
+                "name": "isClusterMode",
+                "position": {
+                    "line": 74,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getControlBehavior",
+                "position": {
+                    "line": 74,
+                    "column": 50
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "validClusterRuleId",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "validClusterRuleId(Long id)",
+        "class_signature": "ParamFlowRuleUtil.validClusterRuleId(Long id)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Long",
+                "id"
+            ]
+        ],
+        "methodBody": "{\n        return id != null && id > 0;\n    }",
+        "position": {
+            "line": 79,
+            "column": 27
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "fillExceptionFlowItems",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "fillExceptionFlowItems(ParamFlowRule rule)",
+        "class_signature": "ParamFlowRuleUtil.fillExceptionFlowItems(ParamFlowRule rule)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ParamFlowRule",
+                "rule"
+            ]
+        ],
+        "methodBody": "{\n        if (rule != null) {\n            if (rule.getParamFlowItemList() == null) {\n                rule.setParamFlowItemList(new ArrayList<ParamFlowItem>());\n            }\n\n            Map<Object, Integer> itemMap = parseHotItems(rule.getParamFlowItemList());\n            rule.setParsedHotItems(itemMap);\n        }\n    }",
+        "position": {
+            "line": 88,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParamFlowItemList",
+                "position": {
+                    "line": 90,
+                    "column": 22
+                }
+            },
+            {
+                "name": "setParamFlowItemList",
+                "position": {
+                    "line": 91,
+                    "column": 22
+                }
+            },
+            {
+                "name": "parseHotItems",
+                "position": {
+                    "line": 94,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getParamFlowItemList",
+                "position": {
+                    "line": 94,
+                    "column": 63
+                }
+            },
+            {
+                "name": "setParsedHotItems",
+                "position": {
+                    "line": 95,
+                    "column": 18
+                }
+            },
+            {
+                "name": "ArrayList<ParamFlowItem>",
+                "position": {
+                    "line": 91,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowRuleUtil.parseHotItems(List<ParamFlowItem> items)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "buildParamRuleMap",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "buildParamRuleMap(List<ParamFlowRule> list)",
+        "class_signature": "ParamFlowRuleUtil.buildParamRuleMap(List<ParamFlowRule> list)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<ParamFlowRule>",
+                "list"
+            ]
+        ],
+        "methodBody": "{\n        return buildParamRuleMap(list, null);\n    }",
+        "position": {
+            "line": 106,
+            "column": 52
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "buildParamRuleMap",
+                "position": {
+                    "line": 107,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowRuleUtil.buildParamRuleMap(List<ParamFlowRule> list, Predicate<ParamFlowRule> filter)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "buildParamRuleMap",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "buildParamRuleMap(List<ParamFlowRule> list, Predicate<ParamFlowRule> filter)",
+        "class_signature": "ParamFlowRuleUtil.buildParamRuleMap(List<ParamFlowRule> list, Predicate<ParamFlowRule> filter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<ParamFlowRule>",
+                "list"
+            ],
+            [
+                "Predicate<ParamFlowRule>",
+                "filter"
+            ]
+        ],
+        "methodBody": "{\n        return buildParamRuleMap(list, filter, true);\n    }",
+        "position": {
+            "line": 118,
+            "column": 52
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "buildParamRuleMap",
+                "position": {
+                    "line": 120,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowRuleUtil.buildParamRuleMap(List<ParamFlowRule> list, Predicate<ParamFlowRule> filter, boolean shouldSort)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "buildParamRuleMap",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "buildParamRuleMap(List<ParamFlowRule> list, Predicate<ParamFlowRule> filter, boolean shouldSort)",
+        "class_signature": "ParamFlowRuleUtil.buildParamRuleMap(List<ParamFlowRule> list, Predicate<ParamFlowRule> filter, boolean shouldSort)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<ParamFlowRule>",
+                "list"
+            ],
+            [
+                "Predicate<ParamFlowRule>",
+                "filter"
+            ],
+            [
+                "boolean",
+                "shouldSort"
+            ]
+        ],
+        "methodBody": "{\n        return buildParamRuleMap(list, EXTRACT_RESOURCE, filter, shouldSort);\n    }",
+        "position": {
+            "line": 132,
+            "column": 52
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "buildParamRuleMap",
+                "position": {
+                    "line": 135,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowRuleUtil.buildParamRuleMap(List<ParamFlowRule> list, Function<ParamFlowRule, K> groupFunction, Predicate<ParamFlowRule> filter, boolean shouldSort)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "buildParamRuleMap",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "buildParamRuleMap(List<ParamFlowRule> list, Function<ParamFlowRule, K> groupFunction, Predicate<ParamFlowRule> filter, boolean shouldSort)",
+        "class_signature": "ParamFlowRuleUtil.buildParamRuleMap(List<ParamFlowRule> list, Function<ParamFlowRule, K> groupFunction, Predicate<ParamFlowRule> filter, boolean shouldSort)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<ParamFlowRule>",
+                "list"
+            ],
+            [
+                "Function<ParamFlowRule, K>",
+                "groupFunction"
+            ],
+            [
+                "Predicate<ParamFlowRule>",
+                "filter"
+            ],
+            [
+                "boolean",
+                "shouldSort"
+            ]
+        ],
+        "methodBody": "{\n        AssertUtil.notNull(groupFunction, \"groupFunction should not be null\");\n        Map<K, List<ParamFlowRule>> newRuleMap = new ConcurrentHashMap<>();\n        if (list == null || list.isEmpty()) {\n            return newRuleMap;\n        }\n        Map<K, Set<ParamFlowRule>> tmpMap = new ConcurrentHashMap<>();\n\n        for (ParamFlowRule rule : list) {\n            if (!ParamFlowRuleUtil.isValidRule(rule)) {\n                RecordLog.warn(\"[ParamFlowRuleManager] Ignoring invalid rule when loading new rules: \" + rule);\n                continue;\n            }\n            if (filter != null && !filter.test(rule)) {\n                continue;\n            }\n            if (StringUtil.isBlank(rule.getLimitApp())) {\n                rule.setLimitApp(RuleConstant.LIMIT_APP_DEFAULT);\n            }\n\n            ParamFlowRuleUtil.fillExceptionFlowItems(rule);\n\n            K key = groupFunction.apply(rule);\n            if (key == null) {\n                continue;\n            }\n            Set<ParamFlowRule> flowRules = tmpMap.get(key);\n\n            if (flowRules == null) {\n                // Use hash set here to remove duplicate rules.\n                flowRules = new HashSet<>();\n                tmpMap.put(key, flowRules);\n            }\n\n            flowRules.add(rule);\n        }\n        for (Entry<K, Set<ParamFlowRule>> entries : tmpMap.entrySet()) {\n            List<ParamFlowRule> rules = new ArrayList<>(entries.getValue());\n            if (shouldSort) {\n                // TODO: Sort the rules.\n            }\n            newRuleMap.put(entries.getKey(), rules);\n        }\n\n        return newRuleMap;\n    }",
+        "position": {
+            "line": 149,
+            "column": 51
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notNull",
+                "position": {
+                    "line": 153,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 155,
+                    "column": 34
+                }
+            },
+            {
+                "name": "isValidRule",
+                "position": {
+                    "line": 161,
+                    "column": 36
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 162,
+                    "column": 27
+                }
+            },
+            {
+                "name": "test",
+                "position": {
+                    "line": 165,
+                    "column": 43
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 168,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getLimitApp",
+                "position": {
+                    "line": 168,
+                    "column": 41
+                }
+            },
+            {
+                "name": "setLimitApp",
+                "position": {
+                    "line": 169,
+                    "column": 22
+                }
+            },
+            {
+                "name": "fillExceptionFlowItems",
+                "position": {
+                    "line": 172,
+                    "column": 31
+                }
+            },
+            {
+                "name": "apply",
+                "position": {
+                    "line": 174,
+                    "column": 35
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 178,
+                    "column": 51
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 183,
+                    "column": 24
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 186,
+                    "column": 23
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 188,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 189,
+                    "column": 65
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 193,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 193,
+                    "column": 36
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 154,
+                    "column": 54
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 158,
+                    "column": 49
+                }
+            },
+            {
+                "name": "HashSet<>",
+                "position": {
+                    "line": 182,
+                    "column": 33
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 189,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowRuleUtil.isValidRule(ParamFlowRule rule)",
+            "ParamFlowRuleUtil.fillExceptionFlowItems(ParamFlowRule rule)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "parseHotItems",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "parseHotItems(List<ParamFlowItem> items)",
+        "class_signature": "ParamFlowRuleUtil.parseHotItems(List<ParamFlowItem> items)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<ParamFlowItem>",
+                "items"
+            ]
+        ],
+        "methodBody": "{\n        if (items == null || items.isEmpty()) {\n            return new HashMap<>();\n        }\n        Map<Object, Integer> itemMap = new HashMap<>(items.size());\n        for (ParamFlowItem item : items) {\n            // Value should not be null.\n            Object value;\n            try {\n                value = parseItemValue(item.getObject(), item.getClassType());\n            } catch (Exception ex) {\n                RecordLog.warn(\"[ParamFlowRuleUtil] Failed to parse value for item: \" + item, ex);\n                continue;\n            }\n            if (item.getCount() == null || item.getCount() < 0 || value == null) {\n                RecordLog.warn(\"[ParamFlowRuleUtil] Ignoring invalid exclusion parameter item: \" + item);\n                continue;\n            }\n            itemMap.put(value, item.getCount());\n        }\n        return itemMap;\n    }",
+        "position": {
+            "line": 199,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 200,
+                    "column": 36
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 203,
+                    "column": 60
+                }
+            },
+            {
+                "name": "parseItemValue",
+                "position": {
+                    "line": 208,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getObject",
+                "position": {
+                    "line": 208,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getClassType",
+                "position": {
+                    "line": 208,
+                    "column": 63
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 210,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getCount",
+                "position": {
+                    "line": 213,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getCount",
+                "position": {
+                    "line": 213,
+                    "column": 49
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 214,
+                    "column": 27
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 217,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getCount",
+                "position": {
+                    "line": 217,
+                    "column": 37
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 201,
+                    "column": 24
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 203,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamFlowRuleUtil.parseItemValue(String value, String classType)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "parseItemValue",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "parseItemValue(String value, String classType)",
+        "class_signature": "ParamFlowRuleUtil.parseItemValue(String value, String classType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "value"
+            ],
+            [
+                "String",
+                "classType"
+            ]
+        ],
+        "methodBody": "{\n        if (value == null) {\n            throw new IllegalArgumentException(\"Null value\");\n        }\n        if (StringUtil.isBlank(classType)) {\n            // If the class type is not provided, then treat it as string.\n            return value;\n        }\n        // Handle primitive type.\n        if (int.class.toString().equals(classType) || Integer.class.getName().equals(classType)) {\n            return Integer.parseInt(value);\n        } else if (boolean.class.toString().equals(classType) || Boolean.class.getName().equals(classType)) {\n            return Boolean.parseBoolean(value);\n        } else if (long.class.toString().equals(classType) || Long.class.getName().equals(classType)) {\n            return Long.parseLong(value);\n        } else if (double.class.toString().equals(classType) || Double.class.getName().equals(classType)) {\n            return Double.parseDouble(value);\n        } else if (float.class.toString().equals(classType) || Float.class.getName().equals(classType)) {\n            return Float.parseFloat(value);\n        } else if (byte.class.toString().equals(classType) || Byte.class.getName().equals(classType)) {\n            return Byte.parseByte(value);\n        } else if (short.class.toString().equals(classType) || Short.class.getName().equals(classType)) {\n            return Short.parseShort(value);\n        } else if (char.class.toString().equals(classType)) {\n            char[] array = value.toCharArray();\n            return array.length > 0 ? array[0] : null;\n        }\n\n        return value;\n    }",
+        "position": {
+            "line": 222,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 226,
+                    "column": 24
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 231,
+                    "column": 34
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 231,
+                    "column": 23
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 231,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 231,
+                    "column": 69
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 232,
+                    "column": 28
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 233,
+                    "column": 45
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 233,
+                    "column": 34
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 233,
+                    "column": 90
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 233,
+                    "column": 80
+                }
+            },
+            {
+                "name": "parseBoolean",
+                "position": {
+                    "line": 234,
+                    "column": 28
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 235,
+                    "column": 42
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 235,
+                    "column": 31
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 235,
+                    "column": 84
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 235,
+                    "column": 74
+                }
+            },
+            {
+                "name": "parseLong",
+                "position": {
+                    "line": 236,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 237,
+                    "column": 44
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 237,
+                    "column": 33
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 237,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 237,
+                    "column": 78
+                }
+            },
+            {
+                "name": "parseDouble",
+                "position": {
+                    "line": 238,
+                    "column": 27
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 239,
+                    "column": 43
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 239,
+                    "column": 32
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 239,
+                    "column": 86
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 239,
+                    "column": 76
+                }
+            },
+            {
+                "name": "parseFloat",
+                "position": {
+                    "line": 240,
+                    "column": 26
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 241,
+                    "column": 42
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 241,
+                    "column": 31
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 241,
+                    "column": 84
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 241,
+                    "column": 74
+                }
+            },
+            {
+                "name": "parseByte",
+                "position": {
+                    "line": 242,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 243,
+                    "column": 43
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 243,
+                    "column": 32
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 243,
+                    "column": 86
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 243,
+                    "column": 76
+                }
+            },
+            {
+                "name": "parseShort",
+                "position": {
+                    "line": 244,
+                    "column": 26
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 245,
+                    "column": 42
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 245,
+                    "column": 31
+                }
+            },
+            {
+                "name": "toCharArray",
+                "position": {
+                    "line": 246,
+                    "column": 34
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 224,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 12
+    },
+    {
+        "name": "apply",
+        "category": "method_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "apply(ParamFlowRule rule)",
+        "class_signature": "ParamFlowRuleUtil.apply(ParamFlowRule rule)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ParamFlowRule",
+                "rule"
+            ]
+        ],
+        "methodBody": "{\n            return rule.getResource();\n        }",
+        "position": {
+            "line": 255,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getResource",
+                "position": {
+                    "line": 256,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "ParamFlowRuleUtil",
+        "category": "constructor_declaration",
+        "class": "ParamFlowRuleUtil",
+        "signature": "ParamFlowRuleUtil()",
+        "class_signature": "ParamFlowRuleUtil.ParamFlowRuleUtil()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{}",
+        "position": {
+            "line": 260,
+            "column": 13
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 2
+    }
+]

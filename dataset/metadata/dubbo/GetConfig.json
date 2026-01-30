@@ -1,0 +1,971 @@
+[
+    {
+        "name": "GetConfig",
+        "category": "constructor_declaration",
+        "class": "GetConfig",
+        "signature": "GetConfig(FrameworkModel frameworkModel)",
+        "class_signature": "GetConfig.GetConfig(FrameworkModel frameworkModel)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FrameworkModel",
+                "frameworkModel"
+            ]
+        ],
+        "methodBody": "{\n        this.frameworkModel = frameworkModel;\n    }",
+        "position": {
+            "line": 57,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "execute",
+        "category": "method_declaration",
+        "class": "GetConfig",
+        "signature": "execute(CommandContext commandContext, String[] args)",
+        "class_signature": "GetConfig.execute(CommandContext commandContext, String[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "CommandContext",
+                "commandContext"
+            ],
+            [
+                "String[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        boolean http = commandContext.isHttp();\n        StringBuilder plainOutput = new StringBuilder();\n        Map<String, Object> frameworkMap = new HashMap<>();\n\n        appendFrameworkConfig(args, plainOutput, frameworkMap);\n\n        if (http) {\n            return JsonUtils.toJson(frameworkMap);\n        } else {\n            return plainOutput.toString();\n        }\n    }",
+        "position": {
+            "line": 62,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isHttp",
+                "position": {
+                    "line": 63,
+                    "column": 39
+                }
+            },
+            {
+                "name": "appendFrameworkConfig",
+                "position": {
+                    "line": 67,
+                    "column": 9
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 70,
+                    "column": 30
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 72,
+                    "column": 32
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 64,
+                    "column": 41
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 65,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "GetConfig.appendFrameworkConfig(String[] args, StringBuilder plainOutput, Map<String, Object> frameworkMap)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "appendFrameworkConfig",
+        "category": "method_declaration",
+        "class": "GetConfig",
+        "signature": "appendFrameworkConfig(String[] args, StringBuilder plainOutput, Map<String, Object> frameworkMap)",
+        "class_signature": "GetConfig.appendFrameworkConfig(String[] args, StringBuilder plainOutput, Map<String, Object> frameworkMap)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String[]",
+                "args"
+            ],
+            [
+                "StringBuilder",
+                "plainOutput"
+            ],
+            [
+                "Map<String, Object>",
+                "frameworkMap"
+            ]
+        ],
+        "methodBody": "{\n        for (ApplicationModel applicationModel : frameworkModel.getApplicationModels()) {\n            Map<String, Object> applicationMap = new HashMap<>();\n            frameworkMap.put(applicationModel.getDesc(), applicationMap);\n            plainOutput\n                    .append(\"ApplicationModel: \")\n                    .append(applicationModel.getDesc())\n                    .append(\"\\n\");\n\n            ConfigManager configManager = applicationModel.getApplicationConfigManager();\n\n            appendApplicationConfigs(args, plainOutput, applicationModel, applicationMap, configManager);\n        }\n    }",
+        "position": {
+            "line": 76,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getApplicationModels",
+                "position": {
+                    "line": 77,
+                    "column": 65
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 79,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getDesc",
+                "position": {
+                    "line": 79,
+                    "column": 47
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 83,
+                    "column": 22
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 82,
+                    "column": 22
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 81,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getDesc",
+                "position": {
+                    "line": 82,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getApplicationConfigManager",
+                "position": {
+                    "line": 85,
+                    "column": 60
+                }
+            },
+            {
+                "name": "appendApplicationConfigs",
+                "position": {
+                    "line": 87,
+                    "column": 13
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 78,
+                    "column": 54
+                }
+            }
+        ],
+        "calledMethods": [
+            "GetConfig.appendApplicationConfigs(String[] args, StringBuilder plainOutput, ApplicationModel applicationModel, Map<String, Object> applicationMap, ConfigManager configManager)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "appendApplicationConfigs",
+        "category": "method_declaration",
+        "class": "GetConfig",
+        "signature": "appendApplicationConfigs(String[] args, StringBuilder plainOutput, ApplicationModel applicationModel, Map<String, Object> applicationMap, ConfigManager configManager)",
+        "class_signature": "GetConfig.appendApplicationConfigs(String[] args, StringBuilder plainOutput, ApplicationModel applicationModel, Map<String, Object> applicationMap, ConfigManager configManager)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String[]",
+                "args"
+            ],
+            [
+                "StringBuilder",
+                "plainOutput"
+            ],
+            [
+                "ApplicationModel",
+                "applicationModel"
+            ],
+            [
+                "Map<String, Object>",
+                "applicationMap"
+            ],
+            [
+                "ConfigManager",
+                "configManager"
+            ]
+        ],
+        "methodBody": "{\n        Optional<ApplicationConfig> applicationConfig = configManager.getApplication();\n        applicationConfig.ifPresent(config ->\n                appendConfig(\"ApplicationConfig\", config.getName(), config, plainOutput, applicationMap, args));\n\n        for (ProtocolConfig protocol : configManager.getProtocols()) {\n            appendConfigs(\"ProtocolConfig\", protocol.getName(), protocol, plainOutput, applicationMap, args);\n        }\n\n        for (RegistryConfig registry : configManager.getRegistries()) {\n            appendConfigs(\"RegistryConfig\", registry.getId(), registry, plainOutput, applicationMap, args);\n        }\n\n        for (MetadataReportConfig metadataConfig : configManager.getMetadataConfigs()) {\n            appendConfigs(\n                    \"MetadataReportConfig\", metadataConfig.getId(), metadataConfig, plainOutput, applicationMap, args);\n        }\n\n        for (ConfigCenterConfig configCenter : configManager.getConfigCenters()) {\n            appendConfigs(\"ConfigCenterConfig\", configCenter.getId(), configCenter, plainOutput, applicationMap, args);\n        }\n\n        Optional<MetricsConfig> metricsConfig = configManager.getMetrics();\n        metricsConfig.ifPresent(\n                config -> appendConfig(\"MetricsConfig\", config.getId(), config, plainOutput, applicationMap, args));\n\n        Optional<TracingConfig> tracingConfig = configManager.getTracing();\n        tracingConfig.ifPresent(\n                config -> appendConfig(\"TracingConfig\", config.getId(), config, plainOutput, applicationMap, args));\n\n        Optional<MonitorConfig> monitorConfig = configManager.getMonitor();\n        monitorConfig.ifPresent(\n                config -> appendConfig(\"MonitorConfig\", config.getId(), config, plainOutput, applicationMap, args));\n\n        Optional<SslConfig> sslConfig = configManager.getSsl();\n        sslConfig.ifPresent(\n                config -> appendConfig(\"SslConfig\", config.getId(), config, plainOutput, applicationMap, args));\n\n        for (ModuleModel moduleModel : applicationModel.getModuleModels()) {\n            Map<String, Object> moduleMap = new HashMap<>();\n            applicationMap.put(moduleModel.getDesc(), moduleMap);\n            plainOutput.append(\"ModuleModel: \").append(moduleModel.getDesc()).append(\"\\n\");\n\n            ModuleConfigManager moduleConfigManager = moduleModel.getConfigManager();\n\n            appendModuleConfigs(args, plainOutput, moduleMap, moduleConfigManager);\n        }\n    }",
+        "position": {
+            "line": 91,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getApplication",
+                "position": {
+                    "line": 97,
+                    "column": 71
+                }
+            },
+            {
+                "name": "ifPresent",
+                "position": {
+                    "line": 98,
+                    "column": 27
+                }
+            },
+            {
+                "name": "appendConfig",
+                "position": {
+                    "line": 99,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 99,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getProtocols",
+                "position": {
+                    "line": 101,
+                    "column": 54
+                }
+            },
+            {
+                "name": "appendConfigs",
+                "position": {
+                    "line": 102,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 102,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getRegistries",
+                "position": {
+                    "line": 105,
+                    "column": 54
+                }
+            },
+            {
+                "name": "appendConfigs",
+                "position": {
+                    "line": 106,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 106,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getMetadataConfigs",
+                "position": {
+                    "line": 109,
+                    "column": 66
+                }
+            },
+            {
+                "name": "appendConfigs",
+                "position": {
+                    "line": 110,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 111,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getConfigCenters",
+                "position": {
+                    "line": 114,
+                    "column": 62
+                }
+            },
+            {
+                "name": "appendConfigs",
+                "position": {
+                    "line": 115,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 115,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getMetrics",
+                "position": {
+                    "line": 118,
+                    "column": 63
+                }
+            },
+            {
+                "name": "ifPresent",
+                "position": {
+                    "line": 119,
+                    "column": 23
+                }
+            },
+            {
+                "name": "appendConfig",
+                "position": {
+                    "line": 120,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 120,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getTracing",
+                "position": {
+                    "line": 122,
+                    "column": 63
+                }
+            },
+            {
+                "name": "ifPresent",
+                "position": {
+                    "line": 123,
+                    "column": 23
+                }
+            },
+            {
+                "name": "appendConfig",
+                "position": {
+                    "line": 124,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 124,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getMonitor",
+                "position": {
+                    "line": 126,
+                    "column": 63
+                }
+            },
+            {
+                "name": "ifPresent",
+                "position": {
+                    "line": 127,
+                    "column": 23
+                }
+            },
+            {
+                "name": "appendConfig",
+                "position": {
+                    "line": 128,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 128,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getSsl",
+                "position": {
+                    "line": 130,
+                    "column": 55
+                }
+            },
+            {
+                "name": "ifPresent",
+                "position": {
+                    "line": 131,
+                    "column": 19
+                }
+            },
+            {
+                "name": "appendConfig",
+                "position": {
+                    "line": 132,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 132,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getModuleModels",
+                "position": {
+                    "line": 134,
+                    "column": 57
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 136,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getDesc",
+                "position": {
+                    "line": 136,
+                    "column": 44
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 137,
+                    "column": 79
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 137,
+                    "column": 49
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 137,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getDesc",
+                "position": {
+                    "line": 137,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getConfigManager",
+                "position": {
+                    "line": 139,
+                    "column": 67
+                }
+            },
+            {
+                "name": "appendModuleConfigs",
+                "position": {
+                    "line": 141,
+                    "column": 13
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 135,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "GetConfig.appendConfig(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfigs(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfigs(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfigs(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfigs(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfig(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfig(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfig(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfig(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendModuleConfigs(String[] args, StringBuilder plainOutput, Map<String, Object> moduleMap, ModuleConfigManager moduleConfigManager)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "appendModuleConfigs",
+        "category": "method_declaration",
+        "class": "GetConfig",
+        "signature": "appendModuleConfigs(String[] args, StringBuilder plainOutput, Map<String, Object> moduleMap, ModuleConfigManager moduleConfigManager)",
+        "class_signature": "GetConfig.appendModuleConfigs(String[] args, StringBuilder plainOutput, Map<String, Object> moduleMap, ModuleConfigManager moduleConfigManager)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String[]",
+                "args"
+            ],
+            [
+                "StringBuilder",
+                "plainOutput"
+            ],
+            [
+                "Map<String, Object>",
+                "moduleMap"
+            ],
+            [
+                "ModuleConfigManager",
+                "moduleConfigManager"
+            ]
+        ],
+        "methodBody": "{\n        for (ProviderConfig provider : moduleConfigManager.getProviders()) {\n            appendConfigs(\"ProviderConfig\", provider.getId(), provider, plainOutput, moduleMap, args);\n        }\n\n        for (ConsumerConfig consumer : moduleConfigManager.getConsumers()) {\n            appendConfigs(\"ConsumerConfig\", consumer.getId(), consumer, plainOutput, moduleMap, args);\n        }\n\n        Optional<ModuleConfig> moduleConfig = moduleConfigManager.getModule();\n        moduleConfig.ifPresent(\n                config -> appendConfig(\"ModuleConfig\", config.getId(), config, plainOutput, moduleMap, args));\n\n        for (ServiceConfigBase<?> service : moduleConfigManager.getServices()) {\n            appendConfigs(\"ServiceConfig\", service.getUniqueServiceName(), service, plainOutput, moduleMap, args);\n        }\n\n        for (ReferenceConfigBase<?> reference : moduleConfigManager.getReferences()) {\n            appendConfigs(\"ReferenceConfig\", reference.getUniqueServiceName(), reference, plainOutput, moduleMap, args);\n        }\n    }",
+        "position": {
+            "line": 145,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getProviders",
+                "position": {
+                    "line": 150,
+                    "column": 60
+                }
+            },
+            {
+                "name": "appendConfigs",
+                "position": {
+                    "line": 151,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 151,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getConsumers",
+                "position": {
+                    "line": 154,
+                    "column": 60
+                }
+            },
+            {
+                "name": "appendConfigs",
+                "position": {
+                    "line": 155,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 155,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getModule",
+                "position": {
+                    "line": 158,
+                    "column": 67
+                }
+            },
+            {
+                "name": "ifPresent",
+                "position": {
+                    "line": 159,
+                    "column": 22
+                }
+            },
+            {
+                "name": "appendConfig",
+                "position": {
+                    "line": 160,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 160,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getServices",
+                "position": {
+                    "line": 162,
+                    "column": 65
+                }
+            },
+            {
+                "name": "appendConfigs",
+                "position": {
+                    "line": 163,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getUniqueServiceName",
+                "position": {
+                    "line": 163,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getReferences",
+                "position": {
+                    "line": 166,
+                    "column": 69
+                }
+            },
+            {
+                "name": "appendConfigs",
+                "position": {
+                    "line": 167,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getUniqueServiceName",
+                "position": {
+                    "line": 167,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [
+            "GetConfig.appendConfigs(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfigs(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfig(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfigs(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+            "GetConfig.appendConfigs(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "appendConfigs",
+        "category": "method_declaration",
+        "class": "GetConfig",
+        "signature": "appendConfigs(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+        "class_signature": "GetConfig.appendConfigs(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "type"
+            ],
+            [
+                "String",
+                "id"
+            ],
+            [
+                "Object",
+                "config"
+            ],
+            [
+                "StringBuilder",
+                "plainOutput"
+            ],
+            [
+                "Map<String, Object>",
+                "map"
+            ],
+            [
+                "String[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        if (!isMatch(type, id, args)) {\n            return;\n        }\n\n        plainOutput\n                .append(type)\n                .append(\": \")\n                .append(id)\n                .append(\"\\n\")\n                .append(config)\n                .append(\"\\n\\n\");\n\n        Map<String, Object> typeMap =\n                (Map<String, Object>) map.computeIfAbsent(type, k -> new HashMap<String, Object>());\n        typeMap.put(id, config);\n    }",
+        "position": {
+            "line": 172,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isMatch",
+                "position": {
+                    "line": 174,
+                    "column": 14
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 184,
+                    "column": 18
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 183,
+                    "column": 18
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 182,
+                    "column": 18
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 181,
+                    "column": 18
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 180,
+                    "column": 18
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 179,
+                    "column": 18
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 187,
+                    "column": 43
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 188,
+                    "column": 17
+                }
+            },
+            {
+                "name": "HashMap<String, Object>",
+                "position": {
+                    "line": 187,
+                    "column": 74
+                }
+            }
+        ],
+        "calledMethods": [
+            "GetConfig.isMatch(String type, String id, String[] args)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "appendConfig",
+        "category": "method_declaration",
+        "class": "GetConfig",
+        "signature": "appendConfig(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+        "class_signature": "GetConfig.appendConfig(String type, String id, Object config, StringBuilder plainOutput, Map<String, Object> map, String[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "type"
+            ],
+            [
+                "String",
+                "id"
+            ],
+            [
+                "Object",
+                "config"
+            ],
+            [
+                "StringBuilder",
+                "plainOutput"
+            ],
+            [
+                "Map<String, Object>",
+                "map"
+            ],
+            [
+                "String[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        if (!isMatch(type, id, args)) {\n            return;\n        }\n\n        plainOutput\n                .append(type)\n                .append(\": \")\n                .append(id)\n                .append(\"\\n\")\n                .append(config)\n                .append(\"\\n\\n\");\n\n        map.put(type, config);\n    }",
+        "position": {
+            "line": 191,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isMatch",
+                "position": {
+                    "line": 193,
+                    "column": 14
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 203,
+                    "column": 18
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 202,
+                    "column": 18
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 201,
+                    "column": 18
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 200,
+                    "column": 18
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 199,
+                    "column": 18
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 198,
+                    "column": 18
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 205,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "GetConfig.isMatch(String type, String id, String[] args)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "isMatch",
+        "category": "method_declaration",
+        "class": "GetConfig",
+        "signature": "isMatch(String type, String id, String[] args)",
+        "class_signature": "GetConfig.isMatch(String type, String id, String[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "type"
+            ],
+            [
+                "String",
+                "id"
+            ],
+            [
+                "String[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        if (args == null) {\n            return true;\n        }\n        switch (args.length) {\n            case 1:\n                if (!Objects.equals(args[0], type)) {\n                    return false;\n                }\n                break;\n            case 2:\n                if (!Objects.equals(args[0], type) || !Objects.equals(args[1], id)) {\n                    return false;\n                }\n                break;\n            default:\n        }\n        return true;\n    }",
+        "position": {
+            "line": 208,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 214,
+                    "column": 30
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 219,
+                    "column": 30
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 219,
+                    "column": 64
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    }
+]

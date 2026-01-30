@@ -1,0 +1,4313 @@
+[
+    {
+        "name": "canBuild",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "canBuild(String modelName)",
+        "class_signature": "GradleApplicationModelBuilder.canBuild(String modelName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "modelName"
+            ]
+        ],
+        "methodBody": "{\n        return modelName.equals(ApplicationModel.class.getName());\n    }",
+        "position": {
+            "line": 83,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 84,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 84,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "getParameterType",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "getParameterType()",
+        "class_signature": "GradleApplicationModelBuilder.getParameterType()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return ModelParameter.class;\n    }",
+        "position": {
+            "line": 88,
+            "column": 34
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "buildAll",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "buildAll(String modelName, Project project)",
+        "class_signature": "GradleApplicationModelBuilder.buildAll(String modelName, Project project)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "modelName"
+            ],
+            [
+                "Project",
+                "project"
+            ]
+        ],
+        "methodBody": "{\n        final ModelParameterImpl modelParameter = new ModelParameterImpl();\n        modelParameter.setMode(LaunchMode.DEVELOPMENT.toString());\n        return buildAll(modelName, modelParameter, project);\n    }",
+        "position": {
+            "line": 93,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setMode",
+                "position": {
+                    "line": 95,
+                    "column": 24
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 95,
+                    "column": 55
+                }
+            },
+            {
+                "name": "buildAll",
+                "position": {
+                    "line": 96,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ModelParameterImpl",
+                "position": {
+                    "line": 94,
+                    "column": 55
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.buildAll(String modelName, ModelParameter parameter, Project project)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "buildAll",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "buildAll(String modelName, ModelParameter parameter, Project project)",
+        "class_signature": "GradleApplicationModelBuilder.buildAll(String modelName, ModelParameter parameter, Project project)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "modelName"
+            ],
+            [
+                "ModelParameter",
+                "parameter"
+            ],
+            [
+                "Project",
+                "project"
+            ]
+        ],
+        "methodBody": "{\n        final LaunchMode mode = LaunchMode.valueOf(parameter.getMode());\n\n        final ApplicationDeploymentClasspathBuilder classpathBuilder = new ApplicationDeploymentClasspathBuilder(project,\n                mode);\n        final Configuration classpathConfig = classpathBuilder.getRuntimeConfiguration();\n        final Configuration deploymentConfig = classpathBuilder.getDeploymentConfiguration();\n        final PlatformImports platformImports = classpathBuilder.getPlatformImports();\n\n        boolean workspaceDiscovery = LaunchMode.DEVELOPMENT.equals(mode) || LaunchMode.TEST.equals(mode)\n                || Boolean.parseBoolean(System.getProperty(BootstrapConstants.QUARKUS_BOOTSTRAP_WORKSPACE_DISCOVERY));\n        if (!workspaceDiscovery) {\n            Object o = project.getProperties().get(BootstrapConstants.QUARKUS_BOOTSTRAP_WORKSPACE_DISCOVERY);\n            if (o != null) {\n                workspaceDiscovery = Boolean.parseBoolean(o.toString());\n            }\n        }\n\n        final ResolvedDependencyBuilder appArtifact = getProjectArtifact(project, workspaceDiscovery);\n        final ApplicationModelBuilder modelBuilder = new ApplicationModelBuilder()\n                .setAppArtifact(appArtifact)\n                .addReloadableWorkspaceModule(appArtifact.getKey())\n                .setPlatformImports(platformImports);\n\n        collectDependencies(classpathConfig.getResolvedConfiguration(), workspaceDiscovery,\n                project, modelBuilder, appArtifact.getWorkspaceModule().mutable());\n        collectExtensionDependencies(project, deploymentConfig, modelBuilder);\n        addCompileOnly(project, classpathBuilder, modelBuilder);\n\n        return modelBuilder.build();\n    }",
+        "position": {
+            "line": 100,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 101,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getMode",
+                "position": {
+                    "line": 101,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getRuntimeConfiguration",
+                "position": {
+                    "line": 105,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getDeploymentConfiguration",
+                "position": {
+                    "line": 106,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getPlatformImports",
+                "position": {
+                    "line": 107,
+                    "column": 66
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 109,
+                    "column": 61
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 109,
+                    "column": 93
+                }
+            },
+            {
+                "name": "parseBoolean",
+                "position": {
+                    "line": 110,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 110,
+                    "column": 48
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 112,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getProperties",
+                "position": {
+                    "line": 112,
+                    "column": 32
+                }
+            },
+            {
+                "name": "parseBoolean",
+                "position": {
+                    "line": 114,
+                    "column": 46
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 114,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getProjectArtifact",
+                "position": {
+                    "line": 118,
+                    "column": 55
+                }
+            },
+            {
+                "name": "setPlatformImports",
+                "position": {
+                    "line": 122,
+                    "column": 18
+                }
+            },
+            {
+                "name": "addReloadableWorkspaceModule",
+                "position": {
+                    "line": 121,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setAppArtifact",
+                "position": {
+                    "line": 120,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 121,
+                    "column": 59
+                }
+            },
+            {
+                "name": "collectDependencies",
+                "position": {
+                    "line": 124,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getResolvedConfiguration",
+                "position": {
+                    "line": 124,
+                    "column": 45
+                }
+            },
+            {
+                "name": "mutable",
+                "position": {
+                    "line": 125,
+                    "column": 73
+                }
+            },
+            {
+                "name": "getWorkspaceModule",
+                "position": {
+                    "line": 125,
+                    "column": 52
+                }
+            },
+            {
+                "name": "collectExtensionDependencies",
+                "position": {
+                    "line": 126,
+                    "column": 9
+                }
+            },
+            {
+                "name": "addCompileOnly",
+                "position": {
+                    "line": 127,
+                    "column": 9
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 129,
+                    "column": 29
+                }
+            },
+            {
+                "name": "ApplicationDeploymentClasspathBuilder",
+                "position": {
+                    "line": 103,
+                    "column": 76
+                }
+            },
+            {
+                "name": "ApplicationModelBuilder",
+                "position": {
+                    "line": 119,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.getProjectArtifact(Project project, boolean workspaceDiscovery)",
+            "GradleApplicationModelBuilder.collectDependencies(ResolvedConfiguration configuration, boolean workspaceDiscovery, Project project, ApplicationModelBuilder modelBuilder, WorkspaceModule.Mutable wsModule)",
+            "GradleApplicationModelBuilder.collectExtensionDependencies(Project project, Configuration deploymentConfiguration, ApplicationModelBuilder modelBuilder)",
+            "GradleApplicationModelBuilder.addCompileOnly(Project project, ApplicationDeploymentClasspathBuilder classpathBuilder, ApplicationModelBuilder modelBuilder)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "addCompileOnly",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "addCompileOnly(Project project, ApplicationDeploymentClasspathBuilder classpathBuilder, ApplicationModelBuilder modelBuilder)",
+        "class_signature": "GradleApplicationModelBuilder.addCompileOnly(Project project, ApplicationDeploymentClasspathBuilder classpathBuilder, ApplicationModelBuilder modelBuilder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Project",
+                "project"
+            ],
+            [
+                "ApplicationDeploymentClasspathBuilder",
+                "classpathBuilder"
+            ],
+            [
+                "ApplicationModelBuilder",
+                "modelBuilder"
+            ]
+        ],
+        "methodBody": "{\n        var compileOnlyConfig = classpathBuilder.getCompileOnly();\n        final List<org.gradle.api.artifacts.ResolvedDependency> queue = new ArrayList<>(\n                compileOnlyConfig.getResolvedConfiguration().getFirstLevelModuleDependencies());\n        for (int i = 0; i < queue.size(); ++i) {\n            var d = queue.get(i);\n            boolean skip = true;\n            for (var a : d.getModuleArtifacts()) {\n                if (!isDependency(a)) {\n                    continue;\n                }\n                var moduleId = a.getModuleVersion().getId();\n                var key = ArtifactKey.of(moduleId.getGroup(), moduleId.getName(), a.getClassifier(), a.getType());\n                var appDep = modelBuilder.getDependency(key);\n                if (appDep == null) {\n                    addArtifactDependency(project, modelBuilder, a);\n                    appDep = modelBuilder.getDependency(key);\n                    appDep.clearFlag(DependencyFlags.DEPLOYMENT_CP);\n                }\n                if (!appDep.isFlagSet(DependencyFlags.COMPILE_ONLY)) {\n                    skip = false;\n                    appDep.setFlags(DependencyFlags.COMPILE_ONLY);\n                }\n            }\n            if (!skip) {\n                queue.addAll(d.getChildren());\n            }\n        }\n    }",
+        "position": {
+            "line": 132,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCompileOnly",
+                "position": {
+                    "line": 134,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getFirstLevelModuleDependencies",
+                "position": {
+                    "line": 136,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getResolvedConfiguration",
+                "position": {
+                    "line": 136,
+                    "column": 35
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 137,
+                    "column": 35
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 138,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getModuleArtifacts",
+                "position": {
+                    "line": 140,
+                    "column": 28
+                }
+            },
+            {
+                "name": "isDependency",
+                "position": {
+                    "line": 141,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 144,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getModuleVersion",
+                "position": {
+                    "line": 144,
+                    "column": 34
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 145,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 145,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 145,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getClassifier",
+                "position": {
+                    "line": 145,
+                    "column": 85
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 145,
+                    "column": 104
+                }
+            },
+            {
+                "name": "getDependency",
+                "position": {
+                    "line": 146,
+                    "column": 43
+                }
+            },
+            {
+                "name": "addArtifactDependency",
+                "position": {
+                    "line": 148,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getDependency",
+                "position": {
+                    "line": 149,
+                    "column": 43
+                }
+            },
+            {
+                "name": "clearFlag",
+                "position": {
+                    "line": 150,
+                    "column": 28
+                }
+            },
+            {
+                "name": "isFlagSet",
+                "position": {
+                    "line": 152,
+                    "column": 29
+                }
+            },
+            {
+                "name": "setFlags",
+                "position": {
+                    "line": 154,
+                    "column": 28
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 158,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getChildren",
+                "position": {
+                    "line": 158,
+                    "column": 32
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 135,
+                    "column": 77
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.isDependency(ResolvedArtifact a)",
+            "GradleApplicationModelBuilder.addArtifactDependency(Project project, ApplicationModelBuilder modelBuilder, ResolvedArtifact a)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "getProjectArtifact",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "getProjectArtifact(Project project, boolean workspaceDiscovery)",
+        "class_signature": "GradleApplicationModelBuilder.getProjectArtifact(Project project, boolean workspaceDiscovery)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Project",
+                "project"
+            ],
+            [
+                "boolean",
+                "workspaceDiscovery"
+            ]
+        ],
+        "methodBody": "{\n        final ResolvedDependencyBuilder appArtifact = ResolvedDependencyBuilder.newInstance()\n                .setGroupId(project.getGroup().toString())\n                .setArtifactId(project.getName())\n                .setVersion(project.getVersion().toString());\n\n        final SourceSetContainer sourceSets = project.getExtensions().getByType(SourceSetContainer.class);\n        final WorkspaceModule.Mutable mainModule = WorkspaceModule.builder()\n                .setModuleId(\n                        WorkspaceModuleId.of(appArtifact.getGroupId(), appArtifact.getArtifactId(), appArtifact.getVersion()))\n                .setModuleDir(project.getProjectDir().toPath())\n                .setBuildDir(project.getBuildDir().toPath())\n                .setBuildFile(project.getBuildFile().toPath());\n\n        initProjectModule(project, mainModule, sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME), ArtifactSources.MAIN);\n        if (workspaceDiscovery) {\n            final TaskCollection<Test> testTasks = project.getTasks().withType(Test.class);\n            if (!testTasks.isEmpty()) {\n                final Map<File, SourceSet> sourceSetsByClassesDir = new HashMap<>();\n                sourceSets.forEach(s -> {\n                    s.getOutput().getClassesDirs().forEach(d -> {\n                        if (d.exists()) {\n                            sourceSetsByClassesDir.put(d, s);\n                        }\n                    });\n                });\n                testTasks.forEach(t -> {\n                    if (t.getEnabled()) {\n                        t.getTestClassesDirs().forEach(d -> {\n                            if (d.exists()) {\n                                final SourceSet sourceSet = sourceSetsByClassesDir.remove(d);\n                                if (sourceSet != null) {\n                                    initProjectModule(project, mainModule, sourceSet,\n                                            sourceSet.getName().equals(SourceSet.TEST_SOURCE_SET_NAME)\n                                                    ? ArtifactSources.TEST\n                                                    : sourceSet.getName());\n                                }\n                            }\n                        });\n                    }\n                });\n            }\n        }\n\n        final PathList.Builder paths = PathList.builder();\n        collectDestinationDirs(mainModule.getMainSources().getSourceDirs(), paths);\n        collectDestinationDirs(mainModule.getMainSources().getResourceDirs(), paths);\n\n        return appArtifact.setWorkspaceModule(mainModule).setResolvedPaths(paths.build());\n    }",
+        "position": {
+            "line": 163,
+            "column": 45
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setVersion",
+                "position": {
+                    "line": 167,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setArtifactId",
+                "position": {
+                    "line": 166,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setGroupId",
+                "position": {
+                    "line": 165,
+                    "column": 18
+                }
+            },
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 164,
+                    "column": 81
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 165,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 165,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 166,
+                    "column": 40
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 167,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getVersion",
+                "position": {
+                    "line": 167,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getByType",
+                "position": {
+                    "line": 169,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getExtensions",
+                "position": {
+                    "line": 169,
+                    "column": 55
+                }
+            },
+            {
+                "name": "setBuildFile",
+                "position": {
+                    "line": 175,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setBuildDir",
+                "position": {
+                    "line": 174,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setModuleDir",
+                "position": {
+                    "line": 173,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setModuleId",
+                "position": {
+                    "line": 171,
+                    "column": 18
+                }
+            },
+            {
+                "name": "builder",
+                "position": {
+                    "line": 170,
+                    "column": 68
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 172,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getGroupId",
+                "position": {
+                    "line": 172,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getArtifactId",
+                "position": {
+                    "line": 172,
+                    "column": 84
+                }
+            },
+            {
+                "name": "getVersion",
+                "position": {
+                    "line": 172,
+                    "column": 113
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 173,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getProjectDir",
+                "position": {
+                    "line": 173,
+                    "column": 39
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 174,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getBuildDir",
+                "position": {
+                    "line": 174,
+                    "column": 38
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 175,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getBuildFile",
+                "position": {
+                    "line": 175,
+                    "column": 39
+                }
+            },
+            {
+                "name": "initProjectModule",
+                "position": {
+                    "line": 177,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getByName",
+                "position": {
+                    "line": 177,
+                    "column": 59
+                }
+            },
+            {
+                "name": "withType",
+                "position": {
+                    "line": 179,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getTasks",
+                "position": {
+                    "line": 179,
+                    "column": 60
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 180,
+                    "column": 28
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 182,
+                    "column": 28
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 183,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getClassesDirs",
+                "position": {
+                    "line": 183,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getOutput",
+                "position": {
+                    "line": 183,
+                    "column": 23
+                }
+            },
+            {
+                "name": "exists",
+                "position": {
+                    "line": 184,
+                    "column": 31
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 185,
+                    "column": 52
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 189,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getEnabled",
+                "position": {
+                    "line": 190,
+                    "column": 27
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 191,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getTestClassesDirs",
+                "position": {
+                    "line": 191,
+                    "column": 27
+                }
+            },
+            {
+                "name": "exists",
+                "position": {
+                    "line": 192,
+                    "column": 35
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 193,
+                    "column": 84
+                }
+            },
+            {
+                "name": "initProjectModule",
+                "position": {
+                    "line": 195,
+                    "column": 37
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 196,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 196,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 198,
+                    "column": 65
+                }
+            },
+            {
+                "name": "builder",
+                "position": {
+                    "line": 207,
+                    "column": 49
+                }
+            },
+            {
+                "name": "collectDestinationDirs",
+                "position": {
+                    "line": 208,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getSourceDirs",
+                "position": {
+                    "line": 208,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getMainSources",
+                "position": {
+                    "line": 208,
+                    "column": 43
+                }
+            },
+            {
+                "name": "collectDestinationDirs",
+                "position": {
+                    "line": 209,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getResourceDirs",
+                "position": {
+                    "line": 209,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getMainSources",
+                "position": {
+                    "line": 209,
+                    "column": 43
+                }
+            },
+            {
+                "name": "setResolvedPaths",
+                "position": {
+                    "line": 211,
+                    "column": 59
+                }
+            },
+            {
+                "name": "setWorkspaceModule",
+                "position": {
+                    "line": 211,
+                    "column": 28
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 211,
+                    "column": 82
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 181,
+                    "column": 73
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.initProjectModule(Project project, WorkspaceModule.Mutable module, SourceSet sourceSet, String classifier)",
+            "GradleApplicationModelBuilder.initProjectModule(Project project, WorkspaceModule.Mutable module, SourceSet sourceSet, String classifier)",
+            "GradleApplicationModelBuilder.collectDestinationDirs(Collection<SourceDir> sources, PathList.Builder paths)",
+            "GradleApplicationModelBuilder.collectDestinationDirs(Collection<SourceDir> sources, PathList.Builder paths)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "collectDestinationDirs",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "collectDestinationDirs(Collection<SourceDir> sources, PathList.Builder paths)",
+        "class_signature": "GradleApplicationModelBuilder.collectDestinationDirs(Collection<SourceDir> sources, PathList.Builder paths)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Collection<SourceDir>",
+                "sources"
+            ],
+            [
+                "PathList.Builder",
+                "paths"
+            ]
+        ],
+        "methodBody": "{\n        for (SourceDir src : sources) {\n            final Path path = src.getOutputDir();\n            if (paths.contains(path) || !Files.exists(path)) {\n                continue;\n            }\n            paths.add(path);\n        }\n    }",
+        "position": {
+            "line": 214,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getOutputDir",
+                "position": {
+                    "line": 216,
+                    "column": 35
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 217,
+                    "column": 23
+                }
+            },
+            {
+                "name": "exists",
+                "position": {
+                    "line": 217,
+                    "column": 48
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 220,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "collectExtensionDependencies",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "collectExtensionDependencies(Project project, Configuration deploymentConfiguration, ApplicationModelBuilder modelBuilder)",
+        "class_signature": "GradleApplicationModelBuilder.collectExtensionDependencies(Project project, Configuration deploymentConfiguration, ApplicationModelBuilder modelBuilder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Project",
+                "project"
+            ],
+            [
+                "Configuration",
+                "deploymentConfiguration"
+            ],
+            [
+                "ApplicationModelBuilder",
+                "modelBuilder"
+            ]
+        ],
+        "methodBody": "{\n        final ResolvedConfiguration rc = deploymentConfiguration.getResolvedConfiguration();\n        for (ResolvedArtifact a : rc.getResolvedArtifacts()) {\n            addArtifactDependency(project, modelBuilder, a);\n        }\n    }",
+        "position": {
+            "line": 224,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getResolvedConfiguration",
+                "position": {
+                    "line": 226,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getResolvedArtifacts",
+                "position": {
+                    "line": 227,
+                    "column": 38
+                }
+            },
+            {
+                "name": "addArtifactDependency",
+                "position": {
+                    "line": 228,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.addArtifactDependency(Project project, ApplicationModelBuilder modelBuilder, ResolvedArtifact a)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "addArtifactDependency",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "addArtifactDependency(Project project, ApplicationModelBuilder modelBuilder, ResolvedArtifact a)",
+        "class_signature": "GradleApplicationModelBuilder.addArtifactDependency(Project project, ApplicationModelBuilder modelBuilder, ResolvedArtifact a)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Project",
+                "project"
+            ],
+            [
+                "ApplicationModelBuilder",
+                "modelBuilder"
+            ],
+            [
+                "ResolvedArtifact",
+                "a"
+            ]
+        ],
+        "methodBody": "{\n        if (a.getId().getComponentIdentifier() instanceof ProjectComponentIdentifier) {\n            ProjectComponentIdentifier projectComponentIdentifier = (ProjectComponentIdentifier) a.getId()\n                    .getComponentIdentifier();\n            var includedBuild = ToolingUtils.includedBuild(project, projectComponentIdentifier.getBuild().getName());\n            final Project projectDep;\n            if (includedBuild != null) {\n                projectDep = ToolingUtils.includedBuildProject((IncludedBuildInternal) includedBuild,\n                        projectComponentIdentifier.getProjectPath());\n            } else {\n                projectDep = project.getRootProject().findProject(projectComponentIdentifier.getProjectPath());\n            }\n            Objects.requireNonNull(projectDep,\n                    () -> \"project \" + projectComponentIdentifier.getProjectPath() + \" should exist\");\n            SourceSetContainer sourceSets = projectDep.getExtensions().getByType(SourceSetContainer.class);\n\n            SourceSet mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME);\n            ResolvedDependencyBuilder dep = modelBuilder.getDependency(\n                    toAppDependenciesKey(a.getModuleVersion().getId().getGroup(), a.getName(), a.getClassifier()));\n            if (dep == null) {\n                dep = toDependency(a, mainSourceSet);\n                modelBuilder.addDependency(dep);\n            }\n            dep.setDeploymentCp();\n            dep.clearFlag(DependencyFlags.RELOADABLE);\n        } else if (isDependency(a)) {\n            ResolvedDependencyBuilder dep = modelBuilder.getDependency(\n                    toAppDependenciesKey(a.getModuleVersion().getId().getGroup(), a.getName(), a.getClassifier()));\n            if (dep == null) {\n                dep = toDependency(a);\n                modelBuilder.addDependency(dep);\n            }\n            dep.setDeploymentCp();\n            dep.clearFlag(DependencyFlags.RELOADABLE);\n        }\n    }",
+        "position": {
+            "line": 232,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getComponentIdentifier",
+                "position": {
+                    "line": 233,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 233,
+                    "column": 15
+                }
+            },
+            {
+                "name": "getComponentIdentifier",
+                "position": {
+                    "line": 235,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 234,
+                    "column": 100
+                }
+            },
+            {
+                "name": "includedBuild",
+                "position": {
+                    "line": 236,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 236,
+                    "column": 107
+                }
+            },
+            {
+                "name": "getBuild",
+                "position": {
+                    "line": 236,
+                    "column": 96
+                }
+            },
+            {
+                "name": "includedBuildProject",
+                "position": {
+                    "line": 239,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getProjectPath",
+                "position": {
+                    "line": 240,
+                    "column": 52
+                }
+            },
+            {
+                "name": "findProject",
+                "position": {
+                    "line": 242,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getRootProject",
+                "position": {
+                    "line": 242,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getProjectPath",
+                "position": {
+                    "line": 242,
+                    "column": 94
+                }
+            },
+            {
+                "name": "requireNonNull",
+                "position": {
+                    "line": 244,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getProjectPath",
+                "position": {
+                    "line": 245,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getByType",
+                "position": {
+                    "line": 246,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getExtensions",
+                "position": {
+                    "line": 246,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getByName",
+                "position": {
+                    "line": 248,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getDependency",
+                "position": {
+                    "line": 249,
+                    "column": 58
+                }
+            },
+            {
+                "name": "toAppDependenciesKey",
+                "position": {
+                    "line": 250,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 250,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 250,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getModuleVersion",
+                "position": {
+                    "line": 250,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 250,
+                    "column": 85
+                }
+            },
+            {
+                "name": "getClassifier",
+                "position": {
+                    "line": 250,
+                    "column": 98
+                }
+            },
+            {
+                "name": "toDependency",
+                "position": {
+                    "line": 252,
+                    "column": 23
+                }
+            },
+            {
+                "name": "addDependency",
+                "position": {
+                    "line": 253,
+                    "column": 30
+                }
+            },
+            {
+                "name": "setDeploymentCp",
+                "position": {
+                    "line": 255,
+                    "column": 17
+                }
+            },
+            {
+                "name": "clearFlag",
+                "position": {
+                    "line": 256,
+                    "column": 17
+                }
+            },
+            {
+                "name": "isDependency",
+                "position": {
+                    "line": 257,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getDependency",
+                "position": {
+                    "line": 258,
+                    "column": 58
+                }
+            },
+            {
+                "name": "toAppDependenciesKey",
+                "position": {
+                    "line": 259,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 259,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 259,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getModuleVersion",
+                "position": {
+                    "line": 259,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 259,
+                    "column": 85
+                }
+            },
+            {
+                "name": "getClassifier",
+                "position": {
+                    "line": 259,
+                    "column": 98
+                }
+            },
+            {
+                "name": "toDependency",
+                "position": {
+                    "line": 261,
+                    "column": 23
+                }
+            },
+            {
+                "name": "addDependency",
+                "position": {
+                    "line": 262,
+                    "column": 30
+                }
+            },
+            {
+                "name": "setDeploymentCp",
+                "position": {
+                    "line": 264,
+                    "column": 17
+                }
+            },
+            {
+                "name": "clearFlag",
+                "position": {
+                    "line": 265,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.toAppDependenciesKey(String groupId, String artifactId, String classifier)",
+            "GradleApplicationModelBuilder.toDependency(ResolvedArtifact a, int... flags)",
+            "GradleApplicationModelBuilder.isDependency(ResolvedArtifact a)",
+            "GradleApplicationModelBuilder.toAppDependenciesKey(String groupId, String artifactId, String classifier)",
+            "GradleApplicationModelBuilder.toDependency(ResolvedArtifact a, int... flags)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "collectDependencies",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "collectDependencies(ResolvedConfiguration configuration, boolean workspaceDiscovery, Project project, ApplicationModelBuilder modelBuilder, WorkspaceModule.Mutable wsModule)",
+        "class_signature": "GradleApplicationModelBuilder.collectDependencies(ResolvedConfiguration configuration, boolean workspaceDiscovery, Project project, ApplicationModelBuilder modelBuilder, WorkspaceModule.Mutable wsModule)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResolvedConfiguration",
+                "configuration"
+            ],
+            [
+                "boolean",
+                "workspaceDiscovery"
+            ],
+            [
+                "Project",
+                "project"
+            ],
+            [
+                "ApplicationModelBuilder",
+                "modelBuilder"
+            ],
+            [
+                "WorkspaceModule.Mutable",
+                "wsModule"
+            ]
+        ],
+        "methodBody": "{\n\n        final Set<ResolvedArtifact> resolvedArtifacts = configuration.getResolvedArtifacts();\n        // if the number of artifacts is less than the number of files then probably\n        // the project includes direct file dependencies\n        final Set<File> artifactFiles = resolvedArtifacts.size() < configuration.getFiles().size()\n                ? new HashSet<>(resolvedArtifacts.size())\n                : null;\n\n        configuration.getFirstLevelModuleDependencies()\n                .forEach(d -> {\n                    collectDependencies(d, workspaceDiscovery, project, artifactFiles, new HashSet<>(),\n                            modelBuilder,\n                            wsModule,\n                            (byte) (COLLECT_TOP_EXTENSION_RUNTIME_NODES | COLLECT_DIRECT_DEPS | COLLECT_RELOADABLE_MODULES));\n                });\n\n        if (artifactFiles != null) {\n            // detect FS paths that aren't provided by the resolved artifacts\n            for (File f : configuration.getFiles()) {\n                if (artifactFiles.contains(f) || !f.exists()) {\n                    continue;\n                }\n                // here we are trying to represent a direct FS path dependency\n                // as an artifact dependency\n                // SHA1 hash is used to avoid long file names in the lib dir\n                final String parentPath = f.getParent();\n                final String group = HashUtil.sha1(parentPath == null ? f.getName() : parentPath);\n                String name = f.getName();\n                String type = ArtifactCoords.TYPE_JAR;\n                if (!f.isDirectory()) {\n                    final int dot = f.getName().lastIndexOf('.');\n                    if (dot > 0) {\n                        name = f.getName().substring(0, dot);\n                        type = f.getName().substring(dot + 1);\n                    }\n                }\n                // hash could be a better way to represent the version\n                final String version = String.valueOf(f.lastModified());\n                final ResolvedDependencyBuilder artifactBuilder = ResolvedDependencyBuilder.newInstance()\n                        .setGroupId(group)\n                        .setArtifactId(name)\n                        .setType(type)\n                        .setVersion(version)\n                        .setResolvedPath(f.toPath())\n                        .setDirect(true)\n                        .setRuntimeCp()\n                        .setDeploymentCp();\n                processQuarkusDependency(artifactBuilder, modelBuilder);\n                modelBuilder.addDependency(artifactBuilder);\n            }\n        }\n    }",
+        "position": {
+            "line": 269,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getResolvedArtifacts",
+                "position": {
+                    "line": 273,
+                    "column": 71
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 276,
+                    "column": 59
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 276,
+                    "column": 93
+                }
+            },
+            {
+                "name": "getFiles",
+                "position": {
+                    "line": 276,
+                    "column": 82
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 277,
+                    "column": 51
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 281,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getFirstLevelModuleDependencies",
+                "position": {
+                    "line": 280,
+                    "column": 23
+                }
+            },
+            {
+                "name": "collectDependencies",
+                "position": {
+                    "line": 282,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getFiles",
+                "position": {
+                    "line": 290,
+                    "column": 41
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 291,
+                    "column": 35
+                }
+            },
+            {
+                "name": "exists",
+                "position": {
+                    "line": 291,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getParent",
+                "position": {
+                    "line": 297,
+                    "column": 45
+                }
+            },
+            {
+                "name": "sha1",
+                "position": {
+                    "line": 298,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 298,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 299,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isDirectory",
+                "position": {
+                    "line": 301,
+                    "column": 24
+                }
+            },
+            {
+                "name": "lastIndexOf",
+                "position": {
+                    "line": 302,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 302,
+                    "column": 39
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 304,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 304,
+                    "column": 34
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 305,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 305,
+                    "column": 34
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 309,
+                    "column": 47
+                }
+            },
+            {
+                "name": "lastModified",
+                "position": {
+                    "line": 309,
+                    "column": 57
+                }
+            },
+            {
+                "name": "setDeploymentCp",
+                "position": {
+                    "line": 318,
+                    "column": 26
+                }
+            },
+            {
+                "name": "setRuntimeCp",
+                "position": {
+                    "line": 317,
+                    "column": 26
+                }
+            },
+            {
+                "name": "setDirect",
+                "position": {
+                    "line": 316,
+                    "column": 26
+                }
+            },
+            {
+                "name": "setResolvedPath",
+                "position": {
+                    "line": 315,
+                    "column": 26
+                }
+            },
+            {
+                "name": "setVersion",
+                "position": {
+                    "line": 314,
+                    "column": 26
+                }
+            },
+            {
+                "name": "setType",
+                "position": {
+                    "line": 313,
+                    "column": 26
+                }
+            },
+            {
+                "name": "setArtifactId",
+                "position": {
+                    "line": 312,
+                    "column": 26
+                }
+            },
+            {
+                "name": "setGroupId",
+                "position": {
+                    "line": 311,
+                    "column": 26
+                }
+            },
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 310,
+                    "column": 93
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 315,
+                    "column": 44
+                }
+            },
+            {
+                "name": "processQuarkusDependency",
+                "position": {
+                    "line": 319,
+                    "column": 17
+                }
+            },
+            {
+                "name": "addDependency",
+                "position": {
+                    "line": 320,
+                    "column": 30
+                }
+            },
+            {
+                "name": "HashSet<>",
+                "position": {
+                    "line": 277,
+                    "column": 23
+                }
+            },
+            {
+                "name": "HashSet<>",
+                "position": {
+                    "line": 282,
+                    "column": 92
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.collectDependencies(org.gradle.api.artifacts.ResolvedDependency resolvedDep, boolean workspaceDiscovery, Project project, Set<File> artifactFiles, Set<ArtifactKey> processedModules, ApplicationModelBuilder modelBuilder, WorkspaceModule.Mutable parentModule, byte flags)",
+            "GradleApplicationModelBuilder.processQuarkusDependency(ResolvedDependencyBuilder artifactBuilder, ApplicationModelBuilder modelBuilder)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "collectDependencies",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "collectDependencies(org.gradle.api.artifacts.ResolvedDependency resolvedDep, boolean workspaceDiscovery, Project project, Set<File> artifactFiles, Set<ArtifactKey> processedModules, ApplicationModelBuilder modelBuilder, WorkspaceModule.Mutable parentModule, byte flags)",
+        "class_signature": "GradleApplicationModelBuilder.collectDependencies(org.gradle.api.artifacts.ResolvedDependency resolvedDep, boolean workspaceDiscovery, Project project, Set<File> artifactFiles, Set<ArtifactKey> processedModules, ApplicationModelBuilder modelBuilder, WorkspaceModule.Mutable parentModule, byte flags)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "org.gradle.api.artifacts.ResolvedDependency",
+                "resolvedDep"
+            ],
+            [
+                "boolean",
+                "workspaceDiscovery"
+            ],
+            [
+                "Project",
+                "project"
+            ],
+            [
+                "Set<File>",
+                "artifactFiles"
+            ],
+            [
+                "Set<ArtifactKey>",
+                "processedModules"
+            ],
+            [
+                "ApplicationModelBuilder",
+                "modelBuilder"
+            ],
+            [
+                "WorkspaceModule.Mutable",
+                "parentModule"
+            ],
+            [
+                "byte",
+                "flags"
+            ]
+        ],
+        "methodBody": "{\n        WorkspaceModule.Mutable projectModule = null;\n        for (ResolvedArtifact a : resolvedDep.getModuleArtifacts()) {\n            final ArtifactKey artifactKey = toAppDependenciesKey(a.getModuleVersion().getId().getGroup(), a.getName(),\n                    a.getClassifier());\n            if (!isDependency(a)) {\n                continue;\n            }\n            var depBuilder = modelBuilder.getDependency(artifactKey);\n            if (depBuilder != null) {\n                if (isFlagOn(flags, COLLECT_DIRECT_DEPS)) {\n                    depBuilder.setDirect(true);\n                }\n                continue;\n            }\n            final ArtifactCoords depCoords = toArtifactCoords(a);\n            depBuilder = ResolvedDependencyBuilder.newInstance()\n                    .setCoords(depCoords)\n                    .setRuntimeCp()\n                    .setDeploymentCp();\n            if (isFlagOn(flags, COLLECT_DIRECT_DEPS)) {\n                depBuilder.setDirect(true);\n                flags = clearFlag(flags, COLLECT_DIRECT_DEPS);\n            }\n            if (parentModule != null) {\n                parentModule.addDependency(new ArtifactDependency(depCoords));\n            }\n\n            PathCollection paths = null;\n            if (workspaceDiscovery && a.getId().getComponentIdentifier() instanceof ProjectComponentIdentifier compId) {\n                Project projectDep = project.getRootProject().findProject(compId.getProjectPath());\n\n                final String classifier = a.getClassifier();\n                if (classifier == null || classifier.isEmpty()) {\n                    final IncludedBuild includedBuild = ToolingUtils.includedBuild(project.getRootProject(),\n                            compId.getBuild().getName());\n                    if (includedBuild != null) {\n                        if (includedBuild instanceof IncludedBuildInternal ib) {\n                            projectDep = ToolingUtils.includedBuildProject(ib, compId.getProjectPath());\n                        }\n                        if (projectDep != null) {\n                            initProjectModuleAndBuildPaths(projectDep, a, modelBuilder, depBuilder);\n                        } else {\n                            final PathList.Builder pathBuilder = PathList.builder();\n                            addSubstitutedProject(pathBuilder, includedBuild.getProjectDir());\n                            paths = pathBuilder.build();\n                        }\n                    } else {\n                        initProjectModuleAndBuildPaths(projectDep, a, modelBuilder, depBuilder);\n                    }\n                } else {\n                    initProjectModuleAndBuildPaths(projectDep, a, modelBuilder, depBuilder);\n                }\n            }\n\n            depBuilder.setResolvedPaths(paths == null ? PathList.of(a.getFile().toPath()) : paths);\n            if (processQuarkusDependency(depBuilder, modelBuilder)) {\n                if (isFlagOn(flags, COLLECT_TOP_EXTENSION_RUNTIME_NODES)) {\n                    depBuilder.setFlags(DependencyFlags.TOP_LEVEL_RUNTIME_EXTENSION_ARTIFACT);\n                    flags = clearFlag(flags, COLLECT_TOP_EXTENSION_RUNTIME_NODES);\n                }\n                flags = clearFlag(flags, COLLECT_RELOADABLE_MODULES);\n            }\n            if (!isFlagOn(flags, COLLECT_RELOADABLE_MODULES)) {\n                depBuilder.clearFlag(DependencyFlags.RELOADABLE);\n            }\n            modelBuilder.addDependency(depBuilder);\n            if (projectModule == null && depBuilder.getWorkspaceModule() != null) {\n                projectModule = depBuilder.getWorkspaceModule().mutable();\n            }\n\n            if (artifactFiles != null) {\n                artifactFiles.add(a.getFile());\n            }\n        }\n\n        processedModules.add(ArtifactKey.ga(resolvedDep.getModuleGroup(), resolvedDep.getModuleName()));\n        for (org.gradle.api.artifacts.ResolvedDependency child : resolvedDep.getChildren()) {\n            if (!processedModules.contains(new GACT(child.getModuleGroup(), child.getModuleName()))) {\n                collectDependencies(child, workspaceDiscovery, project, artifactFiles, processedModules,\n                        modelBuilder, projectModule, flags);\n            }\n        }\n    }",
+        "position": {
+            "line": 325,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getModuleArtifacts",
+                "position": {
+                    "line": 330,
+                    "column": 47
+                }
+            },
+            {
+                "name": "toAppDependenciesKey",
+                "position": {
+                    "line": 331,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 331,
+                    "column": 95
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 331,
+                    "column": 87
+                }
+            },
+            {
+                "name": "getModuleVersion",
+                "position": {
+                    "line": 331,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 331,
+                    "column": 109
+                }
+            },
+            {
+                "name": "getClassifier",
+                "position": {
+                    "line": 332,
+                    "column": 23
+                }
+            },
+            {
+                "name": "isDependency",
+                "position": {
+                    "line": 333,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getDependency",
+                "position": {
+                    "line": 336,
+                    "column": 43
+                }
+            },
+            {
+                "name": "isFlagOn",
+                "position": {
+                    "line": 338,
+                    "column": 21
+                }
+            },
+            {
+                "name": "setDirect",
+                "position": {
+                    "line": 339,
+                    "column": 32
+                }
+            },
+            {
+                "name": "toArtifactCoords",
+                "position": {
+                    "line": 343,
+                    "column": 46
+                }
+            },
+            {
+                "name": "setDeploymentCp",
+                "position": {
+                    "line": 347,
+                    "column": 22
+                }
+            },
+            {
+                "name": "setRuntimeCp",
+                "position": {
+                    "line": 346,
+                    "column": 22
+                }
+            },
+            {
+                "name": "setCoords",
+                "position": {
+                    "line": 345,
+                    "column": 22
+                }
+            },
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 344,
+                    "column": 52
+                }
+            },
+            {
+                "name": "isFlagOn",
+                "position": {
+                    "line": 348,
+                    "column": 17
+                }
+            },
+            {
+                "name": "setDirect",
+                "position": {
+                    "line": 349,
+                    "column": 28
+                }
+            },
+            {
+                "name": "clearFlag",
+                "position": {
+                    "line": 350,
+                    "column": 25
+                }
+            },
+            {
+                "name": "addDependency",
+                "position": {
+                    "line": 353,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getComponentIdentifier",
+                "position": {
+                    "line": 357,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 357,
+                    "column": 41
+                }
+            },
+            {
+                "name": "findProject",
+                "position": {
+                    "line": 358,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getRootProject",
+                "position": {
+                    "line": 358,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getProjectPath",
+                "position": {
+                    "line": 358,
+                    "column": 82
+                }
+            },
+            {
+                "name": "getClassifier",
+                "position": {
+                    "line": 360,
+                    "column": 45
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 361,
+                    "column": 54
+                }
+            },
+            {
+                "name": "includedBuild",
+                "position": {
+                    "line": 362,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getRootProject",
+                "position": {
+                    "line": 362,
+                    "column": 92
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 363,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getBuild",
+                "position": {
+                    "line": 363,
+                    "column": 36
+                }
+            },
+            {
+                "name": "includedBuildProject",
+                "position": {
+                    "line": 366,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getProjectPath",
+                "position": {
+                    "line": 366,
+                    "column": 87
+                }
+            },
+            {
+                "name": "initProjectModuleAndBuildPaths",
+                "position": {
+                    "line": 369,
+                    "column": 29
+                }
+            },
+            {
+                "name": "builder",
+                "position": {
+                    "line": 371,
+                    "column": 75
+                }
+            },
+            {
+                "name": "addSubstitutedProject",
+                "position": {
+                    "line": 372,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getProjectDir",
+                "position": {
+                    "line": 372,
+                    "column": 78
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 373,
+                    "column": 49
+                }
+            },
+            {
+                "name": "initProjectModuleAndBuildPaths",
+                "position": {
+                    "line": 376,
+                    "column": 25
+                }
+            },
+            {
+                "name": "initProjectModuleAndBuildPaths",
+                "position": {
+                    "line": 379,
+                    "column": 21
+                }
+            },
+            {
+                "name": "setResolvedPaths",
+                "position": {
+                    "line": 383,
+                    "column": 24
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 383,
+                    "column": 66
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 383,
+                    "column": 81
+                }
+            },
+            {
+                "name": "getFile",
+                "position": {
+                    "line": 383,
+                    "column": 71
+                }
+            },
+            {
+                "name": "processQuarkusDependency",
+                "position": {
+                    "line": 384,
+                    "column": 17
+                }
+            },
+            {
+                "name": "isFlagOn",
+                "position": {
+                    "line": 385,
+                    "column": 21
+                }
+            },
+            {
+                "name": "setFlags",
+                "position": {
+                    "line": 386,
+                    "column": 32
+                }
+            },
+            {
+                "name": "clearFlag",
+                "position": {
+                    "line": 387,
+                    "column": 29
+                }
+            },
+            {
+                "name": "clearFlag",
+                "position": {
+                    "line": 389,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isFlagOn",
+                "position": {
+                    "line": 391,
+                    "column": 18
+                }
+            },
+            {
+                "name": "clearFlag",
+                "position": {
+                    "line": 392,
+                    "column": 28
+                }
+            },
+            {
+                "name": "addDependency",
+                "position": {
+                    "line": 394,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getWorkspaceModule",
+                "position": {
+                    "line": 395,
+                    "column": 53
+                }
+            },
+            {
+                "name": "mutable",
+                "position": {
+                    "line": 396,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getWorkspaceModule",
+                "position": {
+                    "line": 396,
+                    "column": 44
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 400,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getFile",
+                "position": {
+                    "line": 400,
+                    "column": 37
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 404,
+                    "column": 26
+                }
+            },
+            {
+                "name": "ga",
+                "position": {
+                    "line": 404,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getModuleGroup",
+                "position": {
+                    "line": 404,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getModuleName",
+                "position": {
+                    "line": 404,
+                    "column": 87
+                }
+            },
+            {
+                "name": "getChildren",
+                "position": {
+                    "line": 405,
+                    "column": 78
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 406,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getModuleGroup",
+                "position": {
+                    "line": 406,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getModuleName",
+                "position": {
+                    "line": 406,
+                    "column": 83
+                }
+            },
+            {
+                "name": "collectDependencies",
+                "position": {
+                    "line": 407,
+                    "column": 17
+                }
+            },
+            {
+                "name": "ArtifactDependency",
+                "position": {
+                    "line": 353,
+                    "column": 48
+                }
+            },
+            {
+                "name": "GACT",
+                "position": {
+                    "line": 406,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.toAppDependenciesKey(String groupId, String artifactId, String classifier)",
+            "GradleApplicationModelBuilder.isDependency(ResolvedArtifact a)",
+            "GradleApplicationModelBuilder.isFlagOn(byte walkingFlags, byte flag)",
+            "GradleApplicationModelBuilder.toArtifactCoords(ResolvedArtifact a)",
+            "GradleApplicationModelBuilder.isFlagOn(byte walkingFlags, byte flag)",
+            "GradleApplicationModelBuilder.clearFlag(byte flags, byte flag)",
+            "GradleApplicationModelBuilder.initProjectModuleAndBuildPaths(Project project, ResolvedArtifact resolvedArtifact, ApplicationModelBuilder appModel, ResolvedDependencyBuilder appDep)",
+            "GradleApplicationModelBuilder.addSubstitutedProject(PathList.Builder paths, File projectFile)",
+            "GradleApplicationModelBuilder.initProjectModuleAndBuildPaths(Project project, ResolvedArtifact resolvedArtifact, ApplicationModelBuilder appModel, ResolvedDependencyBuilder appDep)",
+            "GradleApplicationModelBuilder.initProjectModuleAndBuildPaths(Project project, ResolvedArtifact resolvedArtifact, ApplicationModelBuilder appModel, ResolvedDependencyBuilder appDep)",
+            "GradleApplicationModelBuilder.processQuarkusDependency(ResolvedDependencyBuilder artifactBuilder, ApplicationModelBuilder modelBuilder)",
+            "GradleApplicationModelBuilder.isFlagOn(byte walkingFlags, byte flag)",
+            "GradleApplicationModelBuilder.clearFlag(byte flags, byte flag)",
+            "GradleApplicationModelBuilder.clearFlag(byte flags, byte flag)",
+            "GradleApplicationModelBuilder.isFlagOn(byte walkingFlags, byte flag)",
+            "GradleApplicationModelBuilder.collectDependencies(org.gradle.api.artifacts.ResolvedDependency resolvedDep, boolean workspaceDiscovery, Project project, Set<File> artifactFiles, Set<ArtifactKey> processedModules, ApplicationModelBuilder modelBuilder, WorkspaceModule.Mutable parentModule, byte flags)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "toNonNullClassifier",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "toNonNullClassifier(String resolvedClassifier)",
+        "class_signature": "GradleApplicationModelBuilder.toNonNullClassifier(String resolvedClassifier)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "resolvedClassifier"
+            ]
+        ],
+        "methodBody": "{\n        return resolvedClassifier == null ? ArtifactCoords.DEFAULT_CLASSIFIER : resolvedClassifier;\n    }",
+        "position": {
+            "line": 413,
+            "column": 27
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "initProjectModuleAndBuildPaths",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "initProjectModuleAndBuildPaths(Project project, ResolvedArtifact resolvedArtifact, ApplicationModelBuilder appModel, ResolvedDependencyBuilder appDep)",
+        "class_signature": "GradleApplicationModelBuilder.initProjectModuleAndBuildPaths(Project project, ResolvedArtifact resolvedArtifact, ApplicationModelBuilder appModel, ResolvedDependencyBuilder appDep)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Project",
+                "project"
+            ],
+            [
+                "ResolvedArtifact",
+                "resolvedArtifact"
+            ],
+            [
+                "ApplicationModelBuilder",
+                "appModel"
+            ],
+            [
+                "ResolvedDependencyBuilder",
+                "appDep"
+            ]
+        ],
+        "methodBody": "{\n\n        appDep.setWorkspaceModule().setReloadable();\n\n        if (appDep.getWorkspaceModule() == null) {\n            final WorkspaceModule.Mutable projectModule = appModel.getOrCreateProjectModule(\n                    WorkspaceModuleId.of(resolvedArtifact.getModuleVersion().getId().getGroup(), resolvedArtifact.getName(),\n                            resolvedArtifact.getModuleVersion().getId().getVersion()),\n                    project.getProjectDir(),\n                    project.getLayout().getBuildDirectory().get().getAsFile())\n                    .setBuildFile(project.getBuildFile().toPath());\n            ProjectDescriptorBuilder.initSourceDirs(project, projectModule);\n            appDep.setWorkspaceModule(projectModule);\n        }\n\n        appModel.addReloadableWorkspaceModule(appDep.getKey());\n    }",
+        "position": {
+            "line": 417,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setReloadable",
+                "position": {
+                    "line": 420,
+                    "column": 37
+                }
+            },
+            {
+                "name": "setWorkspaceModule",
+                "position": {
+                    "line": 420,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getWorkspaceModule",
+                "position": {
+                    "line": 422,
+                    "column": 20
+                }
+            },
+            {
+                "name": "setBuildFile",
+                "position": {
+                    "line": 428,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getOrCreateProjectModule",
+                "position": {
+                    "line": 423,
+                    "column": 68
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 424,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 424,
+                    "column": 86
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 424,
+                    "column": 78
+                }
+            },
+            {
+                "name": "getModuleVersion",
+                "position": {
+                    "line": 424,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 424,
+                    "column": 115
+                }
+            },
+            {
+                "name": "getVersion",
+                "position": {
+                    "line": 425,
+                    "column": 73
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 425,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getModuleVersion",
+                "position": {
+                    "line": 425,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getProjectDir",
+                "position": {
+                    "line": 426,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getAsFile",
+                "position": {
+                    "line": 427,
+                    "column": 67
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 427,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getBuildDirectory",
+                "position": {
+                    "line": 427,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getLayout",
+                "position": {
+                    "line": 427,
+                    "column": 29
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 428,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getBuildFile",
+                "position": {
+                    "line": 428,
+                    "column": 43
+                }
+            },
+            {
+                "name": "initSourceDirs",
+                "position": {
+                    "line": 429,
+                    "column": 38
+                }
+            },
+            {
+                "name": "setWorkspaceModule",
+                "position": {
+                    "line": 430,
+                    "column": 20
+                }
+            },
+            {
+                "name": "addReloadableWorkspaceModule",
+                "position": {
+                    "line": 433,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 433,
+                    "column": 54
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 17
+    },
+    {
+        "name": "processQuarkusDependency",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "processQuarkusDependency(ResolvedDependencyBuilder artifactBuilder, ApplicationModelBuilder modelBuilder)",
+        "class_signature": "GradleApplicationModelBuilder.processQuarkusDependency(ResolvedDependencyBuilder artifactBuilder, ApplicationModelBuilder modelBuilder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResolvedDependencyBuilder",
+                "artifactBuilder"
+            ],
+            [
+                "ApplicationModelBuilder",
+                "modelBuilder"
+            ]
+        ],
+        "methodBody": "{\n        for (Path artifactPath : artifactBuilder.getResolvedPaths()) {\n            if (!Files.exists(artifactPath) || !artifactBuilder.getType().equals(ArtifactCoords.TYPE_JAR)) {\n                break;\n            }\n            if (Files.isDirectory(artifactPath)) {\n                return processQuarkusDir(artifactBuilder, artifactPath.resolve(BootstrapConstants.META_INF), modelBuilder);\n            } else {\n                try (FileSystem artifactFs = ZipUtils.newFileSystem(artifactPath)) {\n                    return processQuarkusDir(artifactBuilder, artifactFs.getPath(BootstrapConstants.META_INF), modelBuilder);\n                } catch (IOException e) {\n                    throw new RuntimeException(\"Failed to process \" + artifactPath, e);\n                }\n            }\n        }\n        return false;\n    }",
+        "position": {
+            "line": 436,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getResolvedPaths",
+                "position": {
+                    "line": 437,
+                    "column": 50
+                }
+            },
+            {
+                "name": "exists",
+                "position": {
+                    "line": 438,
+                    "column": 24
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 438,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 438,
+                    "column": 65
+                }
+            },
+            {
+                "name": "isDirectory",
+                "position": {
+                    "line": 441,
+                    "column": 23
+                }
+            },
+            {
+                "name": "processQuarkusDir",
+                "position": {
+                    "line": 442,
+                    "column": 24
+                }
+            },
+            {
+                "name": "resolve",
+                "position": {
+                    "line": 442,
+                    "column": 72
+                }
+            },
+            {
+                "name": "newFileSystem",
+                "position": {
+                    "line": 444,
+                    "column": 55
+                }
+            },
+            {
+                "name": "processQuarkusDir",
+                "position": {
+                    "line": 445,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getPath",
+                "position": {
+                    "line": 445,
+                    "column": 74
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 447,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.processQuarkusDir(ResolvedDependencyBuilder artifactBuilder, Path quarkusDir, ApplicationModelBuilder modelBuilder)",
+            "GradleApplicationModelBuilder.processQuarkusDir(ResolvedDependencyBuilder artifactBuilder, Path quarkusDir, ApplicationModelBuilder modelBuilder)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "processQuarkusDir",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "processQuarkusDir(ResolvedDependencyBuilder artifactBuilder, Path quarkusDir, ApplicationModelBuilder modelBuilder)",
+        "class_signature": "GradleApplicationModelBuilder.processQuarkusDir(ResolvedDependencyBuilder artifactBuilder, Path quarkusDir, ApplicationModelBuilder modelBuilder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResolvedDependencyBuilder",
+                "artifactBuilder"
+            ],
+            [
+                "Path",
+                "quarkusDir"
+            ],
+            [
+                "ApplicationModelBuilder",
+                "modelBuilder"
+            ]
+        ],
+        "methodBody": "{\n        if (!Files.exists(quarkusDir)) {\n            return false;\n        }\n        final Path quarkusDescr = quarkusDir.resolve(BootstrapConstants.DESCRIPTOR_FILE_NAME);\n        if (!Files.exists(quarkusDescr)) {\n            return false;\n        }\n        final Properties extProps = readDescriptor(quarkusDescr);\n        if (extProps == null) {\n            return false;\n        }\n        artifactBuilder.setRuntimeExtensionArtifact();\n        modelBuilder.handleExtensionProperties(extProps, artifactBuilder.getKey());\n\n        final String providesCapabilities = extProps.getProperty(BootstrapConstants.PROP_PROVIDES_CAPABILITIES);\n        if (providesCapabilities != null) {\n            modelBuilder\n                    .addExtensionCapabilities(\n                            CapabilityContract.of(artifactBuilder.toGACTVString(), providesCapabilities, null));\n        }\n        return true;\n    }",
+        "position": {
+            "line": 454,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "exists",
+                "position": {
+                    "line": 456,
+                    "column": 20
+                }
+            },
+            {
+                "name": "resolve",
+                "position": {
+                    "line": 459,
+                    "column": 46
+                }
+            },
+            {
+                "name": "exists",
+                "position": {
+                    "line": 460,
+                    "column": 20
+                }
+            },
+            {
+                "name": "readDescriptor",
+                "position": {
+                    "line": 463,
+                    "column": 37
+                }
+            },
+            {
+                "name": "setRuntimeExtensionArtifact",
+                "position": {
+                    "line": 467,
+                    "column": 25
+                }
+            },
+            {
+                "name": "handleExtensionProperties",
+                "position": {
+                    "line": 468,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 468,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 470,
+                    "column": 54
+                }
+            },
+            {
+                "name": "addExtensionCapabilities",
+                "position": {
+                    "line": 473,
+                    "column": 22
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 474,
+                    "column": 48
+                }
+            },
+            {
+                "name": "toGACTVString",
+                "position": {
+                    "line": 474,
+                    "column": 67
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.readDescriptor(Path path)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "readDescriptor",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "readDescriptor(Path path)",
+        "class_signature": "GradleApplicationModelBuilder.readDescriptor(Path path)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Path",
+                "path"
+            ]
+        ],
+        "methodBody": "{\n        final Properties rtProps;\n        if (!Files.exists(path)) {\n            // not a platform artifact\n            return null;\n        }\n        rtProps = new Properties();\n        try (BufferedReader reader = Files.newBufferedReader(path)) {\n            rtProps.load(reader);\n        } catch (IOException e) {\n            throw new UncheckedIOException(\"Failed to load extension description \" + path, e);\n        }\n        return rtProps;\n    }",
+        "position": {
+            "line": 479,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "exists",
+                "position": {
+                    "line": 481,
+                    "column": 20
+                }
+            },
+            {
+                "name": "newBufferedReader",
+                "position": {
+                    "line": 486,
+                    "column": 44
+                }
+            },
+            {
+                "name": "load",
+                "position": {
+                    "line": 487,
+                    "column": 21
+                }
+            },
+            {
+                "name": "Properties",
+                "position": {
+                    "line": 485,
+                    "column": 23
+                }
+            },
+            {
+                "name": "UncheckedIOException",
+                "position": {
+                    "line": 489,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 27
+    },
+    {
+        "name": "initProjectModule",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "initProjectModule(Project project, WorkspaceModule.Mutable module, SourceSet sourceSet, String classifier)",
+        "class_signature": "GradleApplicationModelBuilder.initProjectModule(Project project, WorkspaceModule.Mutable module, SourceSet sourceSet, String classifier)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Project",
+                "project"
+            ],
+            [
+                "WorkspaceModule.Mutable",
+                "module"
+            ],
+            [
+                "SourceSet",
+                "sourceSet"
+            ],
+            [
+                "String",
+                "classifier"
+            ]
+        ],
+        "methodBody": "{\n        if (sourceSet == null) {\n            return;\n        }\n\n        final FileCollection allClassesDirs = sourceSet.getOutput().getClassesDirs();\n        // some plugins do not add source directories to source sets and they may be missing from sourceSet.getAllJava()\n        // see https://github.com/quarkusio/quarkus/issues/20755\n\n        final List<SourceDir> sourceDirs = new ArrayList<>(1);\n        project.getTasks().withType(AbstractCompile.class,\n                t -> configureCompileTask(t.getSource(), t.getDestinationDirectory(), allClassesDirs, sourceDirs, t,\n                        sourceSet));\n\n        maybeConfigureKotlinJvmCompile(project, allClassesDirs, sourceDirs, sourceSet);\n\n        final LinkedHashMap<File, Path> resourceDirs = new LinkedHashMap<>(1);\n        final File resourcesOutputDir = sourceSet.getOutput().getResourcesDir();\n\n        project.getTasks().withType(ProcessResources.class, t -> {\n            if (!t.getEnabled()) {\n                return;\n            }\n            final FileCollection source = t.getSource();\n            if (source.isEmpty()) {\n                return;\n            }\n            if (!t.getDestinationDir().equals(resourcesOutputDir)) {\n                return;\n            }\n            final Path destDir = t.getDestinationDir().toPath();\n            source.getAsFileTree().visit(a -> {\n                // we are looking for the root dirs containing sources\n                if (a.getRelativePath().getSegments().length == 1) {\n                    final File srcDir = a.getFile().getParentFile();\n                    resourceDirs.put(srcDir, destDir);\n                }\n            });\n        });\n        // there could be a task generating resources\n        if (resourcesOutputDir.exists() && resourceDirs.isEmpty()) {\n            sourceSet.getResources().getSrcDirs()\n                    .forEach(srcDir -> resourceDirs.put(srcDir, resourcesOutputDir.toPath()));\n        }\n        final List<SourceDir> resources = new ArrayList<>(resourceDirs.size());\n        for (Map.Entry<File, Path> e : resourceDirs.entrySet()) {\n            resources.add(new DefaultSourceDir(e.getKey().toPath(), e.getValue(), null));\n        }\n        module.addArtifactSources(new DefaultArtifactSources(classifier, sourceDirs, resources));\n    }",
+        "position": {
+            "line": 494,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassesDirs",
+                "position": {
+                    "line": 500,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getOutput",
+                "position": {
+                    "line": 500,
+                    "column": 57
+                }
+            },
+            {
+                "name": "withType",
+                "position": {
+                    "line": 505,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getTasks",
+                "position": {
+                    "line": 505,
+                    "column": 17
+                }
+            },
+            {
+                "name": "configureCompileTask",
+                "position": {
+                    "line": 506,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 506,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getDestinationDirectory",
+                "position": {
+                    "line": 506,
+                    "column": 60
+                }
+            },
+            {
+                "name": "maybeConfigureKotlinJvmCompile",
+                "position": {
+                    "line": 509,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getResourcesDir",
+                "position": {
+                    "line": 512,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getOutput",
+                "position": {
+                    "line": 512,
+                    "column": 51
+                }
+            },
+            {
+                "name": "withType",
+                "position": {
+                    "line": 514,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getTasks",
+                "position": {
+                    "line": 514,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getEnabled",
+                "position": {
+                    "line": 515,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 518,
+                    "column": 45
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 519,
+                    "column": 24
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 522,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getDestinationDir",
+                "position": {
+                    "line": 522,
+                    "column": 20
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 525,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getDestinationDir",
+                "position": {
+                    "line": 525,
+                    "column": 36
+                }
+            },
+            {
+                "name": "visit",
+                "position": {
+                    "line": 526,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getAsFileTree",
+                "position": {
+                    "line": 526,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getSegments",
+                "position": {
+                    "line": 528,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getRelativePath",
+                "position": {
+                    "line": 528,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getParentFile",
+                "position": {
+                    "line": 529,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getFile",
+                "position": {
+                    "line": 529,
+                    "column": 43
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 530,
+                    "column": 34
+                }
+            },
+            {
+                "name": "exists",
+                "position": {
+                    "line": 535,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 535,
+                    "column": 57
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 537,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getSrcDirs",
+                "position": {
+                    "line": 536,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getResources",
+                "position": {
+                    "line": 536,
+                    "column": 23
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 537,
+                    "column": 53
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 537,
+                    "column": 84
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 539,
+                    "column": 72
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 540,
+                    "column": 53
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 541,
+                    "column": 23
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 541,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 541,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 541,
+                    "column": 71
+                }
+            },
+            {
+                "name": "addArtifactSources",
+                "position": {
+                    "line": 543,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 504,
+                    "column": 48
+                }
+            },
+            {
+                "name": "LinkedHashMap<>",
+                "position": {
+                    "line": 511,
+                    "column": 60
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 539,
+                    "column": 47
+                }
+            },
+            {
+                "name": "DefaultSourceDir",
+                "position": {
+                    "line": 541,
+                    "column": 31
+                }
+            },
+            {
+                "name": "DefaultArtifactSources",
+                "position": {
+                    "line": 543,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.configureCompileTask(FileTree sources, DirectoryProperty destinationDirectory, FileCollection allClassesDirs, List<SourceDir> sourceDirs, Task task, SourceSet sourceSet)",
+            "GradleApplicationModelBuilder.maybeConfigureKotlinJvmCompile(Project project, FileCollection allClassesDirs, List<SourceDir> sourceDirs, SourceSet sourceSet)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "maybeConfigureKotlinJvmCompile",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "maybeConfigureKotlinJvmCompile(Project project, FileCollection allClassesDirs, List<SourceDir> sourceDirs, SourceSet sourceSet)",
+        "class_signature": "GradleApplicationModelBuilder.maybeConfigureKotlinJvmCompile(Project project, FileCollection allClassesDirs, List<SourceDir> sourceDirs, SourceSet sourceSet)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Project",
+                "project"
+            ],
+            [
+                "FileCollection",
+                "allClassesDirs"
+            ],
+            [
+                "List<SourceDir>",
+                "sourceDirs"
+            ],
+            [
+                "SourceSet",
+                "sourceSet"
+            ]
+        ],
+        "methodBody": "{\n        for (var task : project.getTasks()) {\n            if (task.getName().contains(\"compileKotlin\") && task.getEnabled()) {\n                int originalSourceDirsSize = sourceDirs.size();\n\n                // This \"try/catch\" is needed because of the way the \"quarkus-cli\" Gradle tests work. Without it, the tests fail.\n                try {\n                    Class.forName(\"org.jetbrains.kotlin.gradle.tasks.KotlinCompileTool\");\n                    doConfigureKotlinJvmCompile(project, allClassesDirs, sourceDirs, sourceSet);\n                } catch (ClassNotFoundException e) {\n                    // ignore\n                }\n                // if the above failed, there could still be a KotlinCompile task that's not easily discoverable\n                if (originalSourceDirsSize == sourceDirs.size()) {\n                    final File outputDir = getClassesOutputDir(task);\n                    if (outputDir != null && task.getInputs().getHasInputs()) {\n                        task.getInputs().getSourceFiles().getAsFileTree().visit(visitor -> {\n                            if (visitor.getRelativePath().getSegments().length == 1) {\n                                sourceDirs.add(SourceDir.of(visitor.getFile().getParentFile().toPath(), outputDir.toPath()));\n                            }\n                        });\n                    }\n                    break;\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 546,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTasks",
+                "position": {
+                    "line": 548,
+                    "column": 33
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 549,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 549,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getEnabled",
+                "position": {
+                    "line": 549,
+                    "column": 66
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 550,
+                    "column": 57
+                }
+            },
+            {
+                "name": "forName",
+                "position": {
+                    "line": 554,
+                    "column": 27
+                }
+            },
+            {
+                "name": "doConfigureKotlinJvmCompile",
+                "position": {
+                    "line": 555,
+                    "column": 21
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 560,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getClassesOutputDir",
+                "position": {
+                    "line": 561,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getHasInputs",
+                "position": {
+                    "line": 562,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getInputs",
+                "position": {
+                    "line": 562,
+                    "column": 51
+                }
+            },
+            {
+                "name": "visit",
+                "position": {
+                    "line": 563,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getAsFileTree",
+                "position": {
+                    "line": 563,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getSourceFiles",
+                "position": {
+                    "line": 563,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getInputs",
+                "position": {
+                    "line": 563,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getSegments",
+                "position": {
+                    "line": 564,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getRelativePath",
+                "position": {
+                    "line": 564,
+                    "column": 41
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 565,
+                    "column": 44
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 565,
+                    "column": 58
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 565,
+                    "column": 95
+                }
+            },
+            {
+                "name": "getParentFile",
+                "position": {
+                    "line": 565,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getFile",
+                "position": {
+                    "line": 565,
+                    "column": 69
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 565,
+                    "column": 115
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.doConfigureKotlinJvmCompile(Project project, FileCollection allClassesDirs, List<SourceDir> sourceDirs, SourceSet sourceSet)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "doConfigureKotlinJvmCompile",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "doConfigureKotlinJvmCompile(Project project, FileCollection allClassesDirs, List<SourceDir> sourceDirs, SourceSet sourceSet)",
+        "class_signature": "GradleApplicationModelBuilder.doConfigureKotlinJvmCompile(Project project, FileCollection allClassesDirs, List<SourceDir> sourceDirs, SourceSet sourceSet)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Project",
+                "project"
+            ],
+            [
+                "FileCollection",
+                "allClassesDirs"
+            ],
+            [
+                "List<SourceDir>",
+                "sourceDirs"
+            ],
+            [
+                "SourceSet",
+                "sourceSet"
+            ]
+        ],
+        "methodBody": "{\n        // Use KotlinJvmCompile.class in a separate method to prevent that maybeConfigureKotlinJvmCompile() runs into\n        // a ClassNotFoundException due to actually using KotlinJvmCompile.class.\n        project.getTasks().withType(KotlinCompileTool.class, t -> configureCompileTask(t.getSources().getAsFileTree(),\n                t.getDestinationDirectory(), allClassesDirs, sourceDirs, t, sourceSet));\n    }",
+        "position": {
+            "line": 575,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "withType",
+                "position": {
+                    "line": 579,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getTasks",
+                "position": {
+                    "line": 579,
+                    "column": 17
+                }
+            },
+            {
+                "name": "configureCompileTask",
+                "position": {
+                    "line": 579,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getAsFileTree",
+                "position": {
+                    "line": 579,
+                    "column": 103
+                }
+            },
+            {
+                "name": "getSources",
+                "position": {
+                    "line": 579,
+                    "column": 90
+                }
+            },
+            {
+                "name": "getDestinationDirectory",
+                "position": {
+                    "line": 580,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.configureCompileTask(FileTree sources, DirectoryProperty destinationDirectory, FileCollection allClassesDirs, List<SourceDir> sourceDirs, Task task, SourceSet sourceSet)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "configureCompileTask",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "configureCompileTask(FileTree sources, DirectoryProperty destinationDirectory, FileCollection allClassesDirs, List<SourceDir> sourceDirs, Task task, SourceSet sourceSet)",
+        "class_signature": "GradleApplicationModelBuilder.configureCompileTask(FileTree sources, DirectoryProperty destinationDirectory, FileCollection allClassesDirs, List<SourceDir> sourceDirs, Task task, SourceSet sourceSet)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FileTree",
+                "sources"
+            ],
+            [
+                "DirectoryProperty",
+                "destinationDirectory"
+            ],
+            [
+                "FileCollection",
+                "allClassesDirs"
+            ],
+            [
+                "List<SourceDir>",
+                "sourceDirs"
+            ],
+            [
+                "Task",
+                "task"
+            ],
+            [
+                "SourceSet",
+                "sourceSet"
+            ]
+        ],
+        "methodBody": "{\n        if (!task.getEnabled() || sources.isEmpty()) {\n            return;\n        }\n        final File destDir = destinationDirectory.getAsFile().get();\n        if (!allClassesDirs.contains(destDir)) {\n            return;\n        }\n        sources.visit(visitor -> {\n            // we are looking for the root dirs containing sources\n            if (visitor.getRelativePath().getSegments().length == 1) {\n                final File srcDir = visitor.getFile().getParentFile();\n                sourceDirs.add(new DefaultSourceDir(srcDir.toPath(), destDir.toPath(),\n                        findGeneratedSourceDir(destDir, sourceSet),\n                        Map.of(\"compiler\", task.getName())));\n            }\n        });\n    }",
+        "position": {
+            "line": 583,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getEnabled",
+                "position": {
+                    "line": 585,
+                    "column": 19
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 585,
+                    "column": 43
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 588,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getAsFile",
+                "position": {
+                    "line": 588,
+                    "column": 51
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 589,
+                    "column": 29
+                }
+            },
+            {
+                "name": "visit",
+                "position": {
+                    "line": 592,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getSegments",
+                "position": {
+                    "line": 594,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getRelativePath",
+                "position": {
+                    "line": 594,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getParentFile",
+                "position": {
+                    "line": 595,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getFile",
+                "position": {
+                    "line": 595,
+                    "column": 45
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 596,
+                    "column": 28
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 596,
+                    "column": 60
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 596,
+                    "column": 78
+                }
+            },
+            {
+                "name": "findGeneratedSourceDir",
+                "position": {
+                    "line": 597,
+                    "column": 25
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 598,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 598,
+                    "column": 49
+                }
+            },
+            {
+                "name": "DefaultSourceDir",
+                "position": {
+                    "line": 596,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.findGeneratedSourceDir(File destDir, SourceSet sourceSet)"
+        ],
+        "priority": 26
+    },
+    {
+        "name": "findGeneratedSourceDir",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "findGeneratedSourceDir(File destDir, SourceSet sourceSet)",
+        "class_signature": "GradleApplicationModelBuilder.findGeneratedSourceDir(File destDir, SourceSet sourceSet)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "File",
+                "destDir"
+            ],
+            [
+                "SourceSet",
+                "sourceSet"
+            ]
+        ],
+        "methodBody": "{\n        // destDir appears to be build/classes/java/main\n        if (destDir.getParentFile() == null) {\n            return null;\n        }\n        String language = destDir.getParentFile().getName(); // java\n        String sourceSetName = destDir.getName(); // main\n        // find the corresponding generated sources, same pattern, but under build/generated/sources/annotationProcessor/java/main\n        for (File generatedDir : sourceSet.getOutput().getGeneratedSourcesDirs().getFiles()) {\n            if (generatedDir.getParentFile() == null) {\n                continue;\n            }\n            if (generatedDir.getName().equals(sourceSetName)\n                    && generatedDir.getParentFile().getName().equals(language)) {\n                return generatedDir.toPath();\n            }\n        }\n        return null;\n    }",
+        "position": {
+            "line": 603,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParentFile",
+                "position": {
+                    "line": 605,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 608,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getParentFile",
+                "position": {
+                    "line": 608,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 609,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getFiles",
+                "position": {
+                    "line": 611,
+                    "column": 82
+                }
+            },
+            {
+                "name": "getGeneratedSourcesDirs",
+                "position": {
+                    "line": 611,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getOutput",
+                "position": {
+                    "line": 611,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getParentFile",
+                "position": {
+                    "line": 612,
+                    "column": 30
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 615,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 615,
+                    "column": 30
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 616,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 616,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getParentFile",
+                "position": {
+                    "line": 616,
+                    "column": 37
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 617,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 29
+    },
+    {
+        "name": "addSubstitutedProject",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "addSubstitutedProject(PathList.Builder paths, File projectFile)",
+        "class_signature": "GradleApplicationModelBuilder.addSubstitutedProject(PathList.Builder paths, File projectFile)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "PathList.Builder",
+                "paths"
+            ],
+            [
+                "File",
+                "projectFile"
+            ]
+        ],
+        "methodBody": "{\n        File mainResourceDirectory = new File(projectFile, MAIN_RESOURCES_OUTPUT);\n        if (mainResourceDirectory.exists()) {\n            paths.add(mainResourceDirectory.toPath());\n        }\n        File classesOutput = new File(projectFile, CLASSES_OUTPUT);\n        File[] languageDirectories = classesOutput.listFiles();\n        if (languageDirectories != null) {\n            for (File languageDirectory : languageDirectories) {\n                if (languageDirectory.isDirectory()) {\n                    for (File sourceSet : languageDirectory.listFiles()) {\n                        if (sourceSet.isDirectory() && sourceSet.getName().equals(SourceSet.MAIN_SOURCE_SET_NAME)) {\n                            paths.add(sourceSet.toPath());\n                        }\n                    }\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 623,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "exists",
+                "position": {
+                    "line": 625,
+                    "column": 35
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 626,
+                    "column": 19
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 626,
+                    "column": 45
+                }
+            },
+            {
+                "name": "listFiles",
+                "position": {
+                    "line": 629,
+                    "column": 52
+                }
+            },
+            {
+                "name": "isDirectory",
+                "position": {
+                    "line": 632,
+                    "column": 39
+                }
+            },
+            {
+                "name": "listFiles",
+                "position": {
+                    "line": 633,
+                    "column": 61
+                }
+            },
+            {
+                "name": "isDirectory",
+                "position": {
+                    "line": 634,
+                    "column": 39
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 634,
+                    "column": 76
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 634,
+                    "column": 66
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 635,
+                    "column": 35
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 635,
+                    "column": 49
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 624,
+                    "column": 42
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 628,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    },
+    {
+        "name": "isFlagOn",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "isFlagOn(byte walkingFlags, byte flag)",
+        "class_signature": "GradleApplicationModelBuilder.isFlagOn(byte walkingFlags, byte flag)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "byte",
+                "walkingFlags"
+            ],
+            [
+                "byte",
+                "flag"
+            ]
+        ],
+        "methodBody": "{\n        return (walkingFlags & flag) > 0;\n    }",
+        "position": {
+            "line": 643,
+            "column": 27
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "clearFlag",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "clearFlag(byte flags, byte flag)",
+        "class_signature": "GradleApplicationModelBuilder.clearFlag(byte flags, byte flag)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "byte",
+                "flags"
+            ],
+            [
+                "byte",
+                "flag"
+            ]
+        ],
+        "methodBody": "{\n        if ((flags & flag) > 0) {\n            flags ^= flag;\n        }\n        return flags;\n    }",
+        "position": {
+            "line": 647,
+            "column": 24
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "isDependency",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "isDependency(ResolvedArtifact a)",
+        "class_signature": "GradleApplicationModelBuilder.isDependency(ResolvedArtifact a)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResolvedArtifact",
+                "a"
+            ]
+        ],
+        "methodBody": "{\n        return ArtifactCoords.TYPE_JAR.equalsIgnoreCase(a.getExtension()) || \"exe\".equalsIgnoreCase(a.getExtension()) ||\n                a.getFile().isDirectory();\n    }",
+        "position": {
+            "line": 654,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equalsIgnoreCase",
+                "position": {
+                    "line": 655,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getExtension",
+                "position": {
+                    "line": 655,
+                    "column": 59
+                }
+            },
+            {
+                "name": "equalsIgnoreCase",
+                "position": {
+                    "line": 655,
+                    "column": 84
+                }
+            },
+            {
+                "name": "getExtension",
+                "position": {
+                    "line": 655,
+                    "column": 103
+                }
+            },
+            {
+                "name": "isDirectory",
+                "position": {
+                    "line": 656,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getFile",
+                "position": {
+                    "line": 656,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 22
+    },
+    {
+        "name": "toDependency",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "toDependency(ResolvedArtifact a, int... flags)",
+        "class_signature": "GradleApplicationModelBuilder.toDependency(ResolvedArtifact a, int... flags)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResolvedArtifact",
+                "a"
+            ],
+            [
+                "int...",
+                "flags"
+            ]
+        ],
+        "methodBody": "{\n        return toDependency(a, PathList.of(a.getFile().toPath()), null, flags);\n    }",
+        "position": {
+            "line": 662,
+            "column": 38
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "toDependency",
+                "position": {
+                    "line": 663,
+                    "column": 16
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 663,
+                    "column": 41
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 663,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getFile",
+                "position": {
+                    "line": 663,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.toDependency(ResolvedArtifact a, PathCollection paths, DefaultWorkspaceModule module, int... flags)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "toDependency",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "toDependency(ResolvedArtifact a, SourceSet s)",
+        "class_signature": "GradleApplicationModelBuilder.toDependency(ResolvedArtifact a, SourceSet s)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResolvedArtifact",
+                "a"
+            ],
+            [
+                "SourceSet",
+                "s"
+            ]
+        ],
+        "methodBody": "{\n        PathList.Builder resolvedPathBuilder = PathList.builder();\n\n        for (File classesDir : s.getOutput().getClassesDirs()) {\n            if (classesDir.exists()) {\n                resolvedPathBuilder.add(classesDir.toPath());\n            }\n        }\n        File resourceDir = s.getOutput().getResourcesDir();\n        if (resourceDir != null && resourceDir.exists()) {\n            resolvedPathBuilder.add(resourceDir.toPath());\n        }\n\n        return ResolvedDependencyBuilder\n                .newInstance()\n                .setResolvedPaths(resolvedPathBuilder.build())\n                .setCoords(toArtifactCoords(a));\n    }",
+        "position": {
+            "line": 666,
+            "column": 38
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "builder",
+                "position": {
+                    "line": 667,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getClassesDirs",
+                "position": {
+                    "line": 669,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getOutput",
+                "position": {
+                    "line": 669,
+                    "column": 34
+                }
+            },
+            {
+                "name": "exists",
+                "position": {
+                    "line": 670,
+                    "column": 28
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 671,
+                    "column": 37
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 671,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getResourcesDir",
+                "position": {
+                    "line": 674,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getOutput",
+                "position": {
+                    "line": 674,
+                    "column": 30
+                }
+            },
+            {
+                "name": "exists",
+                "position": {
+                    "line": 675,
+                    "column": 48
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 676,
+                    "column": 33
+                }
+            },
+            {
+                "name": "toPath",
+                "position": {
+                    "line": 676,
+                    "column": 49
+                }
+            },
+            {
+                "name": "setCoords",
+                "position": {
+                    "line": 682,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setResolvedPaths",
+                "position": {
+                    "line": 681,
+                    "column": 18
+                }
+            },
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 680,
+                    "column": 18
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 681,
+                    "column": 55
+                }
+            },
+            {
+                "name": "toArtifactCoords",
+                "position": {
+                    "line": 682,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.toArtifactCoords(ResolvedArtifact a)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "toDependency",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "toDependency(ResolvedArtifact a, PathCollection paths, DefaultWorkspaceModule module, int... flags)",
+        "class_signature": "GradleApplicationModelBuilder.toDependency(ResolvedArtifact a, PathCollection paths, DefaultWorkspaceModule module, int... flags)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResolvedArtifact",
+                "a"
+            ],
+            [
+                "PathCollection",
+                "paths"
+            ],
+            [
+                "DefaultWorkspaceModule",
+                "module"
+            ],
+            [
+                "int...",
+                "flags"
+            ]
+        ],
+        "methodBody": "{\n        int allFlags = 0;\n        for (int f : flags) {\n            allFlags |= f;\n        }\n        return ResolvedDependencyBuilder.newInstance()\n                .setCoords(toArtifactCoords(a))\n                .setResolvedPaths(paths)\n                .setWorkspaceModule(module)\n                .setFlags(allFlags);\n    }",
+        "position": {
+            "line": 685,
+            "column": 38
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setFlags",
+                "position": {
+                    "line": 695,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setWorkspaceModule",
+                "position": {
+                    "line": 694,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setResolvedPaths",
+                "position": {
+                    "line": 693,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setCoords",
+                "position": {
+                    "line": 692,
+                    "column": 18
+                }
+            },
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 691,
+                    "column": 42
+                }
+            },
+            {
+                "name": "toArtifactCoords",
+                "position": {
+                    "line": 692,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "GradleApplicationModelBuilder.toArtifactCoords(ResolvedArtifact a)"
+        ],
+        "priority": 25
+    },
+    {
+        "name": "toArtifactCoords",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "toArtifactCoords(ResolvedArtifact a)",
+        "class_signature": "GradleApplicationModelBuilder.toArtifactCoords(ResolvedArtifact a)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResolvedArtifact",
+                "a"
+            ]
+        ],
+        "methodBody": "{\n        final String[] split = a.getModuleVersion().toString().split(\":\");\n        return new GACTV(split[0], split[1], a.getClassifier(), a.getType(), split.length > 2 ? split[2] : null);\n    }",
+        "position": {
+            "line": 698,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "split",
+                "position": {
+                    "line": 699,
+                    "column": 64
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 699,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getModuleVersion",
+                "position": {
+                    "line": 699,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getClassifier",
+                "position": {
+                    "line": 700,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 700,
+                    "column": 67
+                }
+            },
+            {
+                "name": "GACTV",
+                "position": {
+                    "line": 700,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 28
+    },
+    {
+        "name": "toAppDependenciesKey",
+        "category": "method_declaration",
+        "class": "GradleApplicationModelBuilder",
+        "signature": "toAppDependenciesKey(String groupId, String artifactId, String classifier)",
+        "class_signature": "GradleApplicationModelBuilder.toAppDependenciesKey(String groupId, String artifactId, String classifier)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "groupId"
+            ],
+            [
+                "String",
+                "artifactId"
+            ],
+            [
+                "String",
+                "classifier"
+            ]
+        ],
+        "methodBody": "{\n        return ArtifactKey.of(groupId, artifactId, classifier, ArtifactCoords.TYPE_JAR);\n    }",
+        "position": {
+            "line": 703,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "of",
+                "position": {
+                    "line": 704,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    }
+]

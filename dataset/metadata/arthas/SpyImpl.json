@@ -1,0 +1,639 @@
+[
+    {
+        "name": "atEnter",
+        "category": "method_declaration",
+        "class": "SpyImpl",
+        "signature": "atEnter(Class<?> clazz, String methodInfo, Object target, Object[] args)",
+        "class_signature": "SpyImpl.atEnter(Class<?> clazz, String methodInfo, Object target, Object[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "methodInfo"
+            ],
+            [
+                "Object",
+                "target"
+            ],
+            [
+                "Object[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        ClassLoader classLoader = clazz.getClassLoader();\n\n        String[] info = StringUtils.splitMethodInfo(methodInfo);\n        String methodName = info[0];\n        String methodDesc = info[1];\n        List<AdviceListener> listeners = AdviceListenerManager.queryAdviceListeners(classLoader, clazz.getName(),\n                methodName, methodDesc);\n        if (listeners != null) {\n            for (AdviceListener adviceListener : listeners) {\n                try {\n                    if (skipAdviceListener(adviceListener)) {\n                        continue;\n                    }\n                    adviceListener.before(clazz, methodName, methodDesc, target, args);\n                } catch (Throwable e) {\n                    logger.error(\"class: {}, methodInfo: {}\", clazz.getName(), methodInfo, e);\n                }\n            }\n        }\n\n    }",
+        "position": {
+            "line": 21,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 22,
+                    "column": 41
+                }
+            },
+            {
+                "name": "splitMethodInfo",
+                "position": {
+                    "line": 24,
+                    "column": 37
+                }
+            },
+            {
+                "name": "queryAdviceListeners",
+                "position": {
+                    "line": 27,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 27,
+                    "column": 104
+                }
+            },
+            {
+                "name": "skipAdviceListener",
+                "position": {
+                    "line": 32,
+                    "column": 25
+                }
+            },
+            {
+                "name": "before",
+                "position": {
+                    "line": 35,
+                    "column": 36
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 37,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 37,
+                    "column": 69
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpyImpl.skipAdviceListener(AdviceListener adviceListener)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "atExit",
+        "category": "method_declaration",
+        "class": "SpyImpl",
+        "signature": "atExit(Class<?> clazz, String methodInfo, Object target, Object[] args, Object returnObject)",
+        "class_signature": "SpyImpl.atExit(Class<?> clazz, String methodInfo, Object target, Object[] args, Object returnObject)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "methodInfo"
+            ],
+            [
+                "Object",
+                "target"
+            ],
+            [
+                "Object[]",
+                "args"
+            ],
+            [
+                "Object",
+                "returnObject"
+            ]
+        ],
+        "methodBody": "{\n        ClassLoader classLoader = clazz.getClassLoader();\n\n        String[] info = StringUtils.splitMethodInfo(methodInfo);\n        String methodName = info[0];\n        String methodDesc = info[1];\n\n        List<AdviceListener> listeners = AdviceListenerManager.queryAdviceListeners(classLoader, clazz.getName(),\n                methodName, methodDesc);\n        if (listeners != null) {\n            for (AdviceListener adviceListener : listeners) {\n                try {\n                    if (skipAdviceListener(adviceListener)) {\n                        continue;\n                    }\n                    adviceListener.afterReturning(clazz, methodName, methodDesc, target, args, returnObject);\n                } catch (Throwable e) {\n                    logger.error(\"class: {}, methodInfo: {}\", clazz.getName(), methodInfo, e);\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 45,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 46,
+                    "column": 41
+                }
+            },
+            {
+                "name": "splitMethodInfo",
+                "position": {
+                    "line": 48,
+                    "column": 37
+                }
+            },
+            {
+                "name": "queryAdviceListeners",
+                "position": {
+                    "line": 52,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 52,
+                    "column": 104
+                }
+            },
+            {
+                "name": "skipAdviceListener",
+                "position": {
+                    "line": 57,
+                    "column": 25
+                }
+            },
+            {
+                "name": "afterReturning",
+                "position": {
+                    "line": 60,
+                    "column": 36
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 62,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 62,
+                    "column": 69
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpyImpl.skipAdviceListener(AdviceListener adviceListener)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "atExceptionExit",
+        "category": "method_declaration",
+        "class": "SpyImpl",
+        "signature": "atExceptionExit(Class<?> clazz, String methodInfo, Object target, Object[] args, Throwable throwable)",
+        "class_signature": "SpyImpl.atExceptionExit(Class<?> clazz, String methodInfo, Object target, Object[] args, Throwable throwable)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "methodInfo"
+            ],
+            [
+                "Object",
+                "target"
+            ],
+            [
+                "Object[]",
+                "args"
+            ],
+            [
+                "Throwable",
+                "throwable"
+            ]
+        ],
+        "methodBody": "{\n        ClassLoader classLoader = clazz.getClassLoader();\n\n        String[] info = StringUtils.splitMethodInfo(methodInfo);\n        String methodName = info[0];\n        String methodDesc = info[1];\n\n        List<AdviceListener> listeners = AdviceListenerManager.queryAdviceListeners(classLoader, clazz.getName(),\n                methodName, methodDesc);\n        if (listeners != null) {\n            for (AdviceListener adviceListener : listeners) {\n                try {\n                    if (skipAdviceListener(adviceListener)) {\n                        continue;\n                    }\n                    adviceListener.afterThrowing(clazz, methodName, methodDesc, target, args, throwable);\n                } catch (Throwable e) {\n                    logger.error(\"class: {}, methodInfo: {}\", clazz.getName(), methodInfo, e);\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 69,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 70,
+                    "column": 41
+                }
+            },
+            {
+                "name": "splitMethodInfo",
+                "position": {
+                    "line": 72,
+                    "column": 37
+                }
+            },
+            {
+                "name": "queryAdviceListeners",
+                "position": {
+                    "line": 76,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 76,
+                    "column": 104
+                }
+            },
+            {
+                "name": "skipAdviceListener",
+                "position": {
+                    "line": 81,
+                    "column": 25
+                }
+            },
+            {
+                "name": "afterThrowing",
+                "position": {
+                    "line": 84,
+                    "column": 36
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 86,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 86,
+                    "column": 69
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpyImpl.skipAdviceListener(AdviceListener adviceListener)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "atBeforeInvoke",
+        "category": "method_declaration",
+        "class": "SpyImpl",
+        "signature": "atBeforeInvoke(Class<?> clazz, String invokeInfo, Object target)",
+        "class_signature": "SpyImpl.atBeforeInvoke(Class<?> clazz, String invokeInfo, Object target)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "invokeInfo"
+            ],
+            [
+                "Object",
+                "target"
+            ]
+        ],
+        "methodBody": "{\n        ClassLoader classLoader = clazz.getClassLoader();\n        String[] info = StringUtils.splitInvokeInfo(invokeInfo);\n        String owner = info[0];\n        String methodName = info[1];\n        String methodDesc = info[2];\n\n        List<AdviceListener> listeners = AdviceListenerManager.queryTraceAdviceListeners(classLoader, clazz.getName(),\n                owner, methodName, methodDesc);\n\n        if (listeners != null) {\n            for (AdviceListener adviceListener : listeners) {\n                try {\n                    if (skipAdviceListener(adviceListener)) {\n                        continue;\n                    }\n                    final InvokeTraceable listener = (InvokeTraceable) adviceListener;\n                    listener.invokeBeforeTracing(classLoader, owner, methodName, methodDesc, Integer.parseInt(info[3]));\n                } catch (Throwable e) {\n                    logger.error(\"class: {}, invokeInfo: {}\", clazz.getName(), invokeInfo, e);\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 93,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 94,
+                    "column": 41
+                }
+            },
+            {
+                "name": "splitInvokeInfo",
+                "position": {
+                    "line": 95,
+                    "column": 37
+                }
+            },
+            {
+                "name": "queryTraceAdviceListeners",
+                "position": {
+                    "line": 100,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 100,
+                    "column": 109
+                }
+            },
+            {
+                "name": "skipAdviceListener",
+                "position": {
+                    "line": 106,
+                    "column": 25
+                }
+            },
+            {
+                "name": "invokeBeforeTracing",
+                "position": {
+                    "line": 110,
+                    "column": 30
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 110,
+                    "column": 102
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 112,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 112,
+                    "column": 69
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpyImpl.skipAdviceListener(AdviceListener adviceListener)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "atAfterInvoke",
+        "category": "method_declaration",
+        "class": "SpyImpl",
+        "signature": "atAfterInvoke(Class<?> clazz, String invokeInfo, Object target)",
+        "class_signature": "SpyImpl.atAfterInvoke(Class<?> clazz, String invokeInfo, Object target)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "invokeInfo"
+            ],
+            [
+                "Object",
+                "target"
+            ]
+        ],
+        "methodBody": "{\n        ClassLoader classLoader = clazz.getClassLoader();\n        String[] info = StringUtils.splitInvokeInfo(invokeInfo);\n        String owner = info[0];\n        String methodName = info[1];\n        String methodDesc = info[2];\n        List<AdviceListener> listeners = AdviceListenerManager.queryTraceAdviceListeners(classLoader, clazz.getName(),\n                owner, methodName, methodDesc);\n\n        if (listeners != null) {\n            for (AdviceListener adviceListener : listeners) {\n                try {\n                    if (skipAdviceListener(adviceListener)) {\n                        continue;\n                    }\n                    final InvokeTraceable listener = (InvokeTraceable) adviceListener;\n                    listener.invokeAfterTracing(classLoader, owner, methodName, methodDesc, Integer.parseInt(info[3]));\n                } catch (Throwable e) {\n                    logger.error(\"class: {}, invokeInfo: {}\", clazz.getName(), invokeInfo, e);\n                }\n            }\n        }\n\n    }",
+        "position": {
+            "line": 119,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 120,
+                    "column": 41
+                }
+            },
+            {
+                "name": "splitInvokeInfo",
+                "position": {
+                    "line": 121,
+                    "column": 37
+                }
+            },
+            {
+                "name": "queryTraceAdviceListeners",
+                "position": {
+                    "line": 125,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 125,
+                    "column": 109
+                }
+            },
+            {
+                "name": "skipAdviceListener",
+                "position": {
+                    "line": 131,
+                    "column": 25
+                }
+            },
+            {
+                "name": "invokeAfterTracing",
+                "position": {
+                    "line": 135,
+                    "column": 30
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 135,
+                    "column": 101
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 137,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 137,
+                    "column": 69
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpyImpl.skipAdviceListener(AdviceListener adviceListener)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "atInvokeException",
+        "category": "method_declaration",
+        "class": "SpyImpl",
+        "signature": "atInvokeException(Class<?> clazz, String invokeInfo, Object target, Throwable throwable)",
+        "class_signature": "SpyImpl.atInvokeException(Class<?> clazz, String invokeInfo, Object target, Throwable throwable)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "invokeInfo"
+            ],
+            [
+                "Object",
+                "target"
+            ],
+            [
+                "Throwable",
+                "throwable"
+            ]
+        ],
+        "methodBody": "{\n        ClassLoader classLoader = clazz.getClassLoader();\n        String[] info = StringUtils.splitInvokeInfo(invokeInfo);\n        String owner = info[0];\n        String methodName = info[1];\n        String methodDesc = info[2];\n\n        List<AdviceListener> listeners = AdviceListenerManager.queryTraceAdviceListeners(classLoader, clazz.getName(),\n                owner, methodName, methodDesc);\n\n        if (listeners != null) {\n            for (AdviceListener adviceListener : listeners) {\n                try {\n                    if (skipAdviceListener(adviceListener)) {\n                        continue;\n                    }\n                    final InvokeTraceable listener = (InvokeTraceable) adviceListener;\n                    listener.invokeThrowTracing(classLoader, owner, methodName, methodDesc, Integer.parseInt(info[3]));\n                } catch (Throwable e) {\n                    logger.error(\"class: {}, invokeInfo: {}\", clazz.getName(), invokeInfo, e);\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 145,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 146,
+                    "column": 41
+                }
+            },
+            {
+                "name": "splitInvokeInfo",
+                "position": {
+                    "line": 147,
+                    "column": 37
+                }
+            },
+            {
+                "name": "queryTraceAdviceListeners",
+                "position": {
+                    "line": 152,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 152,
+                    "column": 109
+                }
+            },
+            {
+                "name": "skipAdviceListener",
+                "position": {
+                    "line": 158,
+                    "column": 25
+                }
+            },
+            {
+                "name": "invokeThrowTracing",
+                "position": {
+                    "line": 162,
+                    "column": 30
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 162,
+                    "column": 101
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 164,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 164,
+                    "column": 69
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpyImpl.skipAdviceListener(AdviceListener adviceListener)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "skipAdviceListener",
+        "category": "method_declaration",
+        "class": "SpyImpl",
+        "signature": "skipAdviceListener(AdviceListener adviceListener)",
+        "class_signature": "SpyImpl.skipAdviceListener(AdviceListener adviceListener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AdviceListener",
+                "adviceListener"
+            ]
+        ],
+        "methodBody": "{\n        if (adviceListener instanceof ProcessAware) {\n            ProcessAware processAware = (ProcessAware) adviceListener;\n            ExecStatus status = processAware.getProcess().status();\n            if (status.equals(ExecStatus.TERMINATED) || status.equals(ExecStatus.STOPPED)) {\n                return true;\n            }\n        }\n        return false;\n    }",
+        "position": {
+            "line": 170,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "status",
+                "position": {
+                    "line": 173,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getProcess",
+                "position": {
+                    "line": 173,
+                    "column": 46
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 174,
+                    "column": 24
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 174,
+                    "column": 64
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    }
+]

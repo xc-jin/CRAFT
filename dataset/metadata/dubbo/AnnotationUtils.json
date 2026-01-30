@@ -1,0 +1,1593 @@
+[
+    {
+        "name": "resolveAnnotationType",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "resolveAnnotationType(AnnotatedElement annotatedElement, String annotationClassName)",
+        "class_signature": "AnnotationUtils.resolveAnnotationType(AnnotatedElement annotatedElement, String annotationClassName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ],
+            [
+                "String",
+                "annotationClassName"
+            ]
+        ],
+        "methodBody": "{\n        ClassLoader classLoader = annotatedElement.getClass().getClassLoader();\n        Class<?> annotationType = resolveClass(annotationClassName, classLoader);\n        if (annotationType == null || !Annotation.class.isAssignableFrom(annotationType)) {\n            return null;\n        }\n        return (Class<A>) annotationType;\n    }",
+        "position": {
+            "line": 65,
+            "column": 44
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 67,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 67,
+                    "column": 52
+                }
+            },
+            {
+                "name": "resolveClass",
+                "position": {
+                    "line": 68,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isAssignableFrom",
+                "position": {
+                    "line": 69,
+                    "column": 57
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 28
+    },
+    {
+        "name": "isType",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "isType(AnnotatedElement annotatedElement)",
+        "class_signature": "AnnotationUtils.isType(AnnotatedElement annotatedElement)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ]
+        ],
+        "methodBody": "{\n        return annotatedElement instanceof Class;\n    }",
+        "position": {
+            "line": 82,
+            "column": 20
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 19
+    },
+    {
+        "name": "isSameType",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "isSameType(Annotation annotation, Class<? extends Annotation> annotationType)",
+        "class_signature": "AnnotationUtils.isSameType(Annotation annotation, Class<? extends Annotation> annotationType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Annotation",
+                "annotation"
+            ],
+            [
+                "Class<? extends Annotation>",
+                "annotationType"
+            ]
+        ],
+        "methodBody": "{\n        if (annotation == null || annotationType == null) {\n            return false;\n        }\n        return Objects.equals(annotation.annotationType(), annotationType);\n    }",
+        "position": {
+            "line": 93,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 97,
+                    "column": 24
+                }
+            },
+            {
+                "name": "annotationType",
+                "position": {
+                    "line": 97,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 29
+    },
+    {
+        "name": "excludedType",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "excludedType(Class<? extends Annotation> excludedAnnotationType)",
+        "class_signature": "AnnotationUtils.excludedType(Class<? extends Annotation> excludedAnnotationType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<? extends Annotation>",
+                "excludedAnnotationType"
+            ]
+        ],
+        "methodBody": "{\n        return annotation -> !isSameType(annotation, excludedAnnotationType);\n    }",
+        "position": {
+            "line": 106,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isSameType",
+                "position": {
+                    "line": 107,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.isSameType(Annotation annotation, Class<? extends Annotation> annotationType)"
+        ],
+        "priority": 27
+    },
+    {
+        "name": "getAttribute",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "getAttribute(Annotation annotation, String attributeName)",
+        "class_signature": "AnnotationUtils.getAttribute(Annotation annotation, String attributeName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Annotation",
+                "annotation"
+            ],
+            [
+                "String",
+                "attributeName"
+            ]
+        ],
+        "methodBody": "{\n        return annotation == null ? null : invokeMethod(annotation, attributeName);\n    }",
+        "position": {
+            "line": 119,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "invokeMethod",
+                "position": {
+                    "line": 120,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "getValue",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "getValue(Annotation annotation)",
+        "class_signature": "AnnotationUtils.getValue(Annotation annotation)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Annotation",
+                "annotation"
+            ]
+        ],
+        "methodBody": "{\n        return getAttribute(annotation, \"value\");\n    }",
+        "position": {
+            "line": 131,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAttribute",
+                "position": {
+                    "line": 132,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.getAttribute(Annotation annotation, String attributeName)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "getAnnotation",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "getAnnotation(AnnotatedElement annotatedElement, String annotationClassName)",
+        "class_signature": "AnnotationUtils.getAnnotation(AnnotatedElement annotatedElement, String annotationClassName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ],
+            [
+                "String",
+                "annotationClassName"
+            ]
+        ],
+        "methodBody": "{\n        Class<? extends Annotation> annotationType = resolveAnnotationType(annotatedElement, annotationClassName);\n        if (annotationType == null) {\n            return null;\n        }\n        return (A) annotatedElement.getAnnotation(annotationType);\n    }",
+        "position": {
+            "line": 145,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "resolveAnnotationType",
+                "position": {
+                    "line": 147,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 151,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.resolveAnnotationType(AnnotatedElement annotatedElement, String annotationClassName)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "getDeclaredAnnotations",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "getDeclaredAnnotations(AnnotatedElement annotatedElement, Predicate<Annotation>... annotationsToFilter)",
+        "class_signature": "AnnotationUtils.getDeclaredAnnotations(AnnotatedElement annotatedElement, Predicate<Annotation>... annotationsToFilter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ],
+            [
+                "Predicate<Annotation>...",
+                "annotationsToFilter"
+            ]
+        ],
+        "methodBody": "{\n        if (annotatedElement == null) {\n            return emptyList();\n        }\n\n        return unmodifiableList(filterAll(asList(annotatedElement.getDeclaredAnnotations()), annotationsToFilter));\n    }",
+        "position": {
+            "line": 162,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 165,
+                    "column": 20
+                }
+            },
+            {
+                "name": "unmodifiableList",
+                "position": {
+                    "line": 168,
+                    "column": 16
+                }
+            },
+            {
+                "name": "filterAll",
+                "position": {
+                    "line": 168,
+                    "column": 33
+                }
+            },
+            {
+                "name": "asList",
+                "position": {
+                    "line": 168,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getDeclaredAnnotations",
+                "position": {
+                    "line": 168,
+                    "column": 67
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 26
+    },
+    {
+        "name": "getAllDeclaredAnnotations",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "getAllDeclaredAnnotations(AnnotatedElement annotatedElement, Predicate<Annotation>... annotationsToFilter)",
+        "class_signature": "AnnotationUtils.getAllDeclaredAnnotations(AnnotatedElement annotatedElement, Predicate<Annotation>... annotationsToFilter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ],
+            [
+                "Predicate<Annotation>...",
+                "annotationsToFilter"
+            ]
+        ],
+        "methodBody": "{\n        if (isType(annotatedElement)) {\n            return getAllDeclaredAnnotations((Class) annotatedElement, annotationsToFilter);\n        } else {\n            return getDeclaredAnnotations(annotatedElement, annotationsToFilter);\n        }\n    }",
+        "position": {
+            "line": 179,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isType",
+                "position": {
+                    "line": 181,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getAllDeclaredAnnotations",
+                "position": {
+                    "line": 182,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getDeclaredAnnotations",
+                "position": {
+                    "line": 184,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.isType(AnnotatedElement annotatedElement)",
+            "AnnotationUtils.getAllDeclaredAnnotations(AnnotatedElement annotatedElement, Predicate<Annotation>... annotationsToFilter)",
+            "AnnotationUtils.getDeclaredAnnotations(AnnotatedElement annotatedElement, Predicate<Annotation>... annotationsToFilter)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "getAllDeclaredAnnotations",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "getAllDeclaredAnnotations(Class<?> type, Predicate<Annotation>... annotationsToFilter)",
+        "class_signature": "AnnotationUtils.getAllDeclaredAnnotations(Class<?> type, Predicate<Annotation>... annotationsToFilter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "type"
+            ],
+            [
+                "Predicate<Annotation>...",
+                "annotationsToFilter"
+            ]
+        ],
+        "methodBody": "{\n\n        if (type == null) {\n            return emptyList();\n        }\n\n        List<Annotation> allAnnotations = new LinkedList<>();\n\n        // All types\n        Set<Class<?>> allTypes = new LinkedHashSet<>();\n        // Add current type\n        allTypes.add(type);\n        // Add all inherited types\n        allTypes.addAll(getAllInheritedTypes(type, t -> !Object.class.equals(t)));\n\n        for (Class<?> t : allTypes) {\n            allAnnotations.addAll(getDeclaredAnnotations(t, annotationsToFilter));\n        }\n\n        return unmodifiableList(allAnnotations);\n    }",
+        "position": {
+            "line": 197,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 200,
+                    "column": 20
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 208,
+                    "column": 18
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 210,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getAllInheritedTypes",
+                "position": {
+                    "line": 210,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 210,
+                    "column": 71
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 213,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getDeclaredAnnotations",
+                "position": {
+                    "line": 213,
+                    "column": 35
+                }
+            },
+            {
+                "name": "unmodifiableList",
+                "position": {
+                    "line": 216,
+                    "column": 16
+                }
+            },
+            {
+                "name": "LinkedList<>",
+                "position": {
+                    "line": 203,
+                    "column": 47
+                }
+            },
+            {
+                "name": "LinkedHashSet<>",
+                "position": {
+                    "line": 206,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.getDeclaredAnnotations(AnnotatedElement annotatedElement, Predicate<Annotation>... annotationsToFilter)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "getMetaAnnotations",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "getMetaAnnotations(Class<? extends Annotation> annotationType, Predicate<Annotation>... metaAnnotationsToFilter)",
+        "class_signature": "AnnotationUtils.getMetaAnnotations(Class<? extends Annotation> annotationType, Predicate<Annotation>... metaAnnotationsToFilter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<? extends Annotation>",
+                "annotationType"
+            ],
+            [
+                "Predicate<Annotation>...",
+                "metaAnnotationsToFilter"
+            ]
+        ],
+        "methodBody": "{\n        return getDeclaredAnnotations(\n                annotationType,\n                // Excludes the Java native annotation types or it causes the stack overflow, e.g,\n                // @Target annotates itself\n                excludedType(Target.class),\n                excludedType(Retention.class),\n                excludedType(Documented.class),\n                // Add other predicates\n                and(metaAnnotationsToFilter));\n    }",
+        "position": {
+            "line": 228,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDeclaredAnnotations",
+                "position": {
+                    "line": 230,
+                    "column": 16
+                }
+            },
+            {
+                "name": "excludedType",
+                "position": {
+                    "line": 234,
+                    "column": 17
+                }
+            },
+            {
+                "name": "excludedType",
+                "position": {
+                    "line": 235,
+                    "column": 17
+                }
+            },
+            {
+                "name": "excludedType",
+                "position": {
+                    "line": 236,
+                    "column": 17
+                }
+            },
+            {
+                "name": "and",
+                "position": {
+                    "line": 238,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.getDeclaredAnnotations(AnnotatedElement annotatedElement, Predicate<Annotation>... annotationsToFilter)",
+            "AnnotationUtils.excludedType(Class<? extends Annotation> excludedAnnotationType)",
+            "AnnotationUtils.excludedType(Class<? extends Annotation> excludedAnnotationType)",
+            "AnnotationUtils.excludedType(Class<? extends Annotation> excludedAnnotationType)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "getAllMetaAnnotations",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "getAllMetaAnnotations(Class<? extends Annotation> annotationType, Predicate<Annotation>... annotationsToFilter)",
+        "class_signature": "AnnotationUtils.getAllMetaAnnotations(Class<? extends Annotation> annotationType, Predicate<Annotation>... annotationsToFilter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<? extends Annotation>",
+                "annotationType"
+            ],
+            [
+                "Predicate<Annotation>...",
+                "annotationsToFilter"
+            ]
+        ],
+        "methodBody": "{\n\n        List<Annotation> allMetaAnnotations = new LinkedList<>();\n\n        List<Annotation> metaAnnotations = getMetaAnnotations(annotationType);\n\n        allMetaAnnotations.addAll(metaAnnotations);\n\n        for (Annotation metaAnnotation : metaAnnotations) {\n            // Get the nested meta annotations recursively\n            allMetaAnnotations.addAll(getAllMetaAnnotations(metaAnnotation.annotationType()));\n        }\n\n        return unmodifiableList(filterAll(allMetaAnnotations, annotationsToFilter));\n    }",
+        "position": {
+            "line": 249,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMetaAnnotations",
+                "position": {
+                    "line": 254,
+                    "column": 44
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 256,
+                    "column": 28
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 260,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getAllMetaAnnotations",
+                "position": {
+                    "line": 260,
+                    "column": 39
+                }
+            },
+            {
+                "name": "annotationType",
+                "position": {
+                    "line": 260,
+                    "column": 76
+                }
+            },
+            {
+                "name": "unmodifiableList",
+                "position": {
+                    "line": 263,
+                    "column": 16
+                }
+            },
+            {
+                "name": "filterAll",
+                "position": {
+                    "line": 263,
+                    "column": 33
+                }
+            },
+            {
+                "name": "LinkedList<>",
+                "position": {
+                    "line": 252,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.getMetaAnnotations(Class<? extends Annotation> annotationType, Predicate<Annotation>... metaAnnotationsToFilter)",
+            "AnnotationUtils.getAllMetaAnnotations(Class<? extends Annotation> annotationType, Predicate<Annotation>... annotationsToFilter)"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "findAnnotation",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "findAnnotation(AnnotatedElement annotatedElement, String annotationClassName)",
+        "class_signature": "AnnotationUtils.findAnnotation(AnnotatedElement annotatedElement, String annotationClassName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ],
+            [
+                "String",
+                "annotationClassName"
+            ]
+        ],
+        "methodBody": "{\n        return findAnnotation(annotatedElement, resolveAnnotationType(annotatedElement, annotationClassName));\n    }",
+        "position": {
+            "line": 274,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findAnnotation",
+                "position": {
+                    "line": 275,
+                    "column": 16
+                }
+            },
+            {
+                "name": "resolveAnnotationType",
+                "position": {
+                    "line": 275,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.findAnnotation(AnnotatedElement annotatedElement, String annotationClassName)",
+            "AnnotationUtils.resolveAnnotationType(AnnotatedElement annotatedElement, String annotationClassName)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "findAnnotation",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "findAnnotation(AnnotatedElement annotatedElement, Class<A> annotationType)",
+        "class_signature": "AnnotationUtils.findAnnotation(AnnotatedElement annotatedElement, Class<A> annotationType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ],
+            [
+                "Class<A>",
+                "annotationType"
+            ]
+        ],
+        "methodBody": "{\n        return (A) filterFirst(getAllDeclaredAnnotations(annotatedElement), a -> isSameType(a, annotationType));\n    }",
+        "position": {
+            "line": 287,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "filterFirst",
+                "position": {
+                    "line": 288,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getAllDeclaredAnnotations",
+                "position": {
+                    "line": 288,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isSameType",
+                "position": {
+                    "line": 288,
+                    "column": 82
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.getAllDeclaredAnnotations(AnnotatedElement annotatedElement, Predicate<Annotation>... annotationsToFilter)",
+            "AnnotationUtils.isSameType(Annotation annotation, Class<? extends Annotation> annotationType)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "findMetaAnnotations",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "findMetaAnnotations(Class<? extends Annotation> annotationType, Class<A> metaAnnotationType)",
+        "class_signature": "AnnotationUtils.findMetaAnnotations(Class<? extends Annotation> annotationType, Class<A> metaAnnotationType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<? extends Annotation>",
+                "annotationType"
+            ],
+            [
+                "Class<A>",
+                "metaAnnotationType"
+            ]
+        ],
+        "methodBody": "{\n        return (List<A>) getAllMetaAnnotations(annotationType, a -> isSameType(a, metaAnnotationType));\n    }",
+        "position": {
+            "line": 300,
+            "column": 43
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllMetaAnnotations",
+                "position": {
+                    "line": 302,
+                    "column": 26
+                }
+            },
+            {
+                "name": "isSameType",
+                "position": {
+                    "line": 302,
+                    "column": 69
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.getAllMetaAnnotations(Class<? extends Annotation> annotationType, Predicate<Annotation>... annotationsToFilter)",
+            "AnnotationUtils.isSameType(Annotation annotation, Class<? extends Annotation> annotationType)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "findMetaAnnotations",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "findMetaAnnotations(AnnotatedElement annotatedElement, Class<A> metaAnnotationType)",
+        "class_signature": "AnnotationUtils.findMetaAnnotations(AnnotatedElement annotatedElement, Class<A> metaAnnotationType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ],
+            [
+                "Class<A>",
+                "metaAnnotationType"
+            ]
+        ],
+        "methodBody": "{\n        List<A> metaAnnotations = new LinkedList<>();\n\n        for (Annotation annotation : getAllDeclaredAnnotations(annotatedElement)) {\n            metaAnnotations.addAll(findMetaAnnotations(annotation.annotationType(), metaAnnotationType));\n        }\n\n        return unmodifiableList(metaAnnotations);\n    }",
+        "position": {
+            "line": 314,
+            "column": 43
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllDeclaredAnnotations",
+                "position": {
+                    "line": 318,
+                    "column": 38
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 319,
+                    "column": 29
+                }
+            },
+            {
+                "name": "findMetaAnnotations",
+                "position": {
+                    "line": 319,
+                    "column": 36
+                }
+            },
+            {
+                "name": "annotationType",
+                "position": {
+                    "line": 319,
+                    "column": 67
+                }
+            },
+            {
+                "name": "unmodifiableList",
+                "position": {
+                    "line": 322,
+                    "column": 16
+                }
+            },
+            {
+                "name": "LinkedList<>",
+                "position": {
+                    "line": 316,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.getAllDeclaredAnnotations(AnnotatedElement annotatedElement, Predicate<Annotation>... annotationsToFilter)",
+            "AnnotationUtils.findMetaAnnotations(Class<? extends Annotation> annotationType, Class<A> metaAnnotationType)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "findMetaAnnotation",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "findMetaAnnotation(AnnotatedElement annotatedElement, String metaAnnotationClassName)",
+        "class_signature": "AnnotationUtils.findMetaAnnotation(AnnotatedElement annotatedElement, String metaAnnotationClassName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ],
+            [
+                "String",
+                "metaAnnotationClassName"
+            ]
+        ],
+        "methodBody": "{\n        return findMetaAnnotation(annotatedElement, resolveAnnotationType(annotatedElement, metaAnnotationClassName));\n    }",
+        "position": {
+            "line": 333,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findMetaAnnotation",
+                "position": {
+                    "line": 335,
+                    "column": 16
+                }
+            },
+            {
+                "name": "resolveAnnotationType",
+                "position": {
+                    "line": 335,
+                    "column": 53
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.findMetaAnnotation(AnnotatedElement annotatedElement, String metaAnnotationClassName)",
+            "AnnotationUtils.resolveAnnotationType(AnnotatedElement annotatedElement, String annotationClassName)"
+        ],
+        "priority": 25
+    },
+    {
+        "name": "findMetaAnnotation",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "findMetaAnnotation(Class<? extends Annotation> annotationType, Class<A> metaAnnotationType)",
+        "class_signature": "AnnotationUtils.findMetaAnnotation(Class<? extends Annotation> annotationType, Class<A> metaAnnotationType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<? extends Annotation>",
+                "annotationType"
+            ],
+            [
+                "Class<A>",
+                "metaAnnotationType"
+            ]
+        ],
+        "methodBody": "{\n        return first(findMetaAnnotations(annotationType, metaAnnotationType));\n    }",
+        "position": {
+            "line": 348,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "first",
+                "position": {
+                    "line": 350,
+                    "column": 16
+                }
+            },
+            {
+                "name": "findMetaAnnotations",
+                "position": {
+                    "line": 350,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.findMetaAnnotations(Class<? extends Annotation> annotationType, Class<A> metaAnnotationType)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "findMetaAnnotation",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "findMetaAnnotation(AnnotatedElement annotatedElement, Class<A> metaAnnotationType)",
+        "class_signature": "AnnotationUtils.findMetaAnnotation(AnnotatedElement annotatedElement, Class<A> metaAnnotationType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ],
+            [
+                "Class<A>",
+                "metaAnnotationType"
+            ]
+        ],
+        "methodBody": "{\n        return first(findMetaAnnotations(annotatedElement, metaAnnotationType));\n    }",
+        "position": {
+            "line": 363,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "first",
+                "position": {
+                    "line": 364,
+                    "column": 16
+                }
+            },
+            {
+                "name": "findMetaAnnotations",
+                "position": {
+                    "line": 364,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.findMetaAnnotations(Class<? extends Annotation> annotationType, Class<A> metaAnnotationType)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "isAnnotationPresent",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "isAnnotationPresent(Class<?> type, boolean matchAll, Class<? extends Annotation>... annotationTypes)",
+        "class_signature": "AnnotationUtils.isAnnotationPresent(Class<?> type, boolean matchAll, Class<? extends Annotation>... annotationTypes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "type"
+            ],
+            [
+                "boolean",
+                "matchAll"
+            ],
+            [
+                "Class<? extends Annotation>...",
+                "annotationTypes"
+            ]
+        ],
+        "methodBody": "{\n\n        int size = annotationTypes == null ? 0 : annotationTypes.length;\n\n        if (size < 1) {\n            return false;\n        }\n\n        int presentCount = 0;\n\n        for (int i = 0; i < size; i++) {\n            Class<? extends Annotation> annotationType = annotationTypes[i];\n            if (findAnnotation(type, annotationType) != null || findMetaAnnotation(type, annotationType) != null) {\n                presentCount++;\n            }\n        }\n\n        return matchAll ? presentCount == size : presentCount > 0;\n    }",
+        "position": {
+            "line": 375,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findAnnotation",
+                "position": {
+                    "line": 388,
+                    "column": 17
+                }
+            },
+            {
+                "name": "findMetaAnnotation",
+                "position": {
+                    "line": 388,
+                    "column": 65
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.findAnnotation(AnnotatedElement annotatedElement, String annotationClassName)",
+            "AnnotationUtils.findMetaAnnotation(AnnotatedElement annotatedElement, String metaAnnotationClassName)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "isAnnotationPresent",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "isAnnotationPresent(Class<?> type, Class<? extends Annotation> annotationType)",
+        "class_signature": "AnnotationUtils.isAnnotationPresent(Class<?> type, Class<? extends Annotation> annotationType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "type"
+            ],
+            [
+                "Class<? extends Annotation>",
+                "annotationType"
+            ]
+        ],
+        "methodBody": "{\n        return isAnnotationPresent(type, true, annotationType);\n    }",
+        "position": {
+            "line": 404,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAnnotationPresent",
+                "position": {
+                    "line": 405,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.isAnnotationPresent(Class<?> type, boolean matchAll, Class<? extends Annotation>... annotationTypes)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "isAnnotationPresent",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "isAnnotationPresent(AnnotatedElement annotatedElement, String annotationClassName)",
+        "class_signature": "AnnotationUtils.isAnnotationPresent(AnnotatedElement annotatedElement, String annotationClassName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ],
+            [
+                "String",
+                "annotationClassName"
+            ]
+        ],
+        "methodBody": "{\n        ClassLoader classLoader = annotatedElement.getClass().getClassLoader();\n        Class<?> resolvedType = resolveClass(annotationClassName, classLoader);\n        if (resolvedType == null || !Annotation.class.isAssignableFrom(resolvedType)) {\n            return false;\n        }\n        return isAnnotationPresent(annotatedElement, (Class<? extends Annotation>) resolvedType);\n    }",
+        "position": {
+            "line": 416,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 417,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 417,
+                    "column": 52
+                }
+            },
+            {
+                "name": "resolveClass",
+                "position": {
+                    "line": 418,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isAssignableFrom",
+                "position": {
+                    "line": 419,
+                    "column": 55
+                }
+            },
+            {
+                "name": "isAnnotationPresent",
+                "position": {
+                    "line": 422,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.isAnnotationPresent(Class<?> type, Class<? extends Annotation> annotationType)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "isAnnotationPresent",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "isAnnotationPresent(AnnotatedElement annotatedElement, Class<? extends Annotation> annotationType)",
+        "class_signature": "AnnotationUtils.isAnnotationPresent(AnnotatedElement annotatedElement, Class<? extends Annotation> annotationType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AnnotatedElement",
+                "annotatedElement"
+            ],
+            [
+                "Class<? extends Annotation>",
+                "annotationType"
+            ]
+        ],
+        "methodBody": "{\n        if (isType(annotatedElement)) {\n            return isAnnotationPresent((Class) annotatedElement, annotationType);\n        } else {\n            return annotatedElement.isAnnotationPresent(annotationType)\n                    || findMetaAnnotation(annotatedElement, annotationType) != null; // to find meta-annotation\n        }\n    }",
+        "position": {
+            "line": 432,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isType",
+                "position": {
+                    "line": 433,
+                    "column": 13
+                }
+            },
+            {
+                "name": "isAnnotationPresent",
+                "position": {
+                    "line": 434,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isAnnotationPresent",
+                "position": {
+                    "line": 436,
+                    "column": 37
+                }
+            },
+            {
+                "name": "findMetaAnnotation",
+                "position": {
+                    "line": 437,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.isType(AnnotatedElement annotatedElement)",
+            "AnnotationUtils.isAnnotationPresent(Class<?> type, Class<? extends Annotation> annotationType)",
+            "AnnotationUtils.findMetaAnnotation(AnnotatedElement annotatedElement, String metaAnnotationClassName)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "isAllAnnotationPresent",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "isAllAnnotationPresent(Class<?> type, Class<? extends Annotation>... annotationTypes)",
+        "class_signature": "AnnotationUtils.isAllAnnotationPresent(Class<?> type, Class<? extends Annotation>... annotationTypes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "type"
+            ],
+            [
+                "Class<? extends Annotation>...",
+                "annotationTypes"
+            ]
+        ],
+        "methodBody": "{\n        return isAnnotationPresent(type, true, annotationTypes);\n    }",
+        "position": {
+            "line": 448,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAnnotationPresent",
+                "position": {
+                    "line": 449,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.isAnnotationPresent(Class<?> type, boolean matchAll, Class<? extends Annotation>... annotationTypes)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "isAnyAnnotationPresent",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "isAnyAnnotationPresent(Class<?> type, Class<? extends Annotation>... annotationTypes)",
+        "class_signature": "AnnotationUtils.isAnyAnnotationPresent(Class<?> type, Class<? extends Annotation>... annotationTypes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "type"
+            ],
+            [
+                "Class<? extends Annotation>...",
+                "annotationTypes"
+            ]
+        ],
+        "methodBody": "{\n        return isAnnotationPresent(type, false, annotationTypes);\n    }",
+        "position": {
+            "line": 459,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAnnotationPresent",
+                "position": {
+                    "line": 460,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.isAnnotationPresent(Class<?> type, boolean matchAll, Class<? extends Annotation>... annotationTypes)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "getDefaultValue",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "getDefaultValue(Annotation annotation, String attributeName)",
+        "class_signature": "AnnotationUtils.getDefaultValue(Annotation annotation, String attributeName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Annotation",
+                "annotation"
+            ],
+            [
+                "String",
+                "attributeName"
+            ]
+        ],
+        "methodBody": "{\n        return getDefaultValue(annotation.annotationType(), attributeName);\n    }",
+        "position": {
+            "line": 472,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDefaultValue",
+                "position": {
+                    "line": 473,
+                    "column": 16
+                }
+            },
+            {
+                "name": "annotationType",
+                "position": {
+                    "line": 473,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.getDefaultValue(Annotation annotation, String attributeName)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "getDefaultValue",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "getDefaultValue(Class<? extends Annotation> annotationType, String attributeName)",
+        "class_signature": "AnnotationUtils.getDefaultValue(Class<? extends Annotation> annotationType, String attributeName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<? extends Annotation>",
+                "annotationType"
+            ],
+            [
+                "String",
+                "attributeName"
+            ]
+        ],
+        "methodBody": "{\n        Method method = findMethod(annotationType, attributeName);\n        return (T) (method == null ? null : method.getDefaultValue());\n    }",
+        "position": {
+            "line": 486,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 487,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getDefaultValue",
+                "position": {
+                    "line": 488,
+                    "column": 52
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "filterDefaultValues",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "filterDefaultValues(Class<? extends Annotation> annotationType, Map<String, Object> attributes)",
+        "class_signature": "AnnotationUtils.filterDefaultValues(Class<? extends Annotation> annotationType, Map<String, Object> attributes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<? extends Annotation>",
+                "annotationType"
+            ],
+            [
+                "Map<String, Object>",
+                "attributes"
+            ]
+        ],
+        "methodBody": "{\n        Map<String, Object> filteredAttributes = new LinkedHashMap<>(attributes.size());\n        attributes.forEach((key, val) -> {\n            if (!Objects.deepEquals(val, getDefaultValue(annotationType, key))) {\n                filteredAttributes.put(key, val);\n            }\n        });\n        // remove void class, compatible with spring 3.x\n        Object interfaceClassValue = filteredAttributes.get(\"interfaceClass\");\n        if (interfaceClassValue instanceof String && StringUtils.isEquals((String) interfaceClassValue, \"void\")) {\n            filteredAttributes.remove(\"interfaceClass\");\n        }\n        return filteredAttributes;\n    }",
+        "position": {
+            "line": 497,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 499,
+                    "column": 81
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 500,
+                    "column": 20
+                }
+            },
+            {
+                "name": "deepEquals",
+                "position": {
+                    "line": 501,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getDefaultValue",
+                "position": {
+                    "line": 501,
+                    "column": 42
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 502,
+                    "column": 36
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 506,
+                    "column": 57
+                }
+            },
+            {
+                "name": "isEquals",
+                "position": {
+                    "line": 507,
+                    "column": 66
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 508,
+                    "column": 32
+                }
+            },
+            {
+                "name": "LinkedHashMap<>",
+                "position": {
+                    "line": 499,
+                    "column": 54
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.getDefaultValue(Annotation annotation, String attributeName)"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "filterDefaultValues",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "filterDefaultValues(Annotation annotation, Map<String, Object> attributes)",
+        "class_signature": "AnnotationUtils.filterDefaultValues(Annotation annotation, Map<String, Object> attributes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Annotation",
+                "annotation"
+            ],
+            [
+                "Map<String, Object>",
+                "attributes"
+            ]
+        ],
+        "methodBody": "{\n        return filterDefaultValues(annotation.annotationType(), attributes);\n    }",
+        "position": {
+            "line": 519,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "filterDefaultValues",
+                "position": {
+                    "line": 520,
+                    "column": 16
+                }
+            },
+            {
+                "name": "annotationType",
+                "position": {
+                    "line": 520,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [
+            "AnnotationUtils.filterDefaultValues(Class<? extends Annotation> annotationType, Map<String, Object> attributes)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "getAttributes",
+        "category": "method_declaration",
+        "class": "AnnotationUtils",
+        "signature": "getAttributes(Annotation annotation, boolean filterDefaultValue)",
+        "class_signature": "AnnotationUtils.getAttributes(Annotation annotation, boolean filterDefaultValue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Annotation",
+                "annotation"
+            ],
+            [
+                "boolean",
+                "filterDefaultValue"
+            ]
+        ],
+        "methodBody": "{\n        Class<?> annotationType = annotation.annotationType();\n        Method[] methods = annotationType.getMethods();\n        Map<String, Object> attributes = new LinkedHashMap<>(methods.length);\n        for (Method method : methods) {\n            try {\n                if (method.getDeclaringClass() == Annotation.class) {\n                    continue;\n                }\n                String name = method.getName();\n                Object value = method.invoke(annotation);\n                if (!filterDefaultValue || !Objects.deepEquals(value, method.getDefaultValue())) {\n                    attributes.put(name, value);\n                }\n            } catch (Exception e) {\n                throw new IllegalStateException(\"get attribute value of annotation failed: \" + method, e);\n            }\n        }\n        return attributes;\n    }",
+        "position": {
+            "line": 528,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "annotationType",
+                "position": {
+                    "line": 529,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getMethods",
+                "position": {
+                    "line": 530,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getDeclaringClass",
+                "position": {
+                    "line": 534,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 537,
+                    "column": 38
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 538,
+                    "column": 39
+                }
+            },
+            {
+                "name": "deepEquals",
+                "position": {
+                    "line": 539,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getDefaultValue",
+                "position": {
+                    "line": 539,
+                    "column": 78
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 540,
+                    "column": 32
+                }
+            },
+            {
+                "name": "LinkedHashMap<>",
+                "position": {
+                    "line": 531,
+                    "column": 46
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 543,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 13
+    }
+]

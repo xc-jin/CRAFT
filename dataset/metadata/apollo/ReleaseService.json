@@ -1,0 +1,2744 @@
+[
+    {
+        "name": "ReleaseService",
+        "category": "constructor_declaration",
+        "class": "ReleaseService",
+        "signature": "ReleaseService(ReleaseRepository releaseRepository, ItemService itemService, AuditService auditService, NamespaceLockService namespaceLockService, NamespaceService namespaceService, NamespaceBranchService namespaceBranchService, ReleaseHistoryService releaseHistoryService, ItemSetService itemSetService)",
+        "class_signature": "ReleaseService.ReleaseService(ReleaseRepository releaseRepository, ItemService itemService, AuditService auditService, NamespaceLockService namespaceLockService, NamespaceService namespaceService, NamespaceBranchService namespaceBranchService, ReleaseHistoryService releaseHistoryService, ItemSetService itemSetService)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ReleaseRepository",
+                "releaseRepository"
+            ],
+            [
+                "ItemService",
+                "itemService"
+            ],
+            [
+                "AuditService",
+                "auditService"
+            ],
+            [
+                "NamespaceLockService",
+                "namespaceLockService"
+            ],
+            [
+                "NamespaceService",
+                "namespaceService"
+            ],
+            [
+                "NamespaceBranchService",
+                "namespaceBranchService"
+            ],
+            [
+                "ReleaseHistoryService",
+                "releaseHistoryService"
+            ],
+            [
+                "ItemSetService",
+                "itemSetService"
+            ]
+        ],
+        "methodBody": "{\n    this.releaseRepository = releaseRepository;\n    this.itemService = itemService;\n    this.auditService = auditService;\n    this.namespaceLockService = namespaceLockService;\n    this.namespaceService = namespaceService;\n    this.namespaceBranchService = namespaceBranchService;\n    this.releaseHistoryService = releaseHistoryService;\n    this.itemSetService = itemSetService;\n  }",
+        "position": {
+            "line": 82,
+            "column": 10
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "findOne",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "findOne(long releaseId)",
+        "class_signature": "ReleaseService.findOne(long releaseId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "releaseId"
+            ]
+        ],
+        "methodBody": "{\n    return releaseRepository.findById(releaseId).orElse(null);\n  }",
+        "position": {
+            "line": 101,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "orElse",
+                "position": {
+                    "line": 102,
+                    "column": 50
+                }
+            },
+            {
+                "name": "findById",
+                "position": {
+                    "line": 102,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 17
+    },
+    {
+        "name": "findActiveOne",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "findActiveOne(long releaseId)",
+        "class_signature": "ReleaseService.findActiveOne(long releaseId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "releaseId"
+            ]
+        ],
+        "methodBody": "{\n    return releaseRepository.findByIdAndIsAbandonedFalse(releaseId);\n  }",
+        "position": {
+            "line": 106,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByIdAndIsAbandonedFalse",
+                "position": {
+                    "line": 107,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "findByReleaseIds",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "findByReleaseIds(Set<Long> releaseIds)",
+        "class_signature": "ReleaseService.findByReleaseIds(Set<Long> releaseIds)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Set<Long>",
+                "releaseIds"
+            ]
+        ],
+        "methodBody": "{\n    Iterable<Release> releases = releaseRepository.findAllById(releaseIds);\n    if (releases == null) {\n      return Collections.emptyList();\n    }\n    return Lists.newArrayList(releases);\n  }",
+        "position": {
+            "line": 110,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findAllById",
+                "position": {
+                    "line": 111,
+                    "column": 52
+                }
+            },
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 113,
+                    "column": 26
+                }
+            },
+            {
+                "name": "newArrayList",
+                "position": {
+                    "line": 115,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "findByReleaseKeys",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "findByReleaseKeys(Set<String> releaseKeys)",
+        "class_signature": "ReleaseService.findByReleaseKeys(Set<String> releaseKeys)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Set<String>",
+                "releaseKeys"
+            ]
+        ],
+        "methodBody": "{\n    return releaseRepository.findByReleaseKeyIn(releaseKeys);\n  }",
+        "position": {
+            "line": 118,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByReleaseKeyIn",
+                "position": {
+                    "line": 119,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "findLatestActiveRelease",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "findLatestActiveRelease(Namespace namespace)",
+        "class_signature": "ReleaseService.findLatestActiveRelease(Namespace namespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ]
+        ],
+        "methodBody": "{\n    return findLatestActiveRelease(namespace.getAppId(),\n                                   namespace.getClusterName(), namespace.getNamespaceName());\n\n  }",
+        "position": {
+            "line": 122,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 123,
+                    "column": 12
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 123,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 124,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 124,
+                    "column": 74
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.findLatestActiveRelease(String appId, String clusterName, String namespaceName)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "findLatestActiveRelease",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "findLatestActiveRelease(String appId, String clusterName, String namespaceName)",
+        "class_signature": "ReleaseService.findLatestActiveRelease(String appId, String clusterName, String namespaceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ]
+        ],
+        "methodBody": "{\n    return releaseRepository.findFirstByAppIdAndClusterNameAndNamespaceNameAndIsAbandonedFalseOrderByIdDesc(appId,\n                                                                                                            clusterName,\n                                                                                                            namespaceName);\n  }",
+        "position": {
+            "line": 128,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findFirstByAppIdAndClusterNameAndNamespaceNameAndIsAbandonedFalseOrderByIdDesc",
+                "position": {
+                    "line": 129,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 27
+    },
+    {
+        "name": "findAllReleases",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "findAllReleases(String appId, String clusterName, String namespaceName, Pageable page)",
+        "class_signature": "ReleaseService.findAllReleases(String appId, String clusterName, String namespaceName, Pageable page)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ],
+            [
+                "Pageable",
+                "page"
+            ]
+        ],
+        "methodBody": "{\n    List<Release> releases = releaseRepository.findByAppIdAndClusterNameAndNamespaceNameOrderByIdDesc(appId,\n                                                                                                      clusterName,\n                                                                                                      namespaceName,\n                                                                                                      page);\n    if (releases == null) {\n      return Collections.emptyList();\n    }\n    return releases;\n  }",
+        "position": {
+            "line": 134,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByAppIdAndClusterNameAndNamespaceNameOrderByIdDesc",
+                "position": {
+                    "line": 135,
+                    "column": 48
+                }
+            },
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 140,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "findActiveReleases",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "findActiveReleases(String appId, String clusterName, String namespaceName, Pageable page)",
+        "class_signature": "ReleaseService.findActiveReleases(String appId, String clusterName, String namespaceName, Pageable page)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ],
+            [
+                "Pageable",
+                "page"
+            ]
+        ],
+        "methodBody": "{\n    List<Release>\n        releases =\n        releaseRepository.findByAppIdAndClusterNameAndNamespaceNameAndIsAbandonedFalseOrderByIdDesc(appId, clusterName,\n                                                                                                    namespaceName,\n                                                                                                    page);\n    if (releases == null) {\n      return Collections.emptyList();\n    }\n    return releases;\n  }",
+        "position": {
+            "line": 145,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByAppIdAndClusterNameAndNamespaceNameAndIsAbandonedFalseOrderByIdDesc",
+                "position": {
+                    "line": 148,
+                    "column": 27
+                }
+            },
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 152,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "findActiveReleasesBetween",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "findActiveReleasesBetween(String appId, String clusterName, String namespaceName, long fromReleaseId, long toReleaseId)",
+        "class_signature": "ReleaseService.findActiveReleasesBetween(String appId, String clusterName, String namespaceName, long fromReleaseId, long toReleaseId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ],
+            [
+                "long",
+                "fromReleaseId"
+            ],
+            [
+                "long",
+                "toReleaseId"
+            ]
+        ],
+        "methodBody": "{\n    List<Release>\n        releases =\n        releaseRepository.findByAppIdAndClusterNameAndNamespaceNameAndIsAbandonedFalseAndIdBetweenOrderByIdDesc(appId,\n                                                                                                                clusterName,\n                                                                                                                namespaceName,\n                                                                                                                fromReleaseId,\n                                                                                                                toReleaseId);\n    if (releases == null) {\n      return Collections.emptyList();\n    }\n    return releases;\n  }",
+        "position": {
+            "line": 157,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByAppIdAndClusterNameAndNamespaceNameAndIsAbandonedFalseAndIdBetweenOrderByIdDesc",
+                "position": {
+                    "line": 161,
+                    "column": 27
+                }
+            },
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 167,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    },
+    {
+        "name": "mergeBranchChangeSetsAndRelease",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "mergeBranchChangeSetsAndRelease(Namespace namespace, String branchName, String releaseName, String releaseComment, boolean isEmergencyPublish, ItemChangeSets changeSets)",
+        "class_signature": "ReleaseService.mergeBranchChangeSetsAndRelease(Namespace namespace, String branchName, String releaseName, String releaseComment, boolean isEmergencyPublish, ItemChangeSets changeSets)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ],
+            [
+                "String",
+                "branchName"
+            ],
+            [
+                "String",
+                "releaseName"
+            ],
+            [
+                "String",
+                "releaseComment"
+            ],
+            [
+                "boolean",
+                "isEmergencyPublish"
+            ],
+            [
+                "ItemChangeSets",
+                "changeSets"
+            ]
+        ],
+        "methodBody": "{\n\n    checkLock(namespace, isEmergencyPublish, changeSets.getDataChangeLastModifiedBy());\n\n    itemSetService.updateSet(namespace, changeSets);\n\n    Release branchRelease = findLatestActiveRelease(namespace.getAppId(), branchName, namespace\n        .getNamespaceName());\n    long branchReleaseId = branchRelease == null ? 0 : branchRelease.getId();\n\n    Map<String, String> operateNamespaceItems = getNamespaceItems(namespace);\n\n    Map<String, Object> operationContext = Maps.newLinkedHashMap();\n    operationContext.put(ReleaseOperationContext.SOURCE_BRANCH, branchName);\n    operationContext.put(ReleaseOperationContext.BASE_RELEASE_ID, branchReleaseId);\n    operationContext.put(ReleaseOperationContext.IS_EMERGENCY_PUBLISH, isEmergencyPublish);\n\n    return masterRelease(namespace, releaseName, releaseComment, operateNamespaceItems,\n                         changeSets.getDataChangeLastModifiedBy(),\n                         ReleaseOperation.GRAY_RELEASE_MERGE_TO_MASTER, operationContext);\n\n  }",
+        "position": {
+            "line": 173,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkLock",
+                "position": {
+                    "line": 177,
+                    "column": 5
+                }
+            },
+            {
+                "name": "getDataChangeLastModifiedBy",
+                "position": {
+                    "line": 177,
+                    "column": 57
+                }
+            },
+            {
+                "name": "updateSet",
+                "position": {
+                    "line": 179,
+                    "column": 20
+                }
+            },
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 181,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 181,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 182,
+                    "column": 10
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 183,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getNamespaceItems",
+                "position": {
+                    "line": 185,
+                    "column": 49
+                }
+            },
+            {
+                "name": "newLinkedHashMap",
+                "position": {
+                    "line": 187,
+                    "column": 49
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 188,
+                    "column": 22
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 189,
+                    "column": 22
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 190,
+                    "column": 22
+                }
+            },
+            {
+                "name": "masterRelease",
+                "position": {
+                    "line": 192,
+                    "column": 12
+                }
+            },
+            {
+                "name": "getDataChangeLastModifiedBy",
+                "position": {
+                    "line": 193,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.checkLock(Namespace namespace, boolean isEmergencyPublish, String operator)",
+            "ReleaseService.findLatestActiveRelease(String appId, String clusterName, String namespaceName)",
+            "ReleaseService.getNamespaceItems(Namespace namespace)",
+            "ReleaseService.masterRelease(Namespace namespace, String releaseName, String releaseComment, Map<String, String> configurations, String operator, int releaseOperation, Map<String, Object> operationContext)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "publish",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "publish(Namespace namespace, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish)",
+        "class_signature": "ReleaseService.publish(Namespace namespace, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ],
+            [
+                "String",
+                "releaseName"
+            ],
+            [
+                "String",
+                "releaseComment"
+            ],
+            [
+                "String",
+                "operator"
+            ],
+            [
+                "boolean",
+                "isEmergencyPublish"
+            ]
+        ],
+        "methodBody": "{\n\n    checkLock(namespace, isEmergencyPublish, operator);\n\n    Map<String, String> operateNamespaceItems = getNamespaceItems(namespace);\n\n    Namespace parentNamespace = namespaceService.findParentNamespace(namespace);\n\n    //branch release\n    if (parentNamespace != null) {\n      return publishBranchNamespace(parentNamespace, namespace, operateNamespaceItems,\n                                    releaseName, releaseComment, operator, isEmergencyPublish);\n    }\n\n    Namespace childNamespace = namespaceService.findChildNamespace(namespace);\n\n    Release previousRelease = null;\n    if (childNamespace != null) {\n      previousRelease = findLatestActiveRelease(namespace);\n    }\n\n    //master release\n    Map<String, Object> operationContext = Maps.newLinkedHashMap();\n    operationContext.put(ReleaseOperationContext.IS_EMERGENCY_PUBLISH, isEmergencyPublish);\n\n    Release release = masterRelease(namespace, releaseName, releaseComment, operateNamespaceItems,\n                                    operator, ReleaseOperation.NORMAL_RELEASE, operationContext);\n\n    //merge to branch and auto release\n    if (childNamespace != null) {\n      mergeFromMasterAndPublishBranch(namespace, childNamespace, operateNamespaceItems,\n                                      releaseName, releaseComment, operator, previousRelease,\n                                      release, isEmergencyPublish);\n    }\n\n    return release;\n  }",
+        "position": {
+            "line": 199,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkLock",
+                "position": {
+                    "line": 202,
+                    "column": 5
+                }
+            },
+            {
+                "name": "getNamespaceItems",
+                "position": {
+                    "line": 204,
+                    "column": 49
+                }
+            },
+            {
+                "name": "findParentNamespace",
+                "position": {
+                    "line": 206,
+                    "column": 50
+                }
+            },
+            {
+                "name": "publishBranchNamespace",
+                "position": {
+                    "line": 210,
+                    "column": 14
+                }
+            },
+            {
+                "name": "findChildNamespace",
+                "position": {
+                    "line": 214,
+                    "column": 49
+                }
+            },
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 218,
+                    "column": 25
+                }
+            },
+            {
+                "name": "newLinkedHashMap",
+                "position": {
+                    "line": 222,
+                    "column": 49
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 223,
+                    "column": 22
+                }
+            },
+            {
+                "name": "masterRelease",
+                "position": {
+                    "line": 225,
+                    "column": 23
+                }
+            },
+            {
+                "name": "mergeFromMasterAndPublishBranch",
+                "position": {
+                    "line": 230,
+                    "column": 7
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.checkLock(Namespace namespace, boolean isEmergencyPublish, String operator)",
+            "ReleaseService.getNamespaceItems(Namespace namespace)",
+            "ReleaseService.publishBranchNamespace(Namespace parentNamespace, Namespace childNamespace, Map<String, String> childNamespaceItems, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish)",
+            "ReleaseService.findLatestActiveRelease(Namespace namespace)",
+            "ReleaseService.masterRelease(Namespace namespace, String releaseName, String releaseComment, Map<String, String> configurations, String operator, int releaseOperation, Map<String, Object> operationContext)",
+            "ReleaseService.mergeFromMasterAndPublishBranch(Namespace parentNamespace, Namespace childNamespace, Map<String, String> parentNamespaceItems, String releaseName, String releaseComment, String operator, Release masterPreviousRelease, Release parentRelease, boolean isEmergencyPublish)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "publishBranchNamespace",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "publishBranchNamespace(Namespace parentNamespace, Namespace childNamespace, Map<String, String> childNamespaceItems, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish, Set<String> grayDelKeys)",
+        "class_signature": "ReleaseService.publishBranchNamespace(Namespace parentNamespace, Namespace childNamespace, Map<String, String> childNamespaceItems, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish, Set<String> grayDelKeys)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "parentNamespace"
+            ],
+            [
+                "Namespace",
+                "childNamespace"
+            ],
+            [
+                "Map<String, String>",
+                "childNamespaceItems"
+            ],
+            [
+                "String",
+                "releaseName"
+            ],
+            [
+                "String",
+                "releaseComment"
+            ],
+            [
+                "String",
+                "operator"
+            ],
+            [
+                "boolean",
+                "isEmergencyPublish"
+            ],
+            [
+                "Set<String>",
+                "grayDelKeys"
+            ]
+        ],
+        "methodBody": "{\n    Release parentLatestRelease = findLatestActiveRelease(parentNamespace);\n    Map<String, String> parentConfigurations = parentLatestRelease != null ?\n            GSON.fromJson(parentLatestRelease.getConfigurations(),\n                          GsonType.CONFIG) : new LinkedHashMap<>();\n    long baseReleaseId = parentLatestRelease == null ? 0 : parentLatestRelease.getId();\n\n    Map<String, String> configsToPublish = mergeConfiguration(parentConfigurations, childNamespaceItems);\n\n    if(!(grayDelKeys == null || grayDelKeys.size()==0)){\n      for (String key : grayDelKeys){\n        configsToPublish.remove(key);\n      }\n    }\n\n    return branchRelease(parentNamespace, childNamespace, releaseName, releaseComment,\n        configsToPublish, baseReleaseId, operator, ReleaseOperation.GRAY_RELEASE, isEmergencyPublish,\n        childNamespaceItems.keySet());\n\n  }",
+        "position": {
+            "line": 238,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 242,
+                    "column": 35
+                }
+            },
+            {
+                "name": "fromJson",
+                "position": {
+                    "line": 244,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 244,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 246,
+                    "column": 80
+                }
+            },
+            {
+                "name": "mergeConfiguration",
+                "position": {
+                    "line": 248,
+                    "column": 44
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 250,
+                    "column": 45
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 252,
+                    "column": 26
+                }
+            },
+            {
+                "name": "branchRelease",
+                "position": {
+                    "line": 256,
+                    "column": 12
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 258,
+                    "column": 29
+                }
+            },
+            {
+                "name": "LinkedHashMap<>",
+                "position": {
+                    "line": 245,
+                    "column": 50
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.findLatestActiveRelease(Namespace namespace)",
+            "ReleaseService.mergeConfiguration(Map<String, String> baseConfigurations, Map<String, String> coverConfigurations)",
+            "ReleaseService.branchRelease(Namespace parentNamespace, Namespace childNamespace, String releaseName, String releaseComment, Map<String, String> configurations, long baseReleaseId, String operator, int releaseOperation, boolean isEmergencyPublish, Collection<String> branchReleaseKeys)"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "grayDeletionPublish",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "grayDeletionPublish(Namespace namespace, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish, Set<String> grayDelKeys)",
+        "class_signature": "ReleaseService.grayDeletionPublish(Namespace namespace, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish, Set<String> grayDelKeys)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ],
+            [
+                "String",
+                "releaseName"
+            ],
+            [
+                "String",
+                "releaseComment"
+            ],
+            [
+                "String",
+                "operator"
+            ],
+            [
+                "boolean",
+                "isEmergencyPublish"
+            ],
+            [
+                "Set<String>",
+                "grayDelKeys"
+            ]
+        ],
+        "methodBody": "{\n\n    checkLock(namespace, isEmergencyPublish, operator);\n\n    Map<String, String> operateNamespaceItems = getNamespaceItems(namespace);\n\n    Namespace parentNamespace = namespaceService.findParentNamespace(namespace);\n\n    //branch release\n    if (parentNamespace != null) {\n      return publishBranchNamespace(parentNamespace, namespace, operateNamespaceItems,\n              releaseName, releaseComment, operator, isEmergencyPublish, grayDelKeys);\n    }\n    throw new NotFoundException(\"Parent namespace not found\");\n  }",
+        "position": {
+            "line": 263,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkLock",
+                "position": {
+                    "line": 266,
+                    "column": 5
+                }
+            },
+            {
+                "name": "getNamespaceItems",
+                "position": {
+                    "line": 268,
+                    "column": 49
+                }
+            },
+            {
+                "name": "findParentNamespace",
+                "position": {
+                    "line": 270,
+                    "column": 50
+                }
+            },
+            {
+                "name": "publishBranchNamespace",
+                "position": {
+                    "line": 274,
+                    "column": 14
+                }
+            },
+            {
+                "name": "NotFoundException",
+                "position": {
+                    "line": 277,
+                    "column": 15
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.checkLock(Namespace namespace, boolean isEmergencyPublish, String operator)",
+            "ReleaseService.getNamespaceItems(Namespace namespace)",
+            "ReleaseService.publishBranchNamespace(Namespace parentNamespace, Namespace childNamespace, Map<String, String> childNamespaceItems, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish, Set<String> grayDelKeys)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "checkLock",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "checkLock(Namespace namespace, boolean isEmergencyPublish, String operator)",
+        "class_signature": "ReleaseService.checkLock(Namespace namespace, boolean isEmergencyPublish, String operator)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ],
+            [
+                "boolean",
+                "isEmergencyPublish"
+            ],
+            [
+                "String",
+                "operator"
+            ]
+        ],
+        "methodBody": "{\n    if (!isEmergencyPublish) {\n      NamespaceLock lock = namespaceLockService.findLock(namespace.getId());\n      if (lock != null && lock.getDataChangeCreatedBy().equals(operator)) {\n        throw new BadRequestException(\"Config can not be published by yourself.\");\n      }\n    }\n  }",
+        "position": {
+            "line": 280,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findLock",
+                "position": {
+                    "line": 282,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 282,
+                    "column": 68
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 283,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getDataChangeCreatedBy",
+                "position": {
+                    "line": 283,
+                    "column": 32
+                }
+            },
+            {
+                "name": "BadRequestException",
+                "position": {
+                    "line": 284,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "mergeFromMasterAndPublishBranch",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "mergeFromMasterAndPublishBranch(Namespace parentNamespace, Namespace childNamespace, Map<String, String> parentNamespaceItems, String releaseName, String releaseComment, String operator, Release masterPreviousRelease, Release parentRelease, boolean isEmergencyPublish)",
+        "class_signature": "ReleaseService.mergeFromMasterAndPublishBranch(Namespace parentNamespace, Namespace childNamespace, Map<String, String> parentNamespaceItems, String releaseName, String releaseComment, String operator, Release masterPreviousRelease, Release parentRelease, boolean isEmergencyPublish)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "parentNamespace"
+            ],
+            [
+                "Namespace",
+                "childNamespace"
+            ],
+            [
+                "Map<String, String>",
+                "parentNamespaceItems"
+            ],
+            [
+                "String",
+                "releaseName"
+            ],
+            [
+                "String",
+                "releaseComment"
+            ],
+            [
+                "String",
+                "operator"
+            ],
+            [
+                "Release",
+                "masterPreviousRelease"
+            ],
+            [
+                "Release",
+                "parentRelease"
+            ],
+            [
+                "boolean",
+                "isEmergencyPublish"
+            ]
+        ],
+        "methodBody": "{\n    //create release for child namespace\n    Release childNamespaceLatestActiveRelease = findLatestActiveRelease(childNamespace);\n\n    Map<String, String> childReleaseConfiguration;\n    Collection<String> branchReleaseKeys;\n    if (childNamespaceLatestActiveRelease != null) {\n      childReleaseConfiguration = GSON.fromJson(childNamespaceLatestActiveRelease.getConfigurations(), GsonType.CONFIG);\n      branchReleaseKeys = getBranchReleaseKeys(childNamespaceLatestActiveRelease.getId());\n    } else {\n      childReleaseConfiguration = Collections.emptyMap();\n      branchReleaseKeys = null;\n    }\n\n    Map<String, String> parentNamespaceOldConfiguration = masterPreviousRelease == null ?\n                                                          null : GSON.fromJson(masterPreviousRelease.getConfigurations(),\n                                                                               GsonType.CONFIG);\n\n    Map<String, String> childNamespaceToPublishConfigs =\n        calculateChildNamespaceToPublishConfiguration(parentNamespaceOldConfiguration, parentNamespaceItems,\n            childReleaseConfiguration, branchReleaseKeys);\n\n    //compare\n    if (!childNamespaceToPublishConfigs.equals(childReleaseConfiguration)) {\n      branchRelease(parentNamespace, childNamespace, releaseName, releaseComment,\n                    childNamespaceToPublishConfigs, parentRelease.getId(), operator,\n                    ReleaseOperation.MASTER_NORMAL_RELEASE_MERGE_TO_GRAY, isEmergencyPublish, branchReleaseKeys);\n    }\n\n  }",
+        "position": {
+            "line": 289,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 295,
+                    "column": 49
+                }
+            },
+            {
+                "name": "fromJson",
+                "position": {
+                    "line": 300,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 300,
+                    "column": 83
+                }
+            },
+            {
+                "name": "getBranchReleaseKeys",
+                "position": {
+                    "line": 301,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 301,
+                    "column": 82
+                }
+            },
+            {
+                "name": "emptyMap",
+                "position": {
+                    "line": 303,
+                    "column": 47
+                }
+            },
+            {
+                "name": "fromJson",
+                "position": {
+                    "line": 308,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 308,
+                    "column": 102
+                }
+            },
+            {
+                "name": "calculateChildNamespaceToPublishConfiguration",
+                "position": {
+                    "line": 312,
+                    "column": 9
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 316,
+                    "column": 41
+                }
+            },
+            {
+                "name": "branchRelease",
+                "position": {
+                    "line": 317,
+                    "column": 7
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 318,
+                    "column": 67
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.findLatestActiveRelease(Namespace namespace)",
+            "ReleaseService.getBranchReleaseKeys(long releaseId)",
+            "ReleaseService.calculateChildNamespaceToPublishConfiguration(Map<String, String> parentNamespaceOldConfiguration, Map<String, String> parentNamespaceNewConfiguration, Map<String, String> childNamespaceLatestActiveConfiguration, Collection<String> branchReleaseKeys)",
+            "ReleaseService.branchRelease(Namespace parentNamespace, Namespace childNamespace, String releaseName, String releaseComment, Map<String, String> configurations, long baseReleaseId, String operator, int releaseOperation, boolean isEmergencyPublish, Collection<String> branchReleaseKeys)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "getBranchReleaseKeys",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "getBranchReleaseKeys(long releaseId)",
+        "class_signature": "ReleaseService.getBranchReleaseKeys(long releaseId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "releaseId"
+            ]
+        ],
+        "methodBody": "{\n    Page<ReleaseHistory> releaseHistories = releaseHistoryService\n        .findByReleaseIdAndOperationInOrderByIdDesc(releaseId, BRANCH_RELEASE_OPERATIONS, FIRST_ITEM);\n\n    if (!releaseHistories.hasContent()) {\n      return null;\n    }\n\n    String operationContextJson = releaseHistories.getContent().get(0).getOperationContext();\n    if (Strings.isNullOrEmpty(operationContextJson)\n        || !operationContextJson.contains(ReleaseOperationContext.BRANCH_RELEASE_KEYS)) {\n      return null;\n    }\n\n    Map<String, Object> operationContext = GSON.fromJson(operationContextJson,\n        OPERATION_CONTEXT_TYPE_REFERENCE);\n\n    if (operationContext == null) {\n      return null;\n    }\n\n    return (Collection<String>) operationContext.get(ReleaseOperationContext.BRANCH_RELEASE_KEYS);\n  }",
+        "position": {
+            "line": 324,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByReleaseIdAndOperationInOrderByIdDesc",
+                "position": {
+                    "line": 326,
+                    "column": 10
+                }
+            },
+            {
+                "name": "hasContent",
+                "position": {
+                    "line": 328,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getOperationContext",
+                "position": {
+                    "line": 332,
+                    "column": 72
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 332,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getContent",
+                "position": {
+                    "line": 332,
+                    "column": 52
+                }
+            },
+            {
+                "name": "isNullOrEmpty",
+                "position": {
+                    "line": 333,
+                    "column": 17
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 334,
+                    "column": 34
+                }
+            },
+            {
+                "name": "fromJson",
+                "position": {
+                    "line": 338,
+                    "column": 49
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 345,
+                    "column": 50
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 21
+    },
+    {
+        "name": "publishBranchNamespace",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "publishBranchNamespace(Namespace parentNamespace, Namespace childNamespace, Map<String, String> childNamespaceItems, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish)",
+        "class_signature": "ReleaseService.publishBranchNamespace(Namespace parentNamespace, Namespace childNamespace, Map<String, String> childNamespaceItems, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "parentNamespace"
+            ],
+            [
+                "Namespace",
+                "childNamespace"
+            ],
+            [
+                "Map<String, String>",
+                "childNamespaceItems"
+            ],
+            [
+                "String",
+                "releaseName"
+            ],
+            [
+                "String",
+                "releaseComment"
+            ],
+            [
+                "String",
+                "operator"
+            ],
+            [
+                "boolean",
+                "isEmergencyPublish"
+            ]
+        ],
+        "methodBody": "{\n    return publishBranchNamespace(parentNamespace, childNamespace, childNamespaceItems, releaseName, releaseComment,\n            operator, isEmergencyPublish, null);\n\n  }",
+        "position": {
+            "line": 348,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "publishBranchNamespace",
+                "position": {
+                    "line": 352,
+                    "column": 12
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.publishBranchNamespace(Namespace parentNamespace, Namespace childNamespace, Map<String, String> childNamespaceItems, String releaseName, String releaseComment, String operator, boolean isEmergencyPublish, Set<String> grayDelKeys)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "masterRelease",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "masterRelease(Namespace namespace, String releaseName, String releaseComment, Map<String, String> configurations, String operator, int releaseOperation, Map<String, Object> operationContext)",
+        "class_signature": "ReleaseService.masterRelease(Namespace namespace, String releaseName, String releaseComment, Map<String, String> configurations, String operator, int releaseOperation, Map<String, Object> operationContext)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ],
+            [
+                "String",
+                "releaseName"
+            ],
+            [
+                "String",
+                "releaseComment"
+            ],
+            [
+                "Map<String, String>",
+                "configurations"
+            ],
+            [
+                "String",
+                "operator"
+            ],
+            [
+                "int",
+                "releaseOperation"
+            ],
+            [
+                "Map<String, Object>",
+                "operationContext"
+            ]
+        ],
+        "methodBody": "{\n    Release lastActiveRelease = findLatestActiveRelease(namespace);\n    long previousReleaseId = lastActiveRelease == null ? 0 : lastActiveRelease.getId();\n    Release release = createRelease(namespace, releaseName, releaseComment,\n                                    configurations, operator);\n\n    releaseHistoryService.createReleaseHistory(namespace.getAppId(), namespace.getClusterName(),\n                                               namespace.getNamespaceName(), namespace.getClusterName(),\n                                               release.getId(), previousReleaseId, releaseOperation,\n                                               operationContext, operator);\n\n    return release;\n  }",
+        "position": {
+            "line": 357,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 360,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 361,
+                    "column": 80
+                }
+            },
+            {
+                "name": "createRelease",
+                "position": {
+                    "line": 362,
+                    "column": 23
+                }
+            },
+            {
+                "name": "createReleaseHistory",
+                "position": {
+                    "line": 365,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 365,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 365,
+                    "column": 80
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 366,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 366,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 367,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.findLatestActiveRelease(Namespace namespace)",
+            "ReleaseService.createRelease(Namespace namespace, String name, String comment, Map<String, String> configurations, String operator)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "branchRelease",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "branchRelease(Namespace parentNamespace, Namespace childNamespace, String releaseName, String releaseComment, Map<String, String> configurations, long baseReleaseId, String operator, int releaseOperation, boolean isEmergencyPublish, Collection<String> branchReleaseKeys)",
+        "class_signature": "ReleaseService.branchRelease(Namespace parentNamespace, Namespace childNamespace, String releaseName, String releaseComment, Map<String, String> configurations, long baseReleaseId, String operator, int releaseOperation, boolean isEmergencyPublish, Collection<String> branchReleaseKeys)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "parentNamespace"
+            ],
+            [
+                "Namespace",
+                "childNamespace"
+            ],
+            [
+                "String",
+                "releaseName"
+            ],
+            [
+                "String",
+                "releaseComment"
+            ],
+            [
+                "Map<String, String>",
+                "configurations"
+            ],
+            [
+                "long",
+                "baseReleaseId"
+            ],
+            [
+                "String",
+                "operator"
+            ],
+            [
+                "int",
+                "releaseOperation"
+            ],
+            [
+                "boolean",
+                "isEmergencyPublish"
+            ],
+            [
+                "Collection<String>",
+                "branchReleaseKeys"
+            ]
+        ],
+        "methodBody": "{\n    Release previousRelease = findLatestActiveRelease(childNamespace.getAppId(),\n                                                      childNamespace.getClusterName(),\n                                                      childNamespace.getNamespaceName());\n    long previousReleaseId = previousRelease == null ? 0 : previousRelease.getId();\n\n    Map<String, Object> releaseOperationContext = Maps.newLinkedHashMap();\n    releaseOperationContext.put(ReleaseOperationContext.BASE_RELEASE_ID, baseReleaseId);\n    releaseOperationContext.put(ReleaseOperationContext.IS_EMERGENCY_PUBLISH, isEmergencyPublish);\n    releaseOperationContext.put(ReleaseOperationContext.BRANCH_RELEASE_KEYS, branchReleaseKeys);\n\n    Release release =\n        createRelease(childNamespace, releaseName, releaseComment, configurations, operator);\n\n    //update gray release rules\n    GrayReleaseRule grayReleaseRule = namespaceBranchService.updateRulesReleaseId(childNamespace.getAppId(),\n                                                                                  parentNamespace.getClusterName(),\n                                                                                  childNamespace.getNamespaceName(),\n                                                                                  childNamespace.getClusterName(),\n                                                                                  release.getId(), operator);\n\n    if (grayReleaseRule != null) {\n      releaseOperationContext.put(ReleaseOperationContext.RULES, GrayReleaseRuleItemTransformer\n          .batchTransformFromJSON(grayReleaseRule.getRules()));\n    }\n\n    releaseHistoryService.createReleaseHistory(parentNamespace.getAppId(), parentNamespace.getClusterName(),\n                                               parentNamespace.getNamespaceName(), childNamespace.getClusterName(),\n                                               release.getId(),\n                                               previousReleaseId, releaseOperation, releaseOperationContext, operator);\n\n    return release;\n  }",
+        "position": {
+            "line": 373,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 377,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 377,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 378,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 379,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 380,
+                    "column": 76
+                }
+            },
+            {
+                "name": "newLinkedHashMap",
+                "position": {
+                    "line": 382,
+                    "column": 56
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 383,
+                    "column": 29
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 384,
+                    "column": 29
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 385,
+                    "column": 29
+                }
+            },
+            {
+                "name": "createRelease",
+                "position": {
+                    "line": 388,
+                    "column": 9
+                }
+            },
+            {
+                "name": "updateRulesReleaseId",
+                "position": {
+                    "line": 391,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 391,
+                    "column": 98
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 392,
+                    "column": 99
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 393,
+                    "column": 98
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 394,
+                    "column": 98
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 395,
+                    "column": 91
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 398,
+                    "column": 31
+                }
+            },
+            {
+                "name": "batchTransformFromJSON",
+                "position": {
+                    "line": 399,
+                    "column": 12
+                }
+            },
+            {
+                "name": "getRules",
+                "position": {
+                    "line": 399,
+                    "column": 51
+                }
+            },
+            {
+                "name": "createReleaseHistory",
+                "position": {
+                    "line": 402,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 402,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 402,
+                    "column": 92
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 403,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 403,
+                    "column": 99
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 404,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.findLatestActiveRelease(String appId, String clusterName, String namespaceName)",
+            "ReleaseService.createRelease(Namespace namespace, String name, String comment, Map<String, String> configurations, String operator)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "mergeConfiguration",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "mergeConfiguration(Map<String, String> baseConfigurations, Map<String, String> coverConfigurations)",
+        "class_signature": "ReleaseService.mergeConfiguration(Map<String, String> baseConfigurations, Map<String, String> coverConfigurations)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Map<String, String>",
+                "baseConfigurations"
+            ],
+            [
+                "Map<String, String>",
+                "coverConfigurations"
+            ]
+        ],
+        "methodBody": "{\n    int expectedSize = baseConfigurations.size() + coverConfigurations.size();\n    Map<String, String> result = Maps.newLinkedHashMapWithExpectedSize(expectedSize);\n\n    //copy base configuration\n    result.putAll(baseConfigurations);\n\n    //update and publish\n    result.putAll(coverConfigurations);\n\n    return result;\n  }",
+        "position": {
+            "line": 410,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 412,
+                    "column": 43
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 412,
+                    "column": 72
+                }
+            },
+            {
+                "name": "newLinkedHashMapWithExpectedSize",
+                "position": {
+                    "line": 413,
+                    "column": 39
+                }
+            },
+            {
+                "name": "putAll",
+                "position": {
+                    "line": 416,
+                    "column": 12
+                }
+            },
+            {
+                "name": "putAll",
+                "position": {
+                    "line": 419,
+                    "column": 12
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 26
+    },
+    {
+        "name": "getNamespaceItems",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "getNamespaceItems(Namespace namespace)",
+        "class_signature": "ReleaseService.getNamespaceItems(Namespace namespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ]
+        ],
+        "methodBody": "{\n    List<Item> items = itemService.findItemsWithOrdered(namespace.getId());\n    Map<String, String> configurations = new LinkedHashMap<>();\n    for (Item item : items) {\n      if (StringUtils.isEmpty(item.getKey())) {\n        continue;\n      }\n      configurations.put(item.getKey(), item.getValue());\n    }\n\n    return configurations;\n  }",
+        "position": {
+            "line": 424,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findItemsWithOrdered",
+                "position": {
+                    "line": 425,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 425,
+                    "column": 67
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 428,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 428,
+                    "column": 36
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 431,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 431,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 431,
+                    "column": 46
+                }
+            },
+            {
+                "name": "LinkedHashMap<>",
+                "position": {
+                    "line": 426,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "createRelease",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "createRelease(Namespace namespace, String name, String comment, Map<String, String> configurations, String operator)",
+        "class_signature": "ReleaseService.createRelease(Namespace namespace, String name, String comment, Map<String, String> configurations, String operator)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "String",
+                "comment"
+            ],
+            [
+                "Map<String, String>",
+                "configurations"
+            ],
+            [
+                "String",
+                "operator"
+            ]
+        ],
+        "methodBody": "{\n    Release release = new Release();\n    release.setReleaseKey(ReleaseKeyGenerator.generateReleaseKey(namespace));\n    release.setDataChangeCreatedTime(new Date());\n    release.setDataChangeCreatedBy(operator);\n    release.setDataChangeLastModifiedBy(operator);\n    release.setName(name);\n    release.setComment(comment);\n    release.setAppId(namespace.getAppId());\n    release.setClusterName(namespace.getClusterName());\n    release.setNamespaceName(namespace.getNamespaceName());\n    release.setConfigurations(GSON.toJson(configurations));\n    release = releaseRepository.save(release);\n\n    namespaceLockService.unlock(namespace.getId());\n    auditService.audit(Release.class.getSimpleName(), release.getId(), Audit.OP.INSERT,\n                       release.getDataChangeCreatedBy());\n\n    return release;\n  }",
+        "position": {
+            "line": 437,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setReleaseKey",
+                "position": {
+                    "line": 440,
+                    "column": 13
+                }
+            },
+            {
+                "name": "generateReleaseKey",
+                "position": {
+                    "line": 440,
+                    "column": 47
+                }
+            },
+            {
+                "name": "setDataChangeCreatedTime",
+                "position": {
+                    "line": 441,
+                    "column": 13
+                }
+            },
+            {
+                "name": "setDataChangeCreatedBy",
+                "position": {
+                    "line": 442,
+                    "column": 13
+                }
+            },
+            {
+                "name": "setDataChangeLastModifiedBy",
+                "position": {
+                    "line": 443,
+                    "column": 13
+                }
+            },
+            {
+                "name": "setName",
+                "position": {
+                    "line": 444,
+                    "column": 13
+                }
+            },
+            {
+                "name": "setComment",
+                "position": {
+                    "line": 445,
+                    "column": 13
+                }
+            },
+            {
+                "name": "setAppId",
+                "position": {
+                    "line": 446,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 446,
+                    "column": 32
+                }
+            },
+            {
+                "name": "setClusterName",
+                "position": {
+                    "line": 447,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 447,
+                    "column": 38
+                }
+            },
+            {
+                "name": "setNamespaceName",
+                "position": {
+                    "line": 448,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 448,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setConfigurations",
+                "position": {
+                    "line": 449,
+                    "column": 13
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 449,
+                    "column": 36
+                }
+            },
+            {
+                "name": "save",
+                "position": {
+                    "line": 450,
+                    "column": 33
+                }
+            },
+            {
+                "name": "unlock",
+                "position": {
+                    "line": 452,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 452,
+                    "column": 43
+                }
+            },
+            {
+                "name": "audit",
+                "position": {
+                    "line": 453,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 453,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 453,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getDataChangeCreatedBy",
+                "position": {
+                    "line": 454,
+                    "column": 32
+                }
+            },
+            {
+                "name": "Release",
+                "position": {
+                    "line": 439,
+                    "column": 27
+                }
+            },
+            {
+                "name": "Date",
+                "position": {
+                    "line": 441,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 28
+    },
+    {
+        "name": "rollback",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "rollback(long releaseId, String operator)",
+        "class_signature": "ReleaseService.rollback(long releaseId, String operator)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "releaseId"
+            ],
+            [
+                "String",
+                "operator"
+            ]
+        ],
+        "methodBody": "{\n    Release release = findOne(releaseId);\n    if (release == null) {\n      throw NotFoundException.releaseNotFound(releaseId);\n    }\n    if (release.isAbandoned()) {\n      throw new BadRequestException(\"release is not active\");\n    }\n\n    String appId = release.getAppId();\n    String clusterName = release.getClusterName();\n    String namespaceName = release.getNamespaceName();\n\n    PageRequest page = PageRequest.of(0, 2);\n    List<Release> twoLatestActiveReleases = findActiveReleases(appId, clusterName, namespaceName, page);\n    if (twoLatestActiveReleases == null || twoLatestActiveReleases.size() < 2) {\n      throw new BadRequestException(\n          \"Can't rollback namespace(appId=%s, clusterName=%s, namespaceName=%s) because there is only one active release\",\n          appId,\n          clusterName,\n          namespaceName);\n    }\n\n    release.setAbandoned(true);\n    release.setDataChangeLastModifiedBy(operator);\n\n    releaseRepository.save(release);\n\n    releaseHistoryService.createReleaseHistory(appId, clusterName,\n                                               namespaceName, clusterName, twoLatestActiveReleases.get(1).getId(),\n                                               release.getId(), ReleaseOperation.ROLLBACK, null, operator);\n\n    //publish child namespace if namespace has child\n    rollbackChildNamespace(appId, clusterName, namespaceName, twoLatestActiveReleases, operator);\n\n    return release;\n  }",
+        "position": {
+            "line": 460,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 461,
+                    "column": 23
+                }
+            },
+            {
+                "name": "releaseNotFound",
+                "position": {
+                    "line": 463,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isAbandoned",
+                "position": {
+                    "line": 465,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 469,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 470,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 471,
+                    "column": 36
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 473,
+                    "column": 36
+                }
+            },
+            {
+                "name": "findActiveReleases",
+                "position": {
+                    "line": 474,
+                    "column": 45
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 475,
+                    "column": 68
+                }
+            },
+            {
+                "name": "setAbandoned",
+                "position": {
+                    "line": 483,
+                    "column": 13
+                }
+            },
+            {
+                "name": "setDataChangeLastModifiedBy",
+                "position": {
+                    "line": 484,
+                    "column": 13
+                }
+            },
+            {
+                "name": "save",
+                "position": {
+                    "line": 486,
+                    "column": 23
+                }
+            },
+            {
+                "name": "createReleaseHistory",
+                "position": {
+                    "line": 488,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 489,
+                    "column": 107
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 489,
+                    "column": 100
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 490,
+                    "column": 56
+                }
+            },
+            {
+                "name": "rollbackChildNamespace",
+                "position": {
+                    "line": 493,
+                    "column": 5
+                }
+            },
+            {
+                "name": "BadRequestException",
+                "position": {
+                    "line": 466,
+                    "column": 17
+                }
+            },
+            {
+                "name": "BadRequestException",
+                "position": {
+                    "line": 476,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.findOne(long releaseId)",
+            "ReleaseService.findActiveReleases(String appId, String clusterName, String namespaceName, Pageable page)",
+            "ReleaseService.rollbackChildNamespace(String appId, String clusterName, String namespaceName, List<Release> parentNamespaceTwoLatestActiveRelease, String operator)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "rollbackTo",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "rollbackTo(long releaseId, long toReleaseId, String operator)",
+        "class_signature": "ReleaseService.rollbackTo(long releaseId, long toReleaseId, String operator)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "releaseId"
+            ],
+            [
+                "long",
+                "toReleaseId"
+            ],
+            [
+                "String",
+                "operator"
+            ]
+        ],
+        "methodBody": "{\n    if (releaseId == toReleaseId) {\n      throw new BadRequestException(\"current release equal to target release\");\n    }\n\n    Release release = findOne(releaseId);\n    Release toRelease = findOne(toReleaseId);\n\n    if (release == null) {\n      throw NotFoundException.releaseNotFound(releaseId);\n    }\n    if (toRelease == null) {\n      throw NotFoundException.releaseNotFound(toReleaseId);\n    }\n    if (release.isAbandoned() || toRelease.isAbandoned()) {\n      throw new BadRequestException(\"release is not active\");\n    }\n\n    String appId = release.getAppId();\n    String clusterName = release.getClusterName();\n    String namespaceName = release.getNamespaceName();\n\n    List<Release> releases = findActiveReleasesBetween(appId, clusterName, namespaceName,\n                                                       toReleaseId, releaseId);\n\n    for (int i = 0; i < releases.size() - 1; i++) {\n      releases.get(i).setAbandoned(true);\n      releases.get(i).setDataChangeLastModifiedBy(operator);\n    }\n\n    releaseRepository.saveAll(releases);\n\n    releaseHistoryService.createReleaseHistory(appId, clusterName,\n                                               namespaceName, clusterName, toReleaseId,\n                                               release.getId(), ReleaseOperation.ROLLBACK, null, operator);\n\n    //publish child namespace if namespace has child\n    rollbackChildNamespace(appId, clusterName, namespaceName, Lists.newArrayList(release, toRelease), operator);\n\n    return release;\n  }",
+        "position": {
+            "line": 499,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 504,
+                    "column": 23
+                }
+            },
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 505,
+                    "column": 25
+                }
+            },
+            {
+                "name": "releaseNotFound",
+                "position": {
+                    "line": 508,
+                    "column": 31
+                }
+            },
+            {
+                "name": "releaseNotFound",
+                "position": {
+                    "line": 511,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isAbandoned",
+                "position": {
+                    "line": 513,
+                    "column": 17
+                }
+            },
+            {
+                "name": "isAbandoned",
+                "position": {
+                    "line": 513,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 517,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 518,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 519,
+                    "column": 36
+                }
+            },
+            {
+                "name": "findActiveReleasesBetween",
+                "position": {
+                    "line": 521,
+                    "column": 30
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 524,
+                    "column": 34
+                }
+            },
+            {
+                "name": "setAbandoned",
+                "position": {
+                    "line": 525,
+                    "column": 23
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 525,
+                    "column": 16
+                }
+            },
+            {
+                "name": "setDataChangeLastModifiedBy",
+                "position": {
+                    "line": 526,
+                    "column": 23
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 526,
+                    "column": 16
+                }
+            },
+            {
+                "name": "saveAll",
+                "position": {
+                    "line": 529,
+                    "column": 23
+                }
+            },
+            {
+                "name": "createReleaseHistory",
+                "position": {
+                    "line": 531,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 533,
+                    "column": 56
+                }
+            },
+            {
+                "name": "rollbackChildNamespace",
+                "position": {
+                    "line": 536,
+                    "column": 5
+                }
+            },
+            {
+                "name": "newArrayList",
+                "position": {
+                    "line": 536,
+                    "column": 69
+                }
+            },
+            {
+                "name": "BadRequestException",
+                "position": {
+                    "line": 501,
+                    "column": 17
+                }
+            },
+            {
+                "name": "BadRequestException",
+                "position": {
+                    "line": 514,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.findOne(long releaseId)",
+            "ReleaseService.findOne(long releaseId)",
+            "ReleaseService.findActiveReleasesBetween(String appId, String clusterName, String namespaceName, long fromReleaseId, long toReleaseId)",
+            "ReleaseService.rollbackChildNamespace(String appId, String clusterName, String namespaceName, List<Release> parentNamespaceTwoLatestActiveRelease, String operator)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "rollbackChildNamespace",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "rollbackChildNamespace(String appId, String clusterName, String namespaceName, List<Release> parentNamespaceTwoLatestActiveRelease, String operator)",
+        "class_signature": "ReleaseService.rollbackChildNamespace(String appId, String clusterName, String namespaceName, List<Release> parentNamespaceTwoLatestActiveRelease, String operator)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ],
+            [
+                "List<Release>",
+                "parentNamespaceTwoLatestActiveRelease"
+            ],
+            [
+                "String",
+                "operator"
+            ]
+        ],
+        "methodBody": "{\n    Namespace parentNamespace = namespaceService.findOne(appId, clusterName, namespaceName);\n    Namespace childNamespace = namespaceService.findChildNamespace(appId, clusterName, namespaceName);\n    if (parentNamespace == null || childNamespace == null) {\n      return;\n    }\n\n    Release childNamespaceLatestActiveRelease = findLatestActiveRelease(childNamespace);\n    Map<String, String> childReleaseConfiguration;\n    Collection<String> branchReleaseKeys;\n    if (childNamespaceLatestActiveRelease != null) {\n      childReleaseConfiguration = GSON.fromJson(childNamespaceLatestActiveRelease.getConfigurations(), GsonType.CONFIG);\n      branchReleaseKeys = getBranchReleaseKeys(childNamespaceLatestActiveRelease.getId());\n    } else {\n      childReleaseConfiguration = Collections.emptyMap();\n      branchReleaseKeys = null;\n    }\n\n    Release abandonedRelease = parentNamespaceTwoLatestActiveRelease.get(0);\n    Release parentNamespaceNewLatestRelease = parentNamespaceTwoLatestActiveRelease.get(1);\n\n    Map<String, String> parentNamespaceAbandonedConfiguration = GSON.fromJson(abandonedRelease.getConfigurations(),\n                                                                              GsonType.CONFIG);\n\n    Map<String, String>\n        parentNamespaceNewLatestConfiguration =\n        GSON.fromJson(parentNamespaceNewLatestRelease.getConfigurations(), GsonType.CONFIG);\n\n    Map<String, String>\n        childNamespaceNewConfiguration =\n        calculateChildNamespaceToPublishConfiguration(parentNamespaceAbandonedConfiguration,\n            parentNamespaceNewLatestConfiguration, childReleaseConfiguration, branchReleaseKeys);\n\n    //compare\n    if (!childNamespaceNewConfiguration.equals(childReleaseConfiguration)) {\n      branchRelease(parentNamespace, childNamespace,\n          TIMESTAMP_FORMAT.format(new Date()) + \"-master-rollback-merge-to-gray\", \"\",\n          childNamespaceNewConfiguration, parentNamespaceNewLatestRelease.getId(), operator,\n          ReleaseOperation.MATER_ROLLBACK_MERGE_TO_GRAY, false, branchReleaseKeys);\n    }\n  }",
+        "position": {
+            "line": 541,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 543,
+                    "column": 50
+                }
+            },
+            {
+                "name": "findChildNamespace",
+                "position": {
+                    "line": 544,
+                    "column": 49
+                }
+            },
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 549,
+                    "column": 49
+                }
+            },
+            {
+                "name": "fromJson",
+                "position": {
+                    "line": 553,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 553,
+                    "column": 83
+                }
+            },
+            {
+                "name": "getBranchReleaseKeys",
+                "position": {
+                    "line": 554,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 554,
+                    "column": 82
+                }
+            },
+            {
+                "name": "emptyMap",
+                "position": {
+                    "line": 556,
+                    "column": 47
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 560,
+                    "column": 70
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 561,
+                    "column": 85
+                }
+            },
+            {
+                "name": "fromJson",
+                "position": {
+                    "line": 563,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 563,
+                    "column": 96
+                }
+            },
+            {
+                "name": "fromJson",
+                "position": {
+                    "line": 568,
+                    "column": 14
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 568,
+                    "column": 55
+                }
+            },
+            {
+                "name": "calculateChildNamespaceToPublishConfiguration",
+                "position": {
+                    "line": 572,
+                    "column": 9
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 576,
+                    "column": 41
+                }
+            },
+            {
+                "name": "branchRelease",
+                "position": {
+                    "line": 577,
+                    "column": 7
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 578,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 579,
+                    "column": 75
+                }
+            },
+            {
+                "name": "Date",
+                "position": {
+                    "line": 578,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.findLatestActiveRelease(Namespace namespace)",
+            "ReleaseService.getBranchReleaseKeys(long releaseId)",
+            "ReleaseService.calculateChildNamespaceToPublishConfiguration(Map<String, String> parentNamespaceOldConfiguration, Map<String, String> parentNamespaceNewConfiguration, Map<String, String> childNamespaceLatestActiveConfiguration, Collection<String> branchReleaseKeys)",
+            "ReleaseService.branchRelease(Namespace parentNamespace, Namespace childNamespace, String releaseName, String releaseComment, Map<String, String> configurations, long baseReleaseId, String operator, int releaseOperation, boolean isEmergencyPublish, Collection<String> branchReleaseKeys)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "calculateChildNamespaceToPublishConfiguration",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "calculateChildNamespaceToPublishConfiguration(Map<String, String> parentNamespaceOldConfiguration, Map<String, String> parentNamespaceNewConfiguration, Map<String, String> childNamespaceLatestActiveConfiguration, Collection<String> branchReleaseKeys)",
+        "class_signature": "ReleaseService.calculateChildNamespaceToPublishConfiguration(Map<String, String> parentNamespaceOldConfiguration, Map<String, String> parentNamespaceNewConfiguration, Map<String, String> childNamespaceLatestActiveConfiguration, Collection<String> branchReleaseKeys)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Map<String, String>",
+                "parentNamespaceOldConfiguration"
+            ],
+            [
+                "Map<String, String>",
+                "parentNamespaceNewConfiguration"
+            ],
+            [
+                "Map<String, String>",
+                "childNamespaceLatestActiveConfiguration"
+            ],
+            [
+                "Collection<String>",
+                "branchReleaseKeys"
+            ]
+        ],
+        "methodBody": "{\n    //first. calculate child namespace modified configs\n\n    Map<String, String> childNamespaceModifiedConfiguration = calculateBranchModifiedItemsAccordingToRelease(\n        parentNamespaceOldConfiguration, childNamespaceLatestActiveConfiguration, branchReleaseKeys);\n\n    //second. append child namespace modified configs to parent namespace new latest configuration\n    return mergeConfiguration(parentNamespaceNewConfiguration, childNamespaceModifiedConfiguration);\n  }",
+        "position": {
+            "line": 584,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "calculateBranchModifiedItemsAccordingToRelease",
+                "position": {
+                    "line": 589,
+                    "column": 63
+                }
+            },
+            {
+                "name": "mergeConfiguration",
+                "position": {
+                    "line": 593,
+                    "column": 12
+                }
+            }
+        ],
+        "calledMethods": [
+            "ReleaseService.calculateBranchModifiedItemsAccordingToRelease(Map<String, String> masterReleaseConfigs, Map<String, String> branchReleaseConfigs, Collection<String> branchReleaseKeys)",
+            "ReleaseService.mergeConfiguration(Map<String, String> baseConfigurations, Map<String, String> coverConfigurations)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "calculateBranchModifiedItemsAccordingToRelease",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "calculateBranchModifiedItemsAccordingToRelease(Map<String, String> masterReleaseConfigs, Map<String, String> branchReleaseConfigs, Collection<String> branchReleaseKeys)",
+        "class_signature": "ReleaseService.calculateBranchModifiedItemsAccordingToRelease(Map<String, String> masterReleaseConfigs, Map<String, String> branchReleaseConfigs, Collection<String> branchReleaseKeys)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Map<String, String>",
+                "masterReleaseConfigs"
+            ],
+            [
+                "Map<String, String>",
+                "branchReleaseConfigs"
+            ],
+            [
+                "Collection<String>",
+                "branchReleaseKeys"
+            ]
+        ],
+        "methodBody": "{\n\n    Map<String, String> modifiedConfigs = new LinkedHashMap<>();\n\n    if (CollectionUtils.isEmpty(branchReleaseConfigs)) {\n      return modifiedConfigs;\n    }\n\n    // new logic, retrieve modified configurations based on branch release keys\n    if (branchReleaseKeys != null) {\n      for (String branchReleaseKey : branchReleaseKeys) {\n        if (branchReleaseConfigs.containsKey(branchReleaseKey)) {\n          modifiedConfigs.put(branchReleaseKey, branchReleaseConfigs.get(branchReleaseKey));\n        }\n      }\n\n      return modifiedConfigs;\n    }\n\n    // old logic, retrieve modified configurations by comparing branchReleaseConfigs with masterReleaseConfigs\n    if (CollectionUtils.isEmpty(masterReleaseConfigs)) {\n      return branchReleaseConfigs;\n    }\n\n    for (Map.Entry<String, String> entry : branchReleaseConfigs.entrySet()) {\n\n      if (!Objects.equals(entry.getValue(), masterReleaseConfigs.get(entry.getKey()))) {\n        modifiedConfigs.put(entry.getKey(), entry.getValue());\n      }\n    }\n\n    return modifiedConfigs;\n\n  }",
+        "position": {
+            "line": 596,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 602,
+                    "column": 25
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 609,
+                    "column": 34
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 610,
+                    "column": 27
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 610,
+                    "column": 70
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 618,
+                    "column": 25
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 622,
+                    "column": 65
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 624,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 624,
+                    "column": 33
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 624,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 624,
+                    "column": 76
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 625,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 625,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 625,
+                    "column": 51
+                }
+            },
+            {
+                "name": "LinkedHashMap<>",
+                "position": {
+                    "line": 600,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 25
+    },
+    {
+        "name": "batchDelete",
+        "category": "method_declaration",
+        "class": "ReleaseService",
+        "signature": "batchDelete(String appId, String clusterName, String namespaceName, String operator)",
+        "class_signature": "ReleaseService.batchDelete(String appId, String clusterName, String namespaceName, String operator)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ],
+            [
+                "String",
+                "operator"
+            ]
+        ],
+        "methodBody": "{\n    return releaseRepository.batchDelete(appId, clusterName, namespaceName, operator);\n  }",
+        "position": {
+            "line": 634,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "batchDelete",
+                "position": {
+                    "line": 635,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 10
+    }
+]

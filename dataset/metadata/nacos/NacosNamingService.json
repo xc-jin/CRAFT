@@ -1,0 +1,3559 @@
+[
+    {
+        "name": "NacosNamingService",
+        "category": "constructor_declaration",
+        "class": "NacosNamingService",
+        "signature": "NacosNamingService(String serverList)",
+        "class_signature": "NacosNamingService.NacosNamingService(String serverList)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverList"
+            ]
+        ],
+        "methodBody": "{\n        Properties properties = new Properties();\n        properties.setProperty(PropertyKeyConst.SERVER_ADDR, serverList);\n        init(properties);\n    }",
+        "position": {
+            "line": 89,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setProperty",
+                "position": {
+                    "line": 91,
+                    "column": 20
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 92,
+                    "column": 9
+                }
+            },
+            {
+                "name": "Properties",
+                "position": {
+                    "line": 90,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.init(Properties properties)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "NacosNamingService",
+        "category": "constructor_declaration",
+        "class": "NacosNamingService",
+        "signature": "NacosNamingService(Properties properties)",
+        "class_signature": "NacosNamingService.NacosNamingService(Properties properties)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Properties",
+                "properties"
+            ]
+        ],
+        "methodBody": "{\n        init(properties);\n    }",
+        "position": {
+            "line": 95,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "init",
+                "position": {
+                    "line": 96,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.init(Properties properties)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "init",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "init(Properties properties)",
+        "class_signature": "NacosNamingService.init(Properties properties)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Properties",
+                "properties"
+            ]
+        ],
+        "methodBody": "{\n        PreInitUtils.asyncPreLoadCostComponent();\n        final NacosClientProperties nacosClientProperties = NacosClientProperties.PROTOTYPE.derive(properties);\n        NAMING_LOGGER.info(ParamUtil.getInputParameters(nacosClientProperties.asProperties()));\n        ValidatorUtils.checkInitParam(nacosClientProperties);\n        this.namespace = InitUtils.initNamespaceForNaming(nacosClientProperties);\n        InitUtils.initSerialization();\n        InitUtils.initWebRootContext(nacosClientProperties);\n        initLogName(nacosClientProperties);\n        \n        this.notifierEventScope = UUID.randomUUID().toString();\n        this.changeNotifier = new InstancesChangeNotifier(this.notifierEventScope);\n        NotifyCenter.registerToPublisher(InstancesChangeEvent.class, 16384);\n        NotifyCenter.registerSubscriber(changeNotifier);\n        this.serviceInfoHolder = new ServiceInfoHolder(namespace, this.notifierEventScope, nacosClientProperties);\n        this.clientProxy = new NamingClientProxyDelegate(this.namespace, serviceInfoHolder, nacosClientProperties,\n                changeNotifier);\n    }",
+        "position": {
+            "line": 99,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "asyncPreLoadCostComponent",
+                "position": {
+                    "line": 100,
+                    "column": 22
+                }
+            },
+            {
+                "name": "derive",
+                "position": {
+                    "line": 101,
+                    "column": 93
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 102,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getInputParameters",
+                "position": {
+                    "line": 102,
+                    "column": 38
+                }
+            },
+            {
+                "name": "asProperties",
+                "position": {
+                    "line": 102,
+                    "column": 79
+                }
+            },
+            {
+                "name": "checkInitParam",
+                "position": {
+                    "line": 103,
+                    "column": 24
+                }
+            },
+            {
+                "name": "initNamespaceForNaming",
+                "position": {
+                    "line": 104,
+                    "column": 36
+                }
+            },
+            {
+                "name": "initSerialization",
+                "position": {
+                    "line": 105,
+                    "column": 19
+                }
+            },
+            {
+                "name": "initWebRootContext",
+                "position": {
+                    "line": 106,
+                    "column": 19
+                }
+            },
+            {
+                "name": "initLogName",
+                "position": {
+                    "line": 107,
+                    "column": 9
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 109,
+                    "column": 53
+                }
+            },
+            {
+                "name": "randomUUID",
+                "position": {
+                    "line": 109,
+                    "column": 40
+                }
+            },
+            {
+                "name": "registerToPublisher",
+                "position": {
+                    "line": 111,
+                    "column": 22
+                }
+            },
+            {
+                "name": "registerSubscriber",
+                "position": {
+                    "line": 112,
+                    "column": 22
+                }
+            },
+            {
+                "name": "InstancesChangeNotifier",
+                "position": {
+                    "line": 110,
+                    "column": 35
+                }
+            },
+            {
+                "name": "ServiceInfoHolder",
+                "position": {
+                    "line": 113,
+                    "column": 38
+                }
+            },
+            {
+                "name": "NamingClientProxyDelegate",
+                "position": {
+                    "line": 114,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.initLogName(NacosClientProperties properties)"
+        ],
+        "priority": 33
+    },
+    {
+        "name": "initLogName",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "initLogName(NacosClientProperties properties)",
+        "class_signature": "NacosNamingService.initLogName(NacosClientProperties properties)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "NacosClientProperties",
+                "properties"
+            ]
+        ],
+        "methodBody": "{\n        logName = properties.getProperty(UtilAndComs.NACOS_NAMING_LOG_NAME, DEFAULT_NAMING_LOG_FILE_PATH);\n    }",
+        "position": {
+            "line": 119,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 120,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 47
+    },
+    {
+        "name": "registerInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "registerInstance(String serviceName, String ip, int port)",
+        "class_signature": "NacosNamingService.registerInstance(String serviceName, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        registerInstance(serviceName, ip, port, Constants.DEFAULT_CLUSTER_NAME);\n    }",
+        "position": {
+            "line": 124,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "registerInstance",
+                "position": {
+                    "line": 125,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.registerInstance(String serviceName, String ip, int port, String clusterName)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "registerInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "registerInstance(String serviceName, String groupName, String ip, int port)",
+        "class_signature": "NacosNamingService.registerInstance(String serviceName, String groupName, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        registerInstance(serviceName, groupName, ip, port, Constants.DEFAULT_CLUSTER_NAME);\n    }",
+        "position": {
+            "line": 129,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "registerInstance",
+                "position": {
+                    "line": 130,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.registerInstance(String serviceName, String groupName, String ip, int port, String clusterName)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "registerInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "registerInstance(String serviceName, String ip, int port, String clusterName)",
+        "class_signature": "NacosNamingService.registerInstance(String serviceName, String ip, int port, String clusterName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "clusterName"
+            ]
+        ],
+        "methodBody": "{\n        registerInstance(serviceName, Constants.DEFAULT_GROUP, ip, port, clusterName);\n    }",
+        "position": {
+            "line": 134,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "registerInstance",
+                "position": {
+                    "line": 135,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.registerInstance(String serviceName, String groupName, String ip, int port, String clusterName)"
+        ],
+        "priority": 34
+    },
+    {
+        "name": "registerInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "registerInstance(String serviceName, String groupName, String ip, int port, String clusterName)",
+        "class_signature": "NacosNamingService.registerInstance(String serviceName, String groupName, String ip, int port, String clusterName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "clusterName"
+            ]
+        ],
+        "methodBody": "{\n        Instance instance = new Instance();\n        instance.setIp(ip);\n        instance.setPort(port);\n        instance.setWeight(1.0);\n        instance.setClusterName(clusterName);\n        registerInstance(serviceName, groupName, instance);\n    }",
+        "position": {
+            "line": 139,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setIp",
+                "position": {
+                    "line": 142,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setPort",
+                "position": {
+                    "line": 143,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setWeight",
+                "position": {
+                    "line": 144,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setClusterName",
+                "position": {
+                    "line": 145,
+                    "column": 18
+                }
+            },
+            {
+                "name": "registerInstance",
+                "position": {
+                    "line": 146,
+                    "column": 9
+                }
+            },
+            {
+                "name": "Instance",
+                "position": {
+                    "line": 141,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.registerInstance(String serviceName, String groupName, Instance instance)"
+        ],
+        "priority": 48
+    },
+    {
+        "name": "registerInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "registerInstance(String serviceName, Instance instance)",
+        "class_signature": "NacosNamingService.registerInstance(String serviceName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        registerInstance(serviceName, Constants.DEFAULT_GROUP, instance);\n    }",
+        "position": {
+            "line": 150,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "registerInstance",
+                "position": {
+                    "line": 151,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.registerInstance(String serviceName, String groupName, Instance instance)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "registerInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "registerInstance(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NacosNamingService.registerInstance(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        NamingUtils.checkInstanceIsLegal(instance);\n        checkAndStripGroupNamePrefix(instance, groupName);\n        clientProxy.registerService(serviceName, groupName, instance);\n    }",
+        "position": {
+            "line": 155,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkInstanceIsLegal",
+                "position": {
+                    "line": 156,
+                    "column": 21
+                }
+            },
+            {
+                "name": "checkAndStripGroupNamePrefix",
+                "position": {
+                    "line": 157,
+                    "column": 9
+                }
+            },
+            {
+                "name": "registerService",
+                "position": {
+                    "line": 158,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.checkAndStripGroupNamePrefix(Instance instance, String groupName)"
+        ],
+        "priority": 56
+    },
+    {
+        "name": "batchRegisterInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "batchRegisterInstance(String serviceName, String groupName, List<Instance> instances)",
+        "class_signature": "NacosNamingService.batchRegisterInstance(String serviceName, String groupName, List<Instance> instances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<Instance>",
+                "instances"
+            ]
+        ],
+        "methodBody": "{\n        NamingUtils.batchCheckInstanceIsLegal(instances);\n        batchCheckAndStripGroupNamePrefix(instances, groupName);\n        clientProxy.batchRegisterService(serviceName, groupName, instances);\n    }",
+        "position": {
+            "line": 162,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "batchCheckInstanceIsLegal",
+                "position": {
+                    "line": 164,
+                    "column": 21
+                }
+            },
+            {
+                "name": "batchCheckAndStripGroupNamePrefix",
+                "position": {
+                    "line": 165,
+                    "column": 9
+                }
+            },
+            {
+                "name": "batchRegisterService",
+                "position": {
+                    "line": 166,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.batchCheckAndStripGroupNamePrefix(List<Instance> instances, String groupName)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "batchDeregisterInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "batchDeregisterInstance(String serviceName, String groupName, List<Instance> instances)",
+        "class_signature": "NacosNamingService.batchDeregisterInstance(String serviceName, String groupName, List<Instance> instances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<Instance>",
+                "instances"
+            ]
+        ],
+        "methodBody": "{\n        NamingUtils.batchCheckInstanceIsLegal(instances);\n        batchCheckAndStripGroupNamePrefix(instances, groupName);\n        clientProxy.batchDeregisterService(serviceName, groupName, instances);\n    }",
+        "position": {
+            "line": 170,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "batchCheckInstanceIsLegal",
+                "position": {
+                    "line": 172,
+                    "column": 21
+                }
+            },
+            {
+                "name": "batchCheckAndStripGroupNamePrefix",
+                "position": {
+                    "line": 173,
+                    "column": 9
+                }
+            },
+            {
+                "name": "batchDeregisterService",
+                "position": {
+                    "line": 174,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.batchCheckAndStripGroupNamePrefix(List<Instance> instances, String groupName)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "deregisterInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "deregisterInstance(String serviceName, String ip, int port)",
+        "class_signature": "NacosNamingService.deregisterInstance(String serviceName, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        deregisterInstance(serviceName, ip, port, Constants.DEFAULT_CLUSTER_NAME);\n    }",
+        "position": {
+            "line": 178,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "deregisterInstance",
+                "position": {
+                    "line": 179,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.deregisterInstance(String serviceName, String ip, int port, String clusterName)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "deregisterInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "deregisterInstance(String serviceName, String groupName, String ip, int port)",
+        "class_signature": "NacosNamingService.deregisterInstance(String serviceName, String groupName, String ip, int port)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ]
+        ],
+        "methodBody": "{\n        deregisterInstance(serviceName, groupName, ip, port, Constants.DEFAULT_CLUSTER_NAME);\n    }",
+        "position": {
+            "line": 183,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "deregisterInstance",
+                "position": {
+                    "line": 184,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.deregisterInstance(String serviceName, String groupName, String ip, int port, String clusterName)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "deregisterInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "deregisterInstance(String serviceName, String ip, int port, String clusterName)",
+        "class_signature": "NacosNamingService.deregisterInstance(String serviceName, String ip, int port, String clusterName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "clusterName"
+            ]
+        ],
+        "methodBody": "{\n        deregisterInstance(serviceName, Constants.DEFAULT_GROUP, ip, port, clusterName);\n    }",
+        "position": {
+            "line": 188,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "deregisterInstance",
+                "position": {
+                    "line": 189,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.deregisterInstance(String serviceName, String groupName, String ip, int port, String clusterName)"
+        ],
+        "priority": 36
+    },
+    {
+        "name": "deregisterInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "deregisterInstance(String serviceName, String groupName, String ip, int port, String clusterName)",
+        "class_signature": "NacosNamingService.deregisterInstance(String serviceName, String groupName, String ip, int port, String clusterName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "ip"
+            ],
+            [
+                "int",
+                "port"
+            ],
+            [
+                "String",
+                "clusterName"
+            ]
+        ],
+        "methodBody": "{\n        Instance instance = new Instance();\n        instance.setIp(ip);\n        instance.setPort(port);\n        instance.setClusterName(clusterName);\n        deregisterInstance(serviceName, groupName, instance);\n    }",
+        "position": {
+            "line": 193,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setIp",
+                "position": {
+                    "line": 196,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setPort",
+                "position": {
+                    "line": 197,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setClusterName",
+                "position": {
+                    "line": 198,
+                    "column": 18
+                }
+            },
+            {
+                "name": "deregisterInstance",
+                "position": {
+                    "line": 199,
+                    "column": 9
+                }
+            },
+            {
+                "name": "Instance",
+                "position": {
+                    "line": 195,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.deregisterInstance(String serviceName, String groupName, Instance instance)"
+        ],
+        "priority": 49
+    },
+    {
+        "name": "deregisterInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "deregisterInstance(String serviceName, Instance instance)",
+        "class_signature": "NacosNamingService.deregisterInstance(String serviceName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        deregisterInstance(serviceName, Constants.DEFAULT_GROUP, instance);\n    }",
+        "position": {
+            "line": 203,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "deregisterInstance",
+                "position": {
+                    "line": 204,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.deregisterInstance(String serviceName, String groupName, Instance instance)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "deregisterInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "deregisterInstance(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NacosNamingService.deregisterInstance(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        NamingUtils.checkInstanceIsLegal(instance);\n        checkAndStripGroupNamePrefix(instance, groupName);\n        clientProxy.deregisterService(serviceName, groupName, instance);\n    }",
+        "position": {
+            "line": 208,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkInstanceIsLegal",
+                "position": {
+                    "line": 209,
+                    "column": 21
+                }
+            },
+            {
+                "name": "checkAndStripGroupNamePrefix",
+                "position": {
+                    "line": 210,
+                    "column": 9
+                }
+            },
+            {
+                "name": "deregisterService",
+                "position": {
+                    "line": 211,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.checkAndStripGroupNamePrefix(Instance instance, String groupName)"
+        ],
+        "priority": 57
+    },
+    {
+        "name": "getAllInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getAllInstances(String serviceName)",
+        "class_signature": "NacosNamingService.getAllInstances(String serviceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ]
+        ],
+        "methodBody": "{\n        return getAllInstances(serviceName, new ArrayList<>());\n    }",
+        "position": {
+            "line": 215,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllInstances",
+                "position": {
+                    "line": 216,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 216,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getAllInstances(String serviceName, List<String> clusters)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "getAllInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getAllInstances(String serviceName, String groupName)",
+        "class_signature": "NacosNamingService.getAllInstances(String serviceName, String groupName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ]
+        ],
+        "methodBody": "{\n        return getAllInstances(serviceName, groupName, new ArrayList<>());\n    }",
+        "position": {
+            "line": 220,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllInstances",
+                "position": {
+                    "line": 221,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 221,
+                    "column": 60
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getAllInstances(String serviceName, String groupName, List<String> clusters)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "getAllInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getAllInstances(String serviceName, boolean subscribe)",
+        "class_signature": "NacosNamingService.getAllInstances(String serviceName, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        return getAllInstances(serviceName, new ArrayList<>(), subscribe);\n    }",
+        "position": {
+            "line": 225,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllInstances",
+                "position": {
+                    "line": 226,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 226,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getAllInstances(String serviceName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "getAllInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getAllInstances(String serviceName, String groupName, boolean subscribe)",
+        "class_signature": "NacosNamingService.getAllInstances(String serviceName, String groupName, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        return getAllInstances(serviceName, groupName, new ArrayList<>(), subscribe);\n    }",
+        "position": {
+            "line": 230,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllInstances",
+                "position": {
+                    "line": 232,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 232,
+                    "column": 60
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getAllInstances(String serviceName, String groupName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "getAllInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getAllInstances(String serviceName, List<String> clusters)",
+        "class_signature": "NacosNamingService.getAllInstances(String serviceName, List<String> clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n        return getAllInstances(serviceName, clusters, true);\n    }",
+        "position": {
+            "line": 236,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllInstances",
+                "position": {
+                    "line": 237,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getAllInstances(String serviceName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 37
+    },
+    {
+        "name": "getAllInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getAllInstances(String serviceName, String groupName, List<String> clusters)",
+        "class_signature": "NacosNamingService.getAllInstances(String serviceName, String groupName, List<String> clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n        return getAllInstances(serviceName, groupName, clusters, true);\n    }",
+        "position": {
+            "line": 241,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllInstances",
+                "position": {
+                    "line": 243,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getAllInstances(String serviceName, String groupName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 38
+    },
+    {
+        "name": "getAllInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getAllInstances(String serviceName, List<String> clusters, boolean subscribe)",
+        "class_signature": "NacosNamingService.getAllInstances(String serviceName, List<String> clusters, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        return getAllInstances(serviceName, Constants.DEFAULT_GROUP, clusters, subscribe);\n    }",
+        "position": {
+            "line": 247,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllInstances",
+                "position": {
+                    "line": 249,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getAllInstances(String serviceName, String groupName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 50
+    },
+    {
+        "name": "getAllInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getAllInstances(String serviceName, String groupName, List<String> clusters, boolean subscribe)",
+        "class_signature": "NacosNamingService.getAllInstances(String serviceName, String groupName, List<String> clusters, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        List<Instance> list;\n        ServiceInfo serviceInfo = getServiceInfo(serviceName, groupName, clusters, subscribe);\n        if (serviceInfo == null || CollectionUtils.isEmpty(list = serviceInfo.getHosts())) {\n            return new ArrayList<>();\n        }\n        return list;\n    }",
+        "position": {
+            "line": 253,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceInfo",
+                "position": {
+                    "line": 256,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 257,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getHosts",
+                "position": {
+                    "line": 257,
+                    "column": 79
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 258,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getServiceInfo(String serviceName, String groupName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 58
+    },
+    {
+        "name": "selectInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectInstances(String serviceName, boolean healthy)",
+        "class_signature": "NacosNamingService.selectInstances(String serviceName, boolean healthy)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "boolean",
+                "healthy"
+            ]
+        ],
+        "methodBody": "{\n        return selectInstances(serviceName, new ArrayList<>(), healthy);\n    }",
+        "position": {
+            "line": 264,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectInstances",
+                "position": {
+                    "line": 265,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 265,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectInstances(String serviceName, List<String> clusters, boolean healthy)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "selectInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectInstances(String serviceName, String groupName, boolean healthy)",
+        "class_signature": "NacosNamingService.selectInstances(String serviceName, String groupName, boolean healthy)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "boolean",
+                "healthy"
+            ]
+        ],
+        "methodBody": "{\n        return selectInstances(serviceName, groupName, healthy, true);\n    }",
+        "position": {
+            "line": 269,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectInstances",
+                "position": {
+                    "line": 270,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectInstances(String serviceName, String groupName, boolean healthy, boolean subscribe)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "selectInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectInstances(String serviceName, boolean healthy, boolean subscribe)",
+        "class_signature": "NacosNamingService.selectInstances(String serviceName, boolean healthy, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "boolean",
+                "healthy"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        return selectInstances(serviceName, new ArrayList<>(), healthy, subscribe);\n    }",
+        "position": {
+            "line": 274,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectInstances",
+                "position": {
+                    "line": 276,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 276,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectInstances(String serviceName, List<String> clusters, boolean healthy, boolean subscribe)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "selectInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectInstances(String serviceName, String groupName, boolean healthy, boolean subscribe)",
+        "class_signature": "NacosNamingService.selectInstances(String serviceName, String groupName, boolean healthy, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "boolean",
+                "healthy"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        return selectInstances(serviceName, groupName, new ArrayList<>(), healthy, subscribe);\n    }",
+        "position": {
+            "line": 280,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectInstances",
+                "position": {
+                    "line": 282,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 282,
+                    "column": 60
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectInstances(String serviceName, String groupName, List<String> clusters, boolean healthy, boolean subscribe)"
+        ],
+        "priority": 40
+    },
+    {
+        "name": "selectInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectInstances(String serviceName, List<String> clusters, boolean healthy)",
+        "class_signature": "NacosNamingService.selectInstances(String serviceName, List<String> clusters, boolean healthy)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "boolean",
+                "healthy"
+            ]
+        ],
+        "methodBody": "{\n        return selectInstances(serviceName, clusters, healthy, true);\n    }",
+        "position": {
+            "line": 286,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectInstances",
+                "position": {
+                    "line": 288,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectInstances(String serviceName, List<String> clusters, boolean healthy, boolean subscribe)"
+        ],
+        "priority": 39
+    },
+    {
+        "name": "selectInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectInstances(String serviceName, String groupName, List<String> clusters, boolean healthy)",
+        "class_signature": "NacosNamingService.selectInstances(String serviceName, String groupName, List<String> clusters, boolean healthy)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "boolean",
+                "healthy"
+            ]
+        ],
+        "methodBody": "{\n        return selectInstances(serviceName, groupName, clusters, healthy, true);\n    }",
+        "position": {
+            "line": 292,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectInstances",
+                "position": {
+                    "line": 294,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectInstances(String serviceName, String groupName, List<String> clusters, boolean healthy, boolean subscribe)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "selectInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectInstances(String serviceName, List<String> clusters, boolean healthy, boolean subscribe)",
+        "class_signature": "NacosNamingService.selectInstances(String serviceName, List<String> clusters, boolean healthy, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "boolean",
+                "healthy"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        return selectInstances(serviceName, Constants.DEFAULT_GROUP, clusters, healthy, subscribe);\n    }",
+        "position": {
+            "line": 298,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectInstances",
+                "position": {
+                    "line": 300,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectInstances(String serviceName, String groupName, List<String> clusters, boolean healthy, boolean subscribe)"
+        ],
+        "priority": 51
+    },
+    {
+        "name": "selectInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectInstances(String serviceName, String groupName, List<String> clusters, boolean healthy, boolean subscribe)",
+        "class_signature": "NacosNamingService.selectInstances(String serviceName, String groupName, List<String> clusters, boolean healthy, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "boolean",
+                "healthy"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        ServiceInfo serviceInfo = getServiceInfo(serviceName, groupName, clusters, subscribe);\n        return selectInstances(serviceInfo, healthy);\n    }",
+        "position": {
+            "line": 304,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceInfo",
+                "position": {
+                    "line": 306,
+                    "column": 35
+                }
+            },
+            {
+                "name": "selectInstances",
+                "position": {
+                    "line": 307,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getServiceInfo(String serviceName, String groupName, List<String> clusters, boolean subscribe)",
+            "NacosNamingService.selectInstances(ServiceInfo serviceInfo, boolean healthy)"
+        ],
+        "priority": 59
+    },
+    {
+        "name": "selectInstances",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectInstances(ServiceInfo serviceInfo, boolean healthy)",
+        "class_signature": "NacosNamingService.selectInstances(ServiceInfo serviceInfo, boolean healthy)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ServiceInfo",
+                "serviceInfo"
+            ],
+            [
+                "boolean",
+                "healthy"
+            ]
+        ],
+        "methodBody": "{\n        List<Instance> list;\n        if (serviceInfo == null || CollectionUtils.isEmpty(list = serviceInfo.getHosts())) {\n            return new ArrayList<>();\n        }\n        \n        Iterator<Instance> iterator = list.iterator();\n        while (iterator.hasNext()) {\n            Instance instance = iterator.next();\n            if (healthy != instance.isHealthy() || !instance.isEnabled() || instance.getWeight() <= 0) {\n                iterator.remove();\n            }\n        }\n        \n        return list;\n    }",
+        "position": {
+            "line": 310,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 312,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getHosts",
+                "position": {
+                    "line": 312,
+                    "column": 79
+                }
+            },
+            {
+                "name": "iterator",
+                "position": {
+                    "line": 316,
+                    "column": 44
+                }
+            },
+            {
+                "name": "hasNext",
+                "position": {
+                    "line": 317,
+                    "column": 25
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 318,
+                    "column": 42
+                }
+            },
+            {
+                "name": "isHealthy",
+                "position": {
+                    "line": 319,
+                    "column": 37
+                }
+            },
+            {
+                "name": "isEnabled",
+                "position": {
+                    "line": 319,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getWeight",
+                "position": {
+                    "line": 319,
+                    "column": 86
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 320,
+                    "column": 26
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 313,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 64
+    },
+    {
+        "name": "getServiceInfoByFailover",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getServiceInfoByFailover(String serviceName, String groupName, String clusterString)",
+        "class_signature": "NacosNamingService.getServiceInfoByFailover(String serviceName, String groupName, String clusterString)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusterString"
+            ]
+        ],
+        "methodBody": "{\n        return serviceInfoHolder.getFailoverServiceInfo(serviceName, groupName, clusterString);\n    }",
+        "position": {
+            "line": 327,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getFailoverServiceInfo",
+                "position": {
+                    "line": 328,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 68
+    },
+    {
+        "name": "getServiceInfoBySubscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getServiceInfoBySubscribe(String serviceName, String groupName, String clusterString, boolean subscribe)",
+        "class_signature": "NacosNamingService.getServiceInfoBySubscribe(String serviceName, String groupName, String clusterString, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusterString"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        ServiceInfo serviceInfo;\n        if (subscribe) {\n            serviceInfo = serviceInfoHolder.getServiceInfo(serviceName, groupName, clusterString);\n            if (null == serviceInfo || !clientProxy.isSubscribed(serviceName, groupName, clusterString)) {\n                serviceInfo = clientProxy.subscribe(serviceName, groupName, clusterString);\n            }\n        } else {\n            serviceInfo = clientProxy.queryInstancesOfService(serviceName, groupName, clusterString, false);\n        }\n        return serviceInfo;\n    }",
+        "position": {
+            "line": 331,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceInfo",
+                "position": {
+                    "line": 335,
+                    "column": 45
+                }
+            },
+            {
+                "name": "isSubscribed",
+                "position": {
+                    "line": 336,
+                    "column": 53
+                }
+            },
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 337,
+                    "column": 43
+                }
+            },
+            {
+                "name": "queryInstancesOfService",
+                "position": {
+                    "line": 340,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 69
+    },
+    {
+        "name": "getServiceInfo",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getServiceInfo(String serviceName, String groupName, List<String> clusters, boolean subscribe)",
+        "class_signature": "NacosNamingService.getServiceInfo(String serviceName, String groupName, List<String> clusters, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        ServiceInfo serviceInfo;\n        String clusterString = StringUtils.join(clusters, \",\");\n        if (serviceInfoHolder.isFailoverSwitch()) {\n            serviceInfo = getServiceInfoByFailover(serviceName, groupName, clusterString);\n            if (serviceInfo != null && serviceInfo.getHosts().size() > 0) {\n                NAMING_LOGGER.debug(\"getServiceInfo from failover,serviceName: {}  data:{}\", serviceName,\n                        JacksonUtils.toJson(serviceInfo.getHosts()));\n                return serviceInfo;\n            }\n        }\n        \n        serviceInfo = getServiceInfoBySubscribe(serviceName, groupName, clusterString, subscribe);\n        return serviceInfo;\n    }",
+        "position": {
+            "line": 345,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 348,
+                    "column": 44
+                }
+            },
+            {
+                "name": "isFailoverSwitch",
+                "position": {
+                    "line": 349,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getServiceInfoByFailover",
+                "position": {
+                    "line": 350,
+                    "column": 27
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 351,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getHosts",
+                "position": {
+                    "line": 351,
+                    "column": 52
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 352,
+                    "column": 31
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 353,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getHosts",
+                "position": {
+                    "line": 353,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getServiceInfoBySubscribe",
+                "position": {
+                    "line": 358,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getServiceInfoByFailover(String serviceName, String groupName, String clusterString)",
+            "NacosNamingService.getServiceInfoBySubscribe(String serviceName, String groupName, String clusterString, boolean subscribe)"
+        ],
+        "priority": 65
+    },
+    {
+        "name": "selectOneHealthyInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectOneHealthyInstance(String serviceName)",
+        "class_signature": "NacosNamingService.selectOneHealthyInstance(String serviceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ]
+        ],
+        "methodBody": "{\n        return selectOneHealthyInstance(serviceName, new ArrayList<>());\n    }",
+        "position": {
+            "line": 363,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectOneHealthyInstance",
+                "position": {
+                    "line": 364,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 364,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectOneHealthyInstance(String serviceName, List<String> clusters)"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "selectOneHealthyInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectOneHealthyInstance(String serviceName, String groupName)",
+        "class_signature": "NacosNamingService.selectOneHealthyInstance(String serviceName, String groupName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ]
+        ],
+        "methodBody": "{\n        return selectOneHealthyInstance(serviceName, groupName, true);\n    }",
+        "position": {
+            "line": 368,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectOneHealthyInstance",
+                "position": {
+                    "line": 369,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectOneHealthyInstance(String serviceName, String groupName, boolean subscribe)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "selectOneHealthyInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectOneHealthyInstance(String serviceName, boolean subscribe)",
+        "class_signature": "NacosNamingService.selectOneHealthyInstance(String serviceName, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        return selectOneHealthyInstance(serviceName, new ArrayList<>(), subscribe);\n    }",
+        "position": {
+            "line": 373,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectOneHealthyInstance",
+                "position": {
+                    "line": 374,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 374,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectOneHealthyInstance(String serviceName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "selectOneHealthyInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectOneHealthyInstance(String serviceName, String groupName, boolean subscribe)",
+        "class_signature": "NacosNamingService.selectOneHealthyInstance(String serviceName, String groupName, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        return selectOneHealthyInstance(serviceName, groupName, new ArrayList<>(), subscribe);\n    }",
+        "position": {
+            "line": 378,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectOneHealthyInstance",
+                "position": {
+                    "line": 380,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 380,
+                    "column": 69
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectOneHealthyInstance(String serviceName, String groupName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 42
+    },
+    {
+        "name": "selectOneHealthyInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectOneHealthyInstance(String serviceName, List<String> clusters)",
+        "class_signature": "NacosNamingService.selectOneHealthyInstance(String serviceName, List<String> clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n        return selectOneHealthyInstance(serviceName, clusters, true);\n    }",
+        "position": {
+            "line": 384,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectOneHealthyInstance",
+                "position": {
+                    "line": 385,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectOneHealthyInstance(String serviceName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 41
+    },
+    {
+        "name": "selectOneHealthyInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectOneHealthyInstance(String serviceName, String groupName, List<String> clusters)",
+        "class_signature": "NacosNamingService.selectOneHealthyInstance(String serviceName, String groupName, List<String> clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n        return selectOneHealthyInstance(serviceName, groupName, clusters, true);\n    }",
+        "position": {
+            "line": 389,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectOneHealthyInstance",
+                "position": {
+                    "line": 391,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectOneHealthyInstance(String serviceName, String groupName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "selectOneHealthyInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectOneHealthyInstance(String serviceName, List<String> clusters, boolean subscribe)",
+        "class_signature": "NacosNamingService.selectOneHealthyInstance(String serviceName, List<String> clusters, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        return selectOneHealthyInstance(serviceName, Constants.DEFAULT_GROUP, clusters, subscribe);\n    }",
+        "position": {
+            "line": 395,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectOneHealthyInstance",
+                "position": {
+                    "line": 397,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.selectOneHealthyInstance(String serviceName, String groupName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 52
+    },
+    {
+        "name": "selectOneHealthyInstance",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "selectOneHealthyInstance(String serviceName, String groupName, List<String> clusters, boolean subscribe)",
+        "class_signature": "NacosNamingService.selectOneHealthyInstance(String serviceName, String groupName, List<String> clusters, boolean subscribe)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "boolean",
+                "subscribe"
+            ]
+        ],
+        "methodBody": "{\n        ServiceInfo serviceInfo = getServiceInfo(serviceName, groupName, clusters, subscribe);\n        return Balancer.RandomByWeight.selectHost(serviceInfo);\n    }",
+        "position": {
+            "line": 401,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceInfo",
+                "position": {
+                    "line": 403,
+                    "column": 35
+                }
+            },
+            {
+                "name": "selectHost",
+                "position": {
+                    "line": 404,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getServiceInfo(String serviceName, String groupName, List<String> clusters, boolean subscribe)"
+        ],
+        "priority": 60
+    },
+    {
+        "name": "subscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "subscribe(String serviceName, EventListener listener)",
+        "class_signature": "NacosNamingService.subscribe(String serviceName, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        subscribe(serviceName, new ArrayList<>(), listener);\n    }",
+        "position": {
+            "line": 408,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 409,
+                    "column": 9
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 409,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.subscribe(String serviceName, List<String> clusters, EventListener listener)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "subscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "subscribe(String serviceName, String groupName, EventListener listener)",
+        "class_signature": "NacosNamingService.subscribe(String serviceName, String groupName, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        subscribe(serviceName, groupName, new ArrayList<>(), listener);\n    }",
+        "position": {
+            "line": 413,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 414,
+                    "column": 9
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 414,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.subscribe(String serviceName, String groupName, List<String> clusters, EventListener listener)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "subscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "subscribe(String serviceName, List<String> clusters, EventListener listener)",
+        "class_signature": "NacosNamingService.subscribe(String serviceName, List<String> clusters, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        subscribe(serviceName, Constants.DEFAULT_GROUP, clusters, listener);\n    }",
+        "position": {
+            "line": 418,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 419,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.subscribe(String serviceName, String groupName, List<String> clusters, EventListener listener)"
+        ],
+        "priority": 43
+    },
+    {
+        "name": "subscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "subscribe(String serviceName, String groupName, List<String> clusters, EventListener listener)",
+        "class_signature": "NacosNamingService.subscribe(String serviceName, String groupName, List<String> clusters, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        NamingSelector clusterSelector = NamingSelectorFactory.newClusterSelector(clusters);\n        doSubscribe(serviceName, groupName, getUniqueClusterString(clusters), clusterSelector, listener);\n    }",
+        "position": {
+            "line": 423,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "newClusterSelector",
+                "position": {
+                    "line": 425,
+                    "column": 64
+                }
+            },
+            {
+                "name": "doSubscribe",
+                "position": {
+                    "line": 426,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getUniqueClusterString",
+                "position": {
+                    "line": 426,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.doSubscribe(String serviceName, String groupName, String clusters, NamingSelector selector, EventListener listener)"
+        ],
+        "priority": 53
+    },
+    {
+        "name": "subscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "subscribe(String serviceName, NamingSelector selector, EventListener listener)",
+        "class_signature": "NacosNamingService.subscribe(String serviceName, NamingSelector selector, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "NamingSelector",
+                "selector"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        subscribe(serviceName, Constants.DEFAULT_GROUP, selector, listener);\n    }",
+        "position": {
+            "line": 430,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 431,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.subscribe(String serviceName, String groupName, NamingSelector selector, EventListener listener)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "subscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "subscribe(String serviceName, String groupName, NamingSelector selector, EventListener listener)",
+        "class_signature": "NacosNamingService.subscribe(String serviceName, String groupName, NamingSelector selector, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "NamingSelector",
+                "selector"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        doSubscribe(serviceName, groupName, Constants.NULL, selector, listener);\n    }",
+        "position": {
+            "line": 435,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "doSubscribe",
+                "position": {
+                    "line": 437,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.doSubscribe(String serviceName, String groupName, String clusters, NamingSelector selector, EventListener listener)"
+        ],
+        "priority": 44
+    },
+    {
+        "name": "doSubscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "doSubscribe(String serviceName, String groupName, String clusters, NamingSelector selector, EventListener listener)",
+        "class_signature": "NacosNamingService.doSubscribe(String serviceName, String groupName, String clusters, NamingSelector selector, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusters"
+            ],
+            [
+                "NamingSelector",
+                "selector"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        if (selector == null || listener == null) {\n            return;\n        }\n        NamingSelectorWrapper wrapper = new NamingSelectorWrapper(serviceName, groupName, clusters, selector, listener);\n        notifyIfSubscribed(serviceName, groupName, wrapper);\n        changeNotifier.registerListener(groupName, serviceName, wrapper);\n        clientProxy.subscribe(serviceName, groupName, Constants.NULL);\n    }",
+        "position": {
+            "line": 440,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notifyIfSubscribed",
+                "position": {
+                    "line": 446,
+                    "column": 9
+                }
+            },
+            {
+                "name": "registerListener",
+                "position": {
+                    "line": 447,
+                    "column": 24
+                }
+            },
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 448,
+                    "column": 21
+                }
+            },
+            {
+                "name": "NamingSelectorWrapper",
+                "position": {
+                    "line": 445,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.notifyIfSubscribed(String serviceName, String groupName, NamingSelectorWrapper wrapper)"
+        ],
+        "priority": 61
+    },
+    {
+        "name": "unsubscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "unsubscribe(String serviceName, EventListener listener)",
+        "class_signature": "NacosNamingService.unsubscribe(String serviceName, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        unsubscribe(serviceName, new ArrayList<>(), listener);\n    }",
+        "position": {
+            "line": 452,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "unsubscribe",
+                "position": {
+                    "line": 453,
+                    "column": 9
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 453,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.unsubscribe(String serviceName, List<String> clusters, EventListener listener)"
+        ],
+        "priority": 25
+    },
+    {
+        "name": "unsubscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "unsubscribe(String serviceName, String groupName, EventListener listener)",
+        "class_signature": "NacosNamingService.unsubscribe(String serviceName, String groupName, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        unsubscribe(serviceName, groupName, new ArrayList<>(), listener);\n    }",
+        "position": {
+            "line": 457,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "unsubscribe",
+                "position": {
+                    "line": 458,
+                    "column": 9
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 458,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.unsubscribe(String serviceName, String groupName, List<String> clusters, EventListener listener)"
+        ],
+        "priority": 26
+    },
+    {
+        "name": "unsubscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "unsubscribe(String serviceName, List<String> clusters, EventListener listener)",
+        "class_signature": "NacosNamingService.unsubscribe(String serviceName, List<String> clusters, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        unsubscribe(serviceName, Constants.DEFAULT_GROUP, clusters, listener);\n    }",
+        "position": {
+            "line": 462,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "unsubscribe",
+                "position": {
+                    "line": 463,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.unsubscribe(String serviceName, String groupName, List<String> clusters, EventListener listener)"
+        ],
+        "priority": 45
+    },
+    {
+        "name": "unsubscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "unsubscribe(String serviceName, String groupName, List<String> clusters, EventListener listener)",
+        "class_signature": "NacosNamingService.unsubscribe(String serviceName, String groupName, List<String> clusters, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<String>",
+                "clusters"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        NamingSelector clusterSelector = NamingSelectorFactory.newClusterSelector(clusters);\n        unsubscribe(serviceName, groupName, clusterSelector, listener);\n    }",
+        "position": {
+            "line": 467,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "newClusterSelector",
+                "position": {
+                    "line": 469,
+                    "column": 64
+                }
+            },
+            {
+                "name": "unsubscribe",
+                "position": {
+                    "line": 470,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.unsubscribe(String serviceName, String groupName, NamingSelector selector, EventListener listener)"
+        ],
+        "priority": 54
+    },
+    {
+        "name": "unsubscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "unsubscribe(String serviceName, NamingSelector selector, EventListener listener)",
+        "class_signature": "NacosNamingService.unsubscribe(String serviceName, NamingSelector selector, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "NamingSelector",
+                "selector"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        unsubscribe(serviceName, Constants.DEFAULT_GROUP, selector, listener);\n    }",
+        "position": {
+            "line": 474,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "unsubscribe",
+                "position": {
+                    "line": 475,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.unsubscribe(String serviceName, String groupName, NamingSelector selector, EventListener listener)"
+        ],
+        "priority": 27
+    },
+    {
+        "name": "unsubscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "unsubscribe(String serviceName, String groupName, NamingSelector selector, EventListener listener)",
+        "class_signature": "NacosNamingService.unsubscribe(String serviceName, String groupName, NamingSelector selector, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "NamingSelector",
+                "selector"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        doUnsubscribe(serviceName, groupName, selector, listener);\n    }",
+        "position": {
+            "line": 479,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "doUnsubscribe",
+                "position": {
+                    "line": 481,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.doUnsubscribe(String serviceName, String groupName, NamingSelector selector, EventListener listener)"
+        ],
+        "priority": 62
+    },
+    {
+        "name": "doUnsubscribe",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "doUnsubscribe(String serviceName, String groupName, NamingSelector selector, EventListener listener)",
+        "class_signature": "NacosNamingService.doUnsubscribe(String serviceName, String groupName, NamingSelector selector, EventListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "NamingSelector",
+                "selector"
+            ],
+            [
+                "EventListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        if (selector == null || listener == null) {\n            return;\n        }\n        NamingSelectorWrapper wrapper = new NamingSelectorWrapper(selector, listener);\n        changeNotifier.deregisterListener(groupName, serviceName, wrapper);\n        if (!changeNotifier.isSubscribed(groupName, serviceName)) {\n            clientProxy.unsubscribe(serviceName, groupName, Constants.NULL);\n        }\n    }",
+        "position": {
+            "line": 484,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "deregisterListener",
+                "position": {
+                    "line": 490,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isSubscribed",
+                "position": {
+                    "line": 491,
+                    "column": 29
+                }
+            },
+            {
+                "name": "unsubscribe",
+                "position": {
+                    "line": 492,
+                    "column": 25
+                }
+            },
+            {
+                "name": "NamingSelectorWrapper",
+                "position": {
+                    "line": 489,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 67
+    },
+    {
+        "name": "getServicesOfServer",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getServicesOfServer(int pageNo, int pageSize)",
+        "class_signature": "NacosNamingService.getServicesOfServer(int pageNo, int pageSize)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "pageNo"
+            ],
+            [
+                "int",
+                "pageSize"
+            ]
+        ],
+        "methodBody": "{\n        return getServicesOfServer(pageNo, pageSize, Constants.DEFAULT_GROUP);\n    }",
+        "position": {
+            "line": 497,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServicesOfServer",
+                "position": {
+                    "line": 498,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getServicesOfServer(int pageNo, int pageSize, String groupName)"
+        ],
+        "priority": 28
+    },
+    {
+        "name": "getServicesOfServer",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getServicesOfServer(int pageNo, int pageSize, String groupName)",
+        "class_signature": "NacosNamingService.getServicesOfServer(int pageNo, int pageSize, String groupName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "pageNo"
+            ],
+            [
+                "int",
+                "pageSize"
+            ],
+            [
+                "String",
+                "groupName"
+            ]
+        ],
+        "methodBody": "{\n        return getServicesOfServer(pageNo, pageSize, groupName, null);\n    }",
+        "position": {
+            "line": 502,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServicesOfServer",
+                "position": {
+                    "line": 503,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getServicesOfServer(int pageNo, int pageSize, String groupName, AbstractSelector selector)"
+        ],
+        "priority": 46
+    },
+    {
+        "name": "getServicesOfServer",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getServicesOfServer(int pageNo, int pageSize, AbstractSelector selector)",
+        "class_signature": "NacosNamingService.getServicesOfServer(int pageNo, int pageSize, AbstractSelector selector)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "pageNo"
+            ],
+            [
+                "int",
+                "pageSize"
+            ],
+            [
+                "AbstractSelector",
+                "selector"
+            ]
+        ],
+        "methodBody": "{\n        return getServicesOfServer(pageNo, pageSize, Constants.DEFAULT_GROUP, selector);\n    }",
+        "position": {
+            "line": 507,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServicesOfServer",
+                "position": {
+                    "line": 509,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.getServicesOfServer(int pageNo, int pageSize, String groupName, AbstractSelector selector)"
+        ],
+        "priority": 29
+    },
+    {
+        "name": "getServicesOfServer",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getServicesOfServer(int pageNo, int pageSize, String groupName, AbstractSelector selector)",
+        "class_signature": "NacosNamingService.getServicesOfServer(int pageNo, int pageSize, String groupName, AbstractSelector selector)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "pageNo"
+            ],
+            [
+                "int",
+                "pageSize"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "AbstractSelector",
+                "selector"
+            ]
+        ],
+        "methodBody": "{\n        return clientProxy.getServiceList(pageNo, pageSize, groupName, selector);\n    }",
+        "position": {
+            "line": 513,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceList",
+                "position": {
+                    "line": 515,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 55
+    },
+    {
+        "name": "getSubscribeServices",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getSubscribeServices()",
+        "class_signature": "NacosNamingService.getSubscribeServices()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return changeNotifier.getSubscribeServices();\n    }",
+        "position": {
+            "line": 519,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getSubscribeServices",
+                "position": {
+                    "line": 520,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 30
+    },
+    {
+        "name": "getServerStatus",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "getServerStatus()",
+        "class_signature": "NacosNamingService.getServerStatus()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return clientProxy.serverHealthy() ? UP : DOWN;\n    }",
+        "position": {
+            "line": 524,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "serverHealthy",
+                "position": {
+                    "line": 525,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 31
+    },
+    {
+        "name": "shutDown",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "shutDown()",
+        "class_signature": "NacosNamingService.shutDown()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        serviceInfoHolder.shutdown();\n        clientProxy.shutdown();\n        NotifyCenter.deregisterSubscriber(changeNotifier);\n    }",
+        "position": {
+            "line": 529,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 530,
+                    "column": 27
+                }
+            },
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 531,
+                    "column": 21
+                }
+            },
+            {
+                "name": "deregisterSubscriber",
+                "position": {
+                    "line": 532,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 32
+    },
+    {
+        "name": "batchCheckAndStripGroupNamePrefix",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "batchCheckAndStripGroupNamePrefix(List<Instance> instances, String groupName)",
+        "class_signature": "NacosNamingService.batchCheckAndStripGroupNamePrefix(List<Instance> instances, String groupName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<Instance>",
+                "instances"
+            ],
+            [
+                "String",
+                "groupName"
+            ]
+        ],
+        "methodBody": "{\n        for (Instance instance : instances) {\n            checkAndStripGroupNamePrefix(instance, groupName);\n        }\n    }",
+        "position": {
+            "line": 535,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkAndStripGroupNamePrefix",
+                "position": {
+                    "line": 537,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.checkAndStripGroupNamePrefix(Instance instance, String groupName)"
+        ],
+        "priority": 35
+    },
+    {
+        "name": "checkAndStripGroupNamePrefix",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "checkAndStripGroupNamePrefix(Instance instance, String groupName)",
+        "class_signature": "NacosNamingService.checkAndStripGroupNamePrefix(Instance instance, String groupName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Instance",
+                "instance"
+            ],
+            [
+                "String",
+                "groupName"
+            ]
+        ],
+        "methodBody": "{\n        String serviceName = instance.getServiceName();\n        if (NamingUtils.isServiceNameCompatibilityMode(serviceName)) {\n            String groupNameOfInstance = NamingUtils.getGroupName(serviceName);\n            if (!groupName.equals(groupNameOfInstance)) {\n                throw new NacosException(NacosException.CLIENT_INVALID_PARAM, String.format(\n                        \"wrong group name prefix of instance service name! it should be: %s, Instance: %s\", groupName,\n                        instance));\n            }\n            instance.setServiceName(NamingUtils.getServiceName(serviceName));\n        }\n    }",
+        "position": {
+            "line": 541,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 542,
+                    "column": 39
+                }
+            },
+            {
+                "name": "isServiceNameCompatibilityMode",
+                "position": {
+                    "line": 543,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getGroupName",
+                "position": {
+                    "line": 544,
+                    "column": 54
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 545,
+                    "column": 28
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 546,
+                    "column": 86
+                }
+            },
+            {
+                "name": "setServiceName",
+                "position": {
+                    "line": 550,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 550,
+                    "column": 49
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 546,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 63
+    },
+    {
+        "name": "notifyIfSubscribed",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "notifyIfSubscribed(String serviceName, String groupName, NamingSelectorWrapper wrapper)",
+        "class_signature": "NacosNamingService.notifyIfSubscribed(String serviceName, String groupName, NamingSelectorWrapper wrapper)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "NamingSelectorWrapper",
+                "wrapper"
+            ]
+        ],
+        "methodBody": "{\n        if (changeNotifier.isSubscribed(groupName, serviceName)) {\n            NAMING_LOGGER.warn(\n                    \"Duplicate subscribe for groupName: {}, serviceName: {}; directly use current cached to notify.\",\n                    groupName, serviceName);\n            ServiceInfo serviceInfo = serviceInfoHolder.getServiceInfo(serviceName, groupName, Constants.NULL);\n            InstancesChangeEvent event = transferToEvent(serviceInfo);\n            wrapper.notifyListener(event);\n        }\n    }",
+        "position": {
+            "line": 554,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isSubscribed",
+                "position": {
+                    "line": 555,
+                    "column": 28
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 556,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getServiceInfo",
+                "position": {
+                    "line": 559,
+                    "column": 57
+                }
+            },
+            {
+                "name": "transferToEvent",
+                "position": {
+                    "line": 560,
+                    "column": 42
+                }
+            },
+            {
+                "name": "notifyListener",
+                "position": {
+                    "line": 561,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosNamingService.transferToEvent(ServiceInfo serviceInfo)"
+        ],
+        "priority": 66
+    },
+    {
+        "name": "transferToEvent",
+        "category": "method_declaration",
+        "class": "NacosNamingService",
+        "signature": "transferToEvent(ServiceInfo serviceInfo)",
+        "class_signature": "NacosNamingService.transferToEvent(ServiceInfo serviceInfo)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ServiceInfo",
+                "serviceInfo"
+            ]
+        ],
+        "methodBody": "{\n        if (serviceInfo == null) {\n            return null;\n        }\n        InstancesDiff diff = new InstancesDiff();\n        diff.setAddedInstances(serviceInfo.getHosts());\n        return new InstancesChangeEvent(notifierEventScope, serviceInfo.getName(), serviceInfo.getGroupName(),\n                serviceInfo.getClusters(), serviceInfo.getHosts(), diff);\n    }",
+        "position": {
+            "line": 565,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setAddedInstances",
+                "position": {
+                    "line": 570,
+                    "column": 14
+                }
+            },
+            {
+                "name": "getHosts",
+                "position": {
+                    "line": 570,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 571,
+                    "column": 73
+                }
+            },
+            {
+                "name": "getGroupName",
+                "position": {
+                    "line": 571,
+                    "column": 96
+                }
+            },
+            {
+                "name": "getClusters",
+                "position": {
+                    "line": 572,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getHosts",
+                "position": {
+                    "line": 572,
+                    "column": 56
+                }
+            },
+            {
+                "name": "InstancesDiff",
+                "position": {
+                    "line": 569,
+                    "column": 34
+                }
+            },
+            {
+                "name": "InstancesChangeEvent",
+                "position": {
+                    "line": 571,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 70
+    }
+]

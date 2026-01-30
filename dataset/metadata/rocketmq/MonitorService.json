@@ -1,0 +1,1326 @@
+[
+    {
+        "name": "MonitorService",
+        "category": "constructor_declaration",
+        "class": "MonitorService",
+        "signature": "MonitorService(MonitorConfig monitorConfig, MonitorListener monitorListener, RPCHook rpcHook)",
+        "class_signature": "MonitorService.MonitorService(MonitorConfig monitorConfig, MonitorListener monitorListener, RPCHook rpcHook)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MonitorConfig",
+                "monitorConfig"
+            ],
+            [
+                "MonitorListener",
+                "monitorListener"
+            ],
+            [
+                "RPCHook",
+                "rpcHook"
+            ]
+        ],
+        "methodBody": "{\n        this.monitorConfig = monitorConfig;\n        this.monitorListener = monitorListener;\n\n        this.defaultMQAdminExt = new DefaultMQAdminExt(rpcHook);\n        this.defaultMQAdminExt.setInstanceName(instanceName());\n        this.defaultMQAdminExt.setNamesrvAddr(monitorConfig.getNamesrvAddr());\n\n        this.defaultMQPullConsumer.setInstanceName(instanceName());\n        this.defaultMQPullConsumer.setNamesrvAddr(monitorConfig.getNamesrvAddr());\n\n        this.defaultMQPushConsumer.setInstanceName(instanceName());\n        this.defaultMQPushConsumer.setNamesrvAddr(monitorConfig.getNamesrvAddr());\n        try {\n            this.defaultMQPushConsumer.setConsumeThreadMin(1);\n            this.defaultMQPushConsumer.setConsumeThreadMax(1);\n            this.defaultMQPushConsumer.subscribe(TopicValidator.RMQ_SYS_OFFSET_MOVED_EVENT, \"*\");\n            this.defaultMQPushConsumer.registerMessageListener(new MessageListenerConcurrently() {\n\n                @Override\n                public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,\n                    ConsumeConcurrentlyContext context) {\n                    try {\n                        OffsetMovedEvent ome =\n                            OffsetMovedEvent.decode(msgs.get(0).getBody(), OffsetMovedEvent.class);\n\n                        DeleteMsgsEvent deleteMsgsEvent = new DeleteMsgsEvent();\n                        deleteMsgsEvent.setOffsetMovedEvent(ome);\n                        deleteMsgsEvent.setEventTimestamp(msgs.get(0).getStoreTimestamp());\n\n                        MonitorService.this.monitorListener.reportDeleteMsgsEvent(deleteMsgsEvent);\n                    } catch (Exception e) {\n                    }\n\n                    return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;\n                }\n            });\n        } catch (MQClientException e) {\n        }\n    }",
+        "position": {
+            "line": 72,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setInstanceName",
+                "position": {
+                    "line": 77,
+                    "column": 32
+                }
+            },
+            {
+                "name": "instanceName",
+                "position": {
+                    "line": 77,
+                    "column": 48
+                }
+            },
+            {
+                "name": "setNamesrvAddr",
+                "position": {
+                    "line": 78,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getNamesrvAddr",
+                "position": {
+                    "line": 78,
+                    "column": 61
+                }
+            },
+            {
+                "name": "setInstanceName",
+                "position": {
+                    "line": 80,
+                    "column": 36
+                }
+            },
+            {
+                "name": "instanceName",
+                "position": {
+                    "line": 80,
+                    "column": 52
+                }
+            },
+            {
+                "name": "setNamesrvAddr",
+                "position": {
+                    "line": 81,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getNamesrvAddr",
+                "position": {
+                    "line": 81,
+                    "column": 65
+                }
+            },
+            {
+                "name": "setInstanceName",
+                "position": {
+                    "line": 83,
+                    "column": 36
+                }
+            },
+            {
+                "name": "instanceName",
+                "position": {
+                    "line": 83,
+                    "column": 52
+                }
+            },
+            {
+                "name": "setNamesrvAddr",
+                "position": {
+                    "line": 84,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getNamesrvAddr",
+                "position": {
+                    "line": 84,
+                    "column": 65
+                }
+            },
+            {
+                "name": "setConsumeThreadMin",
+                "position": {
+                    "line": 86,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setConsumeThreadMax",
+                "position": {
+                    "line": 87,
+                    "column": 40
+                }
+            },
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 88,
+                    "column": 40
+                }
+            },
+            {
+                "name": "registerMessageListener",
+                "position": {
+                    "line": 89,
+                    "column": 40
+                }
+            },
+            {
+                "name": "decode",
+                "position": {
+                    "line": 96,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getBody",
+                "position": {
+                    "line": 96,
+                    "column": 65
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 96,
+                    "column": 58
+                }
+            },
+            {
+                "name": "setOffsetMovedEvent",
+                "position": {
+                    "line": 99,
+                    "column": 41
+                }
+            },
+            {
+                "name": "setEventTimestamp",
+                "position": {
+                    "line": 100,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 100,
+                    "column": 71
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 100,
+                    "column": 64
+                }
+            },
+            {
+                "name": "reportDeleteMsgsEvent",
+                "position": {
+                    "line": 102,
+                    "column": 61
+                }
+            },
+            {
+                "name": "DefaultMQAdminExt",
+                "position": {
+                    "line": 76,
+                    "column": 38
+                }
+            },
+            {
+                "name": "MessageListenerConcurrently",
+                "position": {
+                    "line": 89,
+                    "column": 68
+                }
+            },
+            {
+                "name": "DeleteMsgsEvent",
+                "position": {
+                    "line": 98,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [
+            "MonitorService.instanceName()",
+            "MonitorService.instanceName()",
+            "MonitorService.instanceName()"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "consumeMessage",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context)",
+        "class_signature": "MonitorService.consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<MessageExt>",
+                "msgs"
+            ],
+            [
+                "ConsumeConcurrentlyContext",
+                "context"
+            ]
+        ],
+        "methodBody": "{\n                    try {\n                        OffsetMovedEvent ome =\n                            OffsetMovedEvent.decode(msgs.get(0).getBody(), OffsetMovedEvent.class);\n\n                        DeleteMsgsEvent deleteMsgsEvent = new DeleteMsgsEvent();\n                        deleteMsgsEvent.setOffsetMovedEvent(ome);\n                        deleteMsgsEvent.setEventTimestamp(msgs.get(0).getStoreTimestamp());\n\n                        MonitorService.this.monitorListener.reportDeleteMsgsEvent(deleteMsgsEvent);\n                    } catch (Exception e) {\n                    }\n\n                    return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;\n                }",
+        "position": {
+            "line": 92,
+            "column": 50
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "decode",
+                "position": {
+                    "line": 96,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getBody",
+                "position": {
+                    "line": 96,
+                    "column": 65
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 96,
+                    "column": 58
+                }
+            },
+            {
+                "name": "setOffsetMovedEvent",
+                "position": {
+                    "line": 99,
+                    "column": 41
+                }
+            },
+            {
+                "name": "setEventTimestamp",
+                "position": {
+                    "line": 100,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 100,
+                    "column": 71
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 100,
+                    "column": 64
+                }
+            },
+            {
+                "name": "reportDeleteMsgsEvent",
+                "position": {
+                    "line": 102,
+                    "column": 61
+                }
+            },
+            {
+                "name": "DeleteMsgsEvent",
+                "position": {
+                    "line": 98,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "main",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "main(String[] args)",
+        "class_signature": "MonitorService.main(String[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        main0(args, null);\n    }",
+        "position": {
+            "line": 113,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "main0",
+                "position": {
+                    "line": 114,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "MonitorService.main0(String[] args, RPCHook rpcHook)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "main0",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "main0(String[] args, RPCHook rpcHook)",
+        "class_signature": "MonitorService.main0(String[] args, RPCHook rpcHook)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String[]",
+                "args"
+            ],
+            [
+                "RPCHook",
+                "rpcHook"
+            ]
+        ],
+        "methodBody": "{\n        final MonitorService monitorService =\n            new MonitorService(new MonitorConfig(), new DefaultMonitorListener(), rpcHook);\n        monitorService.start();\n\n        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {\n            private volatile boolean hasShutdown = false;\n\n            @Override\n            public void run() {\n                synchronized (this) {\n                    if (!this.hasShutdown) {\n                        this.hasShutdown = true;\n                        monitorService.shutdown();\n                    }\n                }\n            }\n        }, \"ShutdownHook\"));\n    }",
+        "position": {
+            "line": 117,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "start",
+                "position": {
+                    "line": 120,
+                    "column": 24
+                }
+            },
+            {
+                "name": "addShutdownHook",
+                "position": {
+                    "line": 122,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getRuntime",
+                "position": {
+                    "line": 122,
+                    "column": 17
+                }
+            },
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 130,
+                    "column": 40
+                }
+            },
+            {
+                "name": "MonitorService",
+                "position": {
+                    "line": 119,
+                    "column": 17
+                }
+            },
+            {
+                "name": "MonitorConfig",
+                "position": {
+                    "line": 119,
+                    "column": 36
+                }
+            },
+            {
+                "name": "DefaultMonitorListener",
+                "position": {
+                    "line": 119,
+                    "column": 57
+                }
+            },
+            {
+                "name": "Thread",
+                "position": {
+                    "line": 122,
+                    "column": 50
+                }
+            },
+            {
+                "name": "Runnable",
+                "position": {
+                    "line": 122,
+                    "column": 61
+                }
+            }
+        ],
+        "calledMethods": [
+            "MonitorService.start()",
+            "MonitorService.shutdown()",
+            "MonitorService.MonitorService(MonitorConfig monitorConfig, MonitorListener monitorListener, RPCHook rpcHook)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "run",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "run()",
+        "class_signature": "MonitorService.run()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n                synchronized (this) {\n                    if (!this.hasShutdown) {\n                        this.hasShutdown = true;\n                        monitorService.shutdown();\n                    }\n                }\n            }",
+        "position": {
+            "line": 126,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 130,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [
+            "MonitorService.shutdown()"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "instanceName",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "instanceName()",
+        "class_signature": "MonitorService.instanceName()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        final int randomInteger = RandomUtils.nextInt(0, Integer.MAX_VALUE);\n        String name = System.currentTimeMillis() + randomInteger + this.monitorConfig.getNamesrvAddr();\n        return \"MonitorService_\" + name.hashCode();\n    }",
+        "position": {
+            "line": 137,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "nextInt",
+                "position": {
+                    "line": 138,
+                    "column": 47
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 139,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getNamesrvAddr",
+                "position": {
+                    "line": 139,
+                    "column": 87
+                }
+            },
+            {
+                "name": "hashCode",
+                "position": {
+                    "line": 140,
+                    "column": 41
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "start",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "start()",
+        "class_signature": "MonitorService.start()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        this.defaultMQPullConsumer.start();\n        this.defaultMQAdminExt.start();\n        this.defaultMQPushConsumer.start();\n        this.startScheduleTask();\n    }",
+        "position": {
+            "line": 143,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "start",
+                "position": {
+                    "line": 144,
+                    "column": 36
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 145,
+                    "column": 32
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 146,
+                    "column": 36
+                }
+            },
+            {
+                "name": "startScheduleTask",
+                "position": {
+                    "line": 147,
+                    "column": 14
+                }
+            }
+        ],
+        "calledMethods": [
+            "MonitorService.startScheduleTask()"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "shutdown",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "shutdown()",
+        "class_signature": "MonitorService.shutdown()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        this.defaultMQPullConsumer.shutdown();\n        this.defaultMQAdminExt.shutdown();\n        this.defaultMQPushConsumer.shutdown();\n    }",
+        "position": {
+            "line": 150,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 151,
+                    "column": 36
+                }
+            },
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 152,
+                    "column": 32
+                }
+            },
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 153,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "startScheduleTask",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "startScheduleTask()",
+        "class_signature": "MonitorService.startScheduleTask()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        this.scheduledExecutorService.scheduleAtFixedRate(new Runnable() {\n            @Override\n            public void run() {\n                try {\n                    MonitorService.this.doMonitorWork();\n                } catch (Exception e) {\n                    logger.error(\"doMonitorWork Exception\", e);\n                }\n            }\n        }, 1000 * 20, this.monitorConfig.getRoundInterval(), TimeUnit.MILLISECONDS);\n    }",
+        "position": {
+            "line": 156,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "scheduleAtFixedRate",
+                "position": {
+                    "line": 157,
+                    "column": 39
+                }
+            },
+            {
+                "name": "doMonitorWork",
+                "position": {
+                    "line": 161,
+                    "column": 41
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 163,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getRoundInterval",
+                "position": {
+                    "line": 166,
+                    "column": 42
+                }
+            },
+            {
+                "name": "Runnable",
+                "position": {
+                    "line": 157,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [
+            "MonitorService.doMonitorWork()"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "run",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "run()",
+        "class_signature": "MonitorService.run()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n                try {\n                    MonitorService.this.doMonitorWork();\n                } catch (Exception e) {\n                    logger.error(\"doMonitorWork Exception\", e);\n                }\n            }",
+        "position": {
+            "line": 159,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "doMonitorWork",
+                "position": {
+                    "line": 161,
+                    "column": 41
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 163,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "MonitorService.doMonitorWork()"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "doMonitorWork",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "doMonitorWork()",
+        "class_signature": "MonitorService.doMonitorWork()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        long beginTime = System.currentTimeMillis();\n        this.monitorListener.beginRound();\n\n        TopicList topicList = defaultMQAdminExt.fetchAllTopicList();\n        for (String topic : topicList.getTopicList()) {\n            if (topic.startsWith(MixAll.RETRY_GROUP_TOPIC_PREFIX)) {\n                String consumerGroup = KeyBuilder.parseGroup(topic);\n\n                try {\n                    this.reportUndoneMsgs(consumerGroup);\n                } catch (Exception e) {\n                    // log.error(\"reportUndoneMsgs Exception\", e);\n                }\n\n                try {\n                    this.reportConsumerRunningInfo(consumerGroup);\n                } catch (Exception e) {\n                    // log.error(\"reportConsumerRunningInfo Exception\", e);\n                }\n            }\n        }\n        this.monitorListener.endRound();\n        long spentTimeMills = System.currentTimeMillis() - beginTime;\n        logger.info(\"Execute one round monitor work, spent timemills: {}\", spentTimeMills);\n    }",
+        "position": {
+            "line": 169,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 170,
+                    "column": 33
+                }
+            },
+            {
+                "name": "beginRound",
+                "position": {
+                    "line": 171,
+                    "column": 30
+                }
+            },
+            {
+                "name": "fetchAllTopicList",
+                "position": {
+                    "line": 173,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopicList",
+                "position": {
+                    "line": 174,
+                    "column": 39
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 175,
+                    "column": 23
+                }
+            },
+            {
+                "name": "parseGroup",
+                "position": {
+                    "line": 176,
+                    "column": 51
+                }
+            },
+            {
+                "name": "reportUndoneMsgs",
+                "position": {
+                    "line": 179,
+                    "column": 26
+                }
+            },
+            {
+                "name": "reportConsumerRunningInfo",
+                "position": {
+                    "line": 185,
+                    "column": 26
+                }
+            },
+            {
+                "name": "endRound",
+                "position": {
+                    "line": 191,
+                    "column": 30
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 192,
+                    "column": 38
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 193,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "MonitorService.reportUndoneMsgs(String consumerGroup)",
+            "MonitorService.reportConsumerRunningInfo(String consumerGroup)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "reportUndoneMsgs",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "reportUndoneMsgs(String consumerGroup)",
+        "class_signature": "MonitorService.reportUndoneMsgs(String consumerGroup)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "consumerGroup"
+            ]
+        ],
+        "methodBody": "{\n        ConsumeStats cs = null;\n        try {\n            cs = defaultMQAdminExt.examineConsumeStats(consumerGroup);\n        } catch (Exception ignore) {\n            return;\n        }\n\n        ConsumerConnection cc = null;\n        try {\n            cc = defaultMQAdminExt.examineConsumerConnectionInfo(consumerGroup);\n        } catch (Exception ignore) {\n            return;\n        }\n\n        if (cs != null) {\n\n            HashMap<String/* Topic */, ConsumeStats> csByTopic = new HashMap<>();\n            {\n                Iterator<Entry<MessageQueue, OffsetWrapper>> it = cs.getOffsetTable().entrySet().iterator();\n                while (it.hasNext()) {\n                    Entry<MessageQueue, OffsetWrapper> next = it.next();\n                    MessageQueue mq = next.getKey();\n                    OffsetWrapper ow = next.getValue();\n                    ConsumeStats csTmp = csByTopic.get(mq.getTopic());\n                    if (null == csTmp) {\n                        csTmp = new ConsumeStats();\n                        csByTopic.put(mq.getTopic(), csTmp);\n                    }\n\n                    csTmp.getOffsetTable().put(mq, ow);\n                }\n            }\n\n            {\n                Iterator<Entry<String, ConsumeStats>> it = csByTopic.entrySet().iterator();\n                while (it.hasNext()) {\n                    Entry<String, ConsumeStats> next = it.next();\n                    UndoneMsgs undoneMsgs = new UndoneMsgs();\n                    undoneMsgs.setConsumerGroup(consumerGroup);\n                    undoneMsgs.setTopic(next.getKey());\n                    this.computeUndoneMsgs(undoneMsgs, next.getValue());\n                    this.monitorListener.reportUndoneMsgs(undoneMsgs);\n                    this.reportFailedMsgs(consumerGroup, next.getKey());\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 196,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "examineConsumeStats",
+                "position": {
+                    "line": 199,
+                    "column": 36
+                }
+            },
+            {
+                "name": "examineConsumerConnectionInfo",
+                "position": {
+                    "line": 206,
+                    "column": 36
+                }
+            },
+            {
+                "name": "iterator",
+                "position": {
+                    "line": 215,
+                    "column": 98
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 215,
+                    "column": 87
+                }
+            },
+            {
+                "name": "getOffsetTable",
+                "position": {
+                    "line": 215,
+                    "column": 70
+                }
+            },
+            {
+                "name": "hasNext",
+                "position": {
+                    "line": 216,
+                    "column": 27
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 217,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 218,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 219,
+                    "column": 45
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 220,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 220,
+                    "column": 59
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 223,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 223,
+                    "column": 42
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 226,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getOffsetTable",
+                "position": {
+                    "line": 226,
+                    "column": 27
+                }
+            },
+            {
+                "name": "iterator",
+                "position": {
+                    "line": 231,
+                    "column": 81
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 231,
+                    "column": 70
+                }
+            },
+            {
+                "name": "hasNext",
+                "position": {
+                    "line": 232,
+                    "column": 27
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 233,
+                    "column": 59
+                }
+            },
+            {
+                "name": "setConsumerGroup",
+                "position": {
+                    "line": 235,
+                    "column": 32
+                }
+            },
+            {
+                "name": "setTopic",
+                "position": {
+                    "line": 236,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 236,
+                    "column": 46
+                }
+            },
+            {
+                "name": "computeUndoneMsgs",
+                "position": {
+                    "line": 237,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 237,
+                    "column": 61
+                }
+            },
+            {
+                "name": "reportUndoneMsgs",
+                "position": {
+                    "line": 238,
+                    "column": 42
+                }
+            },
+            {
+                "name": "reportFailedMsgs",
+                "position": {
+                    "line": 239,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 239,
+                    "column": 63
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 213,
+                    "column": 70
+                }
+            },
+            {
+                "name": "ConsumeStats",
+                "position": {
+                    "line": 222,
+                    "column": 37
+                }
+            },
+            {
+                "name": "UndoneMsgs",
+                "position": {
+                    "line": 234,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "MonitorService.computeUndoneMsgs(UndoneMsgs undoneMsgs, ConsumeStats consumeStats)",
+            "MonitorService.reportFailedMsgs(String consumerGroup, String topic)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "reportConsumerRunningInfo",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "reportConsumerRunningInfo(String consumerGroup)",
+        "class_signature": "MonitorService.reportConsumerRunningInfo(String consumerGroup)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "consumerGroup"
+            ]
+        ],
+        "methodBody": "{\n        ConsumerConnection cc = defaultMQAdminExt.examineConsumerConnectionInfo(consumerGroup);\n        TreeMap<String, ConsumerRunningInfo> infoMap = new TreeMap<>();\n        for (Connection c : cc.getConnectionSet()) {\n            String clientId = c.getClientId();\n\n            if (c.getVersion() < MQVersion.Version.V3_1_8_SNAPSHOT.ordinal()) {\n                continue;\n            }\n\n            try {\n                ConsumerRunningInfo info =\n                    defaultMQAdminExt.getConsumerRunningInfo(consumerGroup, clientId, false);\n                infoMap.put(clientId, info);\n            } catch (Exception e) {\n            }\n        }\n\n        if (!infoMap.isEmpty()) {\n            this.monitorListener.reportConsumerRunningInfo(infoMap);\n        }\n    }",
+        "position": {
+            "line": 245,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "examineConsumerConnectionInfo",
+                "position": {
+                    "line": 247,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getConnectionSet",
+                "position": {
+                    "line": 249,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getClientId",
+                "position": {
+                    "line": 250,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getVersion",
+                "position": {
+                    "line": 252,
+                    "column": 19
+                }
+            },
+            {
+                "name": "ordinal",
+                "position": {
+                    "line": 252,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getConsumerRunningInfo",
+                "position": {
+                    "line": 258,
+                    "column": 39
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 259,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 264,
+                    "column": 22
+                }
+            },
+            {
+                "name": "reportConsumerRunningInfo",
+                "position": {
+                    "line": 265,
+                    "column": 34
+                }
+            },
+            {
+                "name": "TreeMap<>",
+                "position": {
+                    "line": 248,
+                    "column": 60
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "computeUndoneMsgs",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "computeUndoneMsgs(UndoneMsgs undoneMsgs, ConsumeStats consumeStats)",
+        "class_signature": "MonitorService.computeUndoneMsgs(UndoneMsgs undoneMsgs, ConsumeStats consumeStats)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "UndoneMsgs",
+                "undoneMsgs"
+            ],
+            [
+                "ConsumeStats",
+                "consumeStats"
+            ]
+        ],
+        "methodBody": "{\n        long total = 0;\n        long singleMax = 0;\n        long delayMax = 0;\n        Iterator<Entry<MessageQueue, OffsetWrapper>> it = consumeStats.getOffsetTable().entrySet().iterator();\n        while (it.hasNext()) {\n            Entry<MessageQueue, OffsetWrapper> next = it.next();\n            MessageQueue mq = next.getKey();\n            OffsetWrapper ow = next.getValue();\n            long diff = ow.getBrokerOffset() - ow.getConsumerOffset();\n\n            if (diff > singleMax) {\n                singleMax = diff;\n            }\n\n            if (diff > 0) {\n                total += diff;\n            }\n\n            // Delay\n            if (ow.getLastTimestamp() > 0) {\n                try {\n                    long maxOffset = this.defaultMQPullConsumer.maxOffset(mq);\n                    if (maxOffset > 0) {\n                        PullResult pull = this.defaultMQPullConsumer.pull(mq, \"*\", maxOffset - 1, 1);\n                        switch (pull.getPullStatus()) {\n                            case FOUND:\n                                long delay =\n                                    pull.getMsgFoundList().get(0).getStoreTimestamp() - ow.getLastTimestamp();\n                                if (delay > delayMax) {\n                                    delayMax = delay;\n                                }\n                                break;\n                            case NO_MATCHED_MSG:\n                            case NO_NEW_MSG:\n                            case OFFSET_ILLEGAL:\n                                break;\n                            default:\n                                break;\n                        }\n                    }\n                } catch (Exception e) {\n                }\n            }\n        }\n\n        undoneMsgs.setUndoneMsgsTotal(total);\n        undoneMsgs.setUndoneMsgsSingleMQ(singleMax);\n        undoneMsgs.setUndoneMsgsDelayTimeMills(delayMax);\n    }",
+        "position": {
+            "line": 269,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "iterator",
+                "position": {
+                    "line": 273,
+                    "column": 100
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 273,
+                    "column": 89
+                }
+            },
+            {
+                "name": "getOffsetTable",
+                "position": {
+                    "line": 273,
+                    "column": 72
+                }
+            },
+            {
+                "name": "hasNext",
+                "position": {
+                    "line": 274,
+                    "column": 19
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 275,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 276,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 277,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getBrokerOffset",
+                "position": {
+                    "line": 278,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getConsumerOffset",
+                "position": {
+                    "line": 278,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getLastTimestamp",
+                "position": {
+                    "line": 289,
+                    "column": 20
+                }
+            },
+            {
+                "name": "maxOffset",
+                "position": {
+                    "line": 291,
+                    "column": 65
+                }
+            },
+            {
+                "name": "pull",
+                "position": {
+                    "line": 293,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getPullStatus",
+                "position": {
+                    "line": 294,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 297,
+                    "column": 67
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 297,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getMsgFoundList",
+                "position": {
+                    "line": 297,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getLastTimestamp",
+                "position": {
+                    "line": 297,
+                    "column": 92
+                }
+            },
+            {
+                "name": "setUndoneMsgsTotal",
+                "position": {
+                    "line": 315,
+                    "column": 20
+                }
+            },
+            {
+                "name": "setUndoneMsgsSingleMQ",
+                "position": {
+                    "line": 316,
+                    "column": 20
+                }
+            },
+            {
+                "name": "setUndoneMsgsDelayTimeMills",
+                "position": {
+                    "line": 317,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 12
+    },
+    {
+        "name": "reportFailedMsgs",
+        "category": "method_declaration",
+        "class": "MonitorService",
+        "signature": "reportFailedMsgs(String consumerGroup, String topic)",
+        "class_signature": "MonitorService.reportFailedMsgs(String consumerGroup, String topic)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "consumerGroup"
+            ],
+            [
+                "String",
+                "topic"
+            ]
+        ],
+        "methodBody": "{\n\n    }",
+        "position": {
+            "line": 320,
+            "column": 18
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 13
+    }
+]

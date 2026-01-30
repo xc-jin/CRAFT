@@ -1,0 +1,422 @@
+[
+    {
+        "name": "TriDecoder",
+        "category": "constructor_declaration",
+        "class": "TriDecoder",
+        "signature": "TriDecoder(DeCompressor decompressor, Listener listener)",
+        "class_signature": "TriDecoder.TriDecoder(DeCompressor decompressor, Listener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "DeCompressor",
+                "decompressor"
+            ],
+            [
+                "Listener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        this.decompressor = decompressor;\n        this.listener = listener;\n    }",
+        "position": {
+            "line": 44,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "deframe",
+        "category": "method_declaration",
+        "class": "TriDecoder",
+        "signature": "deframe(ByteBuf data)",
+        "class_signature": "TriDecoder.deframe(ByteBuf data)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ByteBuf",
+                "data"
+            ]
+        ],
+        "methodBody": "{\n        if (closing || closed) {\n            // ignored\n            return;\n        }\n        accumulate.addComponent(true, data);\n        deliver();\n    }",
+        "position": {
+            "line": 50,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "addComponent",
+                "position": {
+                    "line": 55,
+                    "column": 20
+                }
+            },
+            {
+                "name": "deliver",
+                "position": {
+                    "line": 56,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "TriDecoder.deliver()"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "request",
+        "category": "method_declaration",
+        "class": "TriDecoder",
+        "signature": "request(int numMessages)",
+        "class_signature": "TriDecoder.request(int numMessages)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "numMessages"
+            ]
+        ],
+        "methodBody": "{\n        pendingDeliveries += numMessages;\n        deliver();\n    }",
+        "position": {
+            "line": 59,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "deliver",
+                "position": {
+                    "line": 61,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "TriDecoder.deliver()"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "close",
+        "category": "method_declaration",
+        "class": "TriDecoder",
+        "signature": "close()",
+        "class_signature": "TriDecoder.close()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        closing = true;\n        deliver();\n    }",
+        "position": {
+            "line": 65,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "deliver",
+                "position": {
+                    "line": 67,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "TriDecoder.deliver()"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "deliver",
+        "category": "method_declaration",
+        "class": "TriDecoder",
+        "signature": "deliver()",
+        "class_signature": "TriDecoder.deliver()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        // We can have reentrancy here when using a direct executor, triggered by calls to\n        // request more messages. This is safe as we simply loop until pendingDelivers = 0\n        if (inDelivery) {\n            return;\n        }\n        inDelivery = true;\n        try {\n            // Process the uncompressed bytes.\n            while (pendingDeliveries > 0 && hasEnoughBytes()) {\n                switch (state) {\n                    case HEADER:\n                        processHeader();\n                        break;\n                    case PAYLOAD:\n                        // Read the body and deliver the message.\n                        processBody();\n\n                        // Since we've delivered a message, decrement the number of pending\n                        // deliveries remaining.\n                        pendingDeliveries--;\n                        break;\n                    default:\n                        throw new AssertionError(\"Invalid state: \" + state);\n                }\n            }\n            if (closing) {\n                if (!closed) {\n                    closed = true;\n                    accumulate.clear();\n                    accumulate.release();\n                    listener.close();\n                }\n            }\n        } finally {\n            inDelivery = false;\n        }\n    }",
+        "position": {
+            "line": 70,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "hasEnoughBytes",
+                "position": {
+                    "line": 79,
+                    "column": 45
+                }
+            },
+            {
+                "name": "processHeader",
+                "position": {
+                    "line": 82,
+                    "column": 25
+                }
+            },
+            {
+                "name": "processBody",
+                "position": {
+                    "line": 86,
+                    "column": 25
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 99,
+                    "column": 32
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 100,
+                    "column": 32
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 101,
+                    "column": 30
+                }
+            },
+            {
+                "name": "AssertionError",
+                "position": {
+                    "line": 93,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "TriDecoder.hasEnoughBytes()",
+            "TriDecoder.processHeader()",
+            "TriDecoder.processBody()",
+            "Listener.close()"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "hasEnoughBytes",
+        "category": "method_declaration",
+        "class": "TriDecoder",
+        "signature": "hasEnoughBytes()",
+        "class_signature": "TriDecoder.hasEnoughBytes()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return requiredLength - accumulate.readableBytes() <= 0;\n    }",
+        "position": {
+            "line": 109,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "readableBytes",
+                "position": {
+                    "line": 110,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "processHeader",
+        "category": "method_declaration",
+        "class": "TriDecoder",
+        "signature": "processHeader()",
+        "class_signature": "TriDecoder.processHeader()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        int type = accumulate.readUnsignedByte();\n        if ((type & RESERVED_MASK) != 0) {\n            throw new RpcException(\"gRPC frame header malformed: reserved bits not zero\");\n        }\n        compressedFlag = (type & COMPRESSED_FLAG_MASK) != 0;\n\n        requiredLength = accumulate.readInt();\n\n        // Continue reading the frame body.\n        state = GrpcDecodeState.PAYLOAD;\n    }",
+        "position": {
+            "line": 117,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "readUnsignedByte",
+                "position": {
+                    "line": 118,
+                    "column": 31
+                }
+            },
+            {
+                "name": "readInt",
+                "position": {
+                    "line": 124,
+                    "column": 37
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 120,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "processBody",
+        "category": "method_declaration",
+        "class": "TriDecoder",
+        "signature": "processBody()",
+        "class_signature": "TriDecoder.processBody()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        // There is no reliable way to get the uncompressed size per message when it's compressed,\n        // because the uncompressed bytes are provided through an InputStream whose total size is\n        // unknown until all bytes are read, and we don't know when it happens.\n        byte[] stream = compressedFlag ? getCompressedBody() : getUncompressedBody();\n\n        listener.onRawMessage(stream);\n\n        // Done with this frame, begin processing the next header.\n        state = GrpcDecodeState.HEADER;\n        requiredLength = HEADER_LENGTH;\n    }",
+        "position": {
+            "line": 133,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCompressedBody",
+                "position": {
+                    "line": 137,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getUncompressedBody",
+                "position": {
+                    "line": 137,
+                    "column": 64
+                }
+            },
+            {
+                "name": "onRawMessage",
+                "position": {
+                    "line": 139,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "TriDecoder.getCompressedBody()",
+            "TriDecoder.getUncompressedBody()",
+            "Listener.onRawMessage(byte[] data)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "getCompressedBody",
+        "category": "method_declaration",
+        "class": "TriDecoder",
+        "signature": "getCompressedBody()",
+        "class_signature": "TriDecoder.getCompressedBody()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        final byte[] compressedBody = getUncompressedBody();\n        return decompressor.decompress(compressedBody);\n    }",
+        "position": {
+            "line": 146,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getUncompressedBody",
+                "position": {
+                    "line": 147,
+                    "column": 39
+                }
+            },
+            {
+                "name": "decompress",
+                "position": {
+                    "line": 148,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "TriDecoder.getUncompressedBody()"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "getUncompressedBody",
+        "category": "method_declaration",
+        "class": "TriDecoder",
+        "signature": "getUncompressedBody()",
+        "class_signature": "TriDecoder.getUncompressedBody()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        byte[] data = new byte[requiredLength];\n        accumulate.readBytes(data);\n        accumulate.discardReadComponents();\n        return data;\n    }",
+        "position": {
+            "line": 151,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "readBytes",
+                "position": {
+                    "line": 153,
+                    "column": 20
+                }
+            },
+            {
+                "name": "discardReadComponents",
+                "position": {
+                    "line": 154,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "onRawMessage",
+        "category": "method_declaration",
+        "class": "Listener",
+        "signature": "onRawMessage(byte[] data)",
+        "class_signature": "Listener.onRawMessage(byte[] data)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "byte[]",
+                "data"
+            ]
+        ],
+        "methodBody": "",
+        "position": {
+            "line": 165,
+            "column": 14
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "close",
+        "category": "method_declaration",
+        "class": "Listener",
+        "signature": "close()",
+        "class_signature": "Listener.close()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "",
+        "position": {
+            "line": 167,
+            "column": 14
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 8
+    }
+]

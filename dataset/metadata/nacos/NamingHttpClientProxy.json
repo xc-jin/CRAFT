@@ -1,0 +1,2327 @@
+[
+    {
+        "name": "NamingHttpClientProxy",
+        "category": "constructor_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "NamingHttpClientProxy(String namespaceId, SecurityProxy securityProxy, ServerListManager serverListManager, NacosClientProperties properties)",
+        "class_signature": "NamingHttpClientProxy.NamingHttpClientProxy(String namespaceId, SecurityProxy securityProxy, ServerListManager serverListManager, NacosClientProperties properties)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "namespaceId"
+            ],
+            [
+                "SecurityProxy",
+                "securityProxy"
+            ],
+            [
+                "ServerListManager",
+                "serverListManager"
+            ],
+            [
+                "NacosClientProperties",
+                "properties"
+            ]
+        ],
+        "methodBody": "{\n        super(securityProxy);\n        this.serverListManager = serverListManager;\n        this.setServerPort(DEFAULT_SERVER_PORT);\n        this.namespaceId = namespaceId;\n        this.maxRetry = ConvertUtils.toInt(properties.getProperty(PropertyKeyConst.NAMING_REQUEST_DOMAIN_RETRY_COUNT,\n                String.valueOf(UtilAndComs.REQUEST_DOMAIN_RETRY_COUNT)));\n    }",
+        "position": {
+            "line": 109,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setServerPort",
+                "position": {
+                    "line": 113,
+                    "column": 14
+                }
+            },
+            {
+                "name": "toInt",
+                "position": {
+                    "line": 115,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 115,
+                    "column": 55
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 116,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.setServerPort(int serverPort)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "onEvent",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "onEvent(ServerListChangedEvent event)",
+        "class_signature": "NamingHttpClientProxy.onEvent(ServerListChangedEvent event)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ServerListChangedEvent",
+                "event"
+            ]
+        ],
+        "methodBody": "{\n        // do nothing in http client\n    }",
+        "position": {
+            "line": 120,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "subscribeType",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "subscribeType()",
+        "class_signature": "NamingHttpClientProxy.subscribeType()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return ServerListChangedEvent.class;\n    }",
+        "position": {
+            "line": 125,
+            "column": 35
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "registerService",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "registerService(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingHttpClientProxy.registerService(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        NAMING_LOGGER.info(\"[REGISTER-SERVICE] {} registering service {} with instance: {}\", namespaceId, serviceName,\n                instance);\n        String groupedServiceName = NamingUtils.getGroupedName(serviceName, groupName);\n        if (instance.isEphemeral()) {\n            throw new UnsupportedOperationException(\n                    \"Do not support register ephemeral instances by HTTP, please use gRPC replaced.\");\n        }\n        final Map<String, String> params = new HashMap<>(32);\n        params.put(CommonParams.NAMESPACE_ID, namespaceId);\n        params.put(CommonParams.SERVICE_NAME, groupedServiceName);\n        params.put(CommonParams.GROUP_NAME, groupName);\n        params.put(CommonParams.CLUSTER_NAME, instance.getClusterName());\n        params.put(IP_PARAM, instance.getIp());\n        params.put(PORT_PARAM, String.valueOf(instance.getPort()));\n        params.put(WEIGHT_PARAM, String.valueOf(instance.getWeight()));\n        params.put(REGISTER_ENABLE_PARAM, String.valueOf(instance.isEnabled()));\n        params.put(HEALTHY_PARAM, String.valueOf(instance.isHealthy()));\n        params.put(EPHEMERAL_PARAM, String.valueOf(instance.isEphemeral()));\n        params.put(META_PARAM, JacksonUtils.toJson(instance.getMetadata()));\n        reqApi(UtilAndComs.nacosUrlInstance, params, HttpMethod.POST);\n    }",
+        "position": {
+            "line": 130,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 131,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getGroupedName",
+                "position": {
+                    "line": 133,
+                    "column": 49
+                }
+            },
+            {
+                "name": "isEphemeral",
+                "position": {
+                    "line": 134,
+                    "column": 22
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 139,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 140,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 141,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 142,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 142,
+                    "column": 56
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 143,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 143,
+                    "column": 39
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 144,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 144,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 144,
+                    "column": 56
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 145,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 145,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getWeight",
+                "position": {
+                    "line": 145,
+                    "column": 58
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 146,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 146,
+                    "column": 50
+                }
+            },
+            {
+                "name": "isEnabled",
+                "position": {
+                    "line": 146,
+                    "column": 67
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 147,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 147,
+                    "column": 42
+                }
+            },
+            {
+                "name": "isHealthy",
+                "position": {
+                    "line": 147,
+                    "column": 59
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 148,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 148,
+                    "column": 44
+                }
+            },
+            {
+                "name": "isEphemeral",
+                "position": {
+                    "line": 148,
+                    "column": 61
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 149,
+                    "column": 16
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 149,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getMetadata",
+                "position": {
+                    "line": 149,
+                    "column": 61
+                }
+            },
+            {
+                "name": "reqApi",
+                "position": {
+                    "line": 150,
+                    "column": 9
+                }
+            },
+            {
+                "name": "UnsupportedOperationException",
+                "position": {
+                    "line": 135,
+                    "column": 23
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 138,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, String method)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "batchRegisterService",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "batchRegisterService(String serviceName, String groupName, List<Instance> instances)",
+        "class_signature": "NamingHttpClientProxy.batchRegisterService(String serviceName, String groupName, List<Instance> instances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<Instance>",
+                "instances"
+            ]
+        ],
+        "methodBody": "{\n        throw new UnsupportedOperationException(\n                \"Do not support persistent instances to perform batch registration methods.\");\n    }",
+        "position": {
+            "line": 154,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "UnsupportedOperationException",
+                "position": {
+                    "line": 155,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "batchDeregisterService",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "batchDeregisterService(String serviceName, String groupName, List<Instance> instances)",
+        "class_signature": "NamingHttpClientProxy.batchDeregisterService(String serviceName, String groupName, List<Instance> instances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<Instance>",
+                "instances"
+            ]
+        ],
+        "methodBody": "{\n        throw new UnsupportedOperationException(\n                \"Do not support persistent instances to perform batch de registration methods.\");\n    }",
+        "position": {
+            "line": 160,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "UnsupportedOperationException",
+                "position": {
+                    "line": 161,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "deregisterService",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "deregisterService(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingHttpClientProxy.deregisterService(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        NAMING_LOGGER.info(\"[DEREGISTER-SERVICE] {} deregistering service {} with instance: {}\", namespaceId,\n                serviceName, instance);\n        if (instance.isEphemeral()) {\n            return;\n        }\n        final Map<String, String> params = new HashMap<>(16);\n        params.put(CommonParams.NAMESPACE_ID, namespaceId);\n        params.put(CommonParams.SERVICE_NAME, NamingUtils.getGroupedName(serviceName, groupName));\n        params.put(CommonParams.CLUSTER_NAME, instance.getClusterName());\n        params.put(IP_PARAM, instance.getIp());\n        params.put(PORT_PARAM, String.valueOf(instance.getPort()));\n        params.put(EPHEMERAL_PARAM, String.valueOf(instance.isEphemeral()));\n        \n        reqApi(UtilAndComs.nacosUrlInstance, params, HttpMethod.DELETE);\n    }",
+        "position": {
+            "line": 166,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 167,
+                    "column": 23
+                }
+            },
+            {
+                "name": "isEphemeral",
+                "position": {
+                    "line": 169,
+                    "column": 22
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 173,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 174,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getGroupedName",
+                "position": {
+                    "line": 174,
+                    "column": 59
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 175,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 175,
+                    "column": 56
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 176,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 176,
+                    "column": 39
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 177,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 177,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 177,
+                    "column": 56
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 178,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 178,
+                    "column": 44
+                }
+            },
+            {
+                "name": "isEphemeral",
+                "position": {
+                    "line": 178,
+                    "column": 61
+                }
+            },
+            {
+                "name": "reqApi",
+                "position": {
+                    "line": 180,
+                    "column": 9
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 172,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, String method)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "updateInstance",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "updateInstance(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingHttpClientProxy.updateInstance(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        NAMING_LOGGER.info(\"[UPDATE-SERVICE] {} update service {} with instance: {}\", namespaceId, serviceName,\n                instance);\n        \n        final Map<String, String> params = new HashMap<>(32);\n        params.put(CommonParams.NAMESPACE_ID, namespaceId);\n        params.put(CommonParams.SERVICE_NAME, serviceName);\n        params.put(CommonParams.GROUP_NAME, groupName);\n        params.put(CommonParams.CLUSTER_NAME, instance.getClusterName());\n        params.put(IP_PARAM, instance.getIp());\n        params.put(PORT_PARAM, String.valueOf(instance.getPort()));\n        params.put(WEIGHT_PARAM, String.valueOf(instance.getWeight()));\n        params.put(ENABLE_PARAM, String.valueOf(instance.isEnabled()));\n        params.put(EPHEMERAL_PARAM, String.valueOf(instance.isEphemeral()));\n        params.put(META_PARAM, JacksonUtils.toJson(instance.getMetadata()));\n        \n        reqApi(UtilAndComs.nacosUrlInstance, params, HttpMethod.PUT);\n    }",
+        "position": {
+            "line": 184,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 185,
+                    "column": 23
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 189,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 190,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 191,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 192,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 192,
+                    "column": 56
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 193,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 193,
+                    "column": 39
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 194,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 194,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 194,
+                    "column": 56
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 195,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 195,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getWeight",
+                "position": {
+                    "line": 195,
+                    "column": 58
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 196,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 196,
+                    "column": 41
+                }
+            },
+            {
+                "name": "isEnabled",
+                "position": {
+                    "line": 196,
+                    "column": 58
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 197,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 197,
+                    "column": 44
+                }
+            },
+            {
+                "name": "isEphemeral",
+                "position": {
+                    "line": 197,
+                    "column": 61
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 198,
+                    "column": 16
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 198,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getMetadata",
+                "position": {
+                    "line": 198,
+                    "column": 61
+                }
+            },
+            {
+                "name": "reqApi",
+                "position": {
+                    "line": 200,
+                    "column": 9
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 188,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, String method)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "queryInstancesOfService",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "queryInstancesOfService(String serviceName, String groupName, String clusters, boolean healthyOnly)",
+        "class_signature": "NamingHttpClientProxy.queryInstancesOfService(String serviceName, String groupName, String clusters, boolean healthyOnly)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusters"
+            ],
+            [
+                "boolean",
+                "healthyOnly"
+            ]
+        ],
+        "methodBody": "{\n        throw new UnsupportedOperationException(\n                \"Do not support query instance by http client,please use gRPC replaced.\");\n    }",
+        "position": {
+            "line": 204,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "UnsupportedOperationException",
+                "position": {
+                    "line": 206,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "queryService",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "queryService(String serviceName, String groupName)",
+        "class_signature": "NamingHttpClientProxy.queryService(String serviceName, String groupName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ]
+        ],
+        "methodBody": "{\n        NAMING_LOGGER.info(\"[QUERY-SERVICE] {} query service : {}, {}\", namespaceId, serviceName, groupName);\n        \n        final Map<String, String> params = new HashMap<>(16);\n        params.put(CommonParams.NAMESPACE_ID, namespaceId);\n        params.put(CommonParams.SERVICE_NAME, serviceName);\n        params.put(CommonParams.GROUP_NAME, groupName);\n        \n        String result = reqApi(UtilAndComs.nacosUrlService, params, HttpMethod.GET);\n        return JacksonUtils.toObj(result, Service.class);\n    }",
+        "position": {
+            "line": 211,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 212,
+                    "column": 23
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 215,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 216,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 217,
+                    "column": 16
+                }
+            },
+            {
+                "name": "reqApi",
+                "position": {
+                    "line": 219,
+                    "column": 25
+                }
+            },
+            {
+                "name": "toObj",
+                "position": {
+                    "line": 220,
+                    "column": 29
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 214,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, String method)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "createService",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "createService(Service service, AbstractSelector selector)",
+        "class_signature": "NamingHttpClientProxy.createService(Service service, AbstractSelector selector)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Service",
+                "service"
+            ],
+            [
+                "AbstractSelector",
+                "selector"
+            ]
+        ],
+        "methodBody": "{\n        \n        NAMING_LOGGER.info(\"[CREATE-SERVICE] {} creating service : {}\", namespaceId, service);\n        \n        final Map<String, String> params = new HashMap<>(16);\n        params.put(CommonParams.NAMESPACE_ID, namespaceId);\n        params.put(CommonParams.SERVICE_NAME, service.getName());\n        params.put(CommonParams.GROUP_NAME, service.getGroupName());\n        params.put(PROTECT_THRESHOLD_PARAM, String.valueOf(service.getProtectThreshold()));\n        params.put(META_PARAM, JacksonUtils.toJson(service.getMetadata()));\n        params.put(SELECTOR_PARAM, JacksonUtils.toJson(selector));\n        \n        reqApi(UtilAndComs.nacosUrlService, params, HttpMethod.POST);\n        \n    }",
+        "position": {
+            "line": 224,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 226,
+                    "column": 23
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 229,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 230,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 230,
+                    "column": 55
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 231,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getGroupName",
+                "position": {
+                    "line": 231,
+                    "column": 53
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 232,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 232,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getProtectThreshold",
+                "position": {
+                    "line": 232,
+                    "column": 68
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 233,
+                    "column": 16
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 233,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getMetadata",
+                "position": {
+                    "line": 233,
+                    "column": 60
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 234,
+                    "column": 16
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 234,
+                    "column": 49
+                }
+            },
+            {
+                "name": "reqApi",
+                "position": {
+                    "line": 236,
+                    "column": 9
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 228,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, String method)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "deleteService",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "deleteService(String serviceName, String groupName)",
+        "class_signature": "NamingHttpClientProxy.deleteService(String serviceName, String groupName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ]
+        ],
+        "methodBody": "{\n        NAMING_LOGGER.info(\"[DELETE-SERVICE] {} deleting service : {} with groupName : {}\", namespaceId, serviceName,\n                groupName);\n        \n        final Map<String, String> params = new HashMap<>(16);\n        params.put(CommonParams.NAMESPACE_ID, namespaceId);\n        params.put(CommonParams.SERVICE_NAME, serviceName);\n        params.put(CommonParams.GROUP_NAME, groupName);\n        \n        String result = reqApi(UtilAndComs.nacosUrlService, params, HttpMethod.DELETE);\n        return \"ok\".equals(result);\n    }",
+        "position": {
+            "line": 241,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 242,
+                    "column": 23
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 246,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 247,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 248,
+                    "column": 16
+                }
+            },
+            {
+                "name": "reqApi",
+                "position": {
+                    "line": 250,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 251,
+                    "column": 21
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 245,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, String method)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "updateService",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "updateService(Service service, AbstractSelector selector)",
+        "class_signature": "NamingHttpClientProxy.updateService(Service service, AbstractSelector selector)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Service",
+                "service"
+            ],
+            [
+                "AbstractSelector",
+                "selector"
+            ]
+        ],
+        "methodBody": "{\n        NAMING_LOGGER.info(\"[UPDATE-SERVICE] {} updating service : {}\", namespaceId, service);\n        \n        final Map<String, String> params = new HashMap<>(16);\n        params.put(CommonParams.NAMESPACE_ID, namespaceId);\n        params.put(CommonParams.SERVICE_NAME, service.getName());\n        params.put(CommonParams.GROUP_NAME, service.getGroupName());\n        params.put(PROTECT_THRESHOLD_PARAM, String.valueOf(service.getProtectThreshold()));\n        params.put(META_PARAM, JacksonUtils.toJson(service.getMetadata()));\n        params.put(SELECTOR_PARAM, JacksonUtils.toJson(selector));\n        \n        reqApi(UtilAndComs.nacosUrlService, params, HttpMethod.PUT);\n    }",
+        "position": {
+            "line": 255,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 256,
+                    "column": 23
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 259,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 260,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 260,
+                    "column": 55
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 261,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getGroupName",
+                "position": {
+                    "line": 261,
+                    "column": 53
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 262,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 262,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getProtectThreshold",
+                "position": {
+                    "line": 262,
+                    "column": 68
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 263,
+                    "column": 16
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 263,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getMetadata",
+                "position": {
+                    "line": 263,
+                    "column": 60
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 264,
+                    "column": 16
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 264,
+                    "column": 49
+                }
+            },
+            {
+                "name": "reqApi",
+                "position": {
+                    "line": 266,
+                    "column": 9
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 258,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, String method)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "serverHealthy",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "serverHealthy()",
+        "class_signature": "NamingHttpClientProxy.serverHealthy()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        try {\n            String result = reqApi(UtilAndComs.nacosUrlBase + \"/operator/metrics\", new HashMap<>(8), HttpMethod.GET);\n            JsonNode json = JacksonUtils.toObj(result);\n            String serverStatus = json.get(\"status\").asText();\n            return \"UP\".equals(serverStatus);\n        } catch (Exception e) {\n            return false;\n        }\n    }",
+        "position": {
+            "line": 270,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "reqApi",
+                "position": {
+                    "line": 272,
+                    "column": 29
+                }
+            },
+            {
+                "name": "toObj",
+                "position": {
+                    "line": 273,
+                    "column": 42
+                }
+            },
+            {
+                "name": "asText",
+                "position": {
+                    "line": 274,
+                    "column": 54
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 274,
+                    "column": 40
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 275,
+                    "column": 25
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 272,
+                    "column": 88
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, String method)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "getServiceList",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "getServiceList(int pageNo, int pageSize, String groupName, AbstractSelector selector)",
+        "class_signature": "NamingHttpClientProxy.getServiceList(int pageNo, int pageSize, String groupName, AbstractSelector selector)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "pageNo"
+            ],
+            [
+                "int",
+                "pageSize"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "AbstractSelector",
+                "selector"
+            ]
+        ],
+        "methodBody": "{\n        \n        Map<String, String> params = new HashMap<>(16);\n        params.put(\"pageNo\", String.valueOf(pageNo));\n        params.put(\"pageSize\", String.valueOf(pageSize));\n        params.put(CommonParams.NAMESPACE_ID, namespaceId);\n        params.put(CommonParams.GROUP_NAME, groupName);\n        \n        if (selector != null) {\n            switch (SelectorType.valueOf(selector.getType())) {\n                case none:\n                    break;\n                case label:\n                    ExpressionSelector expressionSelector = (ExpressionSelector) selector;\n                    params.put(SELECTOR_PARAM, JacksonUtils.toJson(expressionSelector));\n                    break;\n                default:\n                    break;\n            }\n        }\n        \n        String result = reqApi(UtilAndComs.nacosUrlBase + \"/service/list\", params, HttpMethod.GET);\n        \n        JsonNode json = JacksonUtils.toObj(result);\n        ListView<String> listView = new ListView<>();\n        listView.setCount(json.get(\"count\").asInt());\n        listView.setData(JacksonUtils.toObj(json.get(\"doms\").toString(), new TypeReference<List<String>>() {\n        }));\n        \n        return listView;\n    }",
+        "position": {
+            "line": 282,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "put",
+                "position": {
+                    "line": 286,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 286,
+                    "column": 37
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 287,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 287,
+                    "column": 39
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 288,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 289,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 292,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 292,
+                    "column": 51
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 297,
+                    "column": 28
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 297,
+                    "column": 61
+                }
+            },
+            {
+                "name": "reqApi",
+                "position": {
+                    "line": 304,
+                    "column": 25
+                }
+            },
+            {
+                "name": "toObj",
+                "position": {
+                    "line": 306,
+                    "column": 38
+                }
+            },
+            {
+                "name": "setCount",
+                "position": {
+                    "line": 308,
+                    "column": 18
+                }
+            },
+            {
+                "name": "asInt",
+                "position": {
+                    "line": 308,
+                    "column": 45
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 308,
+                    "column": 32
+                }
+            },
+            {
+                "name": "setData",
+                "position": {
+                    "line": 309,
+                    "column": 18
+                }
+            },
+            {
+                "name": "toObj",
+                "position": {
+                    "line": 309,
+                    "column": 39
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 309,
+                    "column": 62
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 309,
+                    "column": 50
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 285,
+                    "column": 42
+                }
+            },
+            {
+                "name": "ListView<>",
+                "position": {
+                    "line": 307,
+                    "column": 41
+                }
+            },
+            {
+                "name": "TypeReference<List<String>>",
+                "position": {
+                    "line": 309,
+                    "column": 78
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, String method)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "subscribe",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "subscribe(String serviceName, String groupName, String clusters)",
+        "class_signature": "NamingHttpClientProxy.subscribe(String serviceName, String groupName, String clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n        throw new UnsupportedOperationException(\"Do not support subscribe service by UDP, please use gRPC replaced.\");\n    }",
+        "position": {
+            "line": 316,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "UnsupportedOperationException",
+                "position": {
+                    "line": 317,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "unsubscribe",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "unsubscribe(String serviceName, String groupName, String clusters)",
+        "class_signature": "NamingHttpClientProxy.unsubscribe(String serviceName, String groupName, String clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n    }",
+        "position": {
+            "line": 321,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "isSubscribed",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "isSubscribed(String serviceName, String groupName, String clusters)",
+        "class_signature": "NamingHttpClientProxy.isSubscribed(String serviceName, String groupName, String clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n        return true;\n    }",
+        "position": {
+            "line": 325,
+            "column": 20
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 17
+    },
+    {
+        "name": "reqApi",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "reqApi(String api, Map<String, String> params, String method)",
+        "class_signature": "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, String method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "api"
+            ],
+            [
+                "Map<String, String>",
+                "params"
+            ],
+            [
+                "String",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        return reqApi(api, params, Collections.EMPTY_MAP, method);\n    }",
+        "position": {
+            "line": 329,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "reqApi",
+                "position": {
+                    "line": 330,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, Map<String, String> body, String method)"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "reqApi",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "reqApi(String api, Map<String, String> params, Map<String, String> body, String method)",
+        "class_signature": "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, Map<String, String> body, String method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "api"
+            ],
+            [
+                "Map<String, String>",
+                "params"
+            ],
+            [
+                "Map<String, String>",
+                "body"
+            ],
+            [
+                "String",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        return reqApi(api, params, body, serverListManager.getServerList(), method);\n    }",
+        "position": {
+            "line": 333,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "reqApi",
+                "position": {
+                    "line": 335,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getServerList",
+                "position": {
+                    "line": 335,
+                    "column": 60
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, Map<String, String> body, List<String> servers, String method)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "reqApi",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "reqApi(String api, Map<String, String> params, Map<String, String> body, List<String> servers, String method)",
+        "class_signature": "NamingHttpClientProxy.reqApi(String api, Map<String, String> params, Map<String, String> body, List<String> servers, String method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "api"
+            ],
+            [
+                "Map<String, String>",
+                "params"
+            ],
+            [
+                "Map<String, String>",
+                "body"
+            ],
+            [
+                "List<String>",
+                "servers"
+            ],
+            [
+                "String",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        \n        params.put(CommonParams.NAMESPACE_ID, getNamespaceId());\n        \n        if (CollectionUtils.isEmpty(servers) && !serverListManager.isDomain()) {\n            throw new NacosException(NacosException.INVALID_PARAM, \"no server available\");\n        }\n        \n        NacosException exception = new NacosException();\n        \n        if (serverListManager.isDomain()) {\n            String nacosDomain = serverListManager.getNacosDomain();\n            for (int i = 0; i < maxRetry; i++) {\n                try {\n                    return callServer(api, params, body, nacosDomain, method);\n                } catch (NacosException e) {\n                    exception = e;\n                    if (NAMING_LOGGER.isDebugEnabled()) {\n                        NAMING_LOGGER.debug(\"request {} failed.\", nacosDomain, e);\n                    }\n                }\n            }\n        } else {\n            Random random = new Random();\n            int index = random.nextInt(servers.size());\n            \n            for (int i = 0; i < servers.size(); i++) {\n                String server = servers.get(index);\n                try {\n                    return callServer(api, params, body, server, method);\n                } catch (NacosException e) {\n                    exception = e;\n                    if (NAMING_LOGGER.isDebugEnabled()) {\n                        NAMING_LOGGER.debug(\"request {} failed.\", server, e);\n                    }\n                }\n                index = (index + 1) % servers.size();\n            }\n        }\n        \n        NAMING_LOGGER.error(\"request: {} failed, servers: {}, code: {}, msg: {}\", api, servers, exception.getErrCode(),\n                exception.getErrMsg());\n        \n        throw new NacosException(exception.getErrCode(),\n                \"failed to req API:\" + api + \" after all servers(\" + servers + \") tried: \" + exception.getMessage());\n        \n    }",
+        "position": {
+            "line": 349,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "put",
+                "position": {
+                    "line": 352,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getNamespaceId",
+                "position": {
+                    "line": 352,
+                    "column": 47
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 354,
+                    "column": 29
+                }
+            },
+            {
+                "name": "isDomain",
+                "position": {
+                    "line": 354,
+                    "column": 68
+                }
+            },
+            {
+                "name": "isDomain",
+                "position": {
+                    "line": 360,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getNacosDomain",
+                "position": {
+                    "line": 361,
+                    "column": 52
+                }
+            },
+            {
+                "name": "callServer",
+                "position": {
+                    "line": 364,
+                    "column": 28
+                }
+            },
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 367,
+                    "column": 39
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 368,
+                    "column": 39
+                }
+            },
+            {
+                "name": "nextInt",
+                "position": {
+                    "line": 374,
+                    "column": 32
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 374,
+                    "column": 48
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 376,
+                    "column": 41
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 377,
+                    "column": 41
+                }
+            },
+            {
+                "name": "callServer",
+                "position": {
+                    "line": 379,
+                    "column": 28
+                }
+            },
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 382,
+                    "column": 39
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 383,
+                    "column": 39
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 386,
+                    "column": 47
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 390,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getErrCode",
+                "position": {
+                    "line": 390,
+                    "column": 107
+                }
+            },
+            {
+                "name": "getErrMsg",
+                "position": {
+                    "line": 391,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getErrCode",
+                "position": {
+                    "line": 393,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 394,
+                    "column": 104
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 355,
+                    "column": 23
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 358,
+                    "column": 40
+                }
+            },
+            {
+                "name": "Random",
+                "position": {
+                    "line": 373,
+                    "column": 33
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 393,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingHttpClientProxy.getNamespaceId()",
+            "NamingHttpClientProxy.callServer(String api, Map<String, String> params, Map<String, String> body, String curServer, String method)",
+            "NamingHttpClientProxy.callServer(String api, Map<String, String> params, Map<String, String> body, String curServer, String method)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "callServer",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "callServer(String api, Map<String, String> params, Map<String, String> body, String curServer, String method)",
+        "class_signature": "NamingHttpClientProxy.callServer(String api, Map<String, String> params, Map<String, String> body, String curServer, String method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "api"
+            ],
+            [
+                "Map<String, String>",
+                "params"
+            ],
+            [
+                "Map<String, String>",
+                "body"
+            ],
+            [
+                "String",
+                "curServer"
+            ],
+            [
+                "String",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        long start = System.currentTimeMillis();\n        long end = 0;\n        String namespace = params.get(CommonParams.NAMESPACE_ID);\n        String group = params.get(CommonParams.GROUP_NAME);\n        String serviceName = params.get(CommonParams.SERVICE_NAME);\n        params.putAll(getSecurityHeaders(namespace, group, serviceName));\n        Header header = NamingHttpUtil.builderHeader();\n        \n        String url;\n        if (curServer.startsWith(HTTPS_PREFIX) || curServer.startsWith(HTTP_PREFIX)) {\n            url = curServer + api;\n        } else {\n            if (!InternetAddressUtil.containsPort(curServer)) {\n                curServer = curServer + InternetAddressUtil.IP_PORT_SPLITER + serverPort;\n            }\n            url = NamingHttpClientManager.getInstance().getPrefix() + curServer + api;\n        }\n        try {\n            HttpRestResult<String> restResult = nacosRestTemplate.exchangeForm(url, header,\n                    Query.newInstance().initParams(params), body, method, String.class);\n            end = System.currentTimeMillis();\n            \n            MetricsMonitor.getNamingRequestMonitor(method, url, String.valueOf(restResult.getCode()))\n                    .observe(end - start);\n            \n            if (restResult.ok()) {\n                return restResult.getData();\n            }\n            if (HttpStatus.SC_NOT_MODIFIED == restResult.getCode()) {\n                return StringUtils.EMPTY;\n            }\n            throw new NacosException(restResult.getCode(), restResult.getMessage());\n        } catch (NacosException e) {\n            NAMING_LOGGER.error(\"[NA] failed to request\", e);\n            throw e;\n        } catch (Exception e) {\n            NAMING_LOGGER.error(\"[NA] failed to request\", e);\n            throw new NacosException(NacosException.SERVER_ERROR, e);\n        }\n    }",
+        "position": {
+            "line": 409,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 411,
+                    "column": 29
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 413,
+                    "column": 35
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 414,
+                    "column": 31
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 415,
+                    "column": 37
+                }
+            },
+            {
+                "name": "putAll",
+                "position": {
+                    "line": 416,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getSecurityHeaders",
+                "position": {
+                    "line": 416,
+                    "column": 23
+                }
+            },
+            {
+                "name": "builderHeader",
+                "position": {
+                    "line": 417,
+                    "column": 40
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 420,
+                    "column": 23
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 420,
+                    "column": 61
+                }
+            },
+            {
+                "name": "containsPort",
+                "position": {
+                    "line": 423,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getPrefix",
+                "position": {
+                    "line": 426,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 426,
+                    "column": 43
+                }
+            },
+            {
+                "name": "exchangeForm",
+                "position": {
+                    "line": 429,
+                    "column": 67
+                }
+            },
+            {
+                "name": "initParams",
+                "position": {
+                    "line": 430,
+                    "column": 41
+                }
+            },
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 430,
+                    "column": 27
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 431,
+                    "column": 26
+                }
+            },
+            {
+                "name": "observe",
+                "position": {
+                    "line": 434,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getNamingRequestMonitor",
+                "position": {
+                    "line": 433,
+                    "column": 28
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 433,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getCode",
+                "position": {
+                    "line": 433,
+                    "column": 91
+                }
+            },
+            {
+                "name": "ok",
+                "position": {
+                    "line": 436,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getData",
+                "position": {
+                    "line": 437,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getCode",
+                "position": {
+                    "line": 439,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getCode",
+                "position": {
+                    "line": 442,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 442,
+                    "column": 71
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 444,
+                    "column": 27
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 447,
+                    "column": 27
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 442,
+                    "column": 23
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 448,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 24
+    },
+    {
+        "name": "getNamespaceId",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "getNamespaceId()",
+        "class_signature": "NamingHttpClientProxy.getNamespaceId()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return namespaceId;\n    }",
+        "position": {
+            "line": 452,
+            "column": 19
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 23
+    },
+    {
+        "name": "setServerPort",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "setServerPort(int serverPort)",
+        "class_signature": "NamingHttpClientProxy.setServerPort(int serverPort)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "serverPort"
+            ]
+        ],
+        "methodBody": "{\n        this.serverPort = serverPort;\n        \n        String sp = NacosClientProperties.PROTOTYPE.getProperty(SystemPropertyKeyConst.NAMING_SERVER_PORT);\n        if (StringUtils.isNotBlank(sp)) {\n            this.serverPort = Integer.parseInt(sp);\n        }\n    }",
+        "position": {
+            "line": 456,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 459,
+                    "column": 53
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 460,
+                    "column": 25
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 461,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 19
+    },
+    {
+        "name": "shutdown",
+        "category": "method_declaration",
+        "class": "NamingHttpClientProxy",
+        "signature": "shutdown()",
+        "class_signature": "NamingHttpClientProxy.shutdown()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        String className = this.getClass().getName();\n        NAMING_LOGGER.info(\"{} do shutdown begin\", className);\n        NamingHttpClientManager.getInstance().shutdown();\n        NAMING_LOGGER.info(\"{} do shutdown stop\", className);\n    }",
+        "position": {
+            "line": 466,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getName",
+                "position": {
+                    "line": 467,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 467,
+                    "column": 33
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 468,
+                    "column": 23
+                }
+            },
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 469,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 469,
+                    "column": 33
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 470,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    }
+]

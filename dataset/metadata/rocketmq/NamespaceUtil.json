@@ -1,0 +1,696 @@
+[
+    {
+        "name": "withoutNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceUtil",
+        "signature": "withoutNamespace(String resourceWithNamespace)",
+        "class_signature": "NamespaceUtil.withoutNamespace(String resourceWithNamespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "resourceWithNamespace"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isEmpty(resourceWithNamespace) || isSystemResource(resourceWithNamespace)) {\n            return resourceWithNamespace;\n        }\n\n        StringBuilder stringBuilder = new StringBuilder();\n        if (isRetryTopic(resourceWithNamespace)) {\n            stringBuilder.append(MixAll.RETRY_GROUP_TOPIC_PREFIX);\n        }\n        if (isDLQTopic(resourceWithNamespace)) {\n            stringBuilder.append(MixAll.DLQ_GROUP_TOPIC_PREFIX);\n        }\n\n        String resourceWithoutRetryAndDLQ = withOutRetryAndDLQ(resourceWithNamespace);\n        int index = resourceWithoutRetryAndDLQ.indexOf(NAMESPACE_SEPARATOR);\n        if (index > 0) {\n            String resourceWithoutNamespace = resourceWithoutRetryAndDLQ.substring(index + 1);\n            return stringBuilder.append(resourceWithoutNamespace).toString();\n        }\n\n        return resourceWithNamespace;\n    }",
+        "position": {
+            "line": 37,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 38,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isSystemResource",
+                "position": {
+                    "line": 38,
+                    "column": 59
+                }
+            },
+            {
+                "name": "isRetryTopic",
+                "position": {
+                    "line": 43,
+                    "column": 13
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 44,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isDLQTopic",
+                "position": {
+                    "line": 46,
+                    "column": 13
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 47,
+                    "column": 27
+                }
+            },
+            {
+                "name": "withOutRetryAndDLQ",
+                "position": {
+                    "line": 50,
+                    "column": 45
+                }
+            },
+            {
+                "name": "indexOf",
+                "position": {
+                    "line": 51,
+                    "column": 48
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 53,
+                    "column": 74
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 54,
+                    "column": 67
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 54,
+                    "column": 34
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 42,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUtil.isSystemResource(String resource)",
+            "NamespaceUtil.isRetryTopic(String resource)",
+            "NamespaceUtil.isDLQTopic(String resource)",
+            "NamespaceUtil.withOutRetryAndDLQ(String originalResource)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "withoutNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceUtil",
+        "signature": "withoutNamespace(String resourceWithNamespace, String namespace)",
+        "class_signature": "NamespaceUtil.withoutNamespace(String resourceWithNamespace, String namespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "resourceWithNamespace"
+            ],
+            [
+                "String",
+                "namespace"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isEmpty(resourceWithNamespace) || StringUtils.isEmpty(namespace)) {\n            return resourceWithNamespace;\n        }\n\n        String resourceWithoutRetryAndDLQ = withOutRetryAndDLQ(resourceWithNamespace);\n        if (resourceWithoutRetryAndDLQ.startsWith(namespace + NAMESPACE_SEPARATOR)) {\n            return withoutNamespace(resourceWithNamespace);\n        }\n\n        return resourceWithNamespace;\n    }",
+        "position": {
+            "line": 71,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 72,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 72,
+                    "column": 71
+                }
+            },
+            {
+                "name": "withOutRetryAndDLQ",
+                "position": {
+                    "line": 76,
+                    "column": 45
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 77,
+                    "column": 40
+                }
+            },
+            {
+                "name": "withoutNamespace",
+                "position": {
+                    "line": 78,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUtil.withOutRetryAndDLQ(String originalResource)",
+            "NamespaceUtil.withoutNamespace(String resourceWithNamespace)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "wrapNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceUtil",
+        "signature": "wrapNamespace(String namespace, String resourceWithOutNamespace)",
+        "class_signature": "NamespaceUtil.wrapNamespace(String namespace, String resourceWithOutNamespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "namespace"
+            ],
+            [
+                "String",
+                "resourceWithOutNamespace"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isEmpty(namespace) || StringUtils.isEmpty(resourceWithOutNamespace)) {\n            return resourceWithOutNamespace;\n        }\n\n        if (isSystemResource(resourceWithOutNamespace) || isAlreadyWithNamespace(resourceWithOutNamespace, namespace)) {\n            return resourceWithOutNamespace;\n        }\n\n        String resourceWithoutRetryAndDLQ = withOutRetryAndDLQ(resourceWithOutNamespace);\n        StringBuilder stringBuilder = new StringBuilder();\n\n        if (isRetryTopic(resourceWithOutNamespace)) {\n            stringBuilder.append(MixAll.RETRY_GROUP_TOPIC_PREFIX);\n        }\n\n        if (isDLQTopic(resourceWithOutNamespace)) {\n            stringBuilder.append(MixAll.DLQ_GROUP_TOPIC_PREFIX);\n        }\n\n        return stringBuilder.append(namespace).append(NAMESPACE_SEPARATOR).append(resourceWithoutRetryAndDLQ).toString();\n\n    }",
+        "position": {
+            "line": 84,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 85,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 85,
+                    "column": 59
+                }
+            },
+            {
+                "name": "isSystemResource",
+                "position": {
+                    "line": 89,
+                    "column": 13
+                }
+            },
+            {
+                "name": "isAlreadyWithNamespace",
+                "position": {
+                    "line": 89,
+                    "column": 59
+                }
+            },
+            {
+                "name": "withOutRetryAndDLQ",
+                "position": {
+                    "line": 93,
+                    "column": 45
+                }
+            },
+            {
+                "name": "isRetryTopic",
+                "position": {
+                    "line": 96,
+                    "column": 13
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 97,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isDLQTopic",
+                "position": {
+                    "line": 100,
+                    "column": 13
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 101,
+                    "column": 27
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 104,
+                    "column": 111
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 104,
+                    "column": 76
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 104,
+                    "column": 48
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 104,
+                    "column": 30
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 94,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUtil.isSystemResource(String resource)",
+            "NamespaceUtil.isAlreadyWithNamespace(String resource, String namespace)",
+            "NamespaceUtil.withOutRetryAndDLQ(String originalResource)",
+            "NamespaceUtil.isRetryTopic(String resource)",
+            "NamespaceUtil.isDLQTopic(String resource)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "isAlreadyWithNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceUtil",
+        "signature": "isAlreadyWithNamespace(String resource, String namespace)",
+        "class_signature": "NamespaceUtil.isAlreadyWithNamespace(String resource, String namespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "resource"
+            ],
+            [
+                "String",
+                "namespace"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isEmpty(namespace) || StringUtils.isEmpty(resource) || isSystemResource(resource)) {\n            return false;\n        }\n\n        String resourceWithoutRetryAndDLQ = withOutRetryAndDLQ(resource);\n\n        return resourceWithoutRetryAndDLQ.startsWith(namespace + NAMESPACE_SEPARATOR);\n    }",
+        "position": {
+            "line": 108,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 109,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 109,
+                    "column": 59
+                }
+            },
+            {
+                "name": "isSystemResource",
+                "position": {
+                    "line": 109,
+                    "column": 80
+                }
+            },
+            {
+                "name": "withOutRetryAndDLQ",
+                "position": {
+                    "line": 113,
+                    "column": 45
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 115,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUtil.isSystemResource(String resource)",
+            "NamespaceUtil.withOutRetryAndDLQ(String originalResource)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "wrapNamespaceAndRetry",
+        "category": "method_declaration",
+        "class": "NamespaceUtil",
+        "signature": "wrapNamespaceAndRetry(String namespace, String consumerGroup)",
+        "class_signature": "NamespaceUtil.wrapNamespaceAndRetry(String namespace, String consumerGroup)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "namespace"
+            ],
+            [
+                "String",
+                "consumerGroup"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isEmpty(consumerGroup)) {\n            return null;\n        }\n\n        return new StringBuilder()\n            .append(MixAll.RETRY_GROUP_TOPIC_PREFIX)\n            .append(wrapNamespace(namespace, consumerGroup))\n            .toString();\n    }",
+        "position": {
+            "line": 118,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 119,
+                    "column": 25
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 126,
+                    "column": 14
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 125,
+                    "column": 14
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 124,
+                    "column": 14
+                }
+            },
+            {
+                "name": "wrapNamespace",
+                "position": {
+                    "line": 125,
+                    "column": 21
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 123,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUtil.wrapNamespace(String namespace, String resourceWithOutNamespace)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "getNamespaceFromResource",
+        "category": "method_declaration",
+        "class": "NamespaceUtil",
+        "signature": "getNamespaceFromResource(String resource)",
+        "class_signature": "NamespaceUtil.getNamespaceFromResource(String resource)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "resource"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isEmpty(resource) || isSystemResource(resource)) {\n            return STRING_BLANK;\n        }\n        String resourceWithoutRetryAndDLQ = withOutRetryAndDLQ(resource);\n        int index = resourceWithoutRetryAndDLQ.indexOf(NAMESPACE_SEPARATOR);\n\n        return index > 0 ? resourceWithoutRetryAndDLQ.substring(0, index) : STRING_BLANK;\n    }",
+        "position": {
+            "line": 129,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 130,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isSystemResource",
+                "position": {
+                    "line": 130,
+                    "column": 46
+                }
+            },
+            {
+                "name": "withOutRetryAndDLQ",
+                "position": {
+                    "line": 133,
+                    "column": 45
+                }
+            },
+            {
+                "name": "indexOf",
+                "position": {
+                    "line": 134,
+                    "column": 48
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 136,
+                    "column": 55
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUtil.isSystemResource(String resource)",
+            "NamespaceUtil.withOutRetryAndDLQ(String originalResource)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "withOutRetryAndDLQ",
+        "category": "method_declaration",
+        "class": "NamespaceUtil",
+        "signature": "withOutRetryAndDLQ(String originalResource)",
+        "class_signature": "NamespaceUtil.withOutRetryAndDLQ(String originalResource)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "originalResource"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isEmpty(originalResource)) {\n            return STRING_BLANK;\n        }\n        if (isRetryTopic(originalResource)) {\n            return originalResource.substring(RETRY_PREFIX_LENGTH);\n        }\n\n        if (isDLQTopic(originalResource)) {\n            return originalResource.substring(DLQ_PREFIX_LENGTH);\n        }\n\n        return originalResource;\n    }",
+        "position": {
+            "line": 139,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 140,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isRetryTopic",
+                "position": {
+                    "line": 143,
+                    "column": 13
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 144,
+                    "column": 37
+                }
+            },
+            {
+                "name": "isDLQTopic",
+                "position": {
+                    "line": 147,
+                    "column": 13
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 148,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUtil.isRetryTopic(String resource)",
+            "NamespaceUtil.isDLQTopic(String resource)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "isSystemResource",
+        "category": "method_declaration",
+        "class": "NamespaceUtil",
+        "signature": "isSystemResource(String resource)",
+        "class_signature": "NamespaceUtil.isSystemResource(String resource)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "resource"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isEmpty(resource)) {\n            return false;\n        }\n\n        if (TopicValidator.isSystemTopic(resource) || MixAll.isSysConsumerGroup(resource)) {\n            return true;\n        }\n\n        return false;\n    }",
+        "position": {
+            "line": 154,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 155,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isSystemTopic",
+                "position": {
+                    "line": 159,
+                    "column": 28
+                }
+            },
+            {
+                "name": "isSysConsumerGroup",
+                "position": {
+                    "line": 159,
+                    "column": 62
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "isRetryTopic",
+        "category": "method_declaration",
+        "class": "NamespaceUtil",
+        "signature": "isRetryTopic(String resource)",
+        "class_signature": "NamespaceUtil.isRetryTopic(String resource)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "resource"
+            ]
+        ],
+        "methodBody": "{\n        return StringUtils.isNotBlank(resource) && resource.startsWith(MixAll.RETRY_GROUP_TOPIC_PREFIX);\n    }",
+        "position": {
+            "line": 166,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 167,
+                    "column": 28
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 167,
+                    "column": 61
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "isDLQTopic",
+        "category": "method_declaration",
+        "class": "NamespaceUtil",
+        "signature": "isDLQTopic(String resource)",
+        "class_signature": "NamespaceUtil.isDLQTopic(String resource)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "resource"
+            ]
+        ],
+        "methodBody": "{\n        return StringUtils.isNotBlank(resource) && resource.startsWith(MixAll.DLQ_GROUP_TOPIC_PREFIX);\n    }",
+        "position": {
+            "line": 170,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 171,
+                    "column": 28
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 171,
+                    "column": 61
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9
+    }
+]

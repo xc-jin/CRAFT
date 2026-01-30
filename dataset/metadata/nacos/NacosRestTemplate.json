@@ -1,0 +1,1402 @@
+[
+    {
+        "name": "NacosRestTemplate",
+        "category": "constructor_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "NacosRestTemplate(Logger logger, HttpClientRequest requestClient)",
+        "class_signature": "NacosRestTemplate.NacosRestTemplate(Logger logger, HttpClientRequest requestClient)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Logger",
+                "logger"
+            ],
+            [
+                "HttpClientRequest",
+                "requestClient"
+            ]
+        ],
+        "methodBody": "{\n        super(logger);\n        this.requestClient = requestClient;\n    }",
+        "position": {
+            "line": 54,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "get",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "get(String url, Header header, Query query, Type responseType)",
+        "class_signature": "NacosRestTemplate.get(String url, Header header, Query query, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        return execute(url, HttpMethod.GET, new RequestHttpEntity(header, query), responseType);\n    }",
+        "position": {
+            "line": 71,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 72,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 72,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "get",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "get(String url, HttpClientConfig config, Header header, Query query, Type responseType)",
+        "class_signature": "NacosRestTemplate.get(String url, HttpClientConfig config, Header header, Query query, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "HttpClientConfig",
+                "config"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(config, header, query);\n        return execute(url, HttpMethod.GET, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 90,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 93,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 92,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "getLarge",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "getLarge(String url, Header header, Query query, Object body, Type responseType)",
+        "class_signature": "NacosRestTemplate.getLarge(String url, Header header, Query query, Object body, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "Object",
+                "body"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        return execute(url, HttpMethod.GET_LARGE, new RequestHttpEntity(header, query, body), responseType);\n    }",
+        "position": {
+            "line": 113,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 115,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 115,
+                    "column": 55
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "delete",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "delete(String url, Header header, Query query, Type responseType)",
+        "class_signature": "NacosRestTemplate.delete(String url, Header header, Query query, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        return execute(url, HttpMethod.DELETE, new RequestHttpEntity(header, query), responseType);\n    }",
+        "position": {
+            "line": 130,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 131,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 131,
+                    "column": 52
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "delete",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "delete(String url, HttpClientConfig config, Header header, Query query, Type responseType)",
+        "class_signature": "NacosRestTemplate.delete(String url, HttpClientConfig config, Header header, Query query, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "HttpClientConfig",
+                "config"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        return execute(url, HttpMethod.DELETE, new RequestHttpEntity(config, header, query), responseType);\n    }",
+        "position": {
+            "line": 149,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 151,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 151,
+                    "column": 52
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "put",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "put(String url, Header header, Query query, Object body, Type responseType)",
+        "class_signature": "NacosRestTemplate.put(String url, Header header, Query query, Object body, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "Object",
+                "body"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        return execute(url, HttpMethod.PUT, new RequestHttpEntity(header, query, body), responseType);\n    }",
+        "position": {
+            "line": 169,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 171,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 171,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "putJson",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "putJson(String url, Header header, Query query, String body, Type responseType)",
+        "class_signature": "NacosRestTemplate.putJson(String url, Header header, Query query, String body, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "String",
+                "body"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(header.setContentType(MediaType.APPLICATION_JSON),\n                query, body);\n        return execute(url, HttpMethod.PUT, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 190,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContentType",
+                "position": {
+                    "line": 192,
+                    "column": 76
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 194,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 192,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "putJson",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "putJson(String url, Header header, String body, Type responseType)",
+        "class_signature": "NacosRestTemplate.putJson(String url, Header header, String body, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "String",
+                "body"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(header.setContentType(MediaType.APPLICATION_JSON),\n                body);\n        return execute(url, HttpMethod.PUT, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 210,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContentType",
+                "position": {
+                    "line": 211,
+                    "column": 76
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 213,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 211,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "putForm",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "putForm(String url, Header header, Query query, Map<String, String> bodyValues, Type responseType)",
+        "class_signature": "NacosRestTemplate.putForm(String url, Header header, Query query, Map<String, String> bodyValues, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "Map<String, String>",
+                "bodyValues"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(\n                header.setContentType(MediaType.APPLICATION_FORM_URLENCODED), query, bodyValues);\n        return execute(url, HttpMethod.PUT, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 232,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContentType",
+                "position": {
+                    "line": 235,
+                    "column": 24
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 236,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 234,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "putForm",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "putForm(String url, Header header, Map<String, String> bodyValues, Type responseType)",
+        "class_signature": "NacosRestTemplate.putForm(String url, Header header, Map<String, String> bodyValues, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Map<String, String>",
+                "bodyValues"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(\n                header.setContentType(MediaType.APPLICATION_FORM_URLENCODED), bodyValues);\n        return execute(url, HttpMethod.PUT, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 252,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContentType",
+                "position": {
+                    "line": 255,
+                    "column": 24
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 256,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 254,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "putForm",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "putForm(String url, HttpClientConfig config, Header header, Map<String, String> bodyValues, Type responseType)",
+        "class_signature": "NacosRestTemplate.putForm(String url, HttpClientConfig config, Header header, Map<String, String> bodyValues, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "HttpClientConfig",
+                "config"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Map<String, String>",
+                "bodyValues"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(config,\n                header.setContentType(MediaType.APPLICATION_FORM_URLENCODED), bodyValues);\n        return execute(url, HttpMethod.PUT, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 275,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContentType",
+                "position": {
+                    "line": 278,
+                    "column": 24
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 279,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 277,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "post",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "post(String url, Header header, Query query, Object body, Type responseType)",
+        "class_signature": "NacosRestTemplate.post(String url, Header header, Query query, Object body, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "Object",
+                "body"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        return execute(url, HttpMethod.POST, new RequestHttpEntity(header, query, body), responseType);\n    }",
+        "position": {
+            "line": 297,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 299,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 299,
+                    "column": 50
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "postJson",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "postJson(String url, Header header, Query query, String body, Type responseType)",
+        "class_signature": "NacosRestTemplate.postJson(String url, Header header, Query query, String body, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "String",
+                "body"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(header.setContentType(MediaType.APPLICATION_JSON),\n                query, body);\n        return execute(url, HttpMethod.POST, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 318,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContentType",
+                "position": {
+                    "line": 320,
+                    "column": 76
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 322,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 320,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "postJson",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "postJson(String url, Header header, String body, Type responseType)",
+        "class_signature": "NacosRestTemplate.postJson(String url, Header header, String body, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "String",
+                "body"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(header.setContentType(MediaType.APPLICATION_JSON),\n                body);\n        return execute(url, HttpMethod.POST, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 338,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContentType",
+                "position": {
+                    "line": 339,
+                    "column": 76
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 341,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 339,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "postForm",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "postForm(String url, Header header, Query query, Map<String, String> bodyValues, Type responseType)",
+        "class_signature": "NacosRestTemplate.postForm(String url, Header header, Query query, Map<String, String> bodyValues, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "Map<String, String>",
+                "bodyValues"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(\n                header.setContentType(MediaType.APPLICATION_FORM_URLENCODED), query, bodyValues);\n        return execute(url, HttpMethod.POST, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 360,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContentType",
+                "position": {
+                    "line": 363,
+                    "column": 24
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 364,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 362,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "postForm",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "postForm(String url, Header header, Map<String, String> bodyValues, Type responseType)",
+        "class_signature": "NacosRestTemplate.postForm(String url, Header header, Map<String, String> bodyValues, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Map<String, String>",
+                "bodyValues"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(\n                header.setContentType(MediaType.APPLICATION_FORM_URLENCODED), bodyValues);\n        return execute(url, HttpMethod.POST, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 380,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContentType",
+                "position": {
+                    "line": 383,
+                    "column": 24
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 384,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 382,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "postForm",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "postForm(String url, HttpClientConfig config, Header header, Map<String, String> bodyValues, Type responseType)",
+        "class_signature": "NacosRestTemplate.postForm(String url, HttpClientConfig config, Header header, Map<String, String> bodyValues, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "HttpClientConfig",
+                "config"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Map<String, String>",
+                "bodyValues"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(config,\n                header.setContentType(MediaType.APPLICATION_FORM_URLENCODED), bodyValues);\n        return execute(url, HttpMethod.POST, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 403,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContentType",
+                "position": {
+                    "line": 406,
+                    "column": 24
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 407,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 405,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "exchangeForm",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "exchangeForm(String url, Header header, Query query, Map<String, String> bodyValues, String httpMethod, Type responseType)",
+        "class_signature": "NacosRestTemplate.exchangeForm(String url, Header header, Query query, Map<String, String> bodyValues, String httpMethod, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "Map<String, String>",
+                "bodyValues"
+            ],
+            [
+                "String",
+                "httpMethod"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(\n                header.setContentType(MediaType.APPLICATION_FORM_URLENCODED), query, bodyValues);\n        return execute(url, httpMethod, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 423,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContentType",
+                "position": {
+                    "line": 426,
+                    "column": 24
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 427,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 425,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "exchange",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "exchange(String url, HttpClientConfig config, Header header, Query query, Object body, String httpMethod, Type responseType)",
+        "class_signature": "NacosRestTemplate.exchange(String url, HttpClientConfig config, Header header, Query query, Object body, String httpMethod, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "HttpClientConfig",
+                "config"
+            ],
+            [
+                "Header",
+                "header"
+            ],
+            [
+                "Query",
+                "query"
+            ],
+            [
+                "Object",
+                "body"
+            ],
+            [
+                "String",
+                "httpMethod"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        RequestHttpEntity requestHttpEntity = new RequestHttpEntity(config, header, query, body);\n        return execute(url, httpMethod, requestHttpEntity, responseType);\n    }",
+        "position": {
+            "line": 444,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 447,
+                    "column": 16
+                }
+            },
+            {
+                "name": "RequestHttpEntity",
+                "position": {
+                    "line": 446,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "setInterceptors",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "setInterceptors(List<HttpClientRequestInterceptor> interceptors)",
+        "class_signature": "NacosRestTemplate.setInterceptors(List<HttpClientRequestInterceptor> interceptors)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<HttpClientRequestInterceptor>",
+                "interceptors"
+            ]
+        ],
+        "methodBody": "{\n        if (this.interceptors != interceptors) {\n            this.interceptors.clear();\n            this.interceptors.addAll(interceptors);\n        }\n    }",
+        "position": {
+            "line": 455,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "clear",
+                "position": {
+                    "line": 457,
+                    "column": 31
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 458,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "getInterceptors",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "getInterceptors()",
+        "class_signature": "NacosRestTemplate.getInterceptors()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return interceptors;\n    }",
+        "position": {
+            "line": 467,
+            "column": 47
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 21
+    },
+    {
+        "name": "execute",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)",
+        "class_signature": "NacosRestTemplate.execute(String url, String httpMethod, RequestHttpEntity requestEntity, Type responseType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ],
+            [
+                "String",
+                "httpMethod"
+            ],
+            [
+                "RequestHttpEntity",
+                "requestEntity"
+            ],
+            [
+                "Type",
+                "responseType"
+            ]
+        ],
+        "methodBody": "{\n        URI uri = HttpUtils.buildUri(url, requestEntity.getQuery());\n        if (logger.isDebugEnabled()) {\n            logger.debug(\"HTTP method: {}, url: {}, body: {}\", httpMethod, uri, requestEntity.getBody());\n        }\n        \n        ResponseHandler<T> responseHandler = super.selectResponseHandler(responseType);\n        HttpClientResponse response = null;\n        try {\n            response = this.requestClient().execute(uri, httpMethod, requestEntity);\n            return responseHandler.handle(response);\n        } finally {\n            if (response != null) {\n                response.close();\n            }\n        }\n    }",
+        "position": {
+            "line": 472,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "buildUri",
+                "position": {
+                    "line": 474,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getQuery",
+                "position": {
+                    "line": 474,
+                    "column": 57
+                }
+            },
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 475,
+                    "column": 20
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 476,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getBody",
+                "position": {
+                    "line": 476,
+                    "column": 95
+                }
+            },
+            {
+                "name": "selectResponseHandler",
+                "position": {
+                    "line": 479,
+                    "column": 52
+                }
+            },
+            {
+                "name": "execute",
+                "position": {
+                    "line": 482,
+                    "column": 45
+                }
+            },
+            {
+                "name": "requestClient",
+                "position": {
+                    "line": 482,
+                    "column": 29
+                }
+            },
+            {
+                "name": "handle",
+                "position": {
+                    "line": 483,
+                    "column": 36
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 486,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRestTemplate.requestClient()"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "requestClient",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "requestClient()",
+        "class_signature": "NacosRestTemplate.requestClient()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (CollectionUtils.isNotEmpty(interceptors)) {\n            if (logger.isDebugEnabled()) {\n                logger.debug(\"Execute via interceptors :{}\", interceptors);\n            }\n            return new InterceptingHttpClientRequest(requestClient, interceptors.iterator());\n        }\n        return requestClient;\n    }",
+        "position": {
+            "line": 491,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 492,
+                    "column": 29
+                }
+            },
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 493,
+                    "column": 24
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 494,
+                    "column": 24
+                }
+            },
+            {
+                "name": "iterator",
+                "position": {
+                    "line": 496,
+                    "column": 82
+                }
+            },
+            {
+                "name": "InterceptingHttpClientRequest",
+                "position": {
+                    "line": 496,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 24
+    },
+    {
+        "name": "close",
+        "category": "method_declaration",
+        "class": "NacosRestTemplate",
+        "signature": "close()",
+        "class_signature": "NacosRestTemplate.close()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        requestClient.close();\n    }",
+        "position": {
+            "line": 504,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "close",
+                "position": {
+                    "line": 505,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 22
+    }
+]

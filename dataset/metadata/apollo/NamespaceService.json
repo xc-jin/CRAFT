@@ -1,0 +1,1803 @@
+[
+    {
+        "name": "NamespaceService",
+        "category": "constructor_declaration",
+        "class": "NamespaceService",
+        "signature": "NamespaceService(ReleaseHistoryService releaseHistoryService, NamespaceRepository namespaceRepository, AuditService auditService, AppNamespaceService appNamespaceService, MessageSender messageSender, ItemService itemService, CommitService commitService, ReleaseService releaseService, ClusterService clusterService, NamespaceBranchService namespaceBranchService, NamespaceLockService namespaceLockService, InstanceService instanceService)",
+        "class_signature": "NamespaceService.NamespaceService(ReleaseHistoryService releaseHistoryService, NamespaceRepository namespaceRepository, AuditService auditService, AppNamespaceService appNamespaceService, MessageSender messageSender, ItemService itemService, CommitService commitService, ReleaseService releaseService, ClusterService clusterService, NamespaceBranchService namespaceBranchService, NamespaceLockService namespaceLockService, InstanceService instanceService)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ReleaseHistoryService",
+                "releaseHistoryService"
+            ],
+            [
+                "NamespaceRepository",
+                "namespaceRepository"
+            ],
+            [
+                "AuditService",
+                "auditService"
+            ],
+            [
+                "AppNamespaceService",
+                "appNamespaceService"
+            ],
+            [
+                "MessageSender",
+                "messageSender"
+            ],
+            [
+                "ItemService",
+                "itemService"
+            ],
+            [
+                "CommitService",
+                "commitService"
+            ],
+            [
+                "ReleaseService",
+                "releaseService"
+            ],
+            [
+                "ClusterService",
+                "clusterService"
+            ],
+            [
+                "NamespaceBranchService",
+                "namespaceBranchService"
+            ],
+            [
+                "NamespaceLockService",
+                "namespaceLockService"
+            ],
+            [
+                "InstanceService",
+                "instanceService"
+            ]
+        ],
+        "methodBody": "{\n    this.releaseHistoryService = releaseHistoryService;\n    this.namespaceRepository = namespaceRepository;\n    this.auditService = auditService;\n    this.appNamespaceService = appNamespaceService;\n    this.messageSender = messageSender;\n    this.itemService = itemService;\n    this.commitService = commitService;\n    this.releaseService = releaseService;\n    this.clusterService = clusterService;\n    this.namespaceBranchService = namespaceBranchService;\n    this.namespaceLockService = namespaceLockService;\n    this.instanceService = instanceService;\n  }",
+        "position": {
+            "line": 72,
+            "column": 10
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "findOne",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "findOne(Long namespaceId)",
+        "class_signature": "NamespaceService.findOne(Long namespaceId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Long",
+                "namespaceId"
+            ]
+        ],
+        "methodBody": "{\n    return namespaceRepository.findById(namespaceId).orElse(null);\n  }",
+        "position": {
+            "line": 100,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "orElse",
+                "position": {
+                    "line": 101,
+                    "column": 54
+                }
+            },
+            {
+                "name": "findById",
+                "position": {
+                    "line": 101,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "findOne",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "findOne(String appId, String clusterName, String namespaceName)",
+        "class_signature": "NamespaceService.findOne(String appId, String clusterName, String namespaceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ]
+        ],
+        "methodBody": "{\n    return namespaceRepository.findByAppIdAndClusterNameAndNamespaceName(appId, clusterName,\n                                                                         namespaceName);\n  }",
+        "position": {
+            "line": 104,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByAppIdAndClusterNameAndNamespaceName",
+                "position": {
+                    "line": 105,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 22
+    },
+    {
+        "name": "findByItem",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "findByItem(String itemKey, Pageable pageable)",
+        "class_signature": "NamespaceService.findByItem(String itemKey, Pageable pageable)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "itemKey"
+            ],
+            [
+                "Pageable",
+                "pageable"
+            ]
+        ],
+        "methodBody": "{\n    Page<Item> items = itemService.findItemsByKey(itemKey, pageable);\n\n    if (!items.hasContent()) {\n      return Page.empty();\n    }\n\n    Set<Long> namespaceIds = BeanUtils.toPropertySet(\"namespaceId\", items.getContent());\n\n    return new PageImpl<>(namespaceRepository.findByIdIn(namespaceIds));\n  }",
+        "position": {
+            "line": 112,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findItemsByKey",
+                "position": {
+                    "line": 113,
+                    "column": 36
+                }
+            },
+            {
+                "name": "hasContent",
+                "position": {
+                    "line": 115,
+                    "column": 16
+                }
+            },
+            {
+                "name": "empty",
+                "position": {
+                    "line": 116,
+                    "column": 19
+                }
+            },
+            {
+                "name": "toPropertySet",
+                "position": {
+                    "line": 119,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getContent",
+                "position": {
+                    "line": 119,
+                    "column": 75
+                }
+            },
+            {
+                "name": "findByIdIn",
+                "position": {
+                    "line": 121,
+                    "column": 47
+                }
+            },
+            {
+                "name": "PageImpl<>",
+                "position": {
+                    "line": 121,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "findPublicNamespaceForAssociatedNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "findPublicNamespaceForAssociatedNamespace(String clusterName, String namespaceName)",
+        "class_signature": "NamespaceService.findPublicNamespaceForAssociatedNamespace(String clusterName, String namespaceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ]
+        ],
+        "methodBody": "{\n    AppNamespace appNamespace = appNamespaceService.findPublicNamespaceByName(namespaceName);\n    if (appNamespace == null) {\n      throw BadRequestException.namespaceNotExists(\"\", clusterName, namespaceName);\n    }\n\n    String appId = appNamespace.getAppId();\n\n    Namespace namespace = findOne(appId, clusterName, namespaceName);\n\n    //default cluster's namespace\n    if (Objects.equals(clusterName, ConfigConsts.CLUSTER_NAME_DEFAULT)) {\n      return namespace;\n    }\n\n    //custom cluster's namespace not exist.\n    //return default cluster's namespace\n    if (namespace == null) {\n      return findOne(appId, ConfigConsts.CLUSTER_NAME_DEFAULT, namespaceName);\n    }\n\n    //custom cluster's namespace exist and has published.\n    //return custom cluster's namespace\n    Release latestActiveRelease = releaseService.findLatestActiveRelease(namespace);\n    if (latestActiveRelease != null) {\n      return namespace;\n    }\n\n    Namespace defaultNamespace = findOne(appId, ConfigConsts.CLUSTER_NAME_DEFAULT, namespaceName);\n\n    //custom cluster's namespace exist but never published.\n    //and default cluster's namespace not exist.\n    //return custom cluster's namespace\n    if (defaultNamespace == null) {\n      return namespace;\n    }\n\n    //custom cluster's namespace exist but never published.\n    //and default cluster's namespace exist and has published.\n    //return default cluster's namespace\n    Release defaultNamespaceLatestActiveRelease = releaseService.findLatestActiveRelease(defaultNamespace);\n    if (defaultNamespaceLatestActiveRelease != null) {\n      return defaultNamespace;\n    }\n\n    //custom cluster's namespace exist but never published.\n    //and default cluster's namespace exist but never published.\n    //return custom cluster's namespace\n    return namespace;\n  }",
+        "position": {
+            "line": 124,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findPublicNamespaceByName",
+                "position": {
+                    "line": 125,
+                    "column": 53
+                }
+            },
+            {
+                "name": "namespaceNotExists",
+                "position": {
+                    "line": 127,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 130,
+                    "column": 33
+                }
+            },
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 132,
+                    "column": 27
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 135,
+                    "column": 17
+                }
+            },
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 142,
+                    "column": 14
+                }
+            },
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 147,
+                    "column": 50
+                }
+            },
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 152,
+                    "column": 34
+                }
+            },
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 164,
+                    "column": 66
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.findOne(String appId, String clusterName, String namespaceName)",
+            "NamespaceService.findOne(String appId, String clusterName, String namespaceName)",
+            "NamespaceService.findOne(String appId, String clusterName, String namespaceName)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "findPublicAppNamespaceAllNamespaces",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "findPublicAppNamespaceAllNamespaces(String namespaceName, Pageable page)",
+        "class_signature": "NamespaceService.findPublicAppNamespaceAllNamespaces(String namespaceName, Pageable page)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "namespaceName"
+            ],
+            [
+                "Pageable",
+                "page"
+            ]
+        ],
+        "methodBody": "{\n    AppNamespace publicAppNamespace = appNamespaceService.findPublicNamespaceByName(namespaceName);\n\n    if (publicAppNamespace == null) {\n      throw new BadRequestException(\n          String.format(\"Public appNamespace not exists. NamespaceName = %s\", namespaceName));\n    }\n\n    List<Namespace> namespaces = namespaceRepository.findByNamespaceName(namespaceName, page);\n\n    return filterChildNamespace(namespaces);\n  }",
+        "position": {
+            "line": 175,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findPublicNamespaceByName",
+                "position": {
+                    "line": 176,
+                    "column": 59
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 180,
+                    "column": 18
+                }
+            },
+            {
+                "name": "findByNamespaceName",
+                "position": {
+                    "line": 183,
+                    "column": 54
+                }
+            },
+            {
+                "name": "filterChildNamespace",
+                "position": {
+                    "line": 185,
+                    "column": 12
+                }
+            },
+            {
+                "name": "BadRequestException",
+                "position": {
+                    "line": 179,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.filterChildNamespace(List<Namespace> namespaces)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "filterChildNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "filterChildNamespace(List<Namespace> namespaces)",
+        "class_signature": "NamespaceService.filterChildNamespace(List<Namespace> namespaces)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<Namespace>",
+                "namespaces"
+            ]
+        ],
+        "methodBody": "{\n    List<Namespace> result = new LinkedList<>();\n\n    if (CollectionUtils.isEmpty(namespaces)) {\n      return result;\n    }\n\n    for (Namespace namespace : namespaces) {\n      if (!isChildNamespace(namespace)) {\n        result.add(namespace);\n      }\n    }\n\n    return result;\n  }",
+        "position": {
+            "line": 188,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 191,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isChildNamespace",
+                "position": {
+                    "line": 196,
+                    "column": 12
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 197,
+                    "column": 16
+                }
+            },
+            {
+                "name": "LinkedList<>",
+                "position": {
+                    "line": 189,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.isChildNamespace(Namespace namespace)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "countPublicAppNamespaceAssociatedNamespaces",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "countPublicAppNamespaceAssociatedNamespaces(String publicNamespaceName)",
+        "class_signature": "NamespaceService.countPublicAppNamespaceAssociatedNamespaces(String publicNamespaceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "publicNamespaceName"
+            ]
+        ],
+        "methodBody": "{\n    AppNamespace publicAppNamespace = appNamespaceService.findPublicNamespaceByName(publicNamespaceName);\n\n    if (publicAppNamespace == null) {\n      throw new BadRequestException(\n          String.format(\"Public appNamespace not exists. NamespaceName = %s\", publicNamespaceName));\n    }\n\n    return namespaceRepository.countByNamespaceNameAndAppIdNot(publicNamespaceName, publicAppNamespace.getAppId());\n  }",
+        "position": {
+            "line": 204,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findPublicNamespaceByName",
+                "position": {
+                    "line": 205,
+                    "column": 59
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 209,
+                    "column": 18
+                }
+            },
+            {
+                "name": "countByNamespaceNameAndAppIdNot",
+                "position": {
+                    "line": 212,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 212,
+                    "column": 104
+                }
+            },
+            {
+                "name": "BadRequestException",
+                "position": {
+                    "line": 208,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "findNamespaces",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "findNamespaces(String appId, String clusterName)",
+        "class_signature": "NamespaceService.findNamespaces(String appId, String clusterName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ]
+        ],
+        "methodBody": "{\n    List<Namespace> namespaces = namespaceRepository.findByAppIdAndClusterNameOrderByIdAsc(appId, clusterName);\n    if (namespaces == null) {\n      return Collections.emptyList();\n    }\n    return namespaces;\n  }",
+        "position": {
+            "line": 215,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByAppIdAndClusterNameOrderByIdAsc",
+                "position": {
+                    "line": 216,
+                    "column": 54
+                }
+            },
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 218,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "findByAppIdAndNamespaceName",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "findByAppIdAndNamespaceName(String appId, String namespaceName)",
+        "class_signature": "NamespaceService.findByAppIdAndNamespaceName(String appId, String namespaceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ]
+        ],
+        "methodBody": "{\n    return namespaceRepository.findByAppIdAndNamespaceNameOrderByIdAsc(appId, namespaceName);\n  }",
+        "position": {
+            "line": 223,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByAppIdAndNamespaceNameOrderByIdAsc",
+                "position": {
+                    "line": 224,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 23
+    },
+    {
+        "name": "findChildNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "findChildNamespace(String appId, String parentClusterName, String namespaceName)",
+        "class_signature": "NamespaceService.findChildNamespace(String appId, String parentClusterName, String namespaceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "parentClusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ]
+        ],
+        "methodBody": "{\n    List<Namespace> namespaces = findByAppIdAndNamespaceName(appId, namespaceName);\n    if (CollectionUtils.isEmpty(namespaces) || namespaces.size() == 1) {\n      return null;\n    }\n\n    List<Cluster> childClusters = clusterService.findChildClusters(appId, parentClusterName);\n    if (CollectionUtils.isEmpty(childClusters)) {\n      return null;\n    }\n\n    Set<String> childClusterNames = childClusters.stream().map(Cluster::getName).collect(Collectors.toSet());\n    //the child namespace is the intersection of the child clusters and child namespaces\n    for (Namespace namespace : namespaces) {\n      if (childClusterNames.contains(namespace.getClusterName())) {\n        return namespace;\n      }\n    }\n\n    return null;\n  }",
+        "position": {
+            "line": 227,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByAppIdAndNamespaceName",
+                "position": {
+                    "line": 228,
+                    "column": 34
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 229,
+                    "column": 25
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 229,
+                    "column": 59
+                }
+            },
+            {
+                "name": "findChildClusters",
+                "position": {
+                    "line": 233,
+                    "column": 50
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 234,
+                    "column": 25
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 238,
+                    "column": 82
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 238,
+                    "column": 60
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 238,
+                    "column": 51
+                }
+            },
+            {
+                "name": "toSet",
+                "position": {
+                    "line": 238,
+                    "column": 101
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 241,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 241,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.findByAppIdAndNamespaceName(String appId, String namespaceName)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "findChildNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "findChildNamespace(Namespace parentNamespace)",
+        "class_signature": "NamespaceService.findChildNamespace(Namespace parentNamespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "parentNamespace"
+            ]
+        ],
+        "methodBody": "{\n    String appId = parentNamespace.getAppId();\n    String parentClusterName = parentNamespace.getClusterName();\n    String namespaceName = parentNamespace.getNamespaceName();\n\n    return findChildNamespace(appId, parentClusterName, namespaceName);\n\n  }",
+        "position": {
+            "line": 249,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 250,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 251,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 252,
+                    "column": 44
+                }
+            },
+            {
+                "name": "findChildNamespace",
+                "position": {
+                    "line": 254,
+                    "column": 12
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.findChildNamespace(String appId, String parentClusterName, String namespaceName)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "findParentNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "findParentNamespace(String appId, String clusterName, String namespaceName)",
+        "class_signature": "NamespaceService.findParentNamespace(String appId, String clusterName, String namespaceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ]
+        ],
+        "methodBody": "{\n    return findParentNamespace(new Namespace(appId, clusterName, namespaceName));\n  }",
+        "position": {
+            "line": 258,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findParentNamespace",
+                "position": {
+                    "line": 259,
+                    "column": 12
+                }
+            },
+            {
+                "name": "Namespace",
+                "position": {
+                    "line": 259,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.findParentNamespace(Namespace namespace)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "findParentNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "findParentNamespace(Namespace namespace)",
+        "class_signature": "NamespaceService.findParentNamespace(Namespace namespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ]
+        ],
+        "methodBody": "{\n    String appId = namespace.getAppId();\n    String namespaceName = namespace.getNamespaceName();\n\n    Cluster cluster = clusterService.findOne(appId, namespace.getClusterName());\n    if (cluster != null && cluster.getParentClusterId() > 0) {\n      Cluster parentCluster = clusterService.findOne(cluster.getParentClusterId());\n      return findOne(appId, parentCluster.getName(), namespaceName);\n    }\n\n    return null;\n  }",
+        "position": {
+            "line": 262,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 263,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 264,
+                    "column": 38
+                }
+            },
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 266,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 266,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getParentClusterId",
+                "position": {
+                    "line": 267,
+                    "column": 36
+                }
+            },
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 268,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getParentClusterId",
+                "position": {
+                    "line": 268,
+                    "column": 62
+                }
+            },
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 269,
+                    "column": 14
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 269,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.findOne(String appId, String clusterName, String namespaceName)"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "isChildNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "isChildNamespace(String appId, String clusterName, String namespaceName)",
+        "class_signature": "NamespaceService.isChildNamespace(String appId, String clusterName, String namespaceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ]
+        ],
+        "methodBody": "{\n    return isChildNamespace(new Namespace(appId, clusterName, namespaceName));\n  }",
+        "position": {
+            "line": 275,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isChildNamespace",
+                "position": {
+                    "line": 276,
+                    "column": 12
+                }
+            },
+            {
+                "name": "Namespace",
+                "position": {
+                    "line": 276,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.isChildNamespace(Namespace namespace)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "isChildNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "isChildNamespace(Namespace namespace)",
+        "class_signature": "NamespaceService.isChildNamespace(Namespace namespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ]
+        ],
+        "methodBody": "{\n    return findParentNamespace(namespace) != null;\n  }",
+        "position": {
+            "line": 279,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findParentNamespace",
+                "position": {
+                    "line": 280,
+                    "column": 12
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.findParentNamespace(Namespace namespace)"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "isNamespaceUnique",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "isNamespaceUnique(String appId, String cluster, String namespace)",
+        "class_signature": "NamespaceService.isNamespaceUnique(String appId, String cluster, String namespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "cluster"
+            ],
+            [
+                "String",
+                "namespace"
+            ]
+        ],
+        "methodBody": "{\n    Objects.requireNonNull(appId, \"AppId must not be null\");\n    Objects.requireNonNull(cluster, \"Cluster must not be null\");\n    Objects.requireNonNull(namespace, \"Namespace must not be null\");\n    return Objects.isNull(\n        namespaceRepository.findByAppIdAndClusterNameAndNamespaceName(appId, cluster, namespace));\n  }",
+        "position": {
+            "line": 283,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "requireNonNull",
+                "position": {
+                    "line": 284,
+                    "column": 13
+                }
+            },
+            {
+                "name": "requireNonNull",
+                "position": {
+                    "line": 285,
+                    "column": 13
+                }
+            },
+            {
+                "name": "requireNonNull",
+                "position": {
+                    "line": 286,
+                    "column": 13
+                }
+            },
+            {
+                "name": "isNull",
+                "position": {
+                    "line": 287,
+                    "column": 20
+                }
+            },
+            {
+                "name": "findByAppIdAndClusterNameAndNamespaceName",
+                "position": {
+                    "line": 288,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "deleteByAppIdAndClusterName",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "deleteByAppIdAndClusterName(String appId, String clusterName, String operator)",
+        "class_signature": "NamespaceService.deleteByAppIdAndClusterName(String appId, String clusterName, String operator)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "operator"
+            ]
+        ],
+        "methodBody": "{\n\n    List<Namespace> toDeleteNamespaces = findNamespaces(appId, clusterName);\n\n    for (Namespace namespace : toDeleteNamespaces) {\n\n      deleteNamespace(namespace, operator);\n\n    }\n  }",
+        "position": {
+            "line": 292,
+            "column": 15
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findNamespaces",
+                "position": {
+                    "line": 294,
+                    "column": 42
+                }
+            },
+            {
+                "name": "deleteNamespace",
+                "position": {
+                    "line": 298,
+                    "column": 7
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.findNamespaces(String appId, String clusterName)",
+            "NamespaceService.deleteNamespace(Namespace namespace, String operator)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "deleteNamespace",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "deleteNamespace(Namespace namespace, String operator)",
+        "class_signature": "NamespaceService.deleteNamespace(Namespace namespace, String operator)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ],
+            [
+                "String",
+                "operator"
+            ]
+        ],
+        "methodBody": "{\n    String appId = namespace.getAppId();\n    String clusterName = namespace.getClusterName();\n    String namespaceName = namespace.getNamespaceName();\n\n    itemService.batchDelete(namespace.getId(), operator);\n    commitService.batchDelete(appId, clusterName, namespace.getNamespaceName(), operator);\n\n    // Child namespace releases should retain as long as the parent namespace exists, because parent namespaces' release\n    // histories need them\n    if (!isChildNamespace(namespace)) {\n      releaseService.batchDelete(appId, clusterName, namespace.getNamespaceName(), operator);\n    }\n\n    //delete child namespace\n    Namespace childNamespace = findChildNamespace(namespace);\n    if (childNamespace != null) {\n      namespaceBranchService.deleteBranch(appId, clusterName, namespaceName,\n                                          childNamespace.getClusterName(), NamespaceBranchStatus.DELETED, operator);\n      //delete child namespace's releases. Notice: delete child namespace will not delete child namespace's releases\n      releaseService.batchDelete(appId, childNamespace.getClusterName(), namespaceName, operator);\n    }\n\n    releaseHistoryService.batchDelete(appId, clusterName, namespaceName, operator);\n\n    instanceService.batchDeleteInstanceConfig(appId, clusterName, namespaceName);\n\n    namespaceLockService.unlock(namespace.getId());\n\n    namespace.setDeleted(true);\n    namespace.setDataChangeLastModifiedBy(operator);\n\n    auditService.audit(Namespace.class.getSimpleName(), namespace.getId(), Audit.OP.DELETE, operator);\n\n    Namespace deleted = namespaceRepository.save(namespace);\n\n    //Publish release message to do some clean up in config service, such as updating the cache\n    messageSender.sendMessage(ReleaseMessageKeyGenerator.generate(appId, clusterName, namespaceName),\n        Topics.APOLLO_RELEASE_TOPIC);\n\n    return deleted;\n  }",
+        "position": {
+            "line": 304,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 305,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 306,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 307,
+                    "column": 38
+                }
+            },
+            {
+                "name": "batchDelete",
+                "position": {
+                    "line": 309,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 309,
+                    "column": 39
+                }
+            },
+            {
+                "name": "batchDelete",
+                "position": {
+                    "line": 310,
+                    "column": 19
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 310,
+                    "column": 61
+                }
+            },
+            {
+                "name": "isChildNamespace",
+                "position": {
+                    "line": 314,
+                    "column": 10
+                }
+            },
+            {
+                "name": "batchDelete",
+                "position": {
+                    "line": 315,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 315,
+                    "column": 64
+                }
+            },
+            {
+                "name": "findChildNamespace",
+                "position": {
+                    "line": 319,
+                    "column": 32
+                }
+            },
+            {
+                "name": "deleteBranch",
+                "position": {
+                    "line": 321,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 322,
+                    "column": 58
+                }
+            },
+            {
+                "name": "batchDelete",
+                "position": {
+                    "line": 324,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 324,
+                    "column": 56
+                }
+            },
+            {
+                "name": "batchDelete",
+                "position": {
+                    "line": 327,
+                    "column": 27
+                }
+            },
+            {
+                "name": "batchDeleteInstanceConfig",
+                "position": {
+                    "line": 329,
+                    "column": 21
+                }
+            },
+            {
+                "name": "unlock",
+                "position": {
+                    "line": 331,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 331,
+                    "column": 43
+                }
+            },
+            {
+                "name": "setDeleted",
+                "position": {
+                    "line": 333,
+                    "column": 15
+                }
+            },
+            {
+                "name": "setDataChangeLastModifiedBy",
+                "position": {
+                    "line": 334,
+                    "column": 15
+                }
+            },
+            {
+                "name": "audit",
+                "position": {
+                    "line": 336,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 336,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 336,
+                    "column": 67
+                }
+            },
+            {
+                "name": "save",
+                "position": {
+                    "line": 338,
+                    "column": 45
+                }
+            },
+            {
+                "name": "sendMessage",
+                "position": {
+                    "line": 341,
+                    "column": 19
+                }
+            },
+            {
+                "name": "generate",
+                "position": {
+                    "line": 341,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.isChildNamespace(Namespace namespace)",
+            "NamespaceService.findChildNamespace(Namespace parentNamespace)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "save",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "save(Namespace entity)",
+        "class_signature": "NamespaceService.save(Namespace entity)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "entity"
+            ]
+        ],
+        "methodBody": "{\n    if (!isNamespaceUnique(entity.getAppId(), entity.getClusterName(), entity.getNamespaceName())) {\n      throw new ServiceException(\"namespace not unique\");\n    }\n    entity.setId(0);//protection\n    Namespace namespace = namespaceRepository.save(entity);\n\n    auditService.audit(Namespace.class.getSimpleName(), namespace.getId(), Audit.OP.INSERT,\n                       namespace.getDataChangeCreatedBy());\n\n    return namespace;\n  }",
+        "position": {
+            "line": 348,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNamespaceUnique",
+                "position": {
+                    "line": 349,
+                    "column": 10
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 349,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 349,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 349,
+                    "column": 79
+                }
+            },
+            {
+                "name": "setId",
+                "position": {
+                    "line": 352,
+                    "column": 12
+                }
+            },
+            {
+                "name": "save",
+                "position": {
+                    "line": 353,
+                    "column": 47
+                }
+            },
+            {
+                "name": "audit",
+                "position": {
+                    "line": 355,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 355,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 355,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getDataChangeCreatedBy",
+                "position": {
+                    "line": 356,
+                    "column": 34
+                }
+            },
+            {
+                "name": "ServiceException",
+                "position": {
+                    "line": 350,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.isNamespaceUnique(String appId, String cluster, String namespace)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "update",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "update(Namespace namespace)",
+        "class_signature": "NamespaceService.update(Namespace namespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ]
+        ],
+        "methodBody": "{\n    Namespace managedNamespace = namespaceRepository.findByAppIdAndClusterNameAndNamespaceName(\n        namespace.getAppId(), namespace.getClusterName(), namespace.getNamespaceName());\n    BeanUtils.copyEntityProperties(namespace, managedNamespace);\n    managedNamespace = namespaceRepository.save(managedNamespace);\n\n    auditService.audit(Namespace.class.getSimpleName(), managedNamespace.getId(), Audit.OP.UPDATE,\n                       managedNamespace.getDataChangeLastModifiedBy());\n\n    return managedNamespace;\n  }",
+        "position": {
+            "line": 362,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByAppIdAndClusterNameAndNamespaceName",
+                "position": {
+                    "line": 363,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 364,
+                    "column": 19
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 364,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getNamespaceName",
+                "position": {
+                    "line": 364,
+                    "column": 69
+                }
+            },
+            {
+                "name": "copyEntityProperties",
+                "position": {
+                    "line": 365,
+                    "column": 15
+                }
+            },
+            {
+                "name": "save",
+                "position": {
+                    "line": 366,
+                    "column": 44
+                }
+            },
+            {
+                "name": "audit",
+                "position": {
+                    "line": 368,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 368,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 368,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getDataChangeLastModifiedBy",
+                "position": {
+                    "line": 369,
+                    "column": 41
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "instanceOfAppNamespaces",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "instanceOfAppNamespaces(String appId, String clusterName, String createBy)",
+        "class_signature": "NamespaceService.instanceOfAppNamespaces(String appId, String clusterName, String createBy)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "createBy"
+            ]
+        ],
+        "methodBody": "{\n\n    List<AppNamespace> appNamespaces = appNamespaceService.findByAppId(appId);\n\n    for (AppNamespace appNamespace : appNamespaces) {\n      Namespace ns = new Namespace();\n      ns.setAppId(appId);\n      ns.setClusterName(clusterName);\n      ns.setNamespaceName(appNamespace.getName());\n      ns.setDataChangeCreatedBy(createBy);\n      ns.setDataChangeLastModifiedBy(createBy);\n      namespaceRepository.save(ns);\n      auditService.audit(Namespace.class.getSimpleName(), ns.getId(), Audit.OP.INSERT, createBy);\n    }\n\n  }",
+        "position": {
+            "line": 375,
+            "column": 15
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findByAppId",
+                "position": {
+                    "line": 377,
+                    "column": 60
+                }
+            },
+            {
+                "name": "setAppId",
+                "position": {
+                    "line": 381,
+                    "column": 10
+                }
+            },
+            {
+                "name": "setClusterName",
+                "position": {
+                    "line": 382,
+                    "column": 10
+                }
+            },
+            {
+                "name": "setNamespaceName",
+                "position": {
+                    "line": 383,
+                    "column": 10
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 383,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setDataChangeCreatedBy",
+                "position": {
+                    "line": 384,
+                    "column": 10
+                }
+            },
+            {
+                "name": "setDataChangeLastModifiedBy",
+                "position": {
+                    "line": 385,
+                    "column": 10
+                }
+            },
+            {
+                "name": "save",
+                "position": {
+                    "line": 386,
+                    "column": 27
+                }
+            },
+            {
+                "name": "audit",
+                "position": {
+                    "line": 387,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 387,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 387,
+                    "column": 62
+                }
+            },
+            {
+                "name": "Namespace",
+                "position": {
+                    "line": 380,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "namespacePublishInfo",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "namespacePublishInfo(String appId)",
+        "class_signature": "NamespaceService.namespacePublishInfo(String appId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ]
+        ],
+        "methodBody": "{\n    List<Cluster> clusters = clusterService.findParentClusters(appId);\n    if (CollectionUtils.isEmpty(clusters)) {\n      throw BadRequestException.appNotExists(appId);\n    }\n\n    Map<String, Boolean> clusterHasNotPublishedItems = Maps.newHashMap();\n\n    for (Cluster cluster : clusters) {\n      String clusterName = cluster.getName();\n      List<Namespace> namespaces = findNamespaces(appId, clusterName);\n\n      for (Namespace namespace : namespaces) {\n        boolean isNamespaceNotPublished = isNamespaceNotPublished(namespace);\n\n        if (isNamespaceNotPublished) {\n          clusterHasNotPublishedItems.put(clusterName, true);\n          break;\n        }\n      }\n\n      clusterHasNotPublishedItems.putIfAbsent(clusterName, false);\n    }\n\n    return clusterHasNotPublishedItems;\n  }",
+        "position": {
+            "line": 392,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findParentClusters",
+                "position": {
+                    "line": 393,
+                    "column": 45
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 394,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appNotExists",
+                "position": {
+                    "line": 395,
+                    "column": 33
+                }
+            },
+            {
+                "name": "newHashMap",
+                "position": {
+                    "line": 398,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 401,
+                    "column": 36
+                }
+            },
+            {
+                "name": "findNamespaces",
+                "position": {
+                    "line": 402,
+                    "column": 36
+                }
+            },
+            {
+                "name": "isNamespaceNotPublished",
+                "position": {
+                    "line": 405,
+                    "column": 43
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 408,
+                    "column": 39
+                }
+            },
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 413,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceService.findNamespaces(String appId, String clusterName)",
+            "NamespaceService.isNamespaceNotPublished(Namespace namespace)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "isNamespaceNotPublished",
+        "category": "method_declaration",
+        "class": "NamespaceService",
+        "signature": "isNamespaceNotPublished(Namespace namespace)",
+        "class_signature": "NamespaceService.isNamespaceNotPublished(Namespace namespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ]
+        ],
+        "methodBody": "{\n\n    Release latestRelease = releaseService.findLatestActiveRelease(namespace);\n    long namespaceId = namespace.getId();\n\n    if (latestRelease == null) {\n      Item lastItem = itemService.findLastOne(namespaceId);\n      return lastItem != null;\n    }\n\n    Date lastPublishTime = latestRelease.getDataChangeLastModifiedTime();\n    List<Item> itemsModifiedAfterLastPublish = itemService.findItemsModifiedAfterDate(namespaceId, lastPublishTime);\n\n    if (CollectionUtils.isEmpty(itemsModifiedAfterLastPublish)) {\n      return false;\n    }\n\n    Map<String, String> publishedConfiguration = GSON.fromJson(latestRelease.getConfigurations(), GsonType.CONFIG);\n    for (Item item : itemsModifiedAfterLastPublish) {\n      if (!Objects.equals(item.getValue(), publishedConfiguration.get(item.getKey()))) {\n        return true;\n      }\n    }\n\n    return false;\n  }",
+        "position": {
+            "line": 419,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 421,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 422,
+                    "column": 34
+                }
+            },
+            {
+                "name": "findLastOne",
+                "position": {
+                    "line": 425,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getDataChangeLastModifiedTime",
+                "position": {
+                    "line": 429,
+                    "column": 42
+                }
+            },
+            {
+                "name": "findItemsModifiedAfterDate",
+                "position": {
+                    "line": 430,
+                    "column": 60
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 432,
+                    "column": 25
+                }
+            },
+            {
+                "name": "fromJson",
+                "position": {
+                    "line": 436,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 436,
+                    "column": 78
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 438,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 438,
+                    "column": 32
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 438,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 438,
+                    "column": 76
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 17
+    }
+]

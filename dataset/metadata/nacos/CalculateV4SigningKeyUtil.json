@@ -1,0 +1,403 @@
+[
+    {
+        "name": "firstSigningKey",
+        "category": "method_declaration",
+        "class": "CalculateV4SigningKeyUtil",
+        "signature": "firstSigningKey(String secret, String date, String signMethod)",
+        "class_signature": "CalculateV4SigningKeyUtil.firstSigningKey(String secret, String date, String signMethod)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "secret"
+            ],
+            [
+                "String",
+                "date"
+            ],
+            [
+                "String",
+                "signMethod"
+            ]
+        ],
+        "methodBody": "{\n        Mac mac = Mac.getInstance(signMethod);\n        mac.init(new SecretKeySpec((PREFIX + secret).getBytes(StandardCharsets.UTF_8), signMethod));\n        return mac.doFinal(date.getBytes(StandardCharsets.UTF_8));\n    }",
+        "position": {
+            "line": 46,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 48,
+                    "column": 23
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 49,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 49,
+                    "column": 54
+                }
+            },
+            {
+                "name": "doFinal",
+                "position": {
+                    "line": 50,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 50,
+                    "column": 33
+                }
+            },
+            {
+                "name": "SecretKeySpec",
+                "position": {
+                    "line": 49,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "regionSigningKey",
+        "category": "method_declaration",
+        "class": "CalculateV4SigningKeyUtil",
+        "signature": "regionSigningKey(String secret, String date, String region, String signMethod)",
+        "class_signature": "CalculateV4SigningKeyUtil.regionSigningKey(String secret, String date, String region, String signMethod)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "secret"
+            ],
+            [
+                "String",
+                "date"
+            ],
+            [
+                "String",
+                "region"
+            ],
+            [
+                "String",
+                "signMethod"
+            ]
+        ],
+        "methodBody": "{\n        byte[] firstSignkey = firstSigningKey(secret, date, signMethod);\n        Mac mac = Mac.getInstance(signMethod);\n        mac.init(new SecretKeySpec(firstSignkey, signMethod));\n        return mac.doFinal(region.getBytes(StandardCharsets.UTF_8));\n    }",
+        "position": {
+            "line": 53,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "firstSigningKey",
+                "position": {
+                    "line": 55,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 56,
+                    "column": 23
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 57,
+                    "column": 13
+                }
+            },
+            {
+                "name": "doFinal",
+                "position": {
+                    "line": 58,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 58,
+                    "column": 35
+                }
+            },
+            {
+                "name": "SecretKeySpec",
+                "position": {
+                    "line": 57,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [
+            "CalculateV4SigningKeyUtil.firstSigningKey(String secret, String date, String signMethod)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "finalSigningKey",
+        "category": "method_declaration",
+        "class": "CalculateV4SigningKeyUtil",
+        "signature": "finalSigningKey(String secret, String date, String region, String productCode, String signMethod)",
+        "class_signature": "CalculateV4SigningKeyUtil.finalSigningKey(String secret, String date, String region, String productCode, String signMethod)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "secret"
+            ],
+            [
+                "String",
+                "date"
+            ],
+            [
+                "String",
+                "region"
+            ],
+            [
+                "String",
+                "productCode"
+            ],
+            [
+                "String",
+                "signMethod"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            byte[] secondSignkey = regionSigningKey(secret, date, region, signMethod);\n            Mac mac = Mac.getInstance(signMethod);\n            mac.init(new SecretKeySpec(secondSignkey, signMethod));\n            byte[] thirdSigningKey = mac.doFinal(productCode.getBytes(StandardCharsets.UTF_8));\n            // \n            mac = Mac.getInstance(signMethod);\n            mac.init(new SecretKeySpec(thirdSigningKey, signMethod));\n            return mac.doFinal(CONSTANT.getBytes(StandardCharsets.UTF_8));\n        } catch (NoSuchAlgorithmException e) {\n            throw new RuntimeException(\"unsupported Algorithm:\" + signMethod);\n        } catch (InvalidKeyException e) {\n            throw new RuntimeException(\"InvalidKey\");\n        }\n    }",
+        "position": {
+            "line": 61,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "regionSigningKey",
+                "position": {
+                    "line": 64,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 65,
+                    "column": 27
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 66,
+                    "column": 17
+                }
+            },
+            {
+                "name": "doFinal",
+                "position": {
+                    "line": 67,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 67,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 69,
+                    "column": 23
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 70,
+                    "column": 17
+                }
+            },
+            {
+                "name": "doFinal",
+                "position": {
+                    "line": 71,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 71,
+                    "column": 41
+                }
+            },
+            {
+                "name": "SecretKeySpec",
+                "position": {
+                    "line": 66,
+                    "column": 26
+                }
+            },
+            {
+                "name": "SecretKeySpec",
+                "position": {
+                    "line": 70,
+                    "column": 26
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 73,
+                    "column": 23
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 75,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "CalculateV4SigningKeyUtil.regionSigningKey(String secret, String date, String region, String signMethod)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "finalSigningKeyString",
+        "category": "method_declaration",
+        "class": "CalculateV4SigningKeyUtil",
+        "signature": "finalSigningKeyString(String secret, String date, String region, String productCode, String signMethod)",
+        "class_signature": "CalculateV4SigningKeyUtil.finalSigningKeyString(String secret, String date, String region, String productCode, String signMethod)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "secret"
+            ],
+            [
+                "String",
+                "date"
+            ],
+            [
+                "String",
+                "region"
+            ],
+            [
+                "String",
+                "productCode"
+            ],
+            [
+                "String",
+                "signMethod"
+            ]
+        ],
+        "methodBody": "{\n        return Base64.getEncoder().encodeToString(finalSigningKey(secret, date, region, productCode, signMethod));\n    }",
+        "position": {
+            "line": 89,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeToString",
+                "position": {
+                    "line": 91,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getEncoder",
+                "position": {
+                    "line": 91,
+                    "column": 23
+                }
+            },
+            {
+                "name": "finalSigningKey",
+                "position": {
+                    "line": 91,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "CalculateV4SigningKeyUtil.finalSigningKey(String secret, String date, String region, String productCode, String signMethod)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "finalSigningKeyStringWithDefaultInfo",
+        "category": "method_declaration",
+        "class": "CalculateV4SigningKeyUtil",
+        "signature": "finalSigningKeyStringWithDefaultInfo(String secret, String region)",
+        "class_signature": "CalculateV4SigningKeyUtil.finalSigningKeyStringWithDefaultInfo(String secret, String region)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "secret"
+            ],
+            [
+                "String",
+                "region"
+            ]
+        ],
+        "methodBody": "{\n        String signDate = LocalDateTime.now(UTC_0).format(V4_SIGN_DATE_FORMATTER);\n        return finalSigningKeyString(secret, signDate, region, RamConstants.SIGNATURE_V4_PRODUCE,\n                RamConstants.SIGNATURE_V4_METHOD);\n    }",
+        "position": {
+            "line": 107,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "format",
+                "position": {
+                    "line": 108,
+                    "column": 52
+                }
+            },
+            {
+                "name": "now",
+                "position": {
+                    "line": 108,
+                    "column": 41
+                }
+            },
+            {
+                "name": "finalSigningKeyString",
+                "position": {
+                    "line": 109,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CalculateV4SigningKeyUtil.finalSigningKeyString(String secret, String date, String region, String productCode, String signMethod)"
+        ],
+        "priority": 0
+    }
+]

@@ -1,0 +1,937 @@
+[
+    {
+        "name": "ApolloAuditTracer",
+        "category": "constructor_declaration",
+        "class": "ApolloAuditTracer",
+        "signature": "ApolloAuditTracer(ApolloAuditScopeManager manager, ApolloAuditOperatorSupplier operatorSupplier)",
+        "class_signature": "ApolloAuditTracer.ApolloAuditTracer(ApolloAuditScopeManager manager, ApolloAuditOperatorSupplier operatorSupplier)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ApolloAuditScopeManager",
+                "manager"
+            ],
+            [
+                "ApolloAuditOperatorSupplier",
+                "operatorSupplier"
+            ]
+        ],
+        "methodBody": "{\n    this.manager = manager;\n    this.operatorSupplier = operatorSupplier;\n  }",
+        "position": {
+            "line": 40,
+            "column": 10
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "scopeManager",
+        "category": "method_declaration",
+        "class": "ApolloAuditTracer",
+        "signature": "scopeManager()",
+        "class_signature": "ApolloAuditTracer.scopeManager()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n    return manager;\n  }",
+        "position": {
+            "line": 46,
+            "column": 34
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 13
+    },
+    {
+        "name": "inject",
+        "category": "method_declaration",
+        "class": "ApolloAuditTracer",
+        "signature": "inject(HttpRequest request)",
+        "class_signature": "ApolloAuditTracer.inject(HttpRequest request)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "HttpRequest",
+                "request"
+            ]
+        ],
+        "methodBody": "{\n    Map<String, List<String>> map = new HashMap<>();\n    if (manager.activeSpan() == null) {\n      return request;\n    }\n    map.put(ApolloAuditConstants.TRACE_ID,\n        Collections.singletonList(manager.activeSpan().traceId()));\n    map.put(ApolloAuditConstants.SPAN_ID,\n        Collections.singletonList(manager.activeSpan().spanId()));\n    map.put(ApolloAuditConstants.OPERATOR,\n        Collections.singletonList(manager.activeSpan().operator()));\n    map.put(ApolloAuditConstants.PARENT_ID,\n        Collections.singletonList(manager.activeSpan().parentId()));\n    map.put(ApolloAuditConstants.FOLLOWS_FROM_ID,\n        Collections.singletonList(manager.activeSpan().followsFromId()));\n\n    HttpHeaders headers = request.getHeaders();\n    headers.putAll(map);\n\n    return request;\n  }",
+        "position": {
+            "line": 50,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "activeSpan",
+                "position": {
+                    "line": 52,
+                    "column": 17
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 55,
+                    "column": 9
+                }
+            },
+            {
+                "name": "singletonList",
+                "position": {
+                    "line": 56,
+                    "column": 21
+                }
+            },
+            {
+                "name": "traceId",
+                "position": {
+                    "line": 56,
+                    "column": 56
+                }
+            },
+            {
+                "name": "activeSpan",
+                "position": {
+                    "line": 56,
+                    "column": 43
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 57,
+                    "column": 9
+                }
+            },
+            {
+                "name": "singletonList",
+                "position": {
+                    "line": 58,
+                    "column": 21
+                }
+            },
+            {
+                "name": "spanId",
+                "position": {
+                    "line": 58,
+                    "column": 56
+                }
+            },
+            {
+                "name": "activeSpan",
+                "position": {
+                    "line": 58,
+                    "column": 43
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 59,
+                    "column": 9
+                }
+            },
+            {
+                "name": "singletonList",
+                "position": {
+                    "line": 60,
+                    "column": 21
+                }
+            },
+            {
+                "name": "operator",
+                "position": {
+                    "line": 60,
+                    "column": 56
+                }
+            },
+            {
+                "name": "activeSpan",
+                "position": {
+                    "line": 60,
+                    "column": 43
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 61,
+                    "column": 9
+                }
+            },
+            {
+                "name": "singletonList",
+                "position": {
+                    "line": 62,
+                    "column": 21
+                }
+            },
+            {
+                "name": "parentId",
+                "position": {
+                    "line": 62,
+                    "column": 56
+                }
+            },
+            {
+                "name": "activeSpan",
+                "position": {
+                    "line": 62,
+                    "column": 43
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 63,
+                    "column": 9
+                }
+            },
+            {
+                "name": "singletonList",
+                "position": {
+                    "line": 64,
+                    "column": 21
+                }
+            },
+            {
+                "name": "followsFromId",
+                "position": {
+                    "line": 64,
+                    "column": 56
+                }
+            },
+            {
+                "name": "activeSpan",
+                "position": {
+                    "line": 64,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getHeaders",
+                "position": {
+                    "line": 66,
+                    "column": 35
+                }
+            },
+            {
+                "name": "putAll",
+                "position": {
+                    "line": 67,
+                    "column": 13
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 51,
+                    "column": 41
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "startSpan",
+        "category": "method_declaration",
+        "class": "ApolloAuditTracer",
+        "signature": "startSpan(OpType type, String name, String description)",
+        "class_signature": "ApolloAuditTracer.startSpan(OpType type, String name, String description)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "OpType",
+                "type"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "String",
+                "description"
+            ]
+        ],
+        "methodBody": "{\n    ApolloAuditSpan activeSpan = getActiveSpan();\n    AuditSpanBuilder builder = new AuditSpanBuilder(type, name);\n    builder = builder.description(description);\n    builder = activeSpan == null ? builder.asRootSpan(operatorSupplier.getOperator())\n        : builder.asChildOf(activeSpan);\n    String followsFromId = scopeManager().getScope() == null ?\n        null : scopeManager().getScope().getLastSpanId();\n    builder = builder.followsFrom(followsFromId);\n\n    return builder.build();\n  }",
+        "position": {
+            "line": 72,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getActiveSpan",
+                "position": {
+                    "line": 73,
+                    "column": 34
+                }
+            },
+            {
+                "name": "description",
+                "position": {
+                    "line": 75,
+                    "column": 23
+                }
+            },
+            {
+                "name": "asRootSpan",
+                "position": {
+                    "line": 76,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getOperator",
+                "position": {
+                    "line": 76,
+                    "column": 72
+                }
+            },
+            {
+                "name": "asChildOf",
+                "position": {
+                    "line": 77,
+                    "column": 19
+                }
+            },
+            {
+                "name": "getScope",
+                "position": {
+                    "line": 78,
+                    "column": 43
+                }
+            },
+            {
+                "name": "scopeManager",
+                "position": {
+                    "line": 78,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getLastSpanId",
+                "position": {
+                    "line": 79,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getScope",
+                "position": {
+                    "line": 79,
+                    "column": 31
+                }
+            },
+            {
+                "name": "scopeManager",
+                "position": {
+                    "line": 79,
+                    "column": 16
+                }
+            },
+            {
+                "name": "followsFrom",
+                "position": {
+                    "line": 80,
+                    "column": 23
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 82,
+                    "column": 20
+                }
+            },
+            {
+                "name": "AuditSpanBuilder",
+                "position": {
+                    "line": 74,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "ApolloAuditTracer.getActiveSpan()",
+            "AuditSpanBuilder.description(String val)",
+            "AuditSpanBuilder.asRootSpan(String operator)",
+            "AuditSpanBuilder.asChildOf(ApolloAuditSpan parent)",
+            "ApolloAuditTracer.scopeManager()",
+            "ApolloAuditTracer.scopeManager()",
+            "AuditSpanBuilder.followsFrom(String id)",
+            "AuditSpanBuilder.build()",
+            "AuditSpanBuilder.AuditSpanBuilder(OpType type, String name)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "startActiveSpan",
+        "category": "method_declaration",
+        "class": "ApolloAuditTracer",
+        "signature": "startActiveSpan(OpType type, String name, String description)",
+        "class_signature": "ApolloAuditTracer.startActiveSpan(OpType type, String name, String description)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "OpType",
+                "type"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "String",
+                "description"
+            ]
+        ],
+        "methodBody": "{\n    ApolloAuditSpan startSpan = startSpan(type, name, description);\n    return activate(startSpan);\n  }",
+        "position": {
+            "line": 85,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "startSpan",
+                "position": {
+                    "line": 86,
+                    "column": 33
+                }
+            },
+            {
+                "name": "activate",
+                "position": {
+                    "line": 87,
+                    "column": 12
+                }
+            }
+        ],
+        "calledMethods": [
+            "ApolloAuditTracer.startSpan(OpType type, String name, String description)",
+            "ApolloAuditTracer.activate(ApolloAuditSpan span)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "activate",
+        "category": "method_declaration",
+        "class": "ApolloAuditTracer",
+        "signature": "activate(ApolloAuditSpan span)",
+        "class_signature": "ApolloAuditTracer.activate(ApolloAuditSpan span)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ApolloAuditSpan",
+                "span"
+            ]
+        ],
+        "methodBody": "{\n    return scopeManager().activate(span);\n  }",
+        "position": {
+            "line": 90,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "activate",
+                "position": {
+                    "line": 91,
+                    "column": 27
+                }
+            },
+            {
+                "name": "scopeManager",
+                "position": {
+                    "line": 91,
+                    "column": 12
+                }
+            }
+        ],
+        "calledMethods": [
+            "ApolloAuditTracer.scopeManager()"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "getActiveSpanFromHttp",
+        "category": "method_declaration",
+        "class": "ApolloAuditTracer",
+        "signature": "getActiveSpanFromHttp()",
+        "class_signature": "ApolloAuditTracer.getActiveSpanFromHttp()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n    ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();\n    if (servletRequestAttributes == null) {\n      return null;\n    }\n    HttpServletRequest request = servletRequestAttributes.getRequest();\n    String traceId = request.getHeader(ApolloAuditConstants.TRACE_ID);\n    String spanId = request.getHeader(ApolloAuditConstants.SPAN_ID);\n    String operator = request.getHeader(ApolloAuditConstants.OPERATOR);\n    String parentId = request.getHeader(ApolloAuditConstants.PARENT_ID);\n    String followsFromId = request.getHeader(ApolloAuditConstants.FOLLOWS_FROM_ID);\n    if (Objects.isNull(traceId)) {\n      return null;\n    } else {\n      ApolloAuditSpanContext context = new ApolloAuditSpanContext(traceId, spanId, operator, parentId, followsFromId);\n      return spanBuilder(null, null).regenerateByContext(context);\n    }\n  }",
+        "position": {
+            "line": 94,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getRequestAttributes",
+                "position": {
+                    "line": 95,
+                    "column": 105
+                }
+            },
+            {
+                "name": "getRequest",
+                "position": {
+                    "line": 99,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 100,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 101,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 102,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 103,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 104,
+                    "column": 36
+                }
+            },
+            {
+                "name": "isNull",
+                "position": {
+                    "line": 105,
+                    "column": 17
+                }
+            },
+            {
+                "name": "regenerateByContext",
+                "position": {
+                    "line": 109,
+                    "column": 38
+                }
+            },
+            {
+                "name": "spanBuilder",
+                "position": {
+                    "line": 109,
+                    "column": 14
+                }
+            },
+            {
+                "name": "ApolloAuditSpanContext",
+                "position": {
+                    "line": 108,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [
+            "AuditSpanBuilder.regenerateByContext(ApolloAuditSpanContext val)",
+            "ApolloAuditTracer.spanBuilder(OpType type, String name)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "getActiveSpanFromContext",
+        "category": "method_declaration",
+        "class": "ApolloAuditTracer",
+        "signature": "getActiveSpanFromContext()",
+        "class_signature": "ApolloAuditTracer.getActiveSpanFromContext()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n    return scopeManager().activeSpan();\n  }",
+        "position": {
+            "line": 113,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "activeSpan",
+                "position": {
+                    "line": 114,
+                    "column": 27
+                }
+            },
+            {
+                "name": "scopeManager",
+                "position": {
+                    "line": 114,
+                    "column": 12
+                }
+            }
+        ],
+        "calledMethods": [
+            "ApolloAuditTracer.scopeManager()"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "getActiveSpan",
+        "category": "method_declaration",
+        "class": "ApolloAuditTracer",
+        "signature": "getActiveSpan()",
+        "class_signature": "ApolloAuditTracer.getActiveSpan()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n    ApolloAuditSpan activeSpan = getActiveSpanFromContext();\n    if (activeSpan != null) {\n      return activeSpan;\n    }\n    activeSpan = getActiveSpanFromHttp();\n    // might be null, root span generate should be done in other place\n    return activeSpan;\n  }",
+        "position": {
+            "line": 117,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getActiveSpanFromContext",
+                "position": {
+                    "line": 118,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getActiveSpanFromHttp",
+                "position": {
+                    "line": 122,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "ApolloAuditTracer.getActiveSpanFromContext()",
+            "ApolloAuditTracer.getActiveSpanFromHttp()"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "spanBuilder",
+        "category": "method_declaration",
+        "class": "ApolloAuditTracer",
+        "signature": "spanBuilder(OpType type, String name)",
+        "class_signature": "ApolloAuditTracer.spanBuilder(OpType type, String name)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "OpType",
+                "type"
+            ],
+            [
+                "String",
+                "name"
+            ]
+        ],
+        "methodBody": "{\n    return new AuditSpanBuilder(type, name);\n  }",
+        "position": {
+            "line": 127,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "AuditSpanBuilder",
+                "position": {
+                    "line": 128,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AuditSpanBuilder.AuditSpanBuilder(OpType type, String name)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "AuditSpanBuilder",
+        "category": "constructor_declaration",
+        "class": "AuditSpanBuilder",
+        "signature": "AuditSpanBuilder(OpType type, String name)",
+        "class_signature": "AuditSpanBuilder.AuditSpanBuilder(OpType type, String name)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "OpType",
+                "type"
+            ],
+            [
+                "String",
+                "name"
+            ]
+        ],
+        "methodBody": "{\n      opType = type;\n      opName = name;\n    }",
+        "position": {
+            "line": 142,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "asChildOf",
+        "category": "method_declaration",
+        "class": "AuditSpanBuilder",
+        "signature": "asChildOf(ApolloAuditSpan parent)",
+        "class_signature": "AuditSpanBuilder.asChildOf(ApolloAuditSpan parent)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ApolloAuditSpan",
+                "parent"
+            ]
+        ],
+        "methodBody": "{\n      traceId = parent.traceId();\n      operator = parent.operator();\n      parentId = parent.spanId();\n      return this;\n    }",
+        "position": {
+            "line": 147,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "traceId",
+                "position": {
+                    "line": 148,
+                    "column": 24
+                }
+            },
+            {
+                "name": "operator",
+                "position": {
+                    "line": 149,
+                    "column": 25
+                }
+            },
+            {
+                "name": "spanId",
+                "position": {
+                    "line": 150,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "asRootSpan",
+        "category": "method_declaration",
+        "class": "AuditSpanBuilder",
+        "signature": "asRootSpan(String operator)",
+        "class_signature": "AuditSpanBuilder.asRootSpan(String operator)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "operator"
+            ]
+        ],
+        "methodBody": "{\n      traceId = ApolloAuditUtil.generateId();\n      this.operator = operator;\n      return this;\n    }",
+        "position": {
+            "line": 154,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "generateId",
+                "position": {
+                    "line": 155,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "followsFrom",
+        "category": "method_declaration",
+        "class": "AuditSpanBuilder",
+        "signature": "followsFrom(String id)",
+        "class_signature": "AuditSpanBuilder.followsFrom(String id)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "id"
+            ]
+        ],
+        "methodBody": "{\n      this.followsFromId = id;\n      return this;\n    }",
+        "position": {
+            "line": 160,
+            "column": 29
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "description",
+        "category": "method_declaration",
+        "class": "AuditSpanBuilder",
+        "signature": "description(String val)",
+        "class_signature": "AuditSpanBuilder.description(String val)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "val"
+            ]
+        ],
+        "methodBody": "{\n      this.description = val;\n      return this;\n    }",
+        "position": {
+            "line": 165,
+            "column": 29
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "regenerateByContext",
+        "category": "method_declaration",
+        "class": "AuditSpanBuilder",
+        "signature": "regenerateByContext(ApolloAuditSpanContext val)",
+        "class_signature": "AuditSpanBuilder.regenerateByContext(ApolloAuditSpanContext val)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ApolloAuditSpanContext",
+                "val"
+            ]
+        ],
+        "methodBody": "{\n      ApolloAuditSpan span = new ApolloAuditSpan();\n      span.setContext(val);\n      return span;\n    }",
+        "position": {
+            "line": 170,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setContext",
+                "position": {
+                    "line": 172,
+                    "column": 12
+                }
+            },
+            {
+                "name": "ApolloAuditSpan",
+                "position": {
+                    "line": 171,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "build",
+        "category": "method_declaration",
+        "class": "AuditSpanBuilder",
+        "signature": "build()",
+        "class_signature": "AuditSpanBuilder.build()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n      ApolloAuditSpan span = new ApolloAuditSpan();\n      spanId = ApolloAuditUtil.generateId();\n      ApolloAuditSpanContext context = new ApolloAuditSpanContext(traceId, spanId, operator,\n          parentId, followsFromId);\n      span.setContext(context);\n      span.setDescription(description);\n      span.setOpName(opName);\n      span.setOpType(opType);\n      span.setStartTime(new Date());\n      return span;\n    }",
+        "position": {
+            "line": 176,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "generateId",
+                "position": {
+                    "line": 178,
+                    "column": 32
+                }
+            },
+            {
+                "name": "setContext",
+                "position": {
+                    "line": 181,
+                    "column": 12
+                }
+            },
+            {
+                "name": "setDescription",
+                "position": {
+                    "line": 182,
+                    "column": 12
+                }
+            },
+            {
+                "name": "setOpName",
+                "position": {
+                    "line": 183,
+                    "column": 12
+                }
+            },
+            {
+                "name": "setOpType",
+                "position": {
+                    "line": 184,
+                    "column": 12
+                }
+            },
+            {
+                "name": "setStartTime",
+                "position": {
+                    "line": 185,
+                    "column": 12
+                }
+            },
+            {
+                "name": "ApolloAuditSpan",
+                "position": {
+                    "line": 177,
+                    "column": 34
+                }
+            },
+            {
+                "name": "ApolloAuditSpanContext",
+                "position": {
+                    "line": 179,
+                    "column": 44
+                }
+            },
+            {
+                "name": "Date",
+                "position": {
+                    "line": 185,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 10
+    }
+]

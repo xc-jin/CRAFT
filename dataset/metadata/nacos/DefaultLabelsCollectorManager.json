@@ -1,0 +1,519 @@
+[
+    {
+        "name": "DefaultLabelsCollectorManager",
+        "category": "constructor_declaration",
+        "class": "DefaultLabelsCollectorManager",
+        "signature": "DefaultLabelsCollectorManager()",
+        "class_signature": "DefaultLabelsCollectorManager.DefaultLabelsCollectorManager()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        labelsCollectorsList = loadLabelsCollectors();\n    }",
+        "position": {
+            "line": 42,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadLabelsCollectors",
+                "position": {
+                    "line": 43,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "DefaultLabelsCollectorManager.loadLabelsCollectors()"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "getLabels",
+        "category": "method_declaration",
+        "class": "DefaultLabelsCollectorManager",
+        "signature": "getLabels(Properties properties)",
+        "class_signature": "DefaultLabelsCollectorManager.getLabels(Properties properties)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Properties",
+                "properties"
+            ]
+        ],
+        "methodBody": "{\n        LOGGER.info(\"DefaultLabelsCollectorManager get labels.....\");\n        Map<String, String> labels = getLabels(labelsCollectorsList, properties);\n        LOGGER.info(\"DefaultLabelsCollectorManager get labels finished,labels :{}\", labels);\n        return labels;\n    }",
+        "position": {
+            "line": 47,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 48,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getLabels",
+                "position": {
+                    "line": 49,
+                    "column": 38
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 50,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "DefaultLabelsCollectorManager.getLabels(ArrayList<LabelsCollector> labelsCollectorsList, Properties properties)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "getLabels",
+        "category": "method_declaration",
+        "class": "DefaultLabelsCollectorManager",
+        "signature": "getLabels(ArrayList<LabelsCollector> labelsCollectorsList, Properties properties)",
+        "class_signature": "DefaultLabelsCollectorManager.getLabels(ArrayList<LabelsCollector> labelsCollectorsList, Properties properties)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ArrayList<LabelsCollector>",
+                "labelsCollectorsList"
+            ],
+            [
+                "Properties",
+                "properties"
+            ]
+        ],
+        "methodBody": "{\n        \n        if (properties == null) {\n            properties = new Properties();\n        }\n        Map<String, String> labels = new HashMap<>(8);\n        for (LabelsCollector labelsCollector : labelsCollectorsList) {\n            \n            LOGGER.info(\"Process LabelsCollector with [name:{}]\", labelsCollector.getName());\n            for (Map.Entry<String, String> entry : labelsCollector.collectLabels(properties).entrySet()) {\n                if (!checkValidLabel(entry.getKey(), entry.getValue())) {\n                    LOGGER.info(\" ignore invalid label with [key:{}, value:{}] of collector [name:{}]\", entry.getKey(),\n                            entry.getValue(), labelsCollector.getName());\n                    continue;\n                }\n                if (innerAddLabel(labels, entry.getKey(), entry.getValue())) {\n                    LOGGER.info(\"pick label with [key:{}, value:{}] of collector [name:{}]\", entry.getKey(),\n                            entry.getValue(), labelsCollector.getName());\n                } else {\n                    LOGGER.info(\" ignore label with [key:{}, value:{}] of collector [name:{}],\"\n                                    + \"already existed in LabelsCollectorManager with previous [value:{}]\", entry.getKey(),\n                            entry.getValue(), labelsCollector.getName(), labels.get(entry.getKey()));\n                }\n            }\n        }\n        return labels;\n    }",
+        "position": {
+            "line": 54,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 62,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 62,
+                    "column": 83
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 63,
+                    "column": 94
+                }
+            },
+            {
+                "name": "collectLabels",
+                "position": {
+                    "line": 63,
+                    "column": 68
+                }
+            },
+            {
+                "name": "checkValidLabel",
+                "position": {
+                    "line": 64,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 64,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 64,
+                    "column": 60
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 65,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 65,
+                    "column": 111
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 66,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 66,
+                    "column": 63
+                }
+            },
+            {
+                "name": "innerAddLabel",
+                "position": {
+                    "line": 69,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 69,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 69,
+                    "column": 65
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 70,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 70,
+                    "column": 100
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 71,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 71,
+                    "column": 63
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 73,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 74,
+                    "column": 115
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 75,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 75,
+                    "column": 63
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 75,
+                    "column": 81
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 75,
+                    "column": 91
+                }
+            },
+            {
+                "name": "Properties",
+                "position": {
+                    "line": 57,
+                    "column": 30
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 59,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [
+            "DefaultLabelsCollectorManager.checkValidLabel(String key, String value)",
+            "DefaultLabelsCollectorManager.innerAddLabel(Map<String, String> labels, String key, String value)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "checkValidLabel",
+        "category": "method_declaration",
+        "class": "DefaultLabelsCollectorManager",
+        "signature": "checkValidLabel(String key, String value)",
+        "class_signature": "DefaultLabelsCollectorManager.checkValidLabel(String key, String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "key"
+            ],
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        return isValid(key) && isValid(value);\n    }",
+        "position": {
+            "line": 82,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 83,
+                    "column": 16
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 83,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "DefaultLabelsCollectorManager.isValid(String param)",
+            "DefaultLabelsCollectorManager.isValid(String param)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "isValid",
+        "category": "method_declaration",
+        "class": "DefaultLabelsCollectorManager",
+        "signature": "isValid(String param)",
+        "class_signature": "DefaultLabelsCollectorManager.isValid(String param)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "param"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isBlank(param)) {\n            return false;\n        }\n        int length = param.length();\n        if (length > maxLength) {\n            return false;\n        }\n        for (int i = 0; i < length; i++) {\n            char ch = param.charAt(i);\n            if (!Character.isLetterOrDigit(ch) && !isValidChar(ch)) {\n                return false;\n            }\n        }\n        return true;\n    }",
+        "position": {
+            "line": 86,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 87,
+                    "column": 25
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 90,
+                    "column": 28
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 95,
+                    "column": 29
+                }
+            },
+            {
+                "name": "isLetterOrDigit",
+                "position": {
+                    "line": 96,
+                    "column": 28
+                }
+            },
+            {
+                "name": "isValidChar",
+                "position": {
+                    "line": 96,
+                    "column": 52
+                }
+            }
+        ],
+        "calledMethods": [
+            "DefaultLabelsCollectorManager.isValidChar(char ch)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "isValidChar",
+        "category": "method_declaration",
+        "class": "DefaultLabelsCollectorManager",
+        "signature": "isValidChar(char ch)",
+        "class_signature": "DefaultLabelsCollectorManager.isValidChar(char ch)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "char",
+                "ch"
+            ]
+        ],
+        "methodBody": "{\n        for (char c : validChars) {\n            if (c == ch) {\n                return true;\n            }\n        }\n        return false;\n    }",
+        "position": {
+            "line": 107,
+            "column": 28
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "loadLabelsCollectors",
+        "category": "method_declaration",
+        "class": "DefaultLabelsCollectorManager",
+        "signature": "loadLabelsCollectors()",
+        "class_signature": "DefaultLabelsCollectorManager.loadLabelsCollectors()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        ServiceLoader<LabelsCollector> labelsCollectors = ServiceLoader.load(LabelsCollector.class);\n        ArrayList<LabelsCollector> labelsCollectorsList = new ArrayList<>();\n        for (LabelsCollector labelsCollector : labelsCollectors) {\n            labelsCollectorsList.add(labelsCollector);\n        }\n        labelsCollectorsList.sort((o1, o2) -> o2.getOrder() - o1.getOrder());\n        return labelsCollectorsList;\n    }",
+        "position": {
+            "line": 116,
+            "column": 40
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 117,
+                    "column": 73
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 120,
+                    "column": 34
+                }
+            },
+            {
+                "name": "sort",
+                "position": {
+                    "line": 122,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getOrder",
+                "position": {
+                    "line": 122,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getOrder",
+                "position": {
+                    "line": 122,
+                    "column": 66
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 118,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "innerAddLabel",
+        "category": "method_declaration",
+        "class": "DefaultLabelsCollectorManager",
+        "signature": "innerAddLabel(Map<String, String> labels, String key, String value)",
+        "class_signature": "DefaultLabelsCollectorManager.innerAddLabel(Map<String, String> labels, String key, String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Map<String, String>",
+                "labels"
+            ],
+            [
+                "String",
+                "key"
+            ],
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        return null == labels.putIfAbsent(key, value);\n    }",
+        "position": {
+            "line": 126,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 127,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    }
+]

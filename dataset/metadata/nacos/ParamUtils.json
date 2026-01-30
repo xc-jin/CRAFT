@@ -1,0 +1,681 @@
+[
+    {
+        "name": "isValid",
+        "category": "method_declaration",
+        "class": "ParamUtils",
+        "signature": "isValid(String param)",
+        "class_signature": "ParamUtils.isValid(String param)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "param"
+            ]
+        ],
+        "methodBody": "{\n        if (param == null) {\n            return false;\n        }\n        int length = param.length();\n        for (int i = 0; i < length; i++) {\n            char ch = param.charAt(i);\n            if (!Character.isLetterOrDigit(ch) && !isValidChar(ch)) {\n                return false;\n            }\n        }\n        return true;\n    }",
+        "position": {
+            "line": 52,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 56,
+                    "column": 28
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 58,
+                    "column": 29
+                }
+            },
+            {
+                "name": "isLetterOrDigit",
+                "position": {
+                    "line": 59,
+                    "column": 28
+                }
+            },
+            {
+                "name": "isValidChar",
+                "position": {
+                    "line": 59,
+                    "column": 52
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamUtils.isValidChar(char ch)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "isValidChar",
+        "category": "method_declaration",
+        "class": "ParamUtils",
+        "signature": "isValidChar(char ch)",
+        "class_signature": "ParamUtils.isValidChar(char ch)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "char",
+                "ch"
+            ]
+        ],
+        "methodBody": "{\n        for (char c : VALID_CHARS) {\n            if (c == ch) {\n                return true;\n            }\n        }\n        return false;\n    }",
+        "position": {
+            "line": 66,
+            "column": 28
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "checkTdg",
+        "category": "method_declaration",
+        "class": "ParamUtils",
+        "signature": "checkTdg(String tenant, String dataId, String group)",
+        "class_signature": "ParamUtils.checkTdg(String tenant, String dataId, String group)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "tenant"
+            ],
+            [
+                "String",
+                "dataId"
+            ],
+            [
+                "String",
+                "group"
+            ]
+        ],
+        "methodBody": "{\n        checkTenant(tenant);\n        if (StringUtils.isBlank(dataId) || !ParamUtils.isValid(dataId)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, DATAID_INVALID_MSG);\n        }\n        if (StringUtils.isBlank(group) || !ParamUtils.isValid(group)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, GROUP_INVALID_MSG);\n        }\n    }",
+        "position": {
+            "line": 83,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkTenant",
+                "position": {
+                    "line": 84,
+                    "column": 9
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 85,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 85,
+                    "column": 56
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 88,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 88,
+                    "column": 55
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 86,
+                    "column": 23
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 89,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamUtils.checkTenant(String tenant)",
+            "ParamUtils.isValid(String param)",
+            "ParamUtils.isValid(String param)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "checkKeyParam",
+        "category": "method_declaration",
+        "class": "ParamUtils",
+        "signature": "checkKeyParam(String dataId, String group)",
+        "class_signature": "ParamUtils.checkKeyParam(String dataId, String group)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "dataId"
+            ],
+            [
+                "String",
+                "group"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isBlank(dataId) || !ParamUtils.isValid(dataId)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, DATAID_INVALID_MSG);\n        }\n        if (StringUtils.isBlank(group) || !ParamUtils.isValid(group)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, GROUP_INVALID_MSG);\n        }\n    }",
+        "position": {
+            "line": 100,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 101,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 101,
+                    "column": 56
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 104,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 104,
+                    "column": 55
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 102,
+                    "column": 23
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 105,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamUtils.isValid(String param)",
+            "ParamUtils.isValid(String param)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "checkKeyParam",
+        "category": "method_declaration",
+        "class": "ParamUtils",
+        "signature": "checkKeyParam(String dataId, String group, String datumId)",
+        "class_signature": "ParamUtils.checkKeyParam(String dataId, String group, String datumId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "dataId"
+            ],
+            [
+                "String",
+                "group"
+            ],
+            [
+                "String",
+                "datumId"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isBlank(dataId) || !ParamUtils.isValid(dataId)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, DATAID_INVALID_MSG);\n        }\n        if (StringUtils.isBlank(group) || !ParamUtils.isValid(group)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, GROUP_INVALID_MSG);\n        }\n        if (StringUtils.isBlank(datumId) || !ParamUtils.isValid(datumId)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, DATUMID_INVALID_MSG);\n        }\n    }",
+        "position": {
+            "line": 117,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 118,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 118,
+                    "column": 56
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 121,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 121,
+                    "column": 55
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 124,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 124,
+                    "column": 57
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 119,
+                    "column": 23
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 122,
+                    "column": 23
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 125,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamUtils.isValid(String param)",
+            "ParamUtils.isValid(String param)",
+            "ParamUtils.isValid(String param)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "checkKeyParam",
+        "category": "method_declaration",
+        "class": "ParamUtils",
+        "signature": "checkKeyParam(List<String> dataIds, String group)",
+        "class_signature": "ParamUtils.checkKeyParam(List<String> dataIds, String group)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<String>",
+                "dataIds"
+            ],
+            [
+                "String",
+                "group"
+            ]
+        ],
+        "methodBody": "{\n        if (dataIds == null || dataIds.size() == 0) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, \"dataIds invalid\");\n        }\n        for (String dataId : dataIds) {\n            if (StringUtils.isBlank(dataId) || !ParamUtils.isValid(dataId)) {\n                throw new NacosException(NacosException.CLIENT_INVALID_PARAM, DATAID_INVALID_MSG);\n            }\n        }\n        if (StringUtils.isBlank(group) || !ParamUtils.isValid(group)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, GROUP_INVALID_MSG);\n        }\n    }",
+        "position": {
+            "line": 136,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 137,
+                    "column": 40
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 141,
+                    "column": 29
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 141,
+                    "column": 60
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 145,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 145,
+                    "column": 55
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 138,
+                    "column": 23
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 142,
+                    "column": 27
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 146,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamUtils.isValid(String param)",
+            "ParamUtils.isValid(String param)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "checkParam",
+        "category": "method_declaration",
+        "class": "ParamUtils",
+        "signature": "checkParam(String dataId, String group, String content)",
+        "class_signature": "ParamUtils.checkParam(String dataId, String group, String content)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "dataId"
+            ],
+            [
+                "String",
+                "group"
+            ],
+            [
+                "String",
+                "content"
+            ]
+        ],
+        "methodBody": "{\n        checkKeyParam(dataId, group);\n        if (StringUtils.isBlank(content)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, CONTENT_INVALID_MSG);\n        }\n    }",
+        "position": {
+            "line": 158,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkKeyParam",
+                "position": {
+                    "line": 159,
+                    "column": 9
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 160,
+                    "column": 25
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 161,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamUtils.checkKeyParam(String dataId, String group)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "checkParam",
+        "category": "method_declaration",
+        "class": "ParamUtils",
+        "signature": "checkParam(String dataId, String group, String datumId, String content)",
+        "class_signature": "ParamUtils.checkParam(String dataId, String group, String datumId, String content)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "dataId"
+            ],
+            [
+                "String",
+                "group"
+            ],
+            [
+                "String",
+                "datumId"
+            ],
+            [
+                "String",
+                "content"
+            ]
+        ],
+        "methodBody": "{\n        checkKeyParam(dataId, group, datumId);\n        if (StringUtils.isBlank(content)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, CONTENT_INVALID_MSG);\n        }\n    }",
+        "position": {
+            "line": 174,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkKeyParam",
+                "position": {
+                    "line": 175,
+                    "column": 9
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 176,
+                    "column": 25
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 177,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamUtils.checkKeyParam(String dataId, String group, String datumId)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "checkTenant",
+        "category": "method_declaration",
+        "class": "ParamUtils",
+        "signature": "checkTenant(String tenant)",
+        "class_signature": "ParamUtils.checkTenant(String tenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "tenant"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isBlank(tenant) || !ParamUtils.isValid(tenant)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, TENANT_INVALID_MSG);\n        }\n    }",
+        "position": {
+            "line": 187,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 188,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 188,
+                    "column": 56
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 189,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ParamUtils.isValid(String param)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "checkBetaIps",
+        "category": "method_declaration",
+        "class": "ParamUtils",
+        "signature": "checkBetaIps(String betaIps)",
+        "class_signature": "ParamUtils.checkBetaIps(String betaIps)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "betaIps"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isBlank(betaIps)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, BETAIPS_INVALID_MSG);\n        }\n        String[] ipsArr = betaIps.split(\",\");\n        for (String ip : ipsArr) {\n            if (!InternetAddressUtil.isIP(ip)) {\n                throw new NacosException(NacosException.CLIENT_INVALID_PARAM, BETAIPS_INVALID_MSG);\n            }\n        }\n    }",
+        "position": {
+            "line": 199,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 200,
+                    "column": 25
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 203,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isIP",
+                "position": {
+                    "line": 205,
+                    "column": 38
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 201,
+                    "column": 23
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 206,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "checkContent",
+        "category": "method_declaration",
+        "class": "ParamUtils",
+        "signature": "checkContent(String content)",
+        "class_signature": "ParamUtils.checkContent(String content)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "content"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isBlank(content)) {\n            throw new NacosException(NacosException.CLIENT_INVALID_PARAM, CONTENT_INVALID_MSG);\n        }\n    }",
+        "position": {
+            "line": 217,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 218,
+                    "column": 25
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 219,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    }
+]

@@ -1,0 +1,2117 @@
+[
+    {
+        "name": "TripleClientStream",
+        "category": "constructor_declaration",
+        "class": "TripleClientStream",
+        "signature": "TripleClientStream(FrameworkModel frameworkModel, Executor executor, TripleWriteQueue writeQueue, ClientStream.Listener listener, Http2StreamChannel http2StreamChannel)",
+        "class_signature": "TripleClientStream.TripleClientStream(FrameworkModel frameworkModel, Executor executor, TripleWriteQueue writeQueue, ClientStream.Listener listener, Http2StreamChannel http2StreamChannel)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FrameworkModel",
+                "frameworkModel"
+            ],
+            [
+                "Executor",
+                "executor"
+            ],
+            [
+                "TripleWriteQueue",
+                "writeQueue"
+            ],
+            [
+                "ClientStream.Listener",
+                "listener"
+            ],
+            [
+                "Http2StreamChannel",
+                "http2StreamChannel"
+            ]
+        ],
+        "methodBody": "{\n        super(executor, frameworkModel);\n        this.parent = http2StreamChannel.parent();\n        this.listener = listener;\n        this.writeQueue = writeQueue;\n        this.streamChannelFuture = initHttp2StreamChannel(http2StreamChannel);\n    }",
+        "position": {
+            "line": 88,
+            "column": 5
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "parent",
+                "position": {
+                    "line": 95,
+                    "column": 42
+                }
+            },
+            {
+                "name": "initHttp2StreamChannel",
+                "position": {
+                    "line": 98,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "TripleClientStream.initHttp2StreamChannel(Channel parent)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "TripleClientStream",
+        "category": "constructor_declaration",
+        "class": "TripleClientStream",
+        "signature": "TripleClientStream(FrameworkModel frameworkModel, Executor executor, Channel parent, ClientStream.Listener listener, TripleWriteQueue writeQueue)",
+        "class_signature": "TripleClientStream.TripleClientStream(FrameworkModel frameworkModel, Executor executor, Channel parent, ClientStream.Listener listener, TripleWriteQueue writeQueue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FrameworkModel",
+                "frameworkModel"
+            ],
+            [
+                "Executor",
+                "executor"
+            ],
+            [
+                "Channel",
+                "parent"
+            ],
+            [
+                "ClientStream.Listener",
+                "listener"
+            ],
+            [
+                "TripleWriteQueue",
+                "writeQueue"
+            ]
+        ],
+        "methodBody": "{\n        super(executor, frameworkModel);\n        this.parent = parent;\n        this.listener = listener;\n        this.writeQueue = writeQueue;\n        this.streamChannelFuture = initHttp2StreamChannel(parent);\n    }",
+        "position": {
+            "line": 101,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "initHttp2StreamChannel",
+                "position": {
+                    "line": 111,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "TripleClientStream.initHttp2StreamChannel(Channel parent)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "initHttp2StreamChannel",
+        "category": "method_declaration",
+        "class": "TripleClientStream",
+        "signature": "initHttp2StreamChannel(Channel parent)",
+        "class_signature": "TripleClientStream.initHttp2StreamChannel(Channel parent)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Channel",
+                "parent"
+            ]
+        ],
+        "methodBody": "{\n        TripleStreamChannelFuture streamChannelFuture = new TripleStreamChannelFuture(parent);\n        Http2StreamChannelBootstrap bootstrap = new Http2StreamChannelBootstrap(parent);\n        bootstrap.handler(new ChannelInboundHandlerAdapter() {\n            @Override\n            public void handlerAdded(ChannelHandlerContext ctx) throws Exception {\n                Channel channel = ctx.channel();\n                channel.pipeline().addLast(new TripleCommandOutBoundHandler());\n                channel.pipeline().addLast(new TripleHttp2ClientResponseHandler(createTransportListener()));\n            }\n        });\n        CreateStreamQueueCommand cmd = CreateStreamQueueCommand.create(bootstrap, streamChannelFuture);\n        this.writeQueue.enqueue(cmd);\n        return streamChannelFuture;\n    }",
+        "position": {
+            "line": 114,
+            "column": 39
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "handler",
+                "position": {
+                    "line": 117,
+                    "column": 19
+                }
+            },
+            {
+                "name": "channel",
+                "position": {
+                    "line": 120,
+                    "column": 39
+                }
+            },
+            {
+                "name": "addLast",
+                "position": {
+                    "line": 121,
+                    "column": 36
+                }
+            },
+            {
+                "name": "pipeline",
+                "position": {
+                    "line": 121,
+                    "column": 25
+                }
+            },
+            {
+                "name": "addLast",
+                "position": {
+                    "line": 122,
+                    "column": 36
+                }
+            },
+            {
+                "name": "pipeline",
+                "position": {
+                    "line": 122,
+                    "column": 25
+                }
+            },
+            {
+                "name": "createTransportListener",
+                "position": {
+                    "line": 122,
+                    "column": 81
+                }
+            },
+            {
+                "name": "create",
+                "position": {
+                    "line": 125,
+                    "column": 65
+                }
+            },
+            {
+                "name": "enqueue",
+                "position": {
+                    "line": 126,
+                    "column": 25
+                }
+            },
+            {
+                "name": "TripleStreamChannelFuture",
+                "position": {
+                    "line": 115,
+                    "column": 61
+                }
+            },
+            {
+                "name": "Http2StreamChannelBootstrap",
+                "position": {
+                    "line": 116,
+                    "column": 53
+                }
+            },
+            {
+                "name": "ChannelInboundHandlerAdapter",
+                "position": {
+                    "line": 117,
+                    "column": 31
+                }
+            },
+            {
+                "name": "TripleCommandOutBoundHandler",
+                "position": {
+                    "line": 121,
+                    "column": 48
+                }
+            },
+            {
+                "name": "TripleHttp2ClientResponseHandler",
+                "position": {
+                    "line": 122,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "TripleClientStream.createTransportListener()"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "handlerAdded",
+        "category": "method_declaration",
+        "class": "TripleClientStream",
+        "signature": "handlerAdded(ChannelHandlerContext ctx)",
+        "class_signature": "TripleClientStream.handlerAdded(ChannelHandlerContext ctx)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ChannelHandlerContext",
+                "ctx"
+            ]
+        ],
+        "methodBody": "{\n                Channel channel = ctx.channel();\n                channel.pipeline().addLast(new TripleCommandOutBoundHandler());\n                channel.pipeline().addLast(new TripleHttp2ClientResponseHandler(createTransportListener()));\n            }",
+        "position": {
+            "line": 119,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "channel",
+                "position": {
+                    "line": 120,
+                    "column": 39
+                }
+            },
+            {
+                "name": "addLast",
+                "position": {
+                    "line": 121,
+                    "column": 36
+                }
+            },
+            {
+                "name": "pipeline",
+                "position": {
+                    "line": 121,
+                    "column": 25
+                }
+            },
+            {
+                "name": "addLast",
+                "position": {
+                    "line": 122,
+                    "column": 36
+                }
+            },
+            {
+                "name": "pipeline",
+                "position": {
+                    "line": 122,
+                    "column": 25
+                }
+            },
+            {
+                "name": "createTransportListener",
+                "position": {
+                    "line": 122,
+                    "column": 81
+                }
+            },
+            {
+                "name": "TripleCommandOutBoundHandler",
+                "position": {
+                    "line": 121,
+                    "column": 48
+                }
+            },
+            {
+                "name": "TripleHttp2ClientResponseHandler",
+                "position": {
+                    "line": 122,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "TripleClientStream.createTransportListener()"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "sendHeader",
+        "category": "method_declaration",
+        "class": "TripleClientStream",
+        "signature": "sendHeader(Http2Headers headers)",
+        "class_signature": "TripleClientStream.sendHeader(Http2Headers headers)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Http2Headers",
+                "headers"
+            ]
+        ],
+        "methodBody": "{\n        if (this.writeQueue == null) {\n            // already processed at createStream()\n            return parent.newFailedFuture(new IllegalStateException(\"Stream already closed\"));\n        }\n        ChannelFuture checkResult = preCheck();\n        if (!checkResult.isSuccess()) {\n            return checkResult;\n        }\n        final HeaderQueueCommand headerCmd = HeaderQueueCommand.createHeaders(streamChannelFuture, headers);\n        return writeQueue.enqueueFuture(headerCmd, parent.eventLoop()).addListener(future -> {\n            if (!future.isSuccess()) {\n                transportException(future.cause());\n            }\n        });\n    }",
+        "position": {
+            "line": 130,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 133,
+                    "column": 27
+                }
+            },
+            {
+                "name": "preCheck",
+                "position": {
+                    "line": 135,
+                    "column": 37
+                }
+            },
+            {
+                "name": "isSuccess",
+                "position": {
+                    "line": 136,
+                    "column": 26
+                }
+            },
+            {
+                "name": "createHeaders",
+                "position": {
+                    "line": 139,
+                    "column": 65
+                }
+            },
+            {
+                "name": "addListener",
+                "position": {
+                    "line": 140,
+                    "column": 72
+                }
+            },
+            {
+                "name": "enqueueFuture",
+                "position": {
+                    "line": 140,
+                    "column": 27
+                }
+            },
+            {
+                "name": "eventLoop",
+                "position": {
+                    "line": 140,
+                    "column": 59
+                }
+            },
+            {
+                "name": "isSuccess",
+                "position": {
+                    "line": 141,
+                    "column": 25
+                }
+            },
+            {
+                "name": "transportException",
+                "position": {
+                    "line": 142,
+                    "column": 17
+                }
+            },
+            {
+                "name": "cause",
+                "position": {
+                    "line": 142,
+                    "column": 43
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 133,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [
+            "TripleClientStream.preCheck()",
+            "TripleClientStream.transportException(Throwable cause)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "transportException",
+        "category": "method_declaration",
+        "class": "TripleClientStream",
+        "signature": "transportException(Throwable cause)",
+        "class_signature": "TripleClientStream.transportException(Throwable cause)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Throwable",
+                "cause"
+            ]
+        ],
+        "methodBody": "{\n        final TriRpcStatus status =\n                TriRpcStatus.INTERNAL.withDescription(\"Http2 exception\").withCause(cause);\n        listener.onComplete(status, null, null, false);\n    }",
+        "position": {
+            "line": 147,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "withCause",
+                "position": {
+                    "line": 149,
+                    "column": 74
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 149,
+                    "column": 39
+                }
+            },
+            {
+                "name": "onComplete",
+                "position": {
+                    "line": 150,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "cancelByLocal",
+        "category": "method_declaration",
+        "class": "TripleClientStream",
+        "signature": "cancelByLocal(TriRpcStatus status)",
+        "class_signature": "TripleClientStream.cancelByLocal(TriRpcStatus status)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "TriRpcStatus",
+                "status"
+            ]
+        ],
+        "methodBody": "{\n        ChannelFuture checkResult = preCheck();\n        if (!checkResult.isSuccess()) {\n            return checkResult;\n        }\n        final CancelQueueCommand cmd = CancelQueueCommand.createCommand(streamChannelFuture, Http2Error.CANCEL);\n\n        TripleClientStream.this.rst = true;\n        return this.writeQueue.enqueue(cmd);\n    }",
+        "position": {
+            "line": 153,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "preCheck",
+                "position": {
+                    "line": 154,
+                    "column": 37
+                }
+            },
+            {
+                "name": "isSuccess",
+                "position": {
+                    "line": 155,
+                    "column": 26
+                }
+            },
+            {
+                "name": "createCommand",
+                "position": {
+                    "line": 158,
+                    "column": 59
+                }
+            },
+            {
+                "name": "enqueue",
+                "position": {
+                    "line": 161,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "TripleClientStream.preCheck()"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "remoteAddress",
+        "category": "method_declaration",
+        "class": "TripleClientStream",
+        "signature": "remoteAddress()",
+        "class_signature": "TripleClientStream.remoteAddress()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return parent.remoteAddress();\n    }",
+        "position": {
+            "line": 165,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "remoteAddress",
+                "position": {
+                    "line": 166,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "sendMessage",
+        "category": "method_declaration",
+        "class": "TripleClientStream",
+        "signature": "sendMessage(byte[] message, int compressFlag, boolean eos)",
+        "class_signature": "TripleClientStream.sendMessage(byte[] message, int compressFlag, boolean eos)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "byte[]",
+                "message"
+            ],
+            [
+                "int",
+                "compressFlag"
+            ],
+            [
+                "boolean",
+                "eos"
+            ]
+        ],
+        "methodBody": "{\n        ChannelFuture checkResult = preCheck();\n        if (!checkResult.isSuccess()) {\n            return checkResult;\n        }\n        final DataQueueCommand cmd = DataQueueCommand.create(streamChannelFuture, message, false, compressFlag);\n        return this.writeQueue.enqueueFuture(cmd, parent.eventLoop()).addListener(future -> {\n            if (!future.isSuccess()) {\n                cancelByLocal(TriRpcStatus.INTERNAL\n                        .withDescription(\"Client write message failed\")\n                        .withCause(future.cause()));\n                transportException(future.cause());\n            }\n        });\n    }",
+        "position": {
+            "line": 170,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "preCheck",
+                "position": {
+                    "line": 171,
+                    "column": 37
+                }
+            },
+            {
+                "name": "isSuccess",
+                "position": {
+                    "line": 172,
+                    "column": 26
+                }
+            },
+            {
+                "name": "create",
+                "position": {
+                    "line": 175,
+                    "column": 55
+                }
+            },
+            {
+                "name": "addListener",
+                "position": {
+                    "line": 176,
+                    "column": 71
+                }
+            },
+            {
+                "name": "enqueueFuture",
+                "position": {
+                    "line": 176,
+                    "column": 32
+                }
+            },
+            {
+                "name": "eventLoop",
+                "position": {
+                    "line": 176,
+                    "column": 58
+                }
+            },
+            {
+                "name": "isSuccess",
+                "position": {
+                    "line": 177,
+                    "column": 25
+                }
+            },
+            {
+                "name": "cancelByLocal",
+                "position": {
+                    "line": 178,
+                    "column": 17
+                }
+            },
+            {
+                "name": "withCause",
+                "position": {
+                    "line": 180,
+                    "column": 26
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 179,
+                    "column": 26
+                }
+            },
+            {
+                "name": "cause",
+                "position": {
+                    "line": 180,
+                    "column": 43
+                }
+            },
+            {
+                "name": "transportException",
+                "position": {
+                    "line": 181,
+                    "column": 17
+                }
+            },
+            {
+                "name": "cause",
+                "position": {
+                    "line": 181,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "TripleClientStream.preCheck()",
+            "TripleClientStream.cancelByLocal(TriRpcStatus status)",
+            "TripleClientStream.transportException(Throwable cause)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "request",
+        "category": "method_declaration",
+        "class": "TripleClientStream",
+        "signature": "request(int n)",
+        "class_signature": "TripleClientStream.request(int n)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "n"
+            ]
+        ],
+        "methodBody": "{\n        deframer.request(n);\n    }",
+        "position": {
+            "line": 187,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "request",
+                "position": {
+                    "line": 188,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "halfClose",
+        "category": "method_declaration",
+        "class": "TripleClientStream",
+        "signature": "halfClose()",
+        "class_signature": "TripleClientStream.halfClose()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        ChannelFuture checkResult = preCheck();\n        if (!checkResult.isSuccess()) {\n            return checkResult;\n        }\n        final EndStreamQueueCommand cmd = EndStreamQueueCommand.create(streamChannelFuture);\n        return this.writeQueue.enqueueFuture(cmd, parent.eventLoop()).addListener(future -> {\n            if (future.isSuccess()) {\n                halfClosed = true;\n            }\n        });\n    }",
+        "position": {
+            "line": 192,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "preCheck",
+                "position": {
+                    "line": 193,
+                    "column": 37
+                }
+            },
+            {
+                "name": "isSuccess",
+                "position": {
+                    "line": 194,
+                    "column": 26
+                }
+            },
+            {
+                "name": "create",
+                "position": {
+                    "line": 197,
+                    "column": 65
+                }
+            },
+            {
+                "name": "addListener",
+                "position": {
+                    "line": 198,
+                    "column": 71
+                }
+            },
+            {
+                "name": "enqueueFuture",
+                "position": {
+                    "line": 198,
+                    "column": 32
+                }
+            },
+            {
+                "name": "eventLoop",
+                "position": {
+                    "line": 198,
+                    "column": 58
+                }
+            },
+            {
+                "name": "isSuccess",
+                "position": {
+                    "line": 199,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "TripleClientStream.preCheck()"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "preCheck",
+        "category": "method_declaration",
+        "class": "TripleClientStream",
+        "signature": "preCheck()",
+        "class_signature": "TripleClientStream.preCheck()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (rst) {\n            return streamChannelFuture.getNow().newFailedFuture(new IOException(\"stream channel has reset\"));\n        }\n        return parent.newSucceededFuture();\n    }",
+        "position": {
+            "line": 205,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "newFailedFuture",
+                "position": {
+                    "line": 207,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getNow",
+                "position": {
+                    "line": 207,
+                    "column": 40
+                }
+            },
+            {
+                "name": "newSucceededFuture",
+                "position": {
+                    "line": 209,
+                    "column": 23
+                }
+            },
+            {
+                "name": "IOException",
+                "position": {
+                    "line": 207,
+                    "column": 69
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "createTransportListener",
+        "category": "method_declaration",
+        "class": "TripleClientStream",
+        "signature": "createTransportListener()",
+        "class_signature": "TripleClientStream.createTransportListener()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return new ClientTransportListener();\n    }",
+        "position": {
+            "line": 215,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ClientTransportListener",
+                "position": {
+                    "line": 216,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 19
+    },
+    {
+        "name": "handleH2TransportError",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "handleH2TransportError(TriRpcStatus status)",
+        "class_signature": "ClientTransportListener.handleH2TransportError(TriRpcStatus status)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "TriRpcStatus",
+                "status"
+            ]
+        ],
+        "methodBody": "{\n            writeQueue.enqueue(CancelQueueCommand.createCommand(streamChannelFuture, Http2Error.NO_ERROR));\n            TripleClientStream.this.rst = true;\n            finishProcess(status, null, false);\n        }",
+        "position": {
+            "line": 226,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "enqueue",
+                "position": {
+                    "line": 227,
+                    "column": 24
+                }
+            },
+            {
+                "name": "createCommand",
+                "position": {
+                    "line": 227,
+                    "column": 51
+                }
+            },
+            {
+                "name": "finishProcess",
+                "position": {
+                    "line": 229,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "ClientTransportListener.finishProcess(TriRpcStatus status, Http2Headers trailers, boolean isReturnTriException)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "finishProcess",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "finishProcess(TriRpcStatus status, Http2Headers trailers, boolean isReturnTriException)",
+        "class_signature": "ClientTransportListener.finishProcess(TriRpcStatus status, Http2Headers trailers, boolean isReturnTriException)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "TriRpcStatus",
+                "status"
+            ],
+            [
+                "Http2Headers",
+                "trailers"
+            ],
+            [
+                "boolean",
+                "isReturnTriException"
+            ]
+        ],
+        "methodBody": "{\n            final Map<String, String> reserved = filterReservedHeaders(trailers);\n            final Map<String, Object> attachments =\n                    headersToMap(trailers, () -> reserved.get(TripleHeaderEnum.TRI_HEADER_CONVERT.getHeader()));\n            final TriRpcStatus detailStatus;\n            final TriRpcStatus statusFromTrailers = getStatusFromTrailers(reserved);\n            if (statusFromTrailers != null) {\n                detailStatus = statusFromTrailers;\n            } else {\n                detailStatus = status;\n            }\n            listener.onComplete(detailStatus, attachments, reserved, isReturnTriException);\n        }",
+        "position": {
+            "line": 232,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "filterReservedHeaders",
+                "position": {
+                    "line": 233,
+                    "column": 50
+                }
+            },
+            {
+                "name": "headersToMap",
+                "position": {
+                    "line": 235,
+                    "column": 21
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 235,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 235,
+                    "column": 99
+                }
+            },
+            {
+                "name": "getStatusFromTrailers",
+                "position": {
+                    "line": 237,
+                    "column": 53
+                }
+            },
+            {
+                "name": "onComplete",
+                "position": {
+                    "line": 243,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [
+            "ClientTransportListener.getStatusFromTrailers(Map<String, String> metadata)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "validateHeaderStatus",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "validateHeaderStatus(Http2Headers headers)",
+        "class_signature": "ClientTransportListener.validateHeaderStatus(Http2Headers headers)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Http2Headers",
+                "headers"
+            ]
+        ],
+        "methodBody": "{\n            Integer httpStatus = headers.status() == null\n                    ? null\n                    : Integer.parseInt(headers.status().toString());\n            if (httpStatus == null) {\n                return TriRpcStatus.INTERNAL.withDescription(\"Missing HTTP status code\");\n            }\n            final CharSequence contentType = headers.get(TripleHeaderEnum.CONTENT_TYPE_KEY.getHeader());\n            if (contentType == null\n                    || !contentType.toString().startsWith(TripleHeaderEnum.APPLICATION_GRPC.getHeader())) {\n                return TriRpcStatus.fromCode(TriRpcStatus.httpStatusToGrpcCode(httpStatus))\n                        .withDescription(\"invalid content-type: \" + contentType);\n            }\n            return null;\n        }",
+        "position": {
+            "line": 246,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "status",
+                "position": {
+                    "line": 247,
+                    "column": 42
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 249,
+                    "column": 31
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 249,
+                    "column": 57
+                }
+            },
+            {
+                "name": "status",
+                "position": {
+                    "line": 249,
+                    "column": 48
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 251,
+                    "column": 46
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 253,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 253,
+                    "column": 92
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 255,
+                    "column": 48
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 255,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 255,
+                    "column": 93
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 257,
+                    "column": 26
+                }
+            },
+            {
+                "name": "fromCode",
+                "position": {
+                    "line": 256,
+                    "column": 37
+                }
+            },
+            {
+                "name": "httpStatusToGrpcCode",
+                "position": {
+                    "line": 256,
+                    "column": 59
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 21
+    },
+    {
+        "name": "onHeaderReceived",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "onHeaderReceived(Http2Headers headers)",
+        "class_signature": "ClientTransportListener.onHeaderReceived(Http2Headers headers)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Http2Headers",
+                "headers"
+            ]
+        ],
+        "methodBody": "{\n            if (transportError != null) {\n                transportError.appendDescription(\"headers:\" + headers);\n                return;\n            }\n            if (headerReceived) {\n                transportError = TriRpcStatus.INTERNAL.withDescription(\"Received headers twice\");\n                return;\n            }\n            Integer httpStatus = headers.status() == null\n                    ? null\n                    : Integer.parseInt(headers.status().toString());\n\n            if (httpStatus != null && Integer.parseInt(httpStatus.toString()) > 100 && httpStatus < 200) {\n                // ignored\n                return;\n            }\n            headerReceived = true;\n            transportError = validateHeaderStatus(headers);\n\n            // todo support full payload compressor\n            CharSequence messageEncoding = headers.get(TripleHeaderEnum.GRPC_ENCODING.getHeader());\n            CharSequence triExceptionCode = headers.get(TripleHeaderEnum.TRI_EXCEPTION_CODE.getHeader());\n            if (triExceptionCode != null) {\n                Integer triExceptionCodeNum = Integer.parseInt(triExceptionCode.toString());\n                if (!(triExceptionCodeNum.equals(CommonConstants.TRI_EXCEPTION_CODE_NOT_EXISTS))) {\n                    isReturnTriException = true;\n                }\n            }\n            if (null != messageEncoding) {\n                String compressorStr = messageEncoding.toString();\n                if (!Identity.IDENTITY.getMessageEncoding().equals(compressorStr)) {\n                    DeCompressor compressor = DeCompressor.getCompressor(frameworkModel, compressorStr);\n                    if (null == compressor) {\n                        throw TriRpcStatus.UNIMPLEMENTED\n                                .withDescription(String.format(\"Grpc-encoding '%s' is not supported\", compressorStr))\n                                .asException();\n                    } else {\n                        decompressor = compressor;\n                    }\n                }\n            }\n            TriDecoder.Listener listener = new TriDecoder.Listener() {\n                @Override\n                public void onRawMessage(byte[] data) {\n                    TripleClientStream.this.listener.onMessage(data, isReturnTriException);\n                }\n\n                public void close() {\n                    finishProcess(statusFromTrailers(trailers), trailers, isReturnTriException);\n                }\n            };\n            deframer = new TriDecoder(decompressor, listener);\n            TripleClientStream.this.listener.onStart();\n        }",
+        "position": {
+            "line": 262,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "appendDescription",
+                "position": {
+                    "line": 264,
+                    "column": 32
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 268,
+                    "column": 56
+                }
+            },
+            {
+                "name": "status",
+                "position": {
+                    "line": 271,
+                    "column": 42
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 273,
+                    "column": 31
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 273,
+                    "column": 57
+                }
+            },
+            {
+                "name": "status",
+                "position": {
+                    "line": 273,
+                    "column": 48
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 275,
+                    "column": 47
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 275,
+                    "column": 67
+                }
+            },
+            {
+                "name": "validateHeaderStatus",
+                "position": {
+                    "line": 280,
+                    "column": 30
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 283,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 283,
+                    "column": 87
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 284,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 284,
+                    "column": 93
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 286,
+                    "column": 55
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 286,
+                    "column": 81
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 287,
+                    "column": 43
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 292,
+                    "column": 56
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 293,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getMessageEncoding",
+                "position": {
+                    "line": 293,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getCompressor",
+                "position": {
+                    "line": 294,
+                    "column": 60
+                }
+            },
+            {
+                "name": "asException",
+                "position": {
+                    "line": 298,
+                    "column": 34
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 297,
+                    "column": 34
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 297,
+                    "column": 57
+                }
+            },
+            {
+                "name": "onMessage",
+                "position": {
+                    "line": 307,
+                    "column": 54
+                }
+            },
+            {
+                "name": "finishProcess",
+                "position": {
+                    "line": 311,
+                    "column": 21
+                }
+            },
+            {
+                "name": "statusFromTrailers",
+                "position": {
+                    "line": 311,
+                    "column": 35
+                }
+            },
+            {
+                "name": "onStart",
+                "position": {
+                    "line": 315,
+                    "column": 46
+                }
+            },
+            {
+                "name": "TriDecoder.Listener",
+                "position": {
+                    "line": 304,
+                    "column": 48
+                }
+            },
+            {
+                "name": "TriDecoder",
+                "position": {
+                    "line": 314,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ClientTransportListener.validateHeaderStatus(Http2Headers headers)",
+            "ClientTransportListener.finishProcess(TriRpcStatus status, Http2Headers trailers, boolean isReturnTriException)",
+            "ClientTransportListener.statusFromTrailers(Http2Headers trailers)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "onRawMessage",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "onRawMessage(byte[] data)",
+        "class_signature": "ClientTransportListener.onRawMessage(byte[] data)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "byte[]",
+                "data"
+            ]
+        ],
+        "methodBody": "{\n                    TripleClientStream.this.listener.onMessage(data, isReturnTriException);\n                }",
+        "position": {
+            "line": 306,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "onMessage",
+                "position": {
+                    "line": 307,
+                    "column": 54
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "close",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "close()",
+        "class_signature": "ClientTransportListener.close()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n                    finishProcess(statusFromTrailers(trailers), trailers, isReturnTriException);\n                }",
+        "position": {
+            "line": 310,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "finishProcess",
+                "position": {
+                    "line": 311,
+                    "column": 21
+                }
+            },
+            {
+                "name": "statusFromTrailers",
+                "position": {
+                    "line": 311,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "ClientTransportListener.finishProcess(TriRpcStatus status, Http2Headers trailers, boolean isReturnTriException)",
+            "ClientTransportListener.statusFromTrailers(Http2Headers trailers)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "onTrailersReceived",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "onTrailersReceived(Http2Headers trailers)",
+        "class_signature": "ClientTransportListener.onTrailersReceived(Http2Headers trailers)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Http2Headers",
+                "trailers"
+            ]
+        ],
+        "methodBody": "{\n            if (transportError == null && !headerReceived) {\n                transportError = validateHeaderStatus(trailers);\n            }\n            if (transportError != null) {\n                transportError = transportError.appendDescription(\"trailers: \" + trailers);\n            } else {\n                this.trailers = trailers;\n                TriRpcStatus status = statusFromTrailers(trailers);\n                if (deframer == null) {\n                    finishProcess(status, trailers, false);\n                }\n                if (deframer != null) {\n                    deframer.close();\n                }\n            }\n        }",
+        "position": {
+            "line": 318,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "validateHeaderStatus",
+                "position": {
+                    "line": 320,
+                    "column": 34
+                }
+            },
+            {
+                "name": "appendDescription",
+                "position": {
+                    "line": 323,
+                    "column": 49
+                }
+            },
+            {
+                "name": "statusFromTrailers",
+                "position": {
+                    "line": 326,
+                    "column": 39
+                }
+            },
+            {
+                "name": "finishProcess",
+                "position": {
+                    "line": 328,
+                    "column": 21
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 331,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "ClientTransportListener.validateHeaderStatus(Http2Headers headers)",
+            "ClientTransportListener.statusFromTrailers(Http2Headers trailers)",
+            "ClientTransportListener.finishProcess(TriRpcStatus status, Http2Headers trailers, boolean isReturnTriException)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "statusFromTrailers",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "statusFromTrailers(Http2Headers trailers)",
+        "class_signature": "ClientTransportListener.statusFromTrailers(Http2Headers trailers)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Http2Headers",
+                "trailers"
+            ]
+        ],
+        "methodBody": "{\n            final Integer intStatus = trailers.getInt(TripleHeaderEnum.STATUS_KEY.getHeader());\n            TriRpcStatus status = intStatus == null ? null : TriRpcStatus.fromCode(intStatus);\n            if (status != null) {\n                final CharSequence message = trailers.get(TripleHeaderEnum.MESSAGE_KEY.getHeader());\n                if (message != null) {\n                    final String description = TriRpcStatus.decodeMessage(message.toString());\n                    status = status.withDescription(description);\n                }\n                return status;\n            }\n            // No status; something is broken. Try to provide a rational error.\n            if (headerReceived) {\n                return TriRpcStatus.UNKNOWN.withDescription(\"missing GRPC status in response\");\n            }\n            Integer httpStatus = trailers.status() == null\n                    ? null\n                    : Integer.parseInt(trailers.status().toString());\n            if (httpStatus != null) {\n                status = TriRpcStatus.fromCode(TriRpcStatus.httpStatusToGrpcCode(httpStatus));\n            } else {\n                status = TriRpcStatus.INTERNAL.withDescription(\"missing HTTP status code\");\n            }\n            return status.appendDescription(\"missing GRPC status, inferred error from HTTP status code\");\n        }",
+        "position": {
+            "line": 339,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 340,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 340,
+                    "column": 83
+                }
+            },
+            {
+                "name": "fromCode",
+                "position": {
+                    "line": 341,
+                    "column": 75
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 343,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 343,
+                    "column": 88
+                }
+            },
+            {
+                "name": "decodeMessage",
+                "position": {
+                    "line": 345,
+                    "column": 61
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 345,
+                    "column": 83
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 346,
+                    "column": 37
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 352,
+                    "column": 45
+                }
+            },
+            {
+                "name": "status",
+                "position": {
+                    "line": 354,
+                    "column": 43
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 356,
+                    "column": 31
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 356,
+                    "column": 58
+                }
+            },
+            {
+                "name": "status",
+                "position": {
+                    "line": 356,
+                    "column": 49
+                }
+            },
+            {
+                "name": "fromCode",
+                "position": {
+                    "line": 358,
+                    "column": 39
+                }
+            },
+            {
+                "name": "httpStatusToGrpcCode",
+                "position": {
+                    "line": 358,
+                    "column": 61
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 360,
+                    "column": 48
+                }
+            },
+            {
+                "name": "appendDescription",
+                "position": {
+                    "line": 362,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 22
+    },
+    {
+        "name": "getStatusFromTrailers",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "getStatusFromTrailers(Map<String, String> metadata)",
+        "class_signature": "ClientTransportListener.getStatusFromTrailers(Map<String, String> metadata)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Map<String, String>",
+                "metadata"
+            ]
+        ],
+        "methodBody": "{\n            if (null == metadata) {\n                return null;\n            }\n            if (!getGrpcStatusDetailEnabled()) {\n                return null;\n            }\n            // second get status detail\n            if (!metadata.containsKey(TripleHeaderEnum.STATUS_DETAIL_KEY.getHeader())) {\n                return null;\n            }\n            final String raw = (metadata.remove(TripleHeaderEnum.STATUS_DETAIL_KEY.getHeader()));\n            byte[] statusDetailBin = StreamUtils.decodeASCIIByte(raw);\n            ClassLoader tccl = Thread.currentThread().getContextClassLoader();\n            try {\n                final Status statusDetail = Status.parseFrom(statusDetailBin);\n                List<Any> detailList = statusDetail.getDetailsList();\n                Map<Class<?>, Object> classObjectMap = tranFromStatusDetails(detailList);\n\n                // get common exception from DebugInfo\n                TriRpcStatus status = TriRpcStatus.fromCode(statusDetail.getCode())\n                        .withDescription(TriRpcStatus.decodeMessage(statusDetail.getMessage()));\n                DebugInfo debugInfo = (DebugInfo) classObjectMap.get(DebugInfo.class);\n                if (debugInfo != null) {\n                    String msg = ExceptionUtils.getStackFrameString(debugInfo.getStackEntriesList());\n                    status = status.appendDescription(msg);\n                }\n                return status;\n            } catch (IOException ioException) {\n                return null;\n            } finally {\n                ClassLoadUtil.switchContextLoader(tccl);\n            }\n        }",
+        "position": {
+            "line": 365,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getGrpcStatusDetailEnabled",
+                "position": {
+                    "line": 369,
+                    "column": 18
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 373,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 373,
+                    "column": 74
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 376,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getHeader",
+                "position": {
+                    "line": 376,
+                    "column": 84
+                }
+            },
+            {
+                "name": "decodeASCIIByte",
+                "position": {
+                    "line": 377,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getContextClassLoader",
+                "position": {
+                    "line": 378,
+                    "column": 55
+                }
+            },
+            {
+                "name": "currentThread",
+                "position": {
+                    "line": 378,
+                    "column": 39
+                }
+            },
+            {
+                "name": "parseFrom",
+                "position": {
+                    "line": 380,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getDetailsList",
+                "position": {
+                    "line": 381,
+                    "column": 53
+                }
+            },
+            {
+                "name": "tranFromStatusDetails",
+                "position": {
+                    "line": 382,
+                    "column": 56
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 386,
+                    "column": 26
+                }
+            },
+            {
+                "name": "fromCode",
+                "position": {
+                    "line": 385,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getCode",
+                "position": {
+                    "line": 385,
+                    "column": 74
+                }
+            },
+            {
+                "name": "decodeMessage",
+                "position": {
+                    "line": 386,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 386,
+                    "column": 82
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 387,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getStackFrameString",
+                "position": {
+                    "line": 389,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getStackEntriesList",
+                "position": {
+                    "line": 389,
+                    "column": 79
+                }
+            },
+            {
+                "name": "appendDescription",
+                "position": {
+                    "line": 390,
+                    "column": 37
+                }
+            },
+            {
+                "name": "switchContextLoader",
+                "position": {
+                    "line": 396,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "ClientTransportListener.tranFromStatusDetails(List<Any> detailList)"
+        ],
+        "priority": 25
+    },
+    {
+        "name": "tranFromStatusDetails",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "tranFromStatusDetails(List<Any> detailList)",
+        "class_signature": "ClientTransportListener.tranFromStatusDetails(List<Any> detailList)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<Any>",
+                "detailList"
+            ]
+        ],
+        "methodBody": "{\n            Map<Class<?>, Object> map = new HashMap<>(detailList.size());\n            try {\n                for (Any any : detailList) {\n                    if (any.is(ErrorInfo.class)) {\n                        ErrorInfo errorInfo = any.unpack(ErrorInfo.class);\n                        map.putIfAbsent(ErrorInfo.class, errorInfo);\n                    } else if (any.is(DebugInfo.class)) {\n                        DebugInfo debugInfo = any.unpack(DebugInfo.class);\n                        map.putIfAbsent(DebugInfo.class, debugInfo);\n                    }\n                    // support others type but now only support this\n                }\n            } catch (Throwable t) {\n                LOGGER.error(PROTOCOL_FAILED_RESPONSE, \"\", \"\", \"tran from grpc-status-details error\", t);\n            }\n            return map;\n        }",
+        "position": {
+            "line": 400,
+            "column": 39
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 401,
+                    "column": 66
+                }
+            },
+            {
+                "name": "is",
+                "position": {
+                    "line": 404,
+                    "column": 29
+                }
+            },
+            {
+                "name": "unpack",
+                "position": {
+                    "line": 405,
+                    "column": 51
+                }
+            },
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 406,
+                    "column": 29
+                }
+            },
+            {
+                "name": "is",
+                "position": {
+                    "line": 407,
+                    "column": 36
+                }
+            },
+            {
+                "name": "unpack",
+                "position": {
+                    "line": 408,
+                    "column": 51
+                }
+            },
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 409,
+                    "column": 29
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 414,
+                    "column": 24
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 401,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 26
+    },
+    {
+        "name": "onHeader",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "onHeader(Http2Headers headers, boolean endStream)",
+        "class_signature": "ClientTransportListener.onHeader(Http2Headers headers, boolean endStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Http2Headers",
+                "headers"
+            ],
+            [
+                "boolean",
+                "endStream"
+            ]
+        ],
+        "methodBody": "{\n            executor.execute(() -> {\n                if (endStream) {\n                    if (!halfClosed) {\n                        Http2StreamChannel channel = streamChannelFuture.getNow();\n                        if (channel.isActive() && !rst) {\n                            writeQueue.enqueue(\n                                    CancelQueueCommand.createCommand(streamChannelFuture, Http2Error.CANCEL));\n                            rst = true;\n                        }\n                    }\n                    onTrailersReceived(headers);\n                } else {\n                    onHeaderReceived(headers);\n                }\n            });\n        }",
+        "position": {
+            "line": 420,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 421,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getNow",
+                "position": {
+                    "line": 424,
+                    "column": 74
+                }
+            },
+            {
+                "name": "isActive",
+                "position": {
+                    "line": 425,
+                    "column": 37
+                }
+            },
+            {
+                "name": "enqueue",
+                "position": {
+                    "line": 426,
+                    "column": 40
+                }
+            },
+            {
+                "name": "createCommand",
+                "position": {
+                    "line": 427,
+                    "column": 56
+                }
+            },
+            {
+                "name": "onTrailersReceived",
+                "position": {
+                    "line": 431,
+                    "column": 21
+                }
+            },
+            {
+                "name": "onHeaderReceived",
+                "position": {
+                    "line": 433,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "ClientTransportListener.onTrailersReceived(Http2Headers trailers)",
+            "ClientTransportListener.onHeaderReceived(Http2Headers headers)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "onData",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "onData(ByteBuf data, boolean endStream)",
+        "class_signature": "ClientTransportListener.onData(ByteBuf data, boolean endStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ByteBuf",
+                "data"
+            ],
+            [
+                "boolean",
+                "endStream"
+            ]
+        ],
+        "methodBody": "{\n            try {\n                executor.execute(() -> doOnData(data, endStream));\n            } catch (Throwable t) {\n                // Tasks will be rejected when the thread pool is closed or full,\n                // ByteBuf needs to be released to avoid out of heap memory leakage.\n                // For example, ThreadLessExecutor will be shutdown when request timeout {@link AsyncRpcResult}\n                ReferenceCountUtil.release(data);\n                LOGGER.error(PROTOCOL_FAILED_RESPONSE, \"\", \"\", \"submit onData task failed\", t);\n            }\n        }",
+        "position": {
+            "line": 439,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 441,
+                    "column": 26
+                }
+            },
+            {
+                "name": "doOnData",
+                "position": {
+                    "line": 441,
+                    "column": 40
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 446,
+                    "column": 36
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 447,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "ClientTransportListener.doOnData(ByteBuf data, boolean endStream)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "doOnData",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "doOnData(ByteBuf data, boolean endStream)",
+        "class_signature": "ClientTransportListener.doOnData(ByteBuf data, boolean endStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ByteBuf",
+                "data"
+            ],
+            [
+                "boolean",
+                "endStream"
+            ]
+        ],
+        "methodBody": "{\n            if (transportError != null) {\n                transportError.appendDescription(\"Data:\" + data.toString(StandardCharsets.UTF_8));\n                ReferenceCountUtil.release(data);\n                if (transportError.description.length() > 512 || endStream) {\n                    handleH2TransportError(transportError);\n                }\n                return;\n            }\n            if (!headerReceived) {\n                handleH2TransportError(TriRpcStatus.INTERNAL.withDescription(\"headers not received before payload\"));\n                return;\n            }\n            deframer.deframe(data);\n        }",
+        "position": {
+            "line": 451,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "appendDescription",
+                "position": {
+                    "line": 453,
+                    "column": 32
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 453,
+                    "column": 65
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 454,
+                    "column": 36
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 455,
+                    "column": 48
+                }
+            },
+            {
+                "name": "handleH2TransportError",
+                "position": {
+                    "line": 456,
+                    "column": 21
+                }
+            },
+            {
+                "name": "handleH2TransportError",
+                "position": {
+                    "line": 461,
+                    "column": 17
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 461,
+                    "column": 62
+                }
+            },
+            {
+                "name": "deframe",
+                "position": {
+                    "line": 464,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [
+            "ClientTransportListener.handleH2TransportError(TriRpcStatus status)",
+            "ClientTransportListener.handleH2TransportError(TriRpcStatus status)"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "cancelByRemote",
+        "category": "method_declaration",
+        "class": "ClientTransportListener",
+        "signature": "cancelByRemote(long errorCode)",
+        "class_signature": "ClientTransportListener.cancelByRemote(long errorCode)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "errorCode"
+            ]
+        ],
+        "methodBody": "{\n            executor.execute(() -> {\n                transportError =\n                        TriRpcStatus.CANCELLED.withDescription(\"Canceled by remote peer, errorCode=\" + errorCode);\n                finishProcess(transportError, null, false);\n            });\n        }",
+        "position": {
+            "line": 468,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 469,
+                    "column": 22
+                }
+            },
+            {
+                "name": "withDescription",
+                "position": {
+                    "line": 471,
+                    "column": 48
+                }
+            },
+            {
+                "name": "finishProcess",
+                "position": {
+                    "line": 472,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "ClientTransportListener.finishProcess(TriRpcStatus status, Http2Headers trailers, boolean isReturnTriException)"
+        ],
+        "priority": 12
+    }
+]

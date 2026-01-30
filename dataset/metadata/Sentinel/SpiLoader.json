@@ -1,0 +1,1636 @@
+[
+    {
+        "name": "of",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "of(Class<T> service)",
+        "class_signature": "SpiLoader.of(Class<T> service)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<T>",
+                "service"
+            ]
+        ],
+        "methodBody": "{\n        AssertUtil.notNull(service, \"SPI class cannot be null\");\n        AssertUtil.isTrue(service.isInterface() || Modifier.isAbstract(service.getModifiers()),\n                \"SPI class[\" + service.getName() + \"] must be interface or abstract class\");\n\n        String className = service.getName();\n        SpiLoader<T> spiLoader = SPI_LOADER_MAP.get(className);\n        if (spiLoader == null) {\n            synchronized (SpiLoader.class) {\n                spiLoader = SPI_LOADER_MAP.get(className);\n                if (spiLoader == null) {\n                    SPI_LOADER_MAP.putIfAbsent(className, new SpiLoader<>(service));\n                    spiLoader = SPI_LOADER_MAP.get(className);\n                }\n            }\n        }\n\n        return spiLoader;\n    }",
+        "position": {
+            "line": 114,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notNull",
+                "position": {
+                    "line": 115,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isTrue",
+                "position": {
+                    "line": 116,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isInterface",
+                "position": {
+                    "line": 116,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isAbstract",
+                "position": {
+                    "line": 116,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getModifiers",
+                "position": {
+                    "line": 116,
+                    "column": 80
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 117,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 119,
+                    "column": 36
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 120,
+                    "column": 49
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 123,
+                    "column": 44
+                }
+            },
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 125,
+                    "column": 36
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 126,
+                    "column": 48
+                }
+            },
+            {
+                "name": "SpiLoader<>",
+                "position": {
+                    "line": 125,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.SpiLoader(Class<S> service)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "resetAndClearAll",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "resetAndClearAll()",
+        "class_signature": "SpiLoader.resetAndClearAll()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        Set<Map.Entry<String, SpiLoader>> entries = SPI_LOADER_MAP.entrySet();\n        for (Map.Entry<String, SpiLoader> entry : entries) {\n            SpiLoader spiLoader = entry.getValue();\n            spiLoader.resetAndClear();\n        }\n        SPI_LOADER_MAP.clear();\n    }",
+        "position": {
+            "line": 138,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 139,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 141,
+                    "column": 41
+                }
+            },
+            {
+                "name": "resetAndClear",
+                "position": {
+                    "line": 142,
+                    "column": 23
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 144,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.resetAndClear()"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "SpiLoader",
+        "category": "constructor_declaration",
+        "class": "SpiLoader",
+        "signature": "SpiLoader(Class<S> service)",
+        "class_signature": "SpiLoader.SpiLoader(Class<S> service)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ]
+        ],
+        "methodBody": "{\n        this.service = service;\n    }",
+        "position": {
+            "line": 148,
+            "column": 13
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 12
+    },
+    {
+        "name": "loadInstanceList",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "loadInstanceList()",
+        "class_signature": "SpiLoader.loadInstanceList()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        load();\n\n        return createInstanceList(classList);\n    }",
+        "position": {
+            "line": 157,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 158,
+                    "column": 9
+                }
+            },
+            {
+                "name": "createInstanceList",
+                "position": {
+                    "line": 160,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.load()",
+            "SpiLoader.createInstanceList(List<Class<? extends S>> clazzList)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "loadInstanceListSorted",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "loadInstanceListSorted()",
+        "class_signature": "SpiLoader.loadInstanceListSorted()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        load();\n\n        return createInstanceList(sortedClassList);\n    }",
+        "position": {
+            "line": 168,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 169,
+                    "column": 9
+                }
+            },
+            {
+                "name": "createInstanceList",
+                "position": {
+                    "line": 171,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.load()",
+            "SpiLoader.createInstanceList(List<Class<? extends S>> clazzList)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "loadHighestPriorityInstance",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "loadHighestPriorityInstance()",
+        "class_signature": "SpiLoader.loadHighestPriorityInstance()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        load();\n\n        if (sortedClassList.size() == 0) {\n            return null;\n        }\n\n        Class<? extends S> highestClass = sortedClassList.get(0);\n        return createInstance(highestClass);\n    }",
+        "position": {
+            "line": 179,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 180,
+                    "column": 9
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 182,
+                    "column": 29
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 186,
+                    "column": 59
+                }
+            },
+            {
+                "name": "createInstance",
+                "position": {
+                    "line": 187,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.load()",
+            "SpiLoader.createInstance(Class<? extends S> clazz)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "loadLowestPriorityInstance",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "loadLowestPriorityInstance()",
+        "class_signature": "SpiLoader.loadLowestPriorityInstance()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        load();\n\n        if (sortedClassList.size() == 0) {\n            return null;\n        }\n\n        Class<? extends S> lowestClass = sortedClassList.get(sortedClassList.size() - 1);\n        return createInstance(lowestClass);\n    }",
+        "position": {
+            "line": 195,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 196,
+                    "column": 9
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 198,
+                    "column": 29
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 202,
+                    "column": 58
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 202,
+                    "column": 78
+                }
+            },
+            {
+                "name": "createInstance",
+                "position": {
+                    "line": 203,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.load()",
+            "SpiLoader.createInstance(Class<? extends S> clazz)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "loadFirstInstance",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "loadFirstInstance()",
+        "class_signature": "SpiLoader.loadFirstInstance()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        load();\n\n        if (classList.size() == 0) {\n            return null;\n        }\n\n        Class<? extends S> serviceClass = classList.get(0);\n        S instance = createInstance(serviceClass);\n        return instance;\n    }",
+        "position": {
+            "line": 211,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 212,
+                    "column": 9
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 214,
+                    "column": 23
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 218,
+                    "column": 53
+                }
+            },
+            {
+                "name": "createInstance",
+                "position": {
+                    "line": 219,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.load()",
+            "SpiLoader.createInstance(Class<? extends S> clazz)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "loadFirstInstanceOrDefault",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "loadFirstInstanceOrDefault()",
+        "class_signature": "SpiLoader.loadFirstInstanceOrDefault()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        load();\n\n        for (Class<? extends S> clazz : classList) {\n            if (defaultClass == null || clazz != defaultClass) {\n                return createInstance(clazz);\n            }\n        }\n\n        return loadDefaultInstance();\n    }",
+        "position": {
+            "line": 228,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 229,
+                    "column": 9
+                }
+            },
+            {
+                "name": "createInstance",
+                "position": {
+                    "line": 233,
+                    "column": 24
+                }
+            },
+            {
+                "name": "loadDefaultInstance",
+                "position": {
+                    "line": 237,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.load()",
+            "SpiLoader.createInstance(Class<? extends S> clazz)",
+            "SpiLoader.loadDefaultInstance()"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "loadDefaultInstance",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "loadDefaultInstance()",
+        "class_signature": "SpiLoader.loadDefaultInstance()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        load();\n\n        if (defaultClass == null) {\n            return null;\n        }\n\n        return createInstance(defaultClass);\n    }",
+        "position": {
+            "line": 246,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 247,
+                    "column": 9
+                }
+            },
+            {
+                "name": "createInstance",
+                "position": {
+                    "line": 253,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.load()",
+            "SpiLoader.createInstance(Class<? extends S> clazz)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "loadInstance",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "loadInstance(Class<? extends S> clazz)",
+        "class_signature": "SpiLoader.loadInstance(Class<? extends S> clazz)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<? extends S>",
+                "clazz"
+            ]
+        ],
+        "methodBody": "{\n        AssertUtil.notNull(clazz, \"SPI class cannot be null\");\n\n        if (clazz.equals(service)) {\n            fail(clazz.getName() + \" is not subtype of \" + service.getName());\n        }\n\n        load();\n\n        if (!classMap.containsValue(clazz)) {\n            fail(clazz.getName() + \" is not Provider class of \" + service.getName() + \",check if it is in the SPI configuration file?\");\n        }\n\n        return createInstance(clazz);\n    }",
+        "position": {
+            "line": 262,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notNull",
+                "position": {
+                    "line": 263,
+                    "column": 20
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 265,
+                    "column": 19
+                }
+            },
+            {
+                "name": "fail",
+                "position": {
+                    "line": 266,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 266,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 266,
+                    "column": 68
+                }
+            },
+            {
+                "name": "load",
+                "position": {
+                    "line": 269,
+                    "column": 9
+                }
+            },
+            {
+                "name": "containsValue",
+                "position": {
+                    "line": 271,
+                    "column": 23
+                }
+            },
+            {
+                "name": "fail",
+                "position": {
+                    "line": 272,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 272,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 272,
+                    "column": 75
+                }
+            },
+            {
+                "name": "createInstance",
+                "position": {
+                    "line": 275,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.fail(String msg)",
+            "SpiLoader.load()",
+            "SpiLoader.fail(String msg)",
+            "SpiLoader.createInstance(Class<? extends S> clazz)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "loadInstance",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "loadInstance(String aliasName)",
+        "class_signature": "SpiLoader.loadInstance(String aliasName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "aliasName"
+            ]
+        ],
+        "methodBody": "{\n        AssertUtil.notEmpty(aliasName, \"aliasName cannot be empty\");\n\n        load();\n\n        Class<? extends S> clazz = classMap.get(aliasName);\n        if (clazz == null) {\n            fail(\"no Provider class's aliasName is \" + aliasName);\n        }\n\n        return createInstance(clazz);\n    }",
+        "position": {
+            "line": 284,
+            "column": 14
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notEmpty",
+                "position": {
+                    "line": 285,
+                    "column": 20
+                }
+            },
+            {
+                "name": "load",
+                "position": {
+                    "line": 287,
+                    "column": 9
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 289,
+                    "column": 45
+                }
+            },
+            {
+                "name": "fail",
+                "position": {
+                    "line": 291,
+                    "column": 13
+                }
+            },
+            {
+                "name": "createInstance",
+                "position": {
+                    "line": 294,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.load()",
+            "SpiLoader.fail(String msg)",
+            "SpiLoader.createInstance(Class<? extends S> clazz)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "resetAndClear",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "resetAndClear()",
+        "class_signature": "SpiLoader.resetAndClear()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        SPI_LOADER_MAP.remove(service.getName());\n        classList.clear();\n        sortedClassList.clear();\n        classMap.clear();\n        singletonMap.clear();\n        defaultClass = null;\n        loaded.set(false);\n    }",
+        "position": {
+            "line": 300,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "remove",
+                "position": {
+                    "line": 301,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 301,
+                    "column": 39
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 302,
+                    "column": 19
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 303,
+                    "column": 25
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 304,
+                    "column": 18
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 305,
+                    "column": 22
+                }
+            },
+            {
+                "name": "set",
+                "position": {
+                    "line": 307,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 13
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "load()",
+        "class_signature": "SpiLoader.load()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (!loaded.compareAndSet(false, true)) {\n            return;\n        }\n\n        String fullFileName = SPI_FILE_PREFIX + service.getName();\n        ClassLoader classLoader;\n        if (SentinelConfig.shouldUseContextClassloader()) {\n            classLoader = Thread.currentThread().getContextClassLoader();\n        } else {\n            classLoader = service.getClassLoader();\n        }\n        if (classLoader == null) {\n            classLoader = ClassLoader.getSystemClassLoader();\n        }\n        Enumeration<URL> urls = null;\n        try {\n            urls = classLoader.getResources(fullFileName);\n        } catch (IOException e) {\n            fail(\"Error locating SPI configuration file,filename=\" + fullFileName + \",classloader=\" + classLoader, e);\n        }\n\n        if (urls == null || !urls.hasMoreElements()) {\n            RecordLog.warn(\"No SPI configuration file,filename=\" + fullFileName + \",classloader=\" + classLoader);\n            return;\n        }\n\n        while (urls.hasMoreElements()) {\n            URL url = urls.nextElement();\n\n            InputStream in = null;\n            BufferedReader br = null;\n            try {\n                in = url.openStream();\n                br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));\n                String line;\n                while ((line = br.readLine()) != null) {\n                    if (StringUtil.isBlank(line)) {\n                        // Skip blank line\n                        continue;\n                    }\n\n                    line = line.trim();\n                    int commentIndex = line.indexOf(\"#\");\n                    if (commentIndex == 0) {\n                        // Skip comment line\n                        continue;\n                    }\n\n                    if (commentIndex > 0) {\n                        line = line.substring(0, commentIndex);\n                    }\n                    line = line.trim();\n\n                    Class<S> clazz = null;\n                    try {\n                        clazz = (Class<S>) Class.forName(line, false, classLoader);\n                    } catch (ClassNotFoundException e) {\n                        fail(\"class \" + line + \" not found\", e);\n                    }\n\n                    if (classMap.containsValue(clazz)) {\n                        RecordLog.warn(\"duplicate class found,className=\" + clazz.getName() + \",SPI configuration file[\" + url + \"]\");\n                        continue;\n                    }\n\n                    if (!service.isAssignableFrom(clazz)) {\n                        fail(\"class \" + clazz.getName() + \"is not subtype of \" + service.getName() + \",SPI configuration file[\" + url + \"]\");\n                    }\n\n                    classList.add(clazz);\n                    Spi spi = clazz.getAnnotation(Spi.class);\n                    String aliasName = spi == null || \"\".equals(spi.value()) ? clazz.getName() : spi.value();\n                    if (classMap.containsKey(aliasName)) {\n                        Class<? extends S> existClass = classMap.get(aliasName);\n                        fail(\"Found repeat alias name for \" + clazz.getName() + \" and \"\n                                + existClass.getName() + \",SPI configuration file[\" + url + \"]\");\n                    }\n                    classMap.put(aliasName, clazz);\n\n                    if (spi != null && spi.isDefault()) {\n                        if (defaultClass != null) {\n                            fail(\"Found more than one default Provider,className=\" + clazz.getName() + \",SPI configuration file[\" + url + \"]\");\n                        }\n                        defaultClass = clazz;\n                    }\n\n                    RecordLog.info(\"[SpiLoader] Found SPI implementation for SPI {}, provider={}, aliasName={}\"\n                            + \", isSingleton={}, isDefault={}, order={}\",\n                        service.getName(), line, aliasName\n                            , spi == null ? true : spi.isSingleton()\n                            , spi == null ? false : spi.isDefault()\n                            , spi == null ? 0 : spi.order());\n                }\n            } catch (IOException e) {\n                fail(\"error reading SPI configuration file[\" + url + \"]\", e);\n            } finally {\n                closeResources(in, br);\n            }\n        }\n\n        sortedClassList.addAll(classList);\n        Collections.sort(sortedClassList, new Comparator<Class<? extends S>>() {\n            @Override\n            public int compare(Class<? extends S> o1, Class<? extends S> o2) {\n                Spi spi1 = o1.getAnnotation(Spi.class);\n                int order1 = spi1 == null ? 0 : spi1.order();\n\n                Spi spi2 = o2.getAnnotation(Spi.class);\n                int order2 = spi2 == null ? 0 : spi2.order();\n\n                return Integer.compare(order1, order2);\n            }\n        });\n    }",
+        "position": {
+            "line": 313,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "compareAndSet",
+                "position": {
+                    "line": 314,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 318,
+                    "column": 57
+                }
+            },
+            {
+                "name": "shouldUseContextClassloader",
+                "position": {
+                    "line": 320,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getContextClassLoader",
+                "position": {
+                    "line": 321,
+                    "column": 50
+                }
+            },
+            {
+                "name": "currentThread",
+                "position": {
+                    "line": 321,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 323,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getSystemClassLoader",
+                "position": {
+                    "line": 326,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getResources",
+                "position": {
+                    "line": 330,
+                    "column": 32
+                }
+            },
+            {
+                "name": "fail",
+                "position": {
+                    "line": 332,
+                    "column": 13
+                }
+            },
+            {
+                "name": "hasMoreElements",
+                "position": {
+                    "line": 335,
+                    "column": 35
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 336,
+                    "column": 23
+                }
+            },
+            {
+                "name": "hasMoreElements",
+                "position": {
+                    "line": 340,
+                    "column": 21
+                }
+            },
+            {
+                "name": "nextElement",
+                "position": {
+                    "line": 341,
+                    "column": 28
+                }
+            },
+            {
+                "name": "openStream",
+                "position": {
+                    "line": 346,
+                    "column": 26
+                }
+            },
+            {
+                "name": "readLine",
+                "position": {
+                    "line": 349,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 350,
+                    "column": 36
+                }
+            },
+            {
+                "name": "trim",
+                "position": {
+                    "line": 355,
+                    "column": 33
+                }
+            },
+            {
+                "name": "indexOf",
+                "position": {
+                    "line": 356,
+                    "column": 45
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 363,
+                    "column": 37
+                }
+            },
+            {
+                "name": "trim",
+                "position": {
+                    "line": 365,
+                    "column": 33
+                }
+            },
+            {
+                "name": "forName",
+                "position": {
+                    "line": 369,
+                    "column": 50
+                }
+            },
+            {
+                "name": "fail",
+                "position": {
+                    "line": 371,
+                    "column": 25
+                }
+            },
+            {
+                "name": "containsValue",
+                "position": {
+                    "line": 374,
+                    "column": 34
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 375,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 375,
+                    "column": 83
+                }
+            },
+            {
+                "name": "isAssignableFrom",
+                "position": {
+                    "line": 379,
+                    "column": 34
+                }
+            },
+            {
+                "name": "fail",
+                "position": {
+                    "line": 380,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 380,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 380,
+                    "column": 90
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 383,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 384,
+                    "column": 37
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 385,
+                    "column": 58
+                }
+            },
+            {
+                "name": "value",
+                "position": {
+                    "line": 385,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 385,
+                    "column": 86
+                }
+            },
+            {
+                "name": "value",
+                "position": {
+                    "line": 385,
+                    "column": 102
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 386,
+                    "column": 34
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 387,
+                    "column": 66
+                }
+            },
+            {
+                "name": "fail",
+                "position": {
+                    "line": 388,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 388,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 389,
+                    "column": 46
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 391,
+                    "column": 30
+                }
+            },
+            {
+                "name": "isDefault",
+                "position": {
+                    "line": 393,
+                    "column": 44
+                }
+            },
+            {
+                "name": "fail",
+                "position": {
+                    "line": 395,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 395,
+                    "column": 92
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 400,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 402,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isSingleton",
+                "position": {
+                    "line": 403,
+                    "column": 56
+                }
+            },
+            {
+                "name": "isDefault",
+                "position": {
+                    "line": 404,
+                    "column": 57
+                }
+            },
+            {
+                "name": "order",
+                "position": {
+                    "line": 405,
+                    "column": 53
+                }
+            },
+            {
+                "name": "fail",
+                "position": {
+                    "line": 408,
+                    "column": 17
+                }
+            },
+            {
+                "name": "closeResources",
+                "position": {
+                    "line": 410,
+                    "column": 17
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 414,
+                    "column": 25
+                }
+            },
+            {
+                "name": "sort",
+                "position": {
+                    "line": 415,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 418,
+                    "column": 31
+                }
+            },
+            {
+                "name": "order",
+                "position": {
+                    "line": 419,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 421,
+                    "column": 31
+                }
+            },
+            {
+                "name": "order",
+                "position": {
+                    "line": 422,
+                    "column": 54
+                }
+            },
+            {
+                "name": "compare",
+                "position": {
+                    "line": 424,
+                    "column": 32
+                }
+            },
+            {
+                "name": "BufferedReader",
+                "position": {
+                    "line": 347,
+                    "column": 26
+                }
+            },
+            {
+                "name": "InputStreamReader",
+                "position": {
+                    "line": 347,
+                    "column": 45
+                }
+            },
+            {
+                "name": "Comparator<Class<? extends S>>",
+                "position": {
+                    "line": 415,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.fail(String msg, Throwable e)",
+            "SpiLoader.fail(String msg, Throwable e)",
+            "SpiLoader.fail(String msg)",
+            "SpiLoader.fail(String msg)",
+            "SpiLoader.fail(String msg)",
+            "SpiLoader.fail(String msg, Throwable e)",
+            "SpiLoader.closeResources(Closeable... closeables)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "compare",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "compare(Class<? extends S> o1, Class<? extends S> o2)",
+        "class_signature": "SpiLoader.compare(Class<? extends S> o1, Class<? extends S> o2)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<? extends S>",
+                "o1"
+            ],
+            [
+                "Class<? extends S>",
+                "o2"
+            ]
+        ],
+        "methodBody": "{\n                Spi spi1 = o1.getAnnotation(Spi.class);\n                int order1 = spi1 == null ? 0 : spi1.order();\n\n                Spi spi2 = o2.getAnnotation(Spi.class);\n                int order2 = spi2 == null ? 0 : spi2.order();\n\n                return Integer.compare(order1, order2);\n            }",
+        "position": {
+            "line": 417,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 418,
+                    "column": 31
+                }
+            },
+            {
+                "name": "order",
+                "position": {
+                    "line": 419,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 421,
+                    "column": 31
+                }
+            },
+            {
+                "name": "order",
+                "position": {
+                    "line": 422,
+                    "column": 54
+                }
+            },
+            {
+                "name": "compare",
+                "position": {
+                    "line": 424,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "toString",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "toString()",
+        "class_signature": "SpiLoader.toString()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return \"com.alibaba.csp.sentinel.spi.SpiLoader[\" + service.getName() + \"]\";\n    }",
+        "position": {
+            "line": 430,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getName",
+                "position": {
+                    "line": 431,
+                    "column": 68
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "createInstanceList",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "createInstanceList(List<Class<? extends S>> clazzList)",
+        "class_signature": "SpiLoader.createInstanceList(List<Class<? extends S>> clazzList)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<Class<? extends S>>",
+                "clazzList"
+            ]
+        ],
+        "methodBody": "{\n        if (clazzList == null || clazzList.size() == 0) {\n            return Collections.emptyList();\n        }\n\n        List<S> instances = new ArrayList<>(clazzList.size());\n        for (Class<? extends S> clazz : clazzList) {\n            S instance = createInstance(clazz);\n            instances.add(instance);\n        }\n        return instances;\n    }",
+        "position": {
+            "line": 440,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 441,
+                    "column": 44
+                }
+            },
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 442,
+                    "column": 32
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 445,
+                    "column": 55
+                }
+            },
+            {
+                "name": "createInstance",
+                "position": {
+                    "line": 447,
+                    "column": 26
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 448,
+                    "column": 23
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 445,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.createInstance(Class<? extends S> clazz)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "createInstance",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "createInstance(Class<? extends S> clazz)",
+        "class_signature": "SpiLoader.createInstance(Class<? extends S> clazz)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<? extends S>",
+                "clazz"
+            ]
+        ],
+        "methodBody": "{\n        Spi spi = clazz.getAnnotation(Spi.class);\n        boolean singleton = true;\n        if (spi != null) {\n            singleton = spi.isSingleton();\n        }\n        return createInstance(clazz, singleton);\n    }",
+        "position": {
+            "line": 459,
+            "column": 15
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 460,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isSingleton",
+                "position": {
+                    "line": 463,
+                    "column": 29
+                }
+            },
+            {
+                "name": "createInstance",
+                "position": {
+                    "line": 465,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.createInstance(Class<? extends S> clazz, boolean singleton)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "createInstance",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "createInstance(Class<? extends S> clazz, boolean singleton)",
+        "class_signature": "SpiLoader.createInstance(Class<? extends S> clazz, boolean singleton)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<? extends S>",
+                "clazz"
+            ],
+            [
+                "boolean",
+                "singleton"
+            ]
+        ],
+        "methodBody": "{\n        S instance = null;\n        try {\n            if (singleton) {\n                instance = singletonMap.get(clazz.getName());\n                if (instance == null) {\n                    synchronized (this) {\n                        instance = singletonMap.get(clazz.getName());\n                        if (instance == null) {\n                            instance = service.cast(clazz.newInstance());\n                            singletonMap.put(clazz.getName(), instance);\n                        }\n                    }\n                }\n            } else {\n                instance = service.cast(clazz.newInstance());\n            }\n        } catch (Throwable e) {\n            fail(clazz.getName() + \" could not be instantiated\");\n        }\n        return instance;\n    }",
+        "position": {
+            "line": 475,
+            "column": 15
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 479,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 479,
+                    "column": 51
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 482,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 482,
+                    "column": 59
+                }
+            },
+            {
+                "name": "cast",
+                "position": {
+                    "line": 484,
+                    "column": 48
+                }
+            },
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 484,
+                    "column": 59
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 485,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 485,
+                    "column": 52
+                }
+            },
+            {
+                "name": "cast",
+                "position": {
+                    "line": 490,
+                    "column": 36
+                }
+            },
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 490,
+                    "column": 47
+                }
+            },
+            {
+                "name": "fail",
+                "position": {
+                    "line": 493,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 493,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.fail(String msg)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "closeResources",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "closeResources(Closeable... closeables)",
+        "class_signature": "SpiLoader.closeResources(Closeable... closeables)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Closeable...",
+                "closeables"
+            ]
+        ],
+        "methodBody": "{\n        if (closeables == null || closeables.length == 0) {\n            return;\n        }\n\n        Exception firstException = null;\n        for (Closeable closeable : closeables) {\n            try {\n                closeable.close();\n            } catch (Exception e) {\n                if (firstException == null) {\n                    firstException = e;\n                }\n            }\n        }\n        if (firstException != null) {\n            fail(\"error closing resources\", firstException);\n        }\n    }",
+        "position": {
+            "line": 503,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "close",
+                "position": {
+                    "line": 511,
+                    "column": 27
+                }
+            },
+            {
+                "name": "fail",
+                "position": {
+                    "line": 519,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "SpiLoader.fail(String msg, Throwable e)"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "fail",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "fail(String msg)",
+        "class_signature": "SpiLoader.fail(String msg)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "msg"
+            ]
+        ],
+        "methodBody": "{\n        RecordLog.error(msg);\n        throw new SpiLoaderException(\"[\" + service.getName() + \"]\" + msg);\n    }",
+        "position": {
+            "line": 528,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "error",
+                "position": {
+                    "line": 529,
+                    "column": 19
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 530,
+                    "column": 52
+                }
+            },
+            {
+                "name": "SpiLoaderException",
+                "position": {
+                    "line": 530,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 21
+    },
+    {
+        "name": "fail",
+        "category": "method_declaration",
+        "class": "SpiLoader",
+        "signature": "fail(String msg, Throwable e)",
+        "class_signature": "SpiLoader.fail(String msg, Throwable e)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "msg"
+            ],
+            [
+                "Throwable",
+                "e"
+            ]
+        ],
+        "methodBody": "{\n        RecordLog.error(msg, e);\n        throw new SpiLoaderException(\"[\" + service.getName() + \"]\" + msg, e);\n    }",
+        "position": {
+            "line": 538,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "error",
+                "position": {
+                    "line": 539,
+                    "column": 19
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 540,
+                    "column": 52
+                }
+            },
+            {
+                "name": "SpiLoaderException",
+                "position": {
+                    "line": 540,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    }
+]

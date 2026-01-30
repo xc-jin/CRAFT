@@ -1,0 +1,1548 @@
+[
+    {
+        "name": "traceException",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "traceException(Throwable ex)",
+        "class_signature": "AbstractSentinelAspectSupport.traceException(Throwable ex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Throwable",
+                "ex"
+            ]
+        ],
+        "methodBody": "{\n        Tracer.trace(ex);\n    }",
+        "position": {
+            "line": 41,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "trace",
+                "position": {
+                    "line": 42,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "traceException",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "traceException(Throwable ex, SentinelResource annotation)",
+        "class_signature": "AbstractSentinelAspectSupport.traceException(Throwable ex, SentinelResource annotation)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Throwable",
+                "ex"
+            ],
+            [
+                "SentinelResource",
+                "annotation"
+            ]
+        ],
+        "methodBody": "{\n        Class<? extends Throwable>[] exceptionsToIgnore = annotation.exceptionsToIgnore();\n        // The ignore list will be checked first.\n        if (exceptionsToIgnore.length > 0 && exceptionBelongsTo(ex, exceptionsToIgnore)) {\n            return;\n        }\n        if (exceptionBelongsTo(ex, annotation.exceptionsToTrace())) {\n            traceException(ex);\n        }\n    }",
+        "position": {
+            "line": 45,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "exceptionsToIgnore",
+                "position": {
+                    "line": 46,
+                    "column": 70
+                }
+            },
+            {
+                "name": "exceptionBelongsTo",
+                "position": {
+                    "line": 48,
+                    "column": 46
+                }
+            },
+            {
+                "name": "exceptionBelongsTo",
+                "position": {
+                    "line": 51,
+                    "column": 13
+                }
+            },
+            {
+                "name": "exceptionsToTrace",
+                "position": {
+                    "line": 51,
+                    "column": 47
+                }
+            },
+            {
+                "name": "traceException",
+                "position": {
+                    "line": 52,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.exceptionBelongsTo(Throwable ex, Class<? extends Throwable>[] exceptions)",
+            "AbstractSentinelAspectSupport.exceptionBelongsTo(Throwable ex, Class<? extends Throwable>[] exceptions)",
+            "AbstractSentinelAspectSupport.traceException(Throwable ex)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "exceptionBelongsTo",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "exceptionBelongsTo(Throwable ex, Class<? extends Throwable>[] exceptions)",
+        "class_signature": "AbstractSentinelAspectSupport.exceptionBelongsTo(Throwable ex, Class<? extends Throwable>[] exceptions)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Throwable",
+                "ex"
+            ],
+            [
+                "Class<? extends Throwable>[]",
+                "exceptions"
+            ]
+        ],
+        "methodBody": "{\n        if (exceptions == null) {\n            return false;\n        }\n        for (Class<? extends Throwable> exceptionClass : exceptions) {\n            if (exceptionClass.isAssignableFrom(ex.getClass())) {\n                return true;\n            }\n        }\n        return false;\n    }",
+        "position": {
+            "line": 63,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAssignableFrom",
+                "position": {
+                    "line": 68,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 68,
+                    "column": 52
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "getResourceName",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "getResourceName(String resourceName, Method method)",
+        "class_signature": "AbstractSentinelAspectSupport.getResourceName(String resourceName, Method method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "resourceName"
+            ],
+            [
+                "Method",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        // If resource name is present in annotation, use this value.\n        if (StringUtil.isNotBlank(resourceName)) {\n            return resourceName;\n        }\n        // Parse name of target method.\n        return MethodUtil.resolveMethodName(method);\n    }",
+        "position": {
+            "line": 75,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 77,
+                    "column": 24
+                }
+            },
+            {
+                "name": "resolveMethodName",
+                "position": {
+                    "line": 81,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "handleFallback",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "handleFallback(ProceedingJoinPoint pjp, SentinelResource annotation, Throwable ex)",
+        "class_signature": "AbstractSentinelAspectSupport.handleFallback(ProceedingJoinPoint pjp, SentinelResource annotation, Throwable ex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ProceedingJoinPoint",
+                "pjp"
+            ],
+            [
+                "SentinelResource",
+                "annotation"
+            ],
+            [
+                "Throwable",
+                "ex"
+            ]
+        ],
+        "methodBody": "{\n        return handleFallback(pjp, annotation.fallback(), annotation.defaultFallback(), annotation.fallbackClass(), ex);\n    }",
+        "position": {
+            "line": 84,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "handleFallback",
+                "position": {
+                    "line": 86,
+                    "column": 16
+                }
+            },
+            {
+                "name": "fallback",
+                "position": {
+                    "line": 86,
+                    "column": 47
+                }
+            },
+            {
+                "name": "defaultFallback",
+                "position": {
+                    "line": 86,
+                    "column": 70
+                }
+            },
+            {
+                "name": "fallbackClass",
+                "position": {
+                    "line": 86,
+                    "column": 100
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.handleFallback(ProceedingJoinPoint pjp, String fallback, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "handleFallback",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "handleFallback(ProceedingJoinPoint pjp, String fallback, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)",
+        "class_signature": "AbstractSentinelAspectSupport.handleFallback(ProceedingJoinPoint pjp, String fallback, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ProceedingJoinPoint",
+                "pjp"
+            ],
+            [
+                "String",
+                "fallback"
+            ],
+            [
+                "String",
+                "defaultFallback"
+            ],
+            [
+                "Class<?>[]",
+                "fallbackClass"
+            ],
+            [
+                "Throwable",
+                "ex"
+            ]
+        ],
+        "methodBody": "{\n        Object[] originArgs = pjp.getArgs();\n\n        // Execute fallback function if configured.\n        Method fallbackMethod = extractFallbackMethod(pjp, fallback, fallbackClass);\n        if (fallbackMethod != null) {\n            // Construct args.\n            int paramCount = fallbackMethod.getParameterTypes().length;\n            Object[] args;\n            if (paramCount == originArgs.length) {\n                args = originArgs;\n            } else {\n                args = Arrays.copyOf(originArgs, originArgs.length + 1);\n                args[args.length - 1] = ex;\n            }\n\n            return invoke(pjp, fallbackMethod, args);\n        }\n        // If fallback is absent, we'll try the defaultFallback if provided.\n        return handleDefaultFallback(pjp, defaultFallback, fallbackClass, ex);\n    }",
+        "position": {
+            "line": 89,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getArgs",
+                "position": {
+                    "line": 91,
+                    "column": 35
+                }
+            },
+            {
+                "name": "extractFallbackMethod",
+                "position": {
+                    "line": 94,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 97,
+                    "column": 45
+                }
+            },
+            {
+                "name": "copyOf",
+                "position": {
+                    "line": 102,
+                    "column": 31
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 106,
+                    "column": 20
+                }
+            },
+            {
+                "name": "handleDefaultFallback",
+                "position": {
+                    "line": 109,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.extractFallbackMethod(ProceedingJoinPoint pjp, String fallbackName, Class<?>[] locationClass)",
+            "AbstractSentinelAspectSupport.invoke(ProceedingJoinPoint pjp, Method method, Object[] args)",
+            "AbstractSentinelAspectSupport.handleDefaultFallback(ProceedingJoinPoint pjp, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "handleDefaultFallback",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "handleDefaultFallback(ProceedingJoinPoint pjp, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)",
+        "class_signature": "AbstractSentinelAspectSupport.handleDefaultFallback(ProceedingJoinPoint pjp, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ProceedingJoinPoint",
+                "pjp"
+            ],
+            [
+                "String",
+                "defaultFallback"
+            ],
+            [
+                "Class<?>[]",
+                "fallbackClass"
+            ],
+            [
+                "Throwable",
+                "ex"
+            ]
+        ],
+        "methodBody": "{\n        // Execute the default fallback function if configured.\n        Method fallbackMethod = extractDefaultFallbackMethod(pjp, defaultFallback, fallbackClass);\n        if (fallbackMethod != null) {\n            // Construct args.\n            Object[] args = fallbackMethod.getParameterTypes().length == 0 ? new Object[0] : new Object[] {ex};\n            return invoke(pjp, fallbackMethod, args);\n        }\n\n        // If no any fallback is present, then directly throw the exception.\n        throw ex;\n    }",
+        "position": {
+            "line": 112,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "extractDefaultFallbackMethod",
+                "position": {
+                    "line": 115,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 118,
+                    "column": 44
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 119,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.extractDefaultFallbackMethod(ProceedingJoinPoint pjp, String defaultFallback, Class<?>[] locationClass)",
+            "AbstractSentinelAspectSupport.invoke(ProceedingJoinPoint pjp, Method method, Object[] args)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "handleBlockException",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "handleBlockException(ProceedingJoinPoint pjp, SentinelResource annotation, BlockException ex)",
+        "class_signature": "AbstractSentinelAspectSupport.handleBlockException(ProceedingJoinPoint pjp, SentinelResource annotation, BlockException ex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ProceedingJoinPoint",
+                "pjp"
+            ],
+            [
+                "SentinelResource",
+                "annotation"
+            ],
+            [
+                "BlockException",
+                "ex"
+            ]
+        ],
+        "methodBody": "{\n\n        // Execute block handler if configured.\n        Method blockHandlerMethod = extractBlockHandlerMethod(pjp, annotation.blockHandler(),\n            annotation.blockHandlerClass());\n        if (blockHandlerMethod != null) {\n            Object[] originArgs = pjp.getArgs();\n            // Construct args.\n            Object[] args = Arrays.copyOf(originArgs, originArgs.length + 1);\n            args[args.length - 1] = ex;\n            return invoke(pjp, blockHandlerMethod, args);\n        }\n\n        // If no block handler is present, then go to fallback.\n        return handleFallback(pjp, annotation, ex);\n    }",
+        "position": {
+            "line": 126,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "extractBlockHandlerMethod",
+                "position": {
+                    "line": 130,
+                    "column": 37
+                }
+            },
+            {
+                "name": "blockHandler",
+                "position": {
+                    "line": 130,
+                    "column": 79
+                }
+            },
+            {
+                "name": "blockHandlerClass",
+                "position": {
+                    "line": 131,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getArgs",
+                "position": {
+                    "line": 133,
+                    "column": 39
+                }
+            },
+            {
+                "name": "copyOf",
+                "position": {
+                    "line": 135,
+                    "column": 36
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 137,
+                    "column": 20
+                }
+            },
+            {
+                "name": "handleFallback",
+                "position": {
+                    "line": 141,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.extractBlockHandlerMethod(ProceedingJoinPoint pjp, String name, Class<?>[] locationClass)",
+            "AbstractSentinelAspectSupport.invoke(ProceedingJoinPoint pjp, Method method, Object[] args)",
+            "AbstractSentinelAspectSupport.handleFallback(ProceedingJoinPoint pjp, SentinelResource annotation, Throwable ex)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "invoke",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "invoke(ProceedingJoinPoint pjp, Method method, Object[] args)",
+        "class_signature": "AbstractSentinelAspectSupport.invoke(ProceedingJoinPoint pjp, Method method, Object[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ProceedingJoinPoint",
+                "pjp"
+            ],
+            [
+                "Method",
+                "method"
+            ],
+            [
+                "Object[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            if (!method.isAccessible()) {\n                makeAccessible(method);\n            }\n            if (isStatic(method)) {\n                return method.invoke(null, args);\n            }\n            return method.invoke(pjp.getTarget(), args);\n        } catch (InvocationTargetException e) {\n            // throw the actual exception\n            throw e.getTargetException();\n        }\n    }",
+        "position": {
+            "line": 144,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAccessible",
+                "position": {
+                    "line": 146,
+                    "column": 25
+                }
+            },
+            {
+                "name": "makeAccessible",
+                "position": {
+                    "line": 147,
+                    "column": 17
+                }
+            },
+            {
+                "name": "isStatic",
+                "position": {
+                    "line": 149,
+                    "column": 17
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 150,
+                    "column": 31
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 152,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 152,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getTargetException",
+                "position": {
+                    "line": 155,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.makeAccessible(Method method)",
+            "AbstractSentinelAspectSupport.isStatic(Method method)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "makeAccessible",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "makeAccessible(Method method)",
+        "class_signature": "AbstractSentinelAspectSupport.makeAccessible(Method method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        boolean isNotPublic = !Modifier.isPublic(method.getModifiers()) ||\n                !Modifier.isPublic(method.getDeclaringClass().getModifiers());\n        if (isNotPublic && !method.isAccessible()) {\n            method.setAccessible(true);\n        }\n    }",
+        "position": {
+            "line": 167,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isPublic",
+                "position": {
+                    "line": 168,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getModifiers",
+                "position": {
+                    "line": 168,
+                    "column": 57
+                }
+            },
+            {
+                "name": "isPublic",
+                "position": {
+                    "line": 169,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getModifiers",
+                "position": {
+                    "line": 169,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getDeclaringClass",
+                "position": {
+                    "line": 169,
+                    "column": 43
+                }
+            },
+            {
+                "name": "isAccessible",
+                "position": {
+                    "line": 170,
+                    "column": 36
+                }
+            },
+            {
+                "name": "setAccessible",
+                "position": {
+                    "line": 171,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "extractFallbackMethod",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "extractFallbackMethod(ProceedingJoinPoint pjp, String fallbackName, Class<?>[] locationClass)",
+        "class_signature": "AbstractSentinelAspectSupport.extractFallbackMethod(ProceedingJoinPoint pjp, String fallbackName, Class<?>[] locationClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ProceedingJoinPoint",
+                "pjp"
+            ],
+            [
+                "String",
+                "fallbackName"
+            ],
+            [
+                "Class<?>[]",
+                "locationClass"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(fallbackName)) {\n            return null;\n        }\n        boolean mustStatic = locationClass != null && locationClass.length >= 1;\n        Class<?> clazz = mustStatic ? locationClass[0] : pjp.getTarget().getClass();\n        Method originMethod = resolveMethod(pjp);\n        MethodWrapper m = ResourceMetadataRegistry.lookupFallback(clazz, fallbackName, originMethod.getParameterTypes());\n        if (m == null) {\n            // First time, resolve the fallback.\n            Method method = resolveFallbackInternal(originMethod, fallbackName, clazz, mustStatic);\n            // Cache the method instance.\n            ResourceMetadataRegistry.updateFallbackFor(clazz, fallbackName, originMethod.getParameterTypes(), method);\n            return method;\n        }\n        if (!m.isPresent()) {\n            return null;\n        }\n        return m.getMethod();\n    }",
+        "position": {
+            "line": 175,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 176,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 180,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 180,
+                    "column": 62
+                }
+            },
+            {
+                "name": "resolveMethod",
+                "position": {
+                    "line": 181,
+                    "column": 31
+                }
+            },
+            {
+                "name": "lookupFallback",
+                "position": {
+                    "line": 182,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 182,
+                    "column": 101
+                }
+            },
+            {
+                "name": "resolveFallbackInternal",
+                "position": {
+                    "line": 185,
+                    "column": 29
+                }
+            },
+            {
+                "name": "updateFallbackFor",
+                "position": {
+                    "line": 187,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 187,
+                    "column": 90
+                }
+            },
+            {
+                "name": "isPresent",
+                "position": {
+                    "line": 190,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 193,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.resolveMethod(ProceedingJoinPoint joinPoint)",
+            "AbstractSentinelAspectSupport.resolveFallbackInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "extractDefaultFallbackMethod",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "extractDefaultFallbackMethod(ProceedingJoinPoint pjp, String defaultFallback, Class<?>[] locationClass)",
+        "class_signature": "AbstractSentinelAspectSupport.extractDefaultFallbackMethod(ProceedingJoinPoint pjp, String defaultFallback, Class<?>[] locationClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ProceedingJoinPoint",
+                "pjp"
+            ],
+            [
+                "String",
+                "defaultFallback"
+            ],
+            [
+                "Class<?>[]",
+                "locationClass"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(defaultFallback)) {\n            SentinelResource annotationClass = pjp.getTarget().getClass().getAnnotation(SentinelResource.class);\n            if (annotationClass != null && StringUtil.isNotBlank(annotationClass.defaultFallback())) {\n                defaultFallback = annotationClass.defaultFallback();\n                if (locationClass == null || locationClass.length < 1) {\n                    locationClass = annotationClass.fallbackClass();\n                }\n            } else {\n                return null;\n            }\n        }\n        boolean mustStatic = locationClass != null && locationClass.length >= 1;\n        Class<?> clazz = mustStatic ? locationClass[0] : pjp.getTarget().getClass();\n\n        MethodWrapper m = ResourceMetadataRegistry.lookupDefaultFallback(clazz, defaultFallback);\n        if (m == null) {\n            // First time, resolve the default fallback.\n            Class<?> originReturnType = resolveMethod(pjp).getReturnType();\n            // Default fallback allows two kinds of parameter list.\n            // One is empty parameter list.\n            Class<?>[] defaultParamTypes = new Class<?>[0];\n            // The other is a single parameter {@link Throwable} to get relevant exception info.\n            Class<?>[] paramTypeWithException = new Class<?>[] {Throwable.class};\n            // We first find the default fallback with empty parameter list.\n            Method method = findMethod(mustStatic, clazz, defaultFallback, originReturnType, defaultParamTypes);\n            // If default fallback with empty params is absent, we then try to find the other one.\n            if (method == null) {\n                method = findMethod(mustStatic, clazz, defaultFallback, originReturnType, paramTypeWithException);\n            }\n            // Cache the method instance.\n            ResourceMetadataRegistry.updateDefaultFallbackFor(clazz, defaultFallback, method);\n            return method;\n        }\n        if (!m.isPresent()) {\n            return null;\n        }\n        return m.getMethod();\n    }",
+        "position": {
+            "line": 196,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 198,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 199,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 199,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 199,
+                    "column": 52
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 200,
+                    "column": 55
+                }
+            },
+            {
+                "name": "defaultFallback",
+                "position": {
+                    "line": 200,
+                    "column": 82
+                }
+            },
+            {
+                "name": "defaultFallback",
+                "position": {
+                    "line": 201,
+                    "column": 51
+                }
+            },
+            {
+                "name": "fallbackClass",
+                "position": {
+                    "line": 203,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 210,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 210,
+                    "column": 62
+                }
+            },
+            {
+                "name": "lookupDefaultFallback",
+                "position": {
+                    "line": 212,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getReturnType",
+                "position": {
+                    "line": 215,
+                    "column": 60
+                }
+            },
+            {
+                "name": "resolveMethod",
+                "position": {
+                    "line": 215,
+                    "column": 41
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 222,
+                    "column": 29
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 225,
+                    "column": 26
+                }
+            },
+            {
+                "name": "updateDefaultFallbackFor",
+                "position": {
+                    "line": 228,
+                    "column": 38
+                }
+            },
+            {
+                "name": "isPresent",
+                "position": {
+                    "line": 231,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 234,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.resolveMethod(ProceedingJoinPoint joinPoint)",
+            "AbstractSentinelAspectSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)",
+            "AbstractSentinelAspectSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "resolveFallbackInternal",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "resolveFallbackInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)",
+        "class_signature": "AbstractSentinelAspectSupport.resolveFallbackInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "originMethod"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "boolean",
+                "mustStatic"
+            ]
+        ],
+        "methodBody": "{\n        // Fallback function allows two kinds of parameter list.\n        Class<?>[] defaultParamTypes = originMethod.getParameterTypes();\n        Class<?>[] paramTypesWithException = Arrays.copyOf(defaultParamTypes, defaultParamTypes.length + 1);\n        paramTypesWithException[paramTypesWithException.length - 1] = Throwable.class;\n        // We first find the fallback matching the signature of origin method.\n        Method method = findMethod(mustStatic, clazz, name, originMethod.getReturnType(), defaultParamTypes);\n        // If fallback matching the origin method is absent, we then try to find the other one.\n        if (method == null) {\n            method = findMethod(mustStatic, clazz, name, originMethod.getReturnType(), paramTypesWithException);\n        }\n        return method;\n    }",
+        "position": {
+            "line": 237,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 239,
+                    "column": 53
+                }
+            },
+            {
+                "name": "copyOf",
+                "position": {
+                    "line": 240,
+                    "column": 53
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 243,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getReturnType",
+                "position": {
+                    "line": 243,
+                    "column": 74
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 246,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getReturnType",
+                "position": {
+                    "line": 246,
+                    "column": 71
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)",
+            "AbstractSentinelAspectSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "extractBlockHandlerMethod",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "extractBlockHandlerMethod(ProceedingJoinPoint pjp, String name, Class<?>[] locationClass)",
+        "class_signature": "AbstractSentinelAspectSupport.extractBlockHandlerMethod(ProceedingJoinPoint pjp, String name, Class<?>[] locationClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ProceedingJoinPoint",
+                "pjp"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "Class<?>[]",
+                "locationClass"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(name)) {\n            return null;\n        }\n\n        boolean mustStatic = locationClass != null && locationClass.length >= 1;\n        Class<?> clazz;\n        if (mustStatic) {\n            clazz = locationClass[0];\n        } else {\n            // By default current class.\n            clazz = pjp.getTarget().getClass();\n        }\n        Method originMethod = resolveMethod(pjp);\n        MethodWrapper m = ResourceMetadataRegistry.lookupBlockHandler(clazz, name, originMethod.getParameterTypes());\n        if (m == null) {\n            // First time, resolve the block handler.\n            Method method = resolveBlockHandlerInternal(originMethod, name, clazz, mustStatic);\n            // Cache the method instance.\n            ResourceMetadataRegistry.updateBlockHandlerFor(clazz, name, originMethod.getParameterTypes(), method);\n            return method;\n        }\n        if (!m.isPresent()) {\n            return null;\n        }\n        return m.getMethod();\n    }",
+        "position": {
+            "line": 251,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 252,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 262,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 262,
+                    "column": 25
+                }
+            },
+            {
+                "name": "resolveMethod",
+                "position": {
+                    "line": 264,
+                    "column": 31
+                }
+            },
+            {
+                "name": "lookupBlockHandler",
+                "position": {
+                    "line": 265,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 265,
+                    "column": 97
+                }
+            },
+            {
+                "name": "resolveBlockHandlerInternal",
+                "position": {
+                    "line": 268,
+                    "column": 29
+                }
+            },
+            {
+                "name": "updateBlockHandlerFor",
+                "position": {
+                    "line": 270,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 270,
+                    "column": 86
+                }
+            },
+            {
+                "name": "isPresent",
+                "position": {
+                    "line": 273,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 276,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.resolveMethod(ProceedingJoinPoint joinPoint)",
+            "AbstractSentinelAspectSupport.resolveBlockHandlerInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "resolveBlockHandlerInternal",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "resolveBlockHandlerInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)",
+        "class_signature": "AbstractSentinelAspectSupport.resolveBlockHandlerInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "originMethod"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "boolean",
+                "mustStatic"
+            ]
+        ],
+        "methodBody": "{\n        Class<?>[] originList = originMethod.getParameterTypes();\n        Class<?>[] parameterTypes = Arrays.copyOf(originList, originList.length + 1);\n        parameterTypes[parameterTypes.length - 1] = BlockException.class;\n        return findMethod(mustStatic, clazz, name, originMethod.getReturnType(), parameterTypes);\n    }",
+        "position": {
+            "line": 279,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 280,
+                    "column": 46
+                }
+            },
+            {
+                "name": "copyOf",
+                "position": {
+                    "line": 281,
+                    "column": 44
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 283,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getReturnType",
+                "position": {
+                    "line": 283,
+                    "column": 65
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "checkStatic",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "checkStatic(boolean mustStatic, Method method)",
+        "class_signature": "AbstractSentinelAspectSupport.checkStatic(boolean mustStatic, Method method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "mustStatic"
+            ],
+            [
+                "Method",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        return !mustStatic || isStatic(method);\n    }",
+        "position": {
+            "line": 286,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isStatic",
+                "position": {
+                    "line": 287,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.isStatic(Method method)"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "findMethod",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)",
+        "class_signature": "AbstractSentinelAspectSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "mustStatic"
+            ],
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "Class<?>",
+                "returnType"
+            ],
+            [
+                "Class<?>...",
+                "parameterTypes"
+            ]
+        ],
+        "methodBody": "{\n        Method[] methods = clazz.getDeclaredMethods();\n        for (Method method : methods) {\n            if (name.equals(method.getName()) && checkStatic(mustStatic, method)\n                && returnType.isAssignableFrom(method.getReturnType())\n                && Arrays.equals(parameterTypes, method.getParameterTypes())) {\n\n                RecordLog.info(\"Resolved method [{}] in class [{}]\", name, clazz.getCanonicalName());\n                return method;\n            }\n        }\n        // Current class not found, find in the super classes recursively.\n        Class<?> superClass = clazz.getSuperclass();\n        if (superClass != null && !Object.class.equals(superClass)) {\n            return findMethod(mustStatic, superClass, name, returnType, parameterTypes);\n        } else {\n            String methodType = mustStatic ? \" static\" : \"\";\n            RecordLog.warn(\"Cannot find{} method [{}] in class [{}] with parameters {}\",\n                methodType, name, clazz.getCanonicalName(), Arrays.toString(parameterTypes));\n            return null;\n        }\n    }",
+        "position": {
+            "line": 290,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDeclaredMethods",
+                "position": {
+                    "line": 292,
+                    "column": 34
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 294,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 294,
+                    "column": 36
+                }
+            },
+            {
+                "name": "checkStatic",
+                "position": {
+                    "line": 294,
+                    "column": 50
+                }
+            },
+            {
+                "name": "isAssignableFrom",
+                "position": {
+                    "line": 295,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getReturnType",
+                "position": {
+                    "line": 295,
+                    "column": 55
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 296,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 296,
+                    "column": 57
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 298,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getCanonicalName",
+                "position": {
+                    "line": 298,
+                    "column": 82
+                }
+            },
+            {
+                "name": "getSuperclass",
+                "position": {
+                    "line": 303,
+                    "column": 37
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 304,
+                    "column": 49
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 305,
+                    "column": 20
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 308,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getCanonicalName",
+                "position": {
+                    "line": 309,
+                    "column": 41
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 309,
+                    "column": 68
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.checkStatic(boolean mustStatic, Method method)",
+            "AbstractSentinelAspectSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "isStatic",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "isStatic(Method method)",
+        "class_signature": "AbstractSentinelAspectSupport.isStatic(Method method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        return Modifier.isStatic(method.getModifiers());\n    }",
+        "position": {
+            "line": 314,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isStatic",
+                "position": {
+                    "line": 315,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getModifiers",
+                "position": {
+                    "line": 315,
+                    "column": 41
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 19
+    },
+    {
+        "name": "resolveMethod",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "resolveMethod(ProceedingJoinPoint joinPoint)",
+        "class_signature": "AbstractSentinelAspectSupport.resolveMethod(ProceedingJoinPoint joinPoint)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ProceedingJoinPoint",
+                "joinPoint"
+            ]
+        ],
+        "methodBody": "{\n        MethodSignature signature = (MethodSignature)joinPoint.getSignature();\n        Class<?> targetClass = joinPoint.getTarget().getClass();\n\n        Method method = getDeclaredMethodFor(targetClass, signature.getName(),\n            signature.getMethod().getParameterTypes());\n        if (method == null) {\n            throw new IllegalStateException(\"Cannot resolve target method: \" + signature.getMethod().getName());\n        }\n        return method;\n    }",
+        "position": {
+            "line": 318,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getSignature",
+                "position": {
+                    "line": 319,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 320,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 320,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getDeclaredMethodFor",
+                "position": {
+                    "line": 322,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 322,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 323,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 323,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 325,
+                    "column": 102
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 325,
+                    "column": 90
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 325,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.getDeclaredMethodFor(Class<?> clazz, String name, Class<?>... parameterTypes)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "getDeclaredMethodFor",
+        "category": "method_declaration",
+        "class": "AbstractSentinelAspectSupport",
+        "signature": "getDeclaredMethodFor(Class<?> clazz, String name, Class<?>... parameterTypes)",
+        "class_signature": "AbstractSentinelAspectSupport.getDeclaredMethodFor(Class<?> clazz, String name, Class<?>... parameterTypes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "Class<?>...",
+                "parameterTypes"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            return clazz.getDeclaredMethod(name, parameterTypes);\n        } catch (NoSuchMethodException e) {\n            Class<?> superClass = clazz.getSuperclass();\n            if (superClass != null) {\n                return getDeclaredMethodFor(superClass, name, parameterTypes);\n            }\n        }\n        return null;\n    }",
+        "position": {
+            "line": 339,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDeclaredMethod",
+                "position": {
+                    "line": 341,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getSuperclass",
+                "position": {
+                    "line": 343,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getDeclaredMethodFor",
+                "position": {
+                    "line": 345,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelAspectSupport.getDeclaredMethodFor(Class<?> clazz, String name, Class<?>... parameterTypes)"
+        ],
+        "priority": 17
+    }
+]

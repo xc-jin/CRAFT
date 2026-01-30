@@ -1,0 +1,2066 @@
+[
+    {
+        "name": "init",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "init()",
+        "class_signature": "CapacityService.init()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        // All servers have jobs that modify usage, idempotent.\n        ConfigExecutor.scheduleCorrectUsageTask(() -> {\n            LOGGER.info(\"[capacityManagement] start correct usage\");\n            StopWatch watch = new StopWatch();\n            watch.start();\n            correctUsage();\n            watch.stop();\n            LOGGER.info(\"[capacityManagement] end correct usage, cost: {}s\", watch.getTotalTimeSeconds());\n            \n        }, PropertyUtil.getCorrectUsageDelay(), PropertyUtil.getCorrectUsageDelay(), TimeUnit.SECONDS);\n    }",
+        "position": {
+            "line": 70,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "scheduleCorrectUsageTask",
+                "position": {
+                    "line": 72,
+                    "column": 24
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 73,
+                    "column": 20
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 75,
+                    "column": 19
+                }
+            },
+            {
+                "name": "correctUsage",
+                "position": {
+                    "line": 76,
+                    "column": 13
+                }
+            },
+            {
+                "name": "stop",
+                "position": {
+                    "line": 77,
+                    "column": 19
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 78,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getTotalTimeSeconds",
+                "position": {
+                    "line": 78,
+                    "column": 84
+                }
+            },
+            {
+                "name": "getCorrectUsageDelay",
+                "position": {
+                    "line": 80,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getCorrectUsageDelay",
+                "position": {
+                    "line": 80,
+                    "column": 62
+                }
+            },
+            {
+                "name": "StopWatch",
+                "position": {
+                    "line": 74,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.correctUsage()"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "correctUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "correctUsage()",
+        "class_signature": "CapacityService.correctUsage()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        correctGroupUsage();\n        correctTenantUsage();\n    }",
+        "position": {
+            "line": 83,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "correctGroupUsage",
+                "position": {
+                    "line": 84,
+                    "column": 9
+                }
+            },
+            {
+                "name": "correctTenantUsage",
+                "position": {
+                    "line": 85,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.correctGroupUsage()",
+            "CapacityService.correctTenantUsage()"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "correctGroupUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "correctGroupUsage()",
+        "class_signature": "CapacityService.correctGroupUsage()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        long lastId = 0;\n        int pageSize = 100;\n        while (true) {\n            List<GroupCapacity> groupCapacityList = groupCapacityPersistService\n                    .getCapacityList4CorrectUsage(lastId, pageSize);\n            if (groupCapacityList.isEmpty()) {\n                break;\n            }\n            lastId = groupCapacityList.get(groupCapacityList.size() - 1).getId();\n            for (GroupCapacity groupCapacity : groupCapacityList) {\n                String group = groupCapacity.getGroup();\n                groupCapacityPersistService.correctUsage(group, TimeUtils.getCurrentTime());\n            }\n            try {\n                Thread.sleep(100);\n            } catch (InterruptedException e) {\n                // ignore\n                // set the interrupted flag\n                Thread.currentThread().interrupt();\n            }\n        }\n    }",
+        "position": {
+            "line": 91,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCapacityList4CorrectUsage",
+                "position": {
+                    "line": 96,
+                    "column": 22
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 97,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 100,
+                    "column": 74
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 100,
+                    "column": 40
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 100,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 102,
+                    "column": 46
+                }
+            },
+            {
+                "name": "correctUsage",
+                "position": {
+                    "line": 103,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getCurrentTime",
+                "position": {
+                    "line": 103,
+                    "column": 75
+                }
+            },
+            {
+                "name": "sleep",
+                "position": {
+                    "line": 106,
+                    "column": 24
+                }
+            },
+            {
+                "name": "interrupt",
+                "position": {
+                    "line": 110,
+                    "column": 40
+                }
+            },
+            {
+                "name": "currentThread",
+                "position": {
+                    "line": 110,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 19
+    },
+    {
+        "name": "correctGroupUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "correctGroupUsage(String group)",
+        "class_signature": "CapacityService.correctGroupUsage(String group)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ]
+        ],
+        "methodBody": "{\n        groupCapacityPersistService.correctUsage(group, TimeUtils.getCurrentTime());\n    }",
+        "position": {
+            "line": 115,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "correctUsage",
+                "position": {
+                    "line": 116,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getCurrentTime",
+                "position": {
+                    "line": 116,
+                    "column": 67
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "correctTenantUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "correctTenantUsage(String tenant)",
+        "class_signature": "CapacityService.correctTenantUsage(String tenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "tenant"
+            ]
+        ],
+        "methodBody": "{\n        tenantCapacityPersistService.correctUsage(tenant, TimeUtils.getCurrentTime());\n    }",
+        "position": {
+            "line": 119,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "correctUsage",
+                "position": {
+                    "line": 120,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getCurrentTime",
+                "position": {
+                    "line": 120,
+                    "column": 69
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "correctTenantUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "correctTenantUsage()",
+        "class_signature": "CapacityService.correctTenantUsage()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        long lastId = 0;\n        int pageSize = 100;\n        while (true) {\n            List<TenantCapacity> tenantCapacityList = tenantCapacityPersistService\n                    .getCapacityList4CorrectUsage(lastId, pageSize);\n            if (tenantCapacityList.isEmpty()) {\n                break;\n            }\n            lastId = tenantCapacityList.get(tenantCapacityList.size() - 1).getId();\n            try {\n                Thread.sleep(100);\n            } catch (InterruptedException ignored) {\n            }\n            for (TenantCapacity tenantCapacity : tenantCapacityList) {\n                String tenant = tenantCapacity.getTenant();\n                tenantCapacityPersistService.correctUsage(tenant, TimeUtils.getCurrentTime());\n            }\n        }\n    }",
+        "position": {
+            "line": 126,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCapacityList4CorrectUsage",
+                "position": {
+                    "line": 131,
+                    "column": 22
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 132,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 135,
+                    "column": 76
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 135,
+                    "column": 41
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 135,
+                    "column": 64
+                }
+            },
+            {
+                "name": "sleep",
+                "position": {
+                    "line": 137,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getTenant",
+                "position": {
+                    "line": 141,
+                    "column": 48
+                }
+            },
+            {
+                "name": "correctUsage",
+                "position": {
+                    "line": 142,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getCurrentTime",
+                "position": {
+                    "line": 142,
+                    "column": 77
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "initAllCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "initAllCapacity()",
+        "class_signature": "CapacityService.initAllCapacity()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        initAllCapacity(false);\n        initAllCapacity(true);\n    }",
+        "position": {
+            "line": 147,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "initAllCapacity",
+                "position": {
+                    "line": 148,
+                    "column": 9
+                }
+            },
+            {
+                "name": "initAllCapacity",
+                "position": {
+                    "line": 149,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.initAllCapacity(boolean isTenant)",
+            "CapacityService.initAllCapacity(boolean isTenant)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "initAllCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "initAllCapacity(boolean isTenant)",
+        "class_signature": "CapacityService.initAllCapacity(boolean isTenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "isTenant"
+            ]
+        ],
+        "methodBody": "{\n        int page = 1;\n        while (true) {\n            List<String> list;\n            if (isTenant) {\n                list = configInfoPersistService.getTenantIdList(page, INIT_PAGE_SIZE);\n            } else {\n                list = configInfoPersistService.getGroupIdList(page, INIT_PAGE_SIZE);\n            }\n            for (String targetId : list) {\n                if (isTenant) {\n                    insertTenantCapacity(targetId);\n                    autoExpansion(null, targetId);\n                } else {\n                    insertGroupCapacity(targetId);\n                    autoExpansion(targetId, null);\n                }\n            }\n            if (list.size() < INIT_PAGE_SIZE) {\n                break;\n            }\n            try {\n                Thread.sleep(100);\n            } catch (InterruptedException ignored) {\n            }\n            ++page;\n        }\n    }",
+        "position": {
+            "line": 152,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTenantIdList",
+                "position": {
+                    "line": 157,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getGroupIdList",
+                "position": {
+                    "line": 159,
+                    "column": 49
+                }
+            },
+            {
+                "name": "insertTenantCapacity",
+                "position": {
+                    "line": 163,
+                    "column": 21
+                }
+            },
+            {
+                "name": "autoExpansion",
+                "position": {
+                    "line": 164,
+                    "column": 21
+                }
+            },
+            {
+                "name": "insertGroupCapacity",
+                "position": {
+                    "line": 166,
+                    "column": 21
+                }
+            },
+            {
+                "name": "autoExpansion",
+                "position": {
+                    "line": 167,
+                    "column": 21
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 170,
+                    "column": 22
+                }
+            },
+            {
+                "name": "sleep",
+                "position": {
+                    "line": 174,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.insertTenantCapacity(String tenant)",
+            "CapacityService.autoExpansion(String group, String tenant)",
+            "CapacityService.insertGroupCapacity(String group)",
+            "CapacityService.autoExpansion(String group, String tenant)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "insertAndUpdateClusterUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "insertAndUpdateClusterUsage(CounterMode counterMode, boolean ignoreQuotaLimit)",
+        "class_signature": "CapacityService.insertAndUpdateClusterUsage(CounterMode counterMode, boolean ignoreQuotaLimit)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "CounterMode",
+                "counterMode"
+            ],
+            [
+                "boolean",
+                "ignoreQuotaLimit"
+            ]
+        ],
+        "methodBody": "{\n        Capacity capacity = groupCapacityPersistService.getClusterCapacity();\n        if (capacity == null) {\n            insertGroupCapacity(GroupCapacityPersistService.CLUSTER);\n        }\n        return updateGroupUsage(counterMode, GroupCapacityPersistService.CLUSTER, PropertyUtil.getDefaultClusterQuota(),\n                ignoreQuotaLimit);\n    }",
+        "position": {
+            "line": 189,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClusterCapacity",
+                "position": {
+                    "line": 190,
+                    "column": 57
+                }
+            },
+            {
+                "name": "insertGroupCapacity",
+                "position": {
+                    "line": 192,
+                    "column": 13
+                }
+            },
+            {
+                "name": "updateGroupUsage",
+                "position": {
+                    "line": 194,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getDefaultClusterQuota",
+                "position": {
+                    "line": 194,
+                    "column": 96
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.insertGroupCapacity(String group)",
+            "CapacityService.updateGroupUsage(CounterMode counterMode, String group, int defaultQuota, boolean ignoreQuotaLimit)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "updateClusterUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "updateClusterUsage(CounterMode counterMode)",
+        "class_signature": "CapacityService.updateClusterUsage(CounterMode counterMode)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "CounterMode",
+                "counterMode"
+            ]
+        ],
+        "methodBody": "{\n        return updateGroupUsage(counterMode, GroupCapacityPersistService.CLUSTER, PropertyUtil.getDefaultClusterQuota(),\n                false);\n    }",
+        "position": {
+            "line": 198,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "updateGroupUsage",
+                "position": {
+                    "line": 199,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getDefaultClusterQuota",
+                "position": {
+                    "line": 199,
+                    "column": 96
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.updateGroupUsage(CounterMode counterMode, String group, int defaultQuota, boolean ignoreQuotaLimit)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "insertAndUpdateGroupUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "insertAndUpdateGroupUsage(CounterMode counterMode, String group, boolean ignoreQuotaLimit)",
+        "class_signature": "CapacityService.insertAndUpdateGroupUsage(CounterMode counterMode, String group, boolean ignoreQuotaLimit)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "CounterMode",
+                "counterMode"
+            ],
+            [
+                "String",
+                "group"
+            ],
+            [
+                "boolean",
+                "ignoreQuotaLimit"
+            ]
+        ],
+        "methodBody": "{\n        GroupCapacity groupCapacity = getGroupCapacity(group);\n        if (groupCapacity == null) {\n            initGroupCapacity(group, null, null, null, null);\n        }\n        return updateGroupUsage(counterMode, group, PropertyUtil.getDefaultGroupQuota(), ignoreQuotaLimit);\n    }",
+        "position": {
+            "line": 212,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getGroupCapacity",
+                "position": {
+                    "line": 213,
+                    "column": 39
+                }
+            },
+            {
+                "name": "initGroupCapacity",
+                "position": {
+                    "line": 215,
+                    "column": 13
+                }
+            },
+            {
+                "name": "updateGroupUsage",
+                "position": {
+                    "line": 217,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getDefaultGroupQuota",
+                "position": {
+                    "line": 217,
+                    "column": 66
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.getGroupCapacity(String group)",
+            "CapacityService.initGroupCapacity(String group, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+            "CapacityService.updateGroupUsage(CounterMode counterMode, String group, int defaultQuota, boolean ignoreQuotaLimit)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "updateGroupUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "updateGroupUsage(CounterMode counterMode, String group)",
+        "class_signature": "CapacityService.updateGroupUsage(CounterMode counterMode, String group)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "CounterMode",
+                "counterMode"
+            ],
+            [
+                "String",
+                "group"
+            ]
+        ],
+        "methodBody": "{\n        return updateGroupUsage(counterMode, group, PropertyUtil.getDefaultGroupQuota(), false);\n    }",
+        "position": {
+            "line": 220,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "updateGroupUsage",
+                "position": {
+                    "line": 221,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getDefaultGroupQuota",
+                "position": {
+                    "line": 221,
+                    "column": 66
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.updateGroupUsage(CounterMode counterMode, String group, int defaultQuota, boolean ignoreQuotaLimit)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "updateGroupUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "updateGroupUsage(CounterMode counterMode, String group, int defaultQuota, boolean ignoreQuotaLimit)",
+        "class_signature": "CapacityService.updateGroupUsage(CounterMode counterMode, String group, int defaultQuota, boolean ignoreQuotaLimit)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "CounterMode",
+                "counterMode"
+            ],
+            [
+                "String",
+                "group"
+            ],
+            [
+                "int",
+                "defaultQuota"
+            ],
+            [
+                "boolean",
+                "ignoreQuotaLimit"
+            ]
+        ],
+        "methodBody": "{\n        final Timestamp now = TimeUtils.getCurrentTime();\n        GroupCapacity groupCapacity = new GroupCapacity();\n        groupCapacity.setGroup(group);\n        groupCapacity.setQuota(defaultQuota);\n        groupCapacity.setGmtModified(now);\n        if (CounterMode.INCREMENT == counterMode) {\n            if (ignoreQuotaLimit) {\n                return groupCapacityPersistService.incrementUsage(groupCapacity);\n            }\n            // First update the quota according to the default value. In most cases, it is the default value.\n            // The quota field in the default value table is 0\n            return groupCapacityPersistService.incrementUsageWithDefaultQuotaLimit(groupCapacity)\n                    || groupCapacityPersistService.incrementUsageWithQuotaLimit(groupCapacity);\n        }\n        return groupCapacityPersistService.decrementUsage(groupCapacity);\n    }",
+        "position": {
+            "line": 224,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCurrentTime",
+                "position": {
+                    "line": 226,
+                    "column": 41
+                }
+            },
+            {
+                "name": "setGroup",
+                "position": {
+                    "line": 228,
+                    "column": 23
+                }
+            },
+            {
+                "name": "setQuota",
+                "position": {
+                    "line": 229,
+                    "column": 23
+                }
+            },
+            {
+                "name": "setGmtModified",
+                "position": {
+                    "line": 230,
+                    "column": 23
+                }
+            },
+            {
+                "name": "incrementUsage",
+                "position": {
+                    "line": 233,
+                    "column": 52
+                }
+            },
+            {
+                "name": "incrementUsageWithDefaultQuotaLimit",
+                "position": {
+                    "line": 237,
+                    "column": 48
+                }
+            },
+            {
+                "name": "incrementUsageWithQuotaLimit",
+                "position": {
+                    "line": 238,
+                    "column": 52
+                }
+            },
+            {
+                "name": "decrementUsage",
+                "position": {
+                    "line": 240,
+                    "column": 44
+                }
+            },
+            {
+                "name": "GroupCapacity",
+                "position": {
+                    "line": 227,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "getGroupCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "getGroupCapacity(String group)",
+        "class_signature": "CapacityService.getGroupCapacity(String group)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ]
+        ],
+        "methodBody": "{\n        return groupCapacityPersistService.getGroupCapacity(group);\n    }",
+        "position": {
+            "line": 243,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getGroupCapacity",
+                "position": {
+                    "line": 244,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 31
+    },
+    {
+        "name": "initGroupCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "initGroupCapacity(String group)",
+        "class_signature": "CapacityService.initGroupCapacity(String group)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ]
+        ],
+        "methodBody": "{\n        return initGroupCapacity(group, null, null, null, null);\n    }",
+        "position": {
+            "line": 254,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "initGroupCapacity",
+                "position": {
+                    "line": 255,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.initGroupCapacity(String group, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "initGroupCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "initGroupCapacity(String group, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+        "class_signature": "CapacityService.initGroupCapacity(String group, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ],
+            [
+                "Integer",
+                "quota"
+            ],
+            [
+                "Integer",
+                "maxSize"
+            ],
+            [
+                "Integer",
+                "maxAggrCount"
+            ],
+            [
+                "Integer",
+                "maxAggrSize"
+            ]
+        ],
+        "methodBody": "{\n        boolean insertSuccess = insertGroupCapacity(group, quota, maxSize, maxAggrCount, maxAggrSize);\n        if (quota == null) {\n            autoExpansion(group, null);\n        }\n        return insertSuccess;\n    }",
+        "position": {
+            "line": 269,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "insertGroupCapacity",
+                "position": {
+                    "line": 271,
+                    "column": 33
+                }
+            },
+            {
+                "name": "autoExpansion",
+                "position": {
+                    "line": 273,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.insertGroupCapacity(String group, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+            "CapacityService.autoExpansion(String group, String tenant)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "autoExpansion",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "autoExpansion(String group, String tenant)",
+        "class_signature": "CapacityService.autoExpansion(String group, String tenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ],
+            [
+                "String",
+                "tenant"
+            ]
+        ],
+        "methodBody": "{\n        Capacity capacity = getCapacity(group, tenant);\n        int defaultQuota = getDefaultQuota(tenant != null);\n        Integer usage = capacity.getUsage();\n        if (usage < defaultQuota) {\n            return;\n        }\n        // Initialize the capacity information of the group. If the quota is reached,\n        // the capacity will be automatically expanded to reduce the operation and maintenance cost.\n        int initialExpansionPercent = PropertyUtil.getInitialExpansionPercent();\n        if (initialExpansionPercent > 0) {\n            int finalQuota = (int) (usage + defaultQuota * (1.0 * initialExpansionPercent / 100));\n            if (tenant != null) {\n                tenantCapacityPersistService.updateQuota(tenant, finalQuota);\n                LogUtil.DEFAULT_LOG.warn(\"[capacityManagement] The usage({}) already reach the upper limit({}) when init the tenant({}), \"\n                        + \"automatic upgrade to ({})\", usage, defaultQuota, tenant, finalQuota);\n            } else {\n                groupCapacityPersistService.updateQuota(group, finalQuota);\n                LogUtil.DEFAULT_LOG.warn(\"[capacityManagement] The usage({}) already reach the upper limit({}) when init the group({}), \"\n                        + \"automatic upgrade to ({})\", usage, defaultQuota, group, finalQuota);\n            }\n        }\n    }",
+        "position": {
+            "line": 284,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCapacity",
+                "position": {
+                    "line": 285,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getDefaultQuota",
+                "position": {
+                    "line": 286,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getUsage",
+                "position": {
+                    "line": 287,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getInitialExpansionPercent",
+                "position": {
+                    "line": 293,
+                    "column": 52
+                }
+            },
+            {
+                "name": "updateQuota",
+                "position": {
+                    "line": 297,
+                    "column": 46
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 298,
+                    "column": 37
+                }
+            },
+            {
+                "name": "updateQuota",
+                "position": {
+                    "line": 301,
+                    "column": 45
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 302,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.getCapacity(String group, String tenant)",
+            "CapacityService.getDefaultQuota(boolean isTenant)"
+        ],
+        "priority": 27
+    },
+    {
+        "name": "getDefaultQuota",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "getDefaultQuota(boolean isTenant)",
+        "class_signature": "CapacityService.getDefaultQuota(boolean isTenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "isTenant"
+            ]
+        ],
+        "methodBody": "{\n        if (isTenant) {\n            return PropertyUtil.getDefaultTenantQuota();\n        }\n        return PropertyUtil.getDefaultGroupQuota();\n    }",
+        "position": {
+            "line": 308,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDefaultTenantQuota",
+                "position": {
+                    "line": 310,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getDefaultGroupQuota",
+                "position": {
+                    "line": 312,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 29
+    },
+    {
+        "name": "getCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "getCapacity(String group, String tenant)",
+        "class_signature": "CapacityService.getCapacity(String group, String tenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ],
+            [
+                "String",
+                "tenant"
+            ]
+        ],
+        "methodBody": "{\n        if (tenant != null) {\n            return getTenantCapacity(tenant);\n        }\n        return getGroupCapacity(group);\n    }",
+        "position": {
+            "line": 315,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTenantCapacity",
+                "position": {
+                    "line": 317,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getGroupCapacity",
+                "position": {
+                    "line": 319,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.getTenantCapacity(String tenant)",
+            "CapacityService.getGroupCapacity(String group)"
+        ],
+        "priority": 28
+    },
+    {
+        "name": "getCapacityWithDefault",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "getCapacityWithDefault(String group, String tenant)",
+        "class_signature": "CapacityService.getCapacityWithDefault(String group, String tenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ],
+            [
+                "String",
+                "tenant"
+            ]
+        ],
+        "methodBody": "{\n        Capacity capacity;\n        boolean isTenant = StringUtils.isNotBlank(tenant);\n        if (isTenant) {\n            capacity = getTenantCapacity(tenant);\n        } else {\n            capacity = getGroupCapacity(group);\n        }\n        if (capacity == null) {\n            return null;\n        }\n        Integer quota = capacity.getQuota();\n        if (quota == 0) {\n            if (isTenant) {\n                capacity.setQuota(PropertyUtil.getDefaultTenantQuota());\n            } else {\n                if (GroupCapacityPersistService.CLUSTER.equals(group)) {\n                    capacity.setQuota(PropertyUtil.getDefaultClusterQuota());\n                } else {\n                    capacity.setQuota(PropertyUtil.getDefaultGroupQuota());\n                }\n            }\n        }\n        Integer maxSize = capacity.getMaxSize();\n        if (maxSize == 0) {\n            capacity.setMaxSize(PropertyUtil.getDefaultMaxSize());\n        }\n        Integer maxAggrCount = capacity.getMaxAggrCount();\n        if (maxAggrCount == 0) {\n            capacity.setMaxAggrCount(PropertyUtil.getDefaultMaxAggrCount());\n        }\n        Integer maxAggrSize = capacity.getMaxAggrSize();\n        if (maxAggrSize == 0) {\n            capacity.setMaxAggrSize(PropertyUtil.getDefaultMaxAggrSize());\n        }\n        return capacity;\n    }",
+        "position": {
+            "line": 322,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 324,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getTenantCapacity",
+                "position": {
+                    "line": 326,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getGroupCapacity",
+                "position": {
+                    "line": 328,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getQuota",
+                "position": {
+                    "line": 333,
+                    "column": 34
+                }
+            },
+            {
+                "name": "setQuota",
+                "position": {
+                    "line": 336,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getDefaultTenantQuota",
+                "position": {
+                    "line": 336,
+                    "column": 48
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 338,
+                    "column": 57
+                }
+            },
+            {
+                "name": "setQuota",
+                "position": {
+                    "line": 339,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getDefaultClusterQuota",
+                "position": {
+                    "line": 339,
+                    "column": 52
+                }
+            },
+            {
+                "name": "setQuota",
+                "position": {
+                    "line": 341,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getDefaultGroupQuota",
+                "position": {
+                    "line": 341,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getMaxSize",
+                "position": {
+                    "line": 345,
+                    "column": 36
+                }
+            },
+            {
+                "name": "setMaxSize",
+                "position": {
+                    "line": 347,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getDefaultMaxSize",
+                "position": {
+                    "line": 347,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getMaxAggrCount",
+                "position": {
+                    "line": 349,
+                    "column": 41
+                }
+            },
+            {
+                "name": "setMaxAggrCount",
+                "position": {
+                    "line": 351,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getDefaultMaxAggrCount",
+                "position": {
+                    "line": 351,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getMaxAggrSize",
+                "position": {
+                    "line": 353,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setMaxAggrSize",
+                "position": {
+                    "line": 355,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getDefaultMaxAggrSize",
+                "position": {
+                    "line": 355,
+                    "column": 50
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.getTenantCapacity(String tenant)",
+            "CapacityService.getGroupCapacity(String group)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "initCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "initCapacity(String group, String tenant)",
+        "class_signature": "CapacityService.initCapacity(String group, String tenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ],
+            [
+                "String",
+                "tenant"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isNotBlank(tenant)) {\n            return initTenantCapacity(tenant);\n        }\n        if (GroupCapacityPersistService.CLUSTER.equals(group)) {\n            return insertGroupCapacity(GroupCapacityPersistService.CLUSTER);\n        }\n        // Group can expand capacity automatically.\n        return initGroupCapacity(group);\n    }",
+        "position": {
+            "line": 367,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 368,
+                    "column": 25
+                }
+            },
+            {
+                "name": "initTenantCapacity",
+                "position": {
+                    "line": 369,
+                    "column": 20
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 371,
+                    "column": 49
+                }
+            },
+            {
+                "name": "insertGroupCapacity",
+                "position": {
+                    "line": 372,
+                    "column": 20
+                }
+            },
+            {
+                "name": "initGroupCapacity",
+                "position": {
+                    "line": 375,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.initTenantCapacity(String tenant)",
+            "CapacityService.insertGroupCapacity(String group)",
+            "CapacityService.initGroupCapacity(String group)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "insertGroupCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "insertGroupCapacity(String group)",
+        "class_signature": "CapacityService.insertGroupCapacity(String group)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ]
+        ],
+        "methodBody": "{\n        return insertGroupCapacity(group, null, null, null, null);\n    }",
+        "position": {
+            "line": 378,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "insertGroupCapacity",
+                "position": {
+                    "line": 379,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.insertGroupCapacity(String group, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "insertGroupCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "insertGroupCapacity(String group, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+        "class_signature": "CapacityService.insertGroupCapacity(String group, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ],
+            [
+                "Integer",
+                "quota"
+            ],
+            [
+                "Integer",
+                "maxSize"
+            ],
+            [
+                "Integer",
+                "maxAggrCount"
+            ],
+            [
+                "Integer",
+                "maxAggrSize"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            final Timestamp now = TimeUtils.getCurrentTime();\n            GroupCapacity groupCapacity = new GroupCapacity();\n            groupCapacity.setGroup(group);\n            // When adding a new quota, quota = 0 means that the quota is the default value.\n            // In order to update the default quota, only the Nacos configuration needs to be modified,\n            // and most of the data in the table need not be updated.\n            groupCapacity.setQuota(quota == null ? ZERO : quota);\n            \n            // When adding new data, maxsize = 0 means that the size is the default value.\n            // In order to update the default size, you only need to modify the Nacos configuration without updating most of the data in the table.\n            groupCapacity.setMaxSize(maxSize == null ? ZERO : maxSize);\n            groupCapacity.setMaxAggrCount(maxAggrCount == null ? ZERO : maxAggrCount);\n            groupCapacity.setMaxAggrSize(maxAggrSize == null ? ZERO : maxAggrSize);\n            groupCapacity.setGmtCreate(now);\n            groupCapacity.setGmtModified(now);\n            return groupCapacityPersistService.insertGroupCapacity(groupCapacity);\n        } catch (DuplicateKeyException e) {\n            // this exception will meet when concurrent insertignore it\n            LogUtil.DEFAULT_LOG.warn(\"group: {}, message: {}\", group, e.getMessage());\n        }\n        return false;\n    }",
+        "position": {
+            "line": 382,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCurrentTime",
+                "position": {
+                    "line": 385,
+                    "column": 45
+                }
+            },
+            {
+                "name": "setGroup",
+                "position": {
+                    "line": 387,
+                    "column": 27
+                }
+            },
+            {
+                "name": "setQuota",
+                "position": {
+                    "line": 391,
+                    "column": 27
+                }
+            },
+            {
+                "name": "setMaxSize",
+                "position": {
+                    "line": 395,
+                    "column": 27
+                }
+            },
+            {
+                "name": "setMaxAggrCount",
+                "position": {
+                    "line": 396,
+                    "column": 27
+                }
+            },
+            {
+                "name": "setMaxAggrSize",
+                "position": {
+                    "line": 397,
+                    "column": 27
+                }
+            },
+            {
+                "name": "setGmtCreate",
+                "position": {
+                    "line": 398,
+                    "column": 27
+                }
+            },
+            {
+                "name": "setGmtModified",
+                "position": {
+                    "line": 399,
+                    "column": 27
+                }
+            },
+            {
+                "name": "insertGroupCapacity",
+                "position": {
+                    "line": 400,
+                    "column": 48
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 403,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 403,
+                    "column": 73
+                }
+            },
+            {
+                "name": "GroupCapacity",
+                "position": {
+                    "line": 386,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 25
+    },
+    {
+        "name": "insertAndUpdateTenantUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "insertAndUpdateTenantUsage(CounterMode counterMode, String tenant, boolean ignoreQuotaLimit)",
+        "class_signature": "CapacityService.insertAndUpdateTenantUsage(CounterMode counterMode, String tenant, boolean ignoreQuotaLimit)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "CounterMode",
+                "counterMode"
+            ],
+            [
+                "String",
+                "tenant"
+            ],
+            [
+                "boolean",
+                "ignoreQuotaLimit"
+            ]
+        ],
+        "methodBody": "{\n        TenantCapacity tenantCapacity = getTenantCapacity(tenant);\n        if (tenantCapacity == null) {\n            // Init capacity information.\n            initTenantCapacity(tenant);\n        }\n        return updateTenantUsage(counterMode, tenant, ignoreQuotaLimit);\n    }",
+        "position": {
+            "line": 417,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTenantCapacity",
+                "position": {
+                    "line": 418,
+                    "column": 41
+                }
+            },
+            {
+                "name": "initTenantCapacity",
+                "position": {
+                    "line": 421,
+                    "column": 13
+                }
+            },
+            {
+                "name": "updateTenantUsage",
+                "position": {
+                    "line": 423,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.getTenantCapacity(String tenant)",
+            "CapacityService.initTenantCapacity(String tenant)",
+            "CapacityService.updateTenantUsage(CounterMode counterMode, String tenant, boolean ignoreQuotaLimit)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "updateTenantUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "updateTenantUsage(CounterMode counterMode, String tenant, boolean ignoreQuotaLimit)",
+        "class_signature": "CapacityService.updateTenantUsage(CounterMode counterMode, String tenant, boolean ignoreQuotaLimit)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "CounterMode",
+                "counterMode"
+            ],
+            [
+                "String",
+                "tenant"
+            ],
+            [
+                "boolean",
+                "ignoreQuotaLimit"
+            ]
+        ],
+        "methodBody": "{\n        final Timestamp now = TimeUtils.getCurrentTime();\n        TenantCapacity tenantCapacity = new TenantCapacity();\n        tenantCapacity.setTenant(tenant);\n        tenantCapacity.setQuota(PropertyUtil.getDefaultTenantQuota());\n        tenantCapacity.setGmtModified(now);\n        if (CounterMode.INCREMENT == counterMode) {\n            if (ignoreQuotaLimit) {\n                return tenantCapacityPersistService.incrementUsage(tenantCapacity);\n            }\n            // First update the quota according to the default value. In most cases, it is the default value.\n            // The quota field in the default value table is 0.\n            return tenantCapacityPersistService.incrementUsageWithDefaultQuotaLimit(tenantCapacity)\n                    || tenantCapacityPersistService.incrementUsageWithQuotaLimit(tenantCapacity);\n        }\n        return tenantCapacityPersistService.decrementUsage(tenantCapacity);\n    }",
+        "position": {
+            "line": 426,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCurrentTime",
+                "position": {
+                    "line": 427,
+                    "column": 41
+                }
+            },
+            {
+                "name": "setTenant",
+                "position": {
+                    "line": 429,
+                    "column": 24
+                }
+            },
+            {
+                "name": "setQuota",
+                "position": {
+                    "line": 430,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getDefaultTenantQuota",
+                "position": {
+                    "line": 430,
+                    "column": 46
+                }
+            },
+            {
+                "name": "setGmtModified",
+                "position": {
+                    "line": 431,
+                    "column": 24
+                }
+            },
+            {
+                "name": "incrementUsage",
+                "position": {
+                    "line": 434,
+                    "column": 53
+                }
+            },
+            {
+                "name": "incrementUsageWithDefaultQuotaLimit",
+                "position": {
+                    "line": 438,
+                    "column": 49
+                }
+            },
+            {
+                "name": "incrementUsageWithQuotaLimit",
+                "position": {
+                    "line": 439,
+                    "column": 53
+                }
+            },
+            {
+                "name": "decrementUsage",
+                "position": {
+                    "line": 441,
+                    "column": 45
+                }
+            },
+            {
+                "name": "TenantCapacity",
+                "position": {
+                    "line": 428,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    },
+    {
+        "name": "updateTenantUsage",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "updateTenantUsage(CounterMode counterMode, String tenant)",
+        "class_signature": "CapacityService.updateTenantUsage(CounterMode counterMode, String tenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "CounterMode",
+                "counterMode"
+            ],
+            [
+                "String",
+                "tenant"
+            ]
+        ],
+        "methodBody": "{\n        return updateTenantUsage(counterMode, tenant, false);\n    }",
+        "position": {
+            "line": 444,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "updateTenantUsage",
+                "position": {
+                    "line": 445,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.updateTenantUsage(CounterMode counterMode, String tenant, boolean ignoreQuotaLimit)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "initTenantCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "initTenantCapacity(String tenant)",
+        "class_signature": "CapacityService.initTenantCapacity(String tenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "tenant"
+            ]
+        ],
+        "methodBody": "{\n        return initTenantCapacity(tenant, null, null, null, null);\n    }",
+        "position": {
+            "line": 455,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "initTenantCapacity",
+                "position": {
+                    "line": 456,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.initTenantCapacity(String tenant, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "initTenantCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "initTenantCapacity(String tenant, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+        "class_signature": "CapacityService.initTenantCapacity(String tenant, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "tenant"
+            ],
+            [
+                "Integer",
+                "quota"
+            ],
+            [
+                "Integer",
+                "maxSize"
+            ],
+            [
+                "Integer",
+                "maxAggrCount"
+            ],
+            [
+                "Integer",
+                "maxAggrSize"
+            ]
+        ],
+        "methodBody": "{\n        boolean insertSuccess = insertTenantCapacity(tenant, quota, maxSize, maxAggrCount, maxAggrSize);\n        if (quota != null) {\n            return insertSuccess;\n        }\n        autoExpansion(null, tenant);\n        return insertSuccess;\n    }",
+        "position": {
+            "line": 470,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "insertTenantCapacity",
+                "position": {
+                    "line": 472,
+                    "column": 33
+                }
+            },
+            {
+                "name": "autoExpansion",
+                "position": {
+                    "line": 476,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.insertTenantCapacity(String tenant, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+            "CapacityService.autoExpansion(String group, String tenant)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "insertTenantCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "insertTenantCapacity(String tenant)",
+        "class_signature": "CapacityService.insertTenantCapacity(String tenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "tenant"
+            ]
+        ],
+        "methodBody": "{\n        return insertTenantCapacity(tenant, null, null, null, null);\n    }",
+        "position": {
+            "line": 480,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "insertTenantCapacity",
+                "position": {
+                    "line": 481,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.insertTenantCapacity(String tenant, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "insertTenantCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "insertTenantCapacity(String tenant, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+        "class_signature": "CapacityService.insertTenantCapacity(String tenant, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "tenant"
+            ],
+            [
+                "Integer",
+                "quota"
+            ],
+            [
+                "Integer",
+                "maxSize"
+            ],
+            [
+                "Integer",
+                "maxAggrCount"
+            ],
+            [
+                "Integer",
+                "maxAggrSize"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            final Timestamp now = TimeUtils.getCurrentTime();\n            TenantCapacity tenantCapacity = new TenantCapacity();\n            tenantCapacity.setTenant(tenant);\n            // When adding a new quota, quota = 0 means that the quota is the default value.\n            // In order to update the default quota, only the Nacos configuration needs to be modified,\n            // and most of the data in the table need not be updated.\n            tenantCapacity.setQuota(quota == null ? ZERO : quota);\n            \n            // When adding new data, maxsize = 0 means that the size is the default value.\n            // In order to update the default size, you only need to modify the Nacos configuration without updating most of the data in the table.\n            tenantCapacity.setMaxSize(maxSize == null ? ZERO : maxSize);\n            tenantCapacity.setMaxAggrCount(maxAggrCount == null ? ZERO : maxAggrCount);\n            tenantCapacity.setMaxAggrSize(maxAggrSize == null ? ZERO : maxAggrSize);\n            tenantCapacity.setGmtCreate(now);\n            tenantCapacity.setGmtModified(now);\n            return tenantCapacityPersistService.insertTenantCapacity(tenantCapacity);\n        } catch (DuplicateKeyException e) {\n            // this exception will meet when concurrent insertignore it\n            LogUtil.DEFAULT_LOG.warn(\"tenant: {}, message: {}\", tenant, e.getMessage());\n        }\n        return false;\n    }",
+        "position": {
+            "line": 484,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCurrentTime",
+                "position": {
+                    "line": 487,
+                    "column": 45
+                }
+            },
+            {
+                "name": "setTenant",
+                "position": {
+                    "line": 489,
+                    "column": 28
+                }
+            },
+            {
+                "name": "setQuota",
+                "position": {
+                    "line": 493,
+                    "column": 28
+                }
+            },
+            {
+                "name": "setMaxSize",
+                "position": {
+                    "line": 497,
+                    "column": 28
+                }
+            },
+            {
+                "name": "setMaxAggrCount",
+                "position": {
+                    "line": 498,
+                    "column": 28
+                }
+            },
+            {
+                "name": "setMaxAggrSize",
+                "position": {
+                    "line": 499,
+                    "column": 28
+                }
+            },
+            {
+                "name": "setGmtCreate",
+                "position": {
+                    "line": 500,
+                    "column": 28
+                }
+            },
+            {
+                "name": "setGmtModified",
+                "position": {
+                    "line": 501,
+                    "column": 28
+                }
+            },
+            {
+                "name": "insertTenantCapacity",
+                "position": {
+                    "line": 502,
+                    "column": 49
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 505,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 505,
+                    "column": 75
+                }
+            },
+            {
+                "name": "TenantCapacity",
+                "position": {
+                    "line": 488,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 26
+    },
+    {
+        "name": "getTenantCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "getTenantCapacity(String tenant)",
+        "class_signature": "CapacityService.getTenantCapacity(String tenant)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "tenant"
+            ]
+        ],
+        "methodBody": "{\n        return tenantCapacityPersistService.getTenantCapacity(tenant);\n    }",
+        "position": {
+            "line": 510,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTenantCapacity",
+                "position": {
+                    "line": 511,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 30
+    },
+    {
+        "name": "insertOrUpdateCapacity",
+        "category": "method_declaration",
+        "class": "CapacityService",
+        "signature": "insertOrUpdateCapacity(String group, String tenant, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+        "class_signature": "CapacityService.insertOrUpdateCapacity(String group, String tenant, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ],
+            [
+                "String",
+                "tenant"
+            ],
+            [
+                "Integer",
+                "quota"
+            ],
+            [
+                "Integer",
+                "maxSize"
+            ],
+            [
+                "Integer",
+                "maxAggrCount"
+            ],
+            [
+                "Integer",
+                "maxAggrSize"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isNotBlank(tenant)) {\n            Capacity capacity = tenantCapacityPersistService.getTenantCapacity(tenant);\n            if (capacity == null) {\n                return initTenantCapacity(tenant, quota, maxSize, maxAggrCount, maxAggrSize);\n            }\n            return tenantCapacityPersistService.updateTenantCapacity(tenant, quota, maxSize, maxAggrCount, maxAggrSize);\n        }\n        Capacity capacity = groupCapacityPersistService.getGroupCapacity(group);\n        if (capacity == null) {\n            return initGroupCapacity(group, quota, maxSize, maxAggrCount, maxAggrSize);\n        }\n        return groupCapacityPersistService.updateGroupCapacity(group, quota, maxSize, maxAggrCount, maxAggrSize);\n    }",
+        "position": {
+            "line": 526,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 528,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getTenantCapacity",
+                "position": {
+                    "line": 529,
+                    "column": 62
+                }
+            },
+            {
+                "name": "initTenantCapacity",
+                "position": {
+                    "line": 531,
+                    "column": 24
+                }
+            },
+            {
+                "name": "updateTenantCapacity",
+                "position": {
+                    "line": 533,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getGroupCapacity",
+                "position": {
+                    "line": 535,
+                    "column": 57
+                }
+            },
+            {
+                "name": "initGroupCapacity",
+                "position": {
+                    "line": 537,
+                    "column": 20
+                }
+            },
+            {
+                "name": "updateGroupCapacity",
+                "position": {
+                    "line": 539,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [
+            "CapacityService.initTenantCapacity(String tenant, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)",
+            "CapacityService.initGroupCapacity(String group, Integer quota, Integer maxSize, Integer maxAggrCount, Integer maxAggrSize)"
+        ],
+        "priority": 12
+    }
+]

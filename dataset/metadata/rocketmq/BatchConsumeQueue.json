@@ -1,0 +1,4529 @@
+[
+    {
+        "name": "BatchConsumeQueue",
+        "category": "constructor_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "BatchConsumeQueue(String topic, int queueId, String storePath, int mappedFileSize, MessageStore messageStore, ConsumeQueueStore consumeQueueStore, String subfolder)",
+        "class_signature": "BatchConsumeQueue.BatchConsumeQueue(String topic, int queueId, String storePath, int mappedFileSize, MessageStore messageStore, ConsumeQueueStore consumeQueueStore, String subfolder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "String",
+                "storePath"
+            ],
+            [
+                "int",
+                "mappedFileSize"
+            ],
+            [
+                "MessageStore",
+                "messageStore"
+            ],
+            [
+                "ConsumeQueueStore",
+                "consumeQueueStore"
+            ],
+            [
+                "String",
+                "subfolder"
+            ]
+        ],
+        "methodBody": "{\n        this.storePath = storePath;\n        this.mappedFileSize = mappedFileSize;\n        this.messageStore = messageStore;\n        this.consumeQueueStore = consumeQueueStore;\n        this.commitLogSize = messageStore.getCommitLog().getCommitLogSize();\n\n        this.topic = topic;\n        this.queueId = queueId;\n\n        if (StringUtils.isBlank(subfolder)) {\n            String queueDir = this.storePath + File.separator + topic + File.separator + queueId;\n            this.mappedFileQueue = new MappedFileQueue(queueDir, mappedFileSize, null);\n        } else {\n            String queueDir = this.storePath + File.separator + topic + File.separator + queueId + File.separator + subfolder;\n            this.mappedFileQueue = new MappedFileQueue(queueDir, mappedFileSize, null);\n        }\n\n        this.byteBufferItem = ByteBuffer.allocate(CQ_STORE_UNIT_SIZE);\n    }",
+        "position": {
+            "line": 85,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCommitLogSize",
+                "position": {
+                    "line": 97,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getCommitLog",
+                "position": {
+                    "line": 97,
+                    "column": 43
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 102,
+                    "column": 25
+                }
+            },
+            {
+                "name": "allocate",
+                "position": {
+                    "line": 110,
+                    "column": 42
+                }
+            },
+            {
+                "name": "MappedFileQueue",
+                "position": {
+                    "line": 104,
+                    "column": 40
+                }
+            },
+            {
+                "name": "MappedFileQueue",
+                "position": {
+                    "line": 107,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "BatchConsumeQueue",
+        "category": "constructor_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "BatchConsumeQueue(String topic, int queueId, String storePath, int mappedFileSize, MessageStore messageStore, String subfolder)",
+        "class_signature": "BatchConsumeQueue.BatchConsumeQueue(String topic, int queueId, String storePath, int mappedFileSize, MessageStore messageStore, String subfolder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "String",
+                "storePath"
+            ],
+            [
+                "int",
+                "mappedFileSize"
+            ],
+            [
+                "MessageStore",
+                "messageStore"
+            ],
+            [
+                "String",
+                "subfolder"
+            ]
+        ],
+        "methodBody": "{\n        this(topic, queueId, storePath, mappedFileSize, messageStore, (ConsumeQueueStore) messageStore.getQueueStore(), subfolder);\n    }",
+        "position": {
+            "line": 113,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getQueueStore",
+                "position": {
+                    "line": 120,
+                    "column": 104
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "BatchConsumeQueue",
+        "category": "constructor_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "BatchConsumeQueue(String topic, int queueId, String storePath, int mappedFileSize, MessageStore defaultMessageStore)",
+        "class_signature": "BatchConsumeQueue.BatchConsumeQueue(String topic, int queueId, String storePath, int mappedFileSize, MessageStore defaultMessageStore)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "String",
+                "storePath"
+            ],
+            [
+                "int",
+                "mappedFileSize"
+            ],
+            [
+                "MessageStore",
+                "defaultMessageStore"
+            ]
+        ],
+        "methodBody": "{\n        this(topic, queueId, storePath, mappedFileSize, defaultMessageStore, StringUtils.EMPTY);\n    }",
+        "position": {
+            "line": 123,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "load()",
+        "class_signature": "BatchConsumeQueue.load()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        boolean result = this.mappedFileQueue.load();\n        log.info(\"Load batch consume queue {}-{} {} {}\", topic, queueId, result ? \"OK\" : \"Failed\", mappedFileQueue.getMappedFiles().size());\n        return result;\n    }",
+        "position": {
+            "line": 133,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 134,
+                    "column": 47
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 135,
+                    "column": 13
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 135,
+                    "column": 133
+                }
+            },
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 135,
+                    "column": 116
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "doRefreshCache",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "doRefreshCache(Function<MappedFile, BatchOffsetIndex> offsetFunction)",
+        "class_signature": "BatchConsumeQueue.doRefreshCache(Function<MappedFile, BatchOffsetIndex> offsetFunction)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Function<MappedFile, BatchOffsetIndex>",
+                "offsetFunction"
+            ]
+        ],
+        "methodBody": "{\n        if (!this.messageStore.getMessageStoreConfig().isSearchBcqByCacheEnable()) {\n            return;\n        }\n        ConcurrentSkipListMap<Long, MappedFile> newOffsetCache = new ConcurrentSkipListMap<>();\n        ConcurrentSkipListMap<Long, MappedFile> newTimeCache = new ConcurrentSkipListMap<>();\n\n        List<MappedFile> mappedFiles = mappedFileQueue.getMappedFiles();\n        // iterate all BCQ files\n        for (int i = 0; i < mappedFiles.size(); i++) {\n            MappedFile bcq = mappedFiles.get(i);\n            if (isNewFile(bcq)) {\n                continue;\n            }\n\n            BatchOffsetIndex offset = offsetFunction.apply(bcq);\n            if (offset == null) {\n                continue;\n            }\n            newOffsetCache.put(offset.getMsgOffset(), offset.getMappedFile());\n            newTimeCache.put(offset.getStoreTimestamp(), offset.getMappedFile());\n        }\n\n        this.offsetCache = newOffsetCache;\n        this.timeCache = newTimeCache;\n\n        log.info(\"refreshCache for BCQ [Topic: {}, QueueId: {}].\" +\n                \"offsetCacheSize: {}, minCachedMsgOffset: {}, maxCachedMsgOffset: {}, \" +\n                \"timeCacheSize: {}, minCachedTime: {}, maxCachedTime: {}\", this.topic, this.queueId,\n            this.offsetCache.size(), this.offsetCache.firstEntry(), this.offsetCache.lastEntry(),\n            this.timeCache.size(), this.timeCache.firstEntry(), this.timeCache.lastEntry());\n    }",
+        "position": {
+            "line": 139,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isSearchBcqByCacheEnable",
+                "position": {
+                    "line": 140,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 140,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 146,
+                    "column": 56
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 148,
+                    "column": 41
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 149,
+                    "column": 42
+                }
+            },
+            {
+                "name": "isNewFile",
+                "position": {
+                    "line": 150,
+                    "column": 17
+                }
+            },
+            {
+                "name": "apply",
+                "position": {
+                    "line": 154,
+                    "column": 54
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 158,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getMsgOffset",
+                "position": {
+                    "line": 158,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getMappedFile",
+                "position": {
+                    "line": 158,
+                    "column": 62
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 159,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 159,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getMappedFile",
+                "position": {
+                    "line": 159,
+                    "column": 65
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 165,
+                    "column": 13
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 168,
+                    "column": 30
+                }
+            },
+            {
+                "name": "firstEntry",
+                "position": {
+                    "line": 168,
+                    "column": 55
+                }
+            },
+            {
+                "name": "lastEntry",
+                "position": {
+                    "line": 168,
+                    "column": 86
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 169,
+                    "column": 28
+                }
+            },
+            {
+                "name": "firstEntry",
+                "position": {
+                    "line": 169,
+                    "column": 51
+                }
+            },
+            {
+                "name": "lastEntry",
+                "position": {
+                    "line": 169,
+                    "column": 80
+                }
+            },
+            {
+                "name": "ConcurrentSkipListMap<>",
+                "position": {
+                    "line": 143,
+                    "column": 70
+                }
+            },
+            {
+                "name": "ConcurrentSkipListMap<>",
+                "position": {
+                    "line": 144,
+                    "column": 68
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.isNewFile(MappedFile mappedFile)"
+        ],
+        "priority": 57
+    },
+    {
+        "name": "refreshCache",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "refreshCache()",
+        "class_signature": "BatchConsumeQueue.refreshCache()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        doRefreshCache(m -> getMinMsgOffset(m, false, true));\n    }",
+        "position": {
+            "line": 172,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "doRefreshCache",
+                "position": {
+                    "line": 173,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getMinMsgOffset",
+                "position": {
+                    "line": 173,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.doRefreshCache(Function<MappedFile, BatchOffsetIndex> offsetFunction)",
+            "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)"
+        ],
+        "priority": 49
+    },
+    {
+        "name": "destroyCache",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "destroyCache()",
+        "class_signature": "BatchConsumeQueue.destroyCache()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        this.offsetCache.clear();\n        this.timeCache.clear();\n\n        log.info(\"BCQ [Topic: {}, QueueId: {}]. Cache destroyed\", this.topic, this.queueId);\n    }",
+        "position": {
+            "line": 176,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "clear",
+                "position": {
+                    "line": 177,
+                    "column": 26
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 178,
+                    "column": 24
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 180,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 44
+    },
+    {
+        "name": "cacheBcq",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "cacheBcq(MappedFile bcq)",
+        "class_signature": "BatchConsumeQueue.cacheBcq(MappedFile bcq)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MappedFile",
+                "bcq"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            BatchOffsetIndex min = getMinMsgOffset(bcq, false, true);\n            this.offsetCache.put(min.getMsgOffset(), min.getMappedFile());\n            this.timeCache.put(min.getStoreTimestamp(), min.getMappedFile());\n        } catch (Exception e) {\n            log.error(\"Failed caching offset and time on BCQ [Topic: {}, QueueId: {}, File: {}]\", this.topic, this.queueId, bcq);\n        }\n    }",
+        "position": {
+            "line": 183,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMinMsgOffset",
+                "position": {
+                    "line": 185,
+                    "column": 36
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 186,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getMsgOffset",
+                "position": {
+                    "line": 186,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getMappedFile",
+                "position": {
+                    "line": 186,
+                    "column": 58
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 187,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 187,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getMappedFile",
+                "position": {
+                    "line": 187,
+                    "column": 61
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 189,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)"
+        ],
+        "priority": 51
+    },
+    {
+        "name": "isNewFile",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "isNewFile(MappedFile mappedFile)",
+        "class_signature": "BatchConsumeQueue.isNewFile(MappedFile mappedFile)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MappedFile",
+                "mappedFile"
+            ]
+        ],
+        "methodBody": "{\n        return mappedFile.getReadPosition() < CQ_STORE_UNIT_SIZE;\n    }",
+        "position": {
+            "line": 193,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getReadPosition",
+                "position": {
+                    "line": 194,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 60
+    },
+    {
+        "name": "searchOffsetFromCache",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "searchOffsetFromCache(long msgOffset)",
+        "class_signature": "BatchConsumeQueue.searchOffsetFromCache(long msgOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "msgOffset"
+            ]
+        ],
+        "methodBody": "{\n        Map.Entry<Long, MappedFile> floorEntry = this.offsetCache.floorEntry(msgOffset);\n        if (floorEntry == null) {\n            // the offset is too small.\n            return null;\n        } else {\n            return floorEntry.getValue();\n        }\n    }",
+        "position": {
+            "line": 197,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "floorEntry",
+                "position": {
+                    "line": 198,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 203,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 61
+    },
+    {
+        "name": "searchTimeFromCache",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "searchTimeFromCache(long time)",
+        "class_signature": "BatchConsumeQueue.searchTimeFromCache(long time)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "time"
+            ]
+        ],
+        "methodBody": "{\n        Map.Entry<Long, MappedFile> floorEntry = this.timeCache.floorEntry(time);\n        if (floorEntry == null) {\n            // the timestamp is too small. so we decide to result first BCQ file.\n            return this.mappedFileQueue.getFirstMappedFile();\n        } else {\n            return floorEntry.getValue();\n        }\n    }",
+        "position": {
+            "line": 207,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "floorEntry",
+                "position": {
+                    "line": 208,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getFirstMappedFile",
+                "position": {
+                    "line": 211,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 213,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 52
+    },
+    {
+        "name": "recover",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "recover()",
+        "class_signature": "BatchConsumeQueue.recover()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        final List<MappedFile> mappedFiles = this.mappedFileQueue.getMappedFiles();\n        if (!mappedFiles.isEmpty()) {\n            int index = mappedFiles.size() - 3;\n            if (index < 0)\n                index = 0;\n\n            int mappedFileSizeLogics = this.mappedFileSize;\n            MappedFile mappedFile = mappedFiles.get(index);\n            ByteBuffer byteBuffer = mappedFile.sliceByteBuffer();\n            long processOffset = mappedFile.getFileFromOffset();\n            long mappedFileOffset = 0;\n            while (true) {\n                for (int i = 0; i < mappedFileSizeLogics; i += CQ_STORE_UNIT_SIZE) {\n                    byteBuffer.position(i);\n                    long offset = byteBuffer.getLong();\n                    int size = byteBuffer.getInt();\n                    byteBuffer.getLong();//tagscode\n                    byteBuffer.getLong();//timestamp\n                    long msgBaseOffset = byteBuffer.getLong();\n                    short batchSize = byteBuffer.getShort();\n                    if (offset >= 0 && size > 0 && msgBaseOffset >= 0 && batchSize > 0) {\n                        mappedFileOffset = i + CQ_STORE_UNIT_SIZE;\n                        this.maxMsgPhyOffsetInCommitLog = offset;\n                    } else {\n                        log.info(\"Recover current batch consume queue file over, file:{} offset:{} size:{} msgBaseOffset:{} batchSize:{} mappedFileOffset:{}\",\n                            mappedFile.getFileName(), offset, size, msgBaseOffset, batchSize, mappedFileOffset);\n                        break;\n                    }\n                }\n\n                if (mappedFileOffset == mappedFileSizeLogics) {\n                    index++;\n                    if (index >= mappedFiles.size()) {\n                        log.info(\"Recover last batch consume queue file over, last mapped file:{} \", mappedFile.getFileName());\n                        break;\n                    } else {\n                        mappedFile = mappedFiles.get(index);\n                        byteBuffer = mappedFile.sliceByteBuffer();\n                        processOffset = mappedFile.getFileFromOffset();\n                        mappedFileOffset = 0;\n                        log.info(\"Recover next batch consume queue file: \" + mappedFile.getFileName());\n                    }\n                } else {\n                    log.info(\"Recover current batch consume queue file over:{} processOffset:{}\", mappedFile.getFileName(), processOffset + mappedFileOffset);\n                    break;\n                }\n            }\n            processOffset += mappedFileOffset;\n            this.mappedFileQueue.setFlushedWhere(processOffset);\n            this.mappedFileQueue.setCommittedWhere(processOffset);\n            this.mappedFileQueue.truncateDirtyFiles(processOffset);\n            reviseMaxAndMinOffsetInQueue();\n        }\n    }",
+        "position": {
+            "line": 218,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 219,
+                    "column": 67
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 220,
+                    "column": 26
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 221,
+                    "column": 37
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 226,
+                    "column": 49
+                }
+            },
+            {
+                "name": "sliceByteBuffer",
+                "position": {
+                    "line": 227,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getFileFromOffset",
+                "position": {
+                    "line": 228,
+                    "column": 45
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 232,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 233,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 234,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 235,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 236,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 237,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getShort",
+                "position": {
+                    "line": 238,
+                    "column": 50
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 243,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getFileName",
+                "position": {
+                    "line": 244,
+                    "column": 40
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 251,
+                    "column": 46
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 252,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getFileName",
+                "position": {
+                    "line": 252,
+                    "column": 113
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 255,
+                    "column": 50
+                }
+            },
+            {
+                "name": "sliceByteBuffer",
+                "position": {
+                    "line": 256,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getFileFromOffset",
+                "position": {
+                    "line": 257,
+                    "column": 52
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 259,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getFileName",
+                "position": {
+                    "line": 259,
+                    "column": 89
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 262,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getFileName",
+                "position": {
+                    "line": 262,
+                    "column": 110
+                }
+            },
+            {
+                "name": "setFlushedWhere",
+                "position": {
+                    "line": 267,
+                    "column": 34
+                }
+            },
+            {
+                "name": "setCommittedWhere",
+                "position": {
+                    "line": 268,
+                    "column": 34
+                }
+            },
+            {
+                "name": "truncateDirtyFiles",
+                "position": {
+                    "line": 269,
+                    "column": 34
+                }
+            },
+            {
+                "name": "reviseMaxAndMinOffsetInQueue",
+                "position": {
+                    "line": 270,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.reviseMaxAndMinOffsetInQueue()"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "reviseMinOffsetInQueue",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "reviseMinOffsetInQueue()",
+        "class_signature": "BatchConsumeQueue.reviseMinOffsetInQueue()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        MappedFile firstMappedFile = this.mappedFileQueue.getFirstMappedFile();\n        if (null == firstMappedFile) {\n            maxOffsetInQueue = 0;\n            minOffsetInQueue = -1;\n            minLogicOffset = -1;\n            log.info(\"reviseMinOffsetInQueue found firstMappedFile null, topic:{} queue:{}\", topic, queueId);\n            return;\n        }\n        minLogicOffset = firstMappedFile.getFileFromOffset();\n        BatchOffsetIndex min = getMinMsgOffset(firstMappedFile, false, false);\n        minOffsetInQueue = null == min ? -1 : min.getMsgOffset();\n    }",
+        "position": {
+            "line": 274,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getFirstMappedFile",
+                "position": {
+                    "line": 275,
+                    "column": 59
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 280,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getFileFromOffset",
+                "position": {
+                    "line": 283,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getMinMsgOffset",
+                "position": {
+                    "line": 284,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getMsgOffset",
+                "position": {
+                    "line": 285,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)"
+        ],
+        "priority": 50
+    },
+    {
+        "name": "reviseMaxOffsetInQueue",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "reviseMaxOffsetInQueue()",
+        "class_signature": "BatchConsumeQueue.reviseMaxOffsetInQueue()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        MappedFile lastMappedFile = this.mappedFileQueue.getLastMappedFile();\n        BatchOffsetIndex max = getMaxMsgOffset(lastMappedFile, true, false);\n        if (null == max && this.mappedFileQueue.getMappedFiles().size() >= 2) {\n            MappedFile lastTwoMappedFile = this.mappedFileQueue.getMappedFiles().get(this.mappedFileQueue.getMappedFiles().size() - 2);\n            max = getMaxMsgOffset(lastTwoMappedFile, true, false);\n        }\n        maxOffsetInQueue = (null == max) ? 0 : max.getMsgOffset() + max.getBatchSize();\n    }",
+        "position": {
+            "line": 288,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLastMappedFile",
+                "position": {
+                    "line": 289,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getMaxMsgOffset",
+                "position": {
+                    "line": 290,
+                    "column": 32
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 291,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 291,
+                    "column": 49
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 292,
+                    "column": 82
+                }
+            },
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 292,
+                    "column": 65
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 292,
+                    "column": 124
+                }
+            },
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 292,
+                    "column": 107
+                }
+            },
+            {
+                "name": "getMaxMsgOffset",
+                "position": {
+                    "line": 293,
+                    "column": 19
+                }
+            },
+            {
+                "name": "getMsgOffset",
+                "position": {
+                    "line": 295,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getBatchSize",
+                "position": {
+                    "line": 295,
+                    "column": 73
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getMaxMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+            "BatchConsumeQueue.getMaxMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)"
+        ],
+        "priority": 48
+    },
+    {
+        "name": "reviseMaxAndMinOffsetInQueue",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "reviseMaxAndMinOffsetInQueue()",
+        "class_signature": "BatchConsumeQueue.reviseMaxAndMinOffsetInQueue()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        reviseMinOffsetInQueue();\n        reviseMaxOffsetInQueue();\n    }",
+        "position": {
+            "line": 298,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "reviseMinOffsetInQueue",
+                "position": {
+                    "line": 299,
+                    "column": 9
+                }
+            },
+            {
+                "name": "reviseMaxOffsetInQueue",
+                "position": {
+                    "line": 300,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.reviseMinOffsetInQueue()",
+            "BatchConsumeQueue.reviseMaxOffsetInQueue()"
+        ],
+        "priority": 36
+    },
+    {
+        "name": "getMaxPhysicOffset",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getMaxPhysicOffset()",
+        "class_signature": "BatchConsumeQueue.getMaxPhysicOffset()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return maxMsgPhyOffsetInCommitLog;\n    }",
+        "position": {
+            "line": 304,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "getMinLogicOffset",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getMinLogicOffset()",
+        "class_signature": "BatchConsumeQueue.getMinLogicOffset()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return minLogicOffset;\n    }",
+        "position": {
+            "line": 309,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "iterateFrom",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "iterateFrom(long startOffset)",
+        "class_signature": "BatchConsumeQueue.iterateFrom(long startOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "startOffset"
+            ]
+        ],
+        "methodBody": "{\n        SelectMappedBufferResult sbr = getBatchMsgIndexBuffer(startOffset);\n        if (sbr == null) {\n            return null;\n        }\n        return new BatchConsumeQueueIterator(sbr);\n    }",
+        "position": {
+            "line": 314,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getBatchMsgIndexBuffer",
+                "position": {
+                    "line": 315,
+                    "column": 40
+                }
+            },
+            {
+                "name": "BatchConsumeQueueIterator",
+                "position": {
+                    "line": 319,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getBatchMsgIndexBuffer(long msgOffset)",
+            "BatchConsumeQueueIterator.BatchConsumeQueueIterator(SelectMappedBufferResult sbr)"
+        ],
+        "priority": 56
+    },
+    {
+        "name": "iterateFrom",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "iterateFrom(long startIndex, int count)",
+        "class_signature": "BatchConsumeQueue.iterateFrom(long startIndex, int count)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "startIndex"
+            ],
+            [
+                "int",
+                "count"
+            ]
+        ],
+        "methodBody": "{\n        return iterateFrom(startIndex);\n    }",
+        "position": {
+            "line": 323,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "iterateFrom",
+                "position": {
+                    "line": 324,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.iterateFrom(long startOffset)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "get",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "get(long offset)",
+        "class_signature": "BatchConsumeQueue.get(long offset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "offset"
+            ]
+        ],
+        "methodBody": "{\n        ReferredIterator<CqUnit> it = iterateFrom(offset);\n        if (it == null) {\n            return null;\n        }\n        return it.nextAndRelease();\n    }",
+        "position": {
+            "line": 328,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "iterateFrom",
+                "position": {
+                    "line": 329,
+                    "column": 39
+                }
+            },
+            {
+                "name": "nextAndRelease",
+                "position": {
+                    "line": 333,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.iterateFrom(long startOffset)"
+        ],
+        "priority": 47
+    },
+    {
+        "name": "getCqUnitAndStoreTime",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getCqUnitAndStoreTime(long index)",
+        "class_signature": "BatchConsumeQueue.getCqUnitAndStoreTime(long index)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "index"
+            ]
+        ],
+        "methodBody": "{\n        CqUnit cqUnit = get(index);\n        Long messageStoreTime = this.consumeQueueStore.getStoreTime(cqUnit);\n        return new Pair<>(cqUnit, messageStoreTime);\n    }",
+        "position": {
+            "line": 337,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 338,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getStoreTime",
+                "position": {
+                    "line": 339,
+                    "column": 56
+                }
+            },
+            {
+                "name": "Pair<>",
+                "position": {
+                    "line": 340,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.get(long offset)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "getEarliestUnitAndStoreTime",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getEarliestUnitAndStoreTime()",
+        "class_signature": "BatchConsumeQueue.getEarliestUnitAndStoreTime()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        CqUnit cqUnit = getEarliestUnit();\n        Long messageStoreTime = this.consumeQueueStore.getStoreTime(cqUnit);\n        return new Pair<>(cqUnit, messageStoreTime);\n    }",
+        "position": {
+            "line": 344,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getEarliestUnit",
+                "position": {
+                    "line": 345,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getStoreTime",
+                "position": {
+                    "line": 346,
+                    "column": 56
+                }
+            },
+            {
+                "name": "Pair<>",
+                "position": {
+                    "line": 347,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getEarliestUnit()"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "getEarliestUnit",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getEarliestUnit()",
+        "class_signature": "BatchConsumeQueue.getEarliestUnit()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return get(minOffsetInQueue);\n    }",
+        "position": {
+            "line": 351,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 352,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.get(long offset)"
+        ],
+        "priority": 34
+    },
+    {
+        "name": "getLatestUnit",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getLatestUnit()",
+        "class_signature": "BatchConsumeQueue.getLatestUnit()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return get(maxOffsetInQueue - 1);\n    }",
+        "position": {
+            "line": 356,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 357,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.get(long offset)"
+        ],
+        "priority": 35
+    },
+    {
+        "name": "getLastOffset",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getLastOffset()",
+        "class_signature": "BatchConsumeQueue.getLastOffset()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        CqUnit latestUnit = getLatestUnit();\n        return latestUnit.getPos() + latestUnit.getSize();\n    }",
+        "position": {
+            "line": 361,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLatestUnit",
+                "position": {
+                    "line": 362,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getPos",
+                "position": {
+                    "line": 363,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getSize",
+                "position": {
+                    "line": 363,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getLatestUnit()"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "isFirstFileAvailable",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "isFirstFileAvailable()",
+        "class_signature": "BatchConsumeQueue.isFirstFileAvailable()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        MappedFile mappedFile = this.mappedFileQueue.getFirstMappedFile();\n        if (mappedFile != null) {\n            return mappedFile.isAvailable();\n        }\n        return false;\n    }",
+        "position": {
+            "line": 367,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getFirstMappedFile",
+                "position": {
+                    "line": 368,
+                    "column": 54
+                }
+            },
+            {
+                "name": "isAvailable",
+                "position": {
+                    "line": 370,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "isFirstFileExist",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "isFirstFileExist()",
+        "class_signature": "BatchConsumeQueue.isFirstFileExist()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        MappedFile mappedFile = this.mappedFileQueue.getFirstMappedFile();\n        return mappedFile != null;\n    }",
+        "position": {
+            "line": 376,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getFirstMappedFile",
+                "position": {
+                    "line": 377,
+                    "column": 54
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 12
+    },
+    {
+        "name": "truncateDirtyLogicFiles",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "truncateDirtyLogicFiles(long phyOffset)",
+        "class_signature": "BatchConsumeQueue.truncateDirtyLogicFiles(long phyOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "phyOffset"
+            ]
+        ],
+        "methodBody": "{\n\n        long oldMinOffset = minOffsetInQueue;\n        long oldMaxOffset = maxOffsetInQueue;\n\n        int logicFileSize = this.mappedFileSize;\n\n        this.maxMsgPhyOffsetInCommitLog = phyOffset - 1;\n        boolean stop = false;\n        while (!stop) {\n            MappedFile mappedFile = this.mappedFileQueue.getLastMappedFile();\n            if (mappedFile != null) {\n                ByteBuffer byteBuffer = mappedFile.sliceByteBuffer();\n\n                mappedFile.setWrotePosition(0);\n                mappedFile.setCommittedPosition(0);\n                mappedFile.setFlushedPosition(0);\n\n                for (int i = 0; i < logicFileSize; i += CQ_STORE_UNIT_SIZE) {\n                    byteBuffer.position(i);\n                    long offset = byteBuffer.getLong();\n                    int size = byteBuffer.getInt();\n                    byteBuffer.getLong();//tagscode\n                    byteBuffer.getLong();//timestamp\n                    long msgBaseOffset = byteBuffer.getLong();\n                    short batchSize = byteBuffer.getShort();\n\n                    if (0 == i) {\n                        if (offset >= phyOffset) {\n                            this.mappedFileQueue.deleteLastMappedFile();\n                            break;\n                        } else {\n                            int pos = i + CQ_STORE_UNIT_SIZE;\n                            mappedFile.setWrotePosition(pos);\n                            mappedFile.setCommittedPosition(pos);\n                            mappedFile.setFlushedPosition(pos);\n                            this.maxMsgPhyOffsetInCommitLog = offset;\n                        }\n                    } else {\n                        if (offset >= 0 && size > 0 && msgBaseOffset >= 0 && batchSize > 0) {\n                            if (offset >= phyOffset) {\n                                stop = true;\n                                break;\n                            }\n\n                            int pos = i + CQ_STORE_UNIT_SIZE;\n                            mappedFile.setWrotePosition(pos);\n                            mappedFile.setCommittedPosition(pos);\n                            mappedFile.setFlushedPosition(pos);\n                            this.maxMsgPhyOffsetInCommitLog = offset;\n                            if (pos == logicFileSize) {\n                                stop = true;\n                                break;\n                            }\n                        } else {\n                            stop = true;\n                            break;\n                        }\n                    }\n                }\n            } else {\n                break;\n            }\n        }\n        reviseMaxAndMinOffsetInQueue();\n        log.info(\"Truncate batch logic file topic={} queue={} oldMinOffset={} oldMaxOffset={} minOffset={} maxOffset={} maxPhyOffsetHere={} maxPhyOffsetThere={}\",\n            topic, queueId, oldMinOffset, oldMaxOffset, minOffsetInQueue, maxOffsetInQueue, maxMsgPhyOffsetInCommitLog, phyOffset);\n    }",
+        "position": {
+            "line": 382,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLastMappedFile",
+                "position": {
+                    "line": 392,
+                    "column": 58
+                }
+            },
+            {
+                "name": "sliceByteBuffer",
+                "position": {
+                    "line": 394,
+                    "column": 52
+                }
+            },
+            {
+                "name": "setWrotePosition",
+                "position": {
+                    "line": 396,
+                    "column": 28
+                }
+            },
+            {
+                "name": "setCommittedPosition",
+                "position": {
+                    "line": 397,
+                    "column": 28
+                }
+            },
+            {
+                "name": "setFlushedPosition",
+                "position": {
+                    "line": 398,
+                    "column": 28
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 401,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 402,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 403,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 404,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 405,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 406,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getShort",
+                "position": {
+                    "line": 407,
+                    "column": 50
+                }
+            },
+            {
+                "name": "deleteLastMappedFile",
+                "position": {
+                    "line": 411,
+                    "column": 50
+                }
+            },
+            {
+                "name": "setWrotePosition",
+                "position": {
+                    "line": 415,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setCommittedPosition",
+                "position": {
+                    "line": 416,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setFlushedPosition",
+                "position": {
+                    "line": 417,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setWrotePosition",
+                "position": {
+                    "line": 428,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setCommittedPosition",
+                "position": {
+                    "line": 429,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setFlushedPosition",
+                "position": {
+                    "line": 430,
+                    "column": 40
+                }
+            },
+            {
+                "name": "reviseMaxAndMinOffsetInQueue",
+                "position": {
+                    "line": 446,
+                    "column": 9
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 447,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.reviseMaxAndMinOffsetInQueue()"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "flush",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "flush(int flushLeastPages)",
+        "class_signature": "BatchConsumeQueue.flush(int flushLeastPages)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "flushLeastPages"
+            ]
+        ],
+        "methodBody": "{\n        boolean result = this.mappedFileQueue.flush(flushLeastPages);\n        return result;\n    }",
+        "position": {
+            "line": 452,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "flush",
+                "position": {
+                    "line": 453,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "deleteExpiredFile",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "deleteExpiredFile(long minCommitLogPos)",
+        "class_signature": "BatchConsumeQueue.deleteExpiredFile(long minCommitLogPos)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "minCommitLogPos"
+            ]
+        ],
+        "methodBody": "{\n        int cnt = this.mappedFileQueue.deleteExpiredFileByOffset(minCommitLogPos, CQ_STORE_UNIT_SIZE);\n        this.correctMinOffset(minCommitLogPos);\n        return cnt;\n    }",
+        "position": {
+            "line": 458,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "deleteExpiredFileByOffset",
+                "position": {
+                    "line": 459,
+                    "column": 40
+                }
+            },
+            {
+                "name": "correctMinOffset",
+                "position": {
+                    "line": 460,
+                    "column": 14
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.correctMinOffset(long phyMinOffset)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "correctMinOffset",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "correctMinOffset(long phyMinOffset)",
+        "class_signature": "BatchConsumeQueue.correctMinOffset(long phyMinOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "phyMinOffset"
+            ]
+        ],
+        "methodBody": "{\n        reviseMinOffsetInQueue();\n        refreshCache();\n        long oldMinOffset = minOffsetInQueue;\n        MappedFile mappedFile = this.mappedFileQueue.getFirstMappedFile();\n        if (mappedFile != null) {\n            SelectMappedBufferResult result = mappedFile.selectMappedBuffer(0);\n            if (result != null) {\n                try {\n                    int startPos = result.getByteBuffer().position();\n                    for (int i = 0; i < result.getSize(); i += BatchConsumeQueue.CQ_STORE_UNIT_SIZE) {\n                        result.getByteBuffer().position(startPos + i);\n                        long offsetPy = result.getByteBuffer().getLong();\n                        result.getByteBuffer().getInt(); //size\n                        result.getByteBuffer().getLong();//tagscode\n                        result.getByteBuffer().getLong();//timestamp\n                        long msgBaseOffset = result.getByteBuffer().getLong();\n                        short batchSize = result.getByteBuffer().getShort();\n\n                        if (offsetPy < phyMinOffset) {\n                            this.minOffsetInQueue = msgBaseOffset + batchSize;\n                        } else {\n                            break;\n                        }\n                    }\n                } catch (Exception e) {\n                    log.error(\"Exception thrown when correctMinOffset\", e);\n                } finally {\n                    result.release();\n                }\n            } else {\n                /**\n                 *  It will go to here under two conditions:\n                 1. the files number is 1, and it has no data\n                 2. the pull process hold the cq reference, and release it just the moment\n                 */\n                log.warn(\"Correct min offset found null cq file topic:{} queue:{} files:{} minOffset:{} maxOffset:{}\",\n                    topic, queueId, this.mappedFileQueue.getMappedFiles().size(), minOffsetInQueue, maxOffsetInQueue);\n            }\n        }\n        if (oldMinOffset != this.minOffsetInQueue) {\n            log.info(\"BatchCQ Compute new minOffset:{} oldMinOffset{} topic:{} queue:{}\", minOffsetInQueue, oldMinOffset, topic, queueId);\n        }\n    }",
+        "position": {
+            "line": 465,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "reviseMinOffsetInQueue",
+                "position": {
+                    "line": 466,
+                    "column": 9
+                }
+            },
+            {
+                "name": "refreshCache",
+                "position": {
+                    "line": 467,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getFirstMappedFile",
+                "position": {
+                    "line": 469,
+                    "column": 54
+                }
+            },
+            {
+                "name": "selectMappedBuffer",
+                "position": {
+                    "line": 471,
+                    "column": 58
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 474,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 474,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getSize",
+                "position": {
+                    "line": 475,
+                    "column": 48
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 476,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 476,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 477,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 477,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 478,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 478,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 479,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 479,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 480,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 480,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 481,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 481,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getShort",
+                "position": {
+                    "line": 482,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 482,
+                    "column": 50
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 491,
+                    "column": 25
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 493,
+                    "column": 28
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 501,
+                    "column": 21
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 502,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 502,
+                    "column": 58
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 506,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.reviseMinOffsetInQueue()",
+            "BatchConsumeQueue.refreshCache()"
+        ],
+        "priority": 37
+    },
+    {
+        "name": "putMessagePositionInfoWrapper",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "putMessagePositionInfoWrapper(DispatchRequest request)",
+        "class_signature": "BatchConsumeQueue.putMessagePositionInfoWrapper(DispatchRequest request)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "DispatchRequest",
+                "request"
+            ]
+        ],
+        "methodBody": "{\n        final int maxRetries = 30;\n        boolean canWrite = this.messageStore.getRunningFlags().isCQWriteable();\n        if (request.getMsgBaseOffset() < 0 || request.getBatchSize() < 0) {\n            log.warn(\"[NOTIFYME]unexpected dispatch request in batch consume queue topic:{} queue:{} offset:{}\", topic, queueId, request.getCommitLogOffset());\n            return;\n        }\n        for (int i = 0; i < maxRetries && canWrite; i++) {\n            boolean result = this.putBatchMessagePositionInfo(request.getCommitLogOffset(),\n                request.getMsgSize(), request.getTagsCode(),\n                request.getStoreTimestamp(), request.getMsgBaseOffset(), request.getBatchSize());\n            if (result) {\n                if (BrokerRole.SLAVE == this.messageStore.getMessageStoreConfig().getBrokerRole()) {\n                    this.messageStore.getStoreCheckpoint().setPhysicMsgTimestamp(request.getStoreTimestamp());\n                }\n                this.messageStore.getStoreCheckpoint().setLogicsMsgTimestamp(request.getStoreTimestamp());\n                return;\n            } else {\n                // XXX: warn and notify me\n                log.warn(\"[NOTIFYME]put commit log position info to batch consume queue \" + topic + \":\" + queueId + \" \" + request.getCommitLogOffset()\n                    + \" failed, retry \" + i + \" times\");\n\n                try {\n                    Thread.sleep(1000);\n                } catch (InterruptedException e) {\n                    log.warn(\"\", e);\n                }\n            }\n        }\n        // XXX: warn and notify me\n        log.error(\"[NOTIFYME]batch consume queue can not write, {} {}\", this.topic, this.queueId);\n        this.messageStore.getRunningFlags().makeLogicsQueueError();\n    }",
+        "position": {
+            "line": 511,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isCQWriteable",
+                "position": {
+                    "line": 513,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getRunningFlags",
+                "position": {
+                    "line": 513,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getMsgBaseOffset",
+                "position": {
+                    "line": 514,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getBatchSize",
+                "position": {
+                    "line": 514,
+                    "column": 55
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 515,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getCommitLogOffset",
+                "position": {
+                    "line": 515,
+                    "column": 138
+                }
+            },
+            {
+                "name": "putBatchMessagePositionInfo",
+                "position": {
+                    "line": 519,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getCommitLogOffset",
+                "position": {
+                    "line": 519,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getMsgSize",
+                "position": {
+                    "line": 520,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getTagsCode",
+                "position": {
+                    "line": 520,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 521,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getMsgBaseOffset",
+                "position": {
+                    "line": 521,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getBatchSize",
+                "position": {
+                    "line": 521,
+                    "column": 82
+                }
+            },
+            {
+                "name": "getBrokerRole",
+                "position": {
+                    "line": 523,
+                    "column": 83
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 523,
+                    "column": 59
+                }
+            },
+            {
+                "name": "setPhysicMsgTimestamp",
+                "position": {
+                    "line": 524,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getStoreCheckpoint",
+                "position": {
+                    "line": 524,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 524,
+                    "column": 90
+                }
+            },
+            {
+                "name": "setLogicsMsgTimestamp",
+                "position": {
+                    "line": 526,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getStoreCheckpoint",
+                "position": {
+                    "line": 526,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 526,
+                    "column": 86
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 530,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getCommitLogOffset",
+                "position": {
+                    "line": 530,
+                    "column": 131
+                }
+            },
+            {
+                "name": "sleep",
+                "position": {
+                    "line": 534,
+                    "column": 28
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 536,
+                    "column": 25
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 541,
+                    "column": 13
+                }
+            },
+            {
+                "name": "makeLogicsQueueError",
+                "position": {
+                    "line": 542,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getRunningFlags",
+                "position": {
+                    "line": 542,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.putBatchMessagePositionInfo(long offset, int size, long tagsCode, long storeTime, long msgBaseOffset, short batchSize)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "assignQueueOffset",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "assignQueueOffset(QueueOffsetOperator queueOffsetOperator, MessageExtBrokerInner msg)",
+        "class_signature": "BatchConsumeQueue.assignQueueOffset(QueueOffsetOperator queueOffsetOperator, MessageExtBrokerInner msg)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "QueueOffsetOperator",
+                "queueOffsetOperator"
+            ],
+            [
+                "MessageExtBrokerInner",
+                "msg"
+            ]
+        ],
+        "methodBody": "{\n        String topicQueueKey = getTopic() + \"-\" + getQueueId();\n\n        long queueOffset = queueOffsetOperator.getBatchQueueOffset(topicQueueKey);\n\n        if (MessageSysFlag.check(msg.getSysFlag(), MessageSysFlag.INNER_BATCH_FLAG)) {\n            MessageAccessor.putProperty(msg, MessageConst.PROPERTY_INNER_BASE, String.valueOf(queueOffset));\n            msg.setPropertiesString(MessageDecoder.messageProperties2String(msg.getProperties()));\n        }\n        msg.setQueueOffset(queueOffset);\n    }",
+        "position": {
+            "line": 546,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 547,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 547,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getBatchQueueOffset",
+                "position": {
+                    "line": 549,
+                    "column": 48
+                }
+            },
+            {
+                "name": "check",
+                "position": {
+                    "line": 551,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getSysFlag",
+                "position": {
+                    "line": 551,
+                    "column": 38
+                }
+            },
+            {
+                "name": "putProperty",
+                "position": {
+                    "line": 552,
+                    "column": 29
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 552,
+                    "column": 87
+                }
+            },
+            {
+                "name": "setPropertiesString",
+                "position": {
+                    "line": 553,
+                    "column": 17
+                }
+            },
+            {
+                "name": "messageProperties2String",
+                "position": {
+                    "line": 553,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getProperties",
+                "position": {
+                    "line": 553,
+                    "column": 81
+                }
+            },
+            {
+                "name": "setQueueOffset",
+                "position": {
+                    "line": 555,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getTopic()",
+            "BatchConsumeQueue.getQueueId()"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "increaseQueueOffset",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "increaseQueueOffset(QueueOffsetOperator queueOffsetOperator, MessageExtBrokerInner msg, short messageNum)",
+        "class_signature": "BatchConsumeQueue.increaseQueueOffset(QueueOffsetOperator queueOffsetOperator, MessageExtBrokerInner msg, short messageNum)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "QueueOffsetOperator",
+                "queueOffsetOperator"
+            ],
+            [
+                "MessageExtBrokerInner",
+                "msg"
+            ],
+            [
+                "short",
+                "messageNum"
+            ]
+        ],
+        "methodBody": "{\n        String topicQueueKey = getTopic() + \"-\" + getQueueId();\n        queueOffsetOperator.increaseBatchQueueOffset(topicQueueKey, messageNum);\n    }",
+        "position": {
+            "line": 559,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 561,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 561,
+                    "column": 51
+                }
+            },
+            {
+                "name": "increaseBatchQueueOffset",
+                "position": {
+                    "line": 562,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getTopic()",
+            "BatchConsumeQueue.getQueueId()"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "putBatchMessagePositionInfo",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "putBatchMessagePositionInfo(long offset, int size, long tagsCode, long storeTime, long msgBaseOffset, short batchSize)",
+        "class_signature": "BatchConsumeQueue.putBatchMessagePositionInfo(long offset, int size, long tagsCode, long storeTime, long msgBaseOffset, short batchSize)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "offset"
+            ],
+            [
+                "int",
+                "size"
+            ],
+            [
+                "long",
+                "tagsCode"
+            ],
+            [
+                "long",
+                "storeTime"
+            ],
+            [
+                "long",
+                "msgBaseOffset"
+            ],
+            [
+                "short",
+                "batchSize"
+            ]
+        ],
+        "methodBody": "{\n\n        if (offset <= this.maxMsgPhyOffsetInCommitLog) {\n            if (System.currentTimeMillis() % 1000 == 0) {\n                log.warn(\"Build batch consume queue repeatedly, maxMsgPhyOffsetInCommitLog:{} offset:{} Topic: {} QID: {}\",\n                    maxMsgPhyOffsetInCommitLog, offset, this.topic, this.queueId);\n            }\n            return true;\n        }\n\n        long behind = System.currentTimeMillis() - storeTime;\n        if (behind > 10000 && System.currentTimeMillis() % 10000 == 0) {\n            String flag = \"LEVEL\" + (behind / 10000);\n            log.warn(\"Reput behind {} topic:{} queue:{} offset:{} behind:{}\", flag, topic, queueId, offset, behind);\n        }\n\n        this.byteBufferItem.flip();\n        this.byteBufferItem.limit(CQ_STORE_UNIT_SIZE);\n        this.byteBufferItem.putLong(offset);\n        this.byteBufferItem.putInt(size);\n        this.byteBufferItem.putLong(tagsCode);\n        this.byteBufferItem.putLong(storeTime);\n        this.byteBufferItem.putLong(msgBaseOffset);\n        this.byteBufferItem.putShort(batchSize);\n        this.byteBufferItem.putInt(INVALID_POS);\n        this.byteBufferItem.putInt(0); // 4 bytes reserved\n\n        MappedFile mappedFile = this.mappedFileQueue.getLastMappedFile(this.mappedFileQueue.getMaxOffset());\n        if (mappedFile != null) {\n            boolean isNewFile = isNewFile(mappedFile);\n            boolean appendRes;\n            if (messageStore.getMessageStoreConfig().isPutConsumeQueueDataByFileChannel()) {\n                appendRes = mappedFile.appendMessageUsingFileChannel(this.byteBufferItem.array());\n            } else {\n                appendRes = mappedFile.appendMessage(this.byteBufferItem.array());\n            }\n            if (appendRes) {\n                maxMsgPhyOffsetInCommitLog = offset;\n                maxOffsetInQueue = msgBaseOffset + batchSize;\n                //only the first time need to correct the minOffsetInQueue\n                //the other correctness is done in correctLogicMinoffsetService\n                if (mappedFile.isFirstCreateInQueue() && minOffsetInQueue == -1) {\n                    reviseMinOffsetInQueue();\n                }\n                if (isNewFile) {\n                    // cache new file\n                    this.cacheBcq(mappedFile);\n                }\n            }\n            return appendRes;\n        }\n        return false;\n    }",
+        "position": {
+            "line": 565,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 570,
+                    "column": 24
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 571,
+                    "column": 21
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 577,
+                    "column": 30
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 578,
+                    "column": 38
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 580,
+                    "column": 17
+                }
+            },
+            {
+                "name": "flip",
+                "position": {
+                    "line": 583,
+                    "column": 29
+                }
+            },
+            {
+                "name": "limit",
+                "position": {
+                    "line": 584,
+                    "column": 29
+                }
+            },
+            {
+                "name": "putLong",
+                "position": {
+                    "line": 585,
+                    "column": 29
+                }
+            },
+            {
+                "name": "putInt",
+                "position": {
+                    "line": 586,
+                    "column": 29
+                }
+            },
+            {
+                "name": "putLong",
+                "position": {
+                    "line": 587,
+                    "column": 29
+                }
+            },
+            {
+                "name": "putLong",
+                "position": {
+                    "line": 588,
+                    "column": 29
+                }
+            },
+            {
+                "name": "putLong",
+                "position": {
+                    "line": 589,
+                    "column": 29
+                }
+            },
+            {
+                "name": "putShort",
+                "position": {
+                    "line": 590,
+                    "column": 29
+                }
+            },
+            {
+                "name": "putInt",
+                "position": {
+                    "line": 591,
+                    "column": 29
+                }
+            },
+            {
+                "name": "putInt",
+                "position": {
+                    "line": 592,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getLastMappedFile",
+                "position": {
+                    "line": 594,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getMaxOffset",
+                "position": {
+                    "line": 594,
+                    "column": 93
+                }
+            },
+            {
+                "name": "isNewFile",
+                "position": {
+                    "line": 596,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isPutConsumeQueueDataByFileChannel",
+                "position": {
+                    "line": 598,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 598,
+                    "column": 30
+                }
+            },
+            {
+                "name": "appendMessageUsingFileChannel",
+                "position": {
+                    "line": 599,
+                    "column": 40
+                }
+            },
+            {
+                "name": "array",
+                "position": {
+                    "line": 599,
+                    "column": 90
+                }
+            },
+            {
+                "name": "appendMessage",
+                "position": {
+                    "line": 601,
+                    "column": 40
+                }
+            },
+            {
+                "name": "array",
+                "position": {
+                    "line": 601,
+                    "column": 74
+                }
+            },
+            {
+                "name": "isFirstCreateInQueue",
+                "position": {
+                    "line": 608,
+                    "column": 32
+                }
+            },
+            {
+                "name": "reviseMinOffsetInQueue",
+                "position": {
+                    "line": 609,
+                    "column": 21
+                }
+            },
+            {
+                "name": "cacheBcq",
+                "position": {
+                    "line": 613,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.isNewFile(MappedFile mappedFile)",
+            "BatchConsumeQueue.reviseMinOffsetInQueue()",
+            "BatchConsumeQueue.cacheBcq(MappedFile bcq)"
+        ],
+        "priority": 38
+    },
+    {
+        "name": "getMinMsgOffset",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+        "class_signature": "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MappedFile",
+                "mappedFile"
+            ],
+            [
+                "boolean",
+                "getBatchSize"
+            ],
+            [
+                "boolean",
+                "getStoreTime"
+            ]
+        ],
+        "methodBody": "{\n        if (mappedFile.getReadPosition() < CQ_STORE_UNIT_SIZE) {\n            return null;\n        }\n        return getBatchOffsetIndexByPos(mappedFile, 0, getBatchSize, getStoreTime);\n    }",
+        "position": {
+            "line": 621,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getReadPosition",
+                "position": {
+                    "line": 622,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getBatchOffsetIndexByPos",
+                "position": {
+                    "line": 625,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getBatchOffsetIndexByPos(MappedFile mappedFile, int pos, boolean getBatchSize, boolean getStoreTime)"
+        ],
+        "priority": 65
+    },
+    {
+        "name": "getBatchOffsetIndexByPos",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getBatchOffsetIndexByPos(MappedFile mappedFile, int pos, boolean getBatchSize, boolean getStoreTime)",
+        "class_signature": "BatchConsumeQueue.getBatchOffsetIndexByPos(MappedFile mappedFile, int pos, boolean getBatchSize, boolean getStoreTime)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MappedFile",
+                "mappedFile"
+            ],
+            [
+                "int",
+                "pos"
+            ],
+            [
+                "boolean",
+                "getBatchSize"
+            ],
+            [
+                "boolean",
+                "getStoreTime"
+            ]
+        ],
+        "methodBody": "{\n        SelectMappedBufferResult sbr = mappedFile.selectMappedBuffer(pos);\n        try {\n            return new BatchOffsetIndex(mappedFile, pos, sbr.getByteBuffer().getLong(MSG_BASE_OFFSET_INDEX),\n                getBatchSize ? sbr.getByteBuffer().getShort(MSG_BATCH_SIZE_INDEX) : 0,\n                getStoreTime ? sbr.getByteBuffer().getLong(MSG_STORE_TIME_OFFSET_INDEX) : 0);\n        } finally {\n            if (sbr != null) {\n                sbr.release();\n            }\n        }\n    }",
+        "position": {
+            "line": 628,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectMappedBuffer",
+                "position": {
+                    "line": 630,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 632,
+                    "column": 78
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 632,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getShort",
+                "position": {
+                    "line": 633,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 633,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 634,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 634,
+                    "column": 36
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 637,
+                    "column": 21
+                }
+            },
+            {
+                "name": "BatchOffsetIndex",
+                "position": {
+                    "line": 632,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 67
+    },
+    {
+        "name": "getMaxMsgOffset",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getMaxMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+        "class_signature": "BatchConsumeQueue.getMaxMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MappedFile",
+                "mappedFile"
+            ],
+            [
+                "boolean",
+                "getBatchSize"
+            ],
+            [
+                "boolean",
+                "getStoreTime"
+            ]
+        ],
+        "methodBody": "{\n        if (mappedFile == null || mappedFile.getReadPosition() < CQ_STORE_UNIT_SIZE) {\n            return null;\n        }\n        int pos = mappedFile.getReadPosition() - CQ_STORE_UNIT_SIZE;\n        return getBatchOffsetIndexByPos(mappedFile, pos, getBatchSize, getStoreTime);\n    }",
+        "position": {
+            "line": 642,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getReadPosition",
+                "position": {
+                    "line": 643,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getReadPosition",
+                "position": {
+                    "line": 646,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getBatchOffsetIndexByPos",
+                "position": {
+                    "line": 647,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getBatchOffsetIndexByPos(MappedFile mappedFile, int pos, boolean getBatchSize, boolean getStoreTime)"
+        ],
+        "priority": 63
+    },
+    {
+        "name": "ceil",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "ceil(int pos)",
+        "class_signature": "BatchConsumeQueue.ceil(int pos)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "pos"
+            ]
+        ],
+        "methodBody": "{\n        return (pos / CQ_STORE_UNIT_SIZE) * CQ_STORE_UNIT_SIZE;\n    }",
+        "position": {
+            "line": 650,
+            "column": 24
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 66
+    },
+    {
+        "name": "getBatchMsgIndexBuffer",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getBatchMsgIndexBuffer(long msgOffset)",
+        "class_signature": "BatchConsumeQueue.getBatchMsgIndexBuffer(long msgOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "msgOffset"
+            ]
+        ],
+        "methodBody": "{\n        if (msgOffset >= maxOffsetInQueue) {\n            return null;\n        }\n        MappedFile targetBcq;\n        BatchOffsetIndex targetMinOffset;\n\n        // first check the last bcq file\n        MappedFile lastBcq = mappedFileQueue.getLastMappedFile();\n        BatchOffsetIndex minForLastBcq = getMinMsgOffset(lastBcq, false, false);\n        if (null != minForLastBcq && minForLastBcq.getMsgOffset() <= msgOffset) {\n            // found, it's the last bcq.\n            targetBcq = lastBcq;\n            targetMinOffset = minForLastBcq;\n        } else {\n            boolean searchBcqByCacheEnable = this.messageStore.getMessageStoreConfig().isSearchBcqByCacheEnable();\n            if (searchBcqByCacheEnable) {\n                // it's not the last BCQ file, so search it through cache.\n                targetBcq = this.searchOffsetFromCache(msgOffset);\n                // not found in cache\n                if (targetBcq == null) {\n                    MappedFile firstBcq = mappedFileQueue.getFirstMappedFile();\n                    BatchOffsetIndex minForFirstBcq = getMinMsgOffset(firstBcq, false, false);\n                    if (minForFirstBcq != null && minForFirstBcq.getMsgOffset() <= msgOffset && msgOffset < minForLastBcq.getMsgOffset()) {\n                        // old search logic\n                        targetBcq = this.searchOffsetFromFiles(msgOffset);\n                    }\n                    log.warn(\"cache is not working on BCQ [Topic: {}, QueueId: {}] for msgOffset: {}, targetBcq: {}\", this.topic, this.queueId, msgOffset, targetBcq);\n                }\n            } else {\n                // old search logic\n                targetBcq = this.searchOffsetFromFiles(msgOffset);\n            }\n\n            if (targetBcq == null) {\n                return null;\n            }\n\n            targetMinOffset = getMinMsgOffset(targetBcq, false, false);\n        }\n\n        BatchOffsetIndex targetMaxOffset = getMaxMsgOffset(targetBcq, false, false);\n        if (null == targetMinOffset || null == targetMaxOffset) {\n            return null;\n        }\n\n        // then use binary search to find the indexed position\n        SelectMappedBufferResult sbr = targetMinOffset.getMappedFile().selectMappedBuffer(0);\n        try {\n            ByteBuffer byteBuffer = sbr.getByteBuffer();\n            int left = targetMinOffset.getIndexPos(), right = targetMaxOffset.getIndexPos();\n            int mid = binarySearch(byteBuffer, left, right, CQ_STORE_UNIT_SIZE, MSG_BASE_OFFSET_INDEX, msgOffset);\n            if (mid != -1) {\n                // return a buffer that needs to be released manually.\n                return targetMinOffset.getMappedFile().selectMappedBuffer(mid);\n            }\n        } finally {\n            sbr.release();\n        }\n        return null;\n    }",
+        "position": {
+            "line": 660,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLastMappedFile",
+                "position": {
+                    "line": 668,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getMinMsgOffset",
+                "position": {
+                    "line": 669,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getMsgOffset",
+                "position": {
+                    "line": 670,
+                    "column": 52
+                }
+            },
+            {
+                "name": "isSearchBcqByCacheEnable",
+                "position": {
+                    "line": 675,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 675,
+                    "column": 64
+                }
+            },
+            {
+                "name": "searchOffsetFromCache",
+                "position": {
+                    "line": 678,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getFirstMappedFile",
+                "position": {
+                    "line": 681,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getMinMsgOffset",
+                "position": {
+                    "line": 682,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getMsgOffset",
+                "position": {
+                    "line": 683,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getMsgOffset",
+                "position": {
+                    "line": 683,
+                    "column": 123
+                }
+            },
+            {
+                "name": "searchOffsetFromFiles",
+                "position": {
+                    "line": 685,
+                    "column": 42
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 687,
+                    "column": 25
+                }
+            },
+            {
+                "name": "searchOffsetFromFiles",
+                "position": {
+                    "line": 691,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getMinMsgOffset",
+                "position": {
+                    "line": 698,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getMaxMsgOffset",
+                "position": {
+                    "line": 701,
+                    "column": 44
+                }
+            },
+            {
+                "name": "selectMappedBuffer",
+                "position": {
+                    "line": 707,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getMappedFile",
+                "position": {
+                    "line": 707,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 709,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getIndexPos",
+                "position": {
+                    "line": 710,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getIndexPos",
+                "position": {
+                    "line": 710,
+                    "column": 79
+                }
+            },
+            {
+                "name": "binarySearch",
+                "position": {
+                    "line": 711,
+                    "column": 23
+                }
+            },
+            {
+                "name": "selectMappedBuffer",
+                "position": {
+                    "line": 714,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getMappedFile",
+                "position": {
+                    "line": 714,
+                    "column": 40
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 717,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+            "BatchConsumeQueue.searchOffsetFromCache(long msgOffset)",
+            "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+            "BatchConsumeQueue.searchOffsetFromFiles(long msgOffset)",
+            "BatchConsumeQueue.searchOffsetFromFiles(long msgOffset)",
+            "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+            "BatchConsumeQueue.getMaxMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+            "BatchConsumeQueue.binarySearch(ByteBuffer byteBuffer, int left, int right, int unitSize, int unitShift, long targetValue)"
+        ],
+        "priority": 58
+    },
+    {
+        "name": "searchOffsetFromFiles",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "searchOffsetFromFiles(long msgOffset)",
+        "class_signature": "BatchConsumeQueue.searchOffsetFromFiles(long msgOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "msgOffset"
+            ]
+        ],
+        "methodBody": "{\n        MappedFile targetBcq = null;\n        // find the mapped file one by one reversely\n        int mappedFileNum = this.mappedFileQueue.getMappedFiles().size();\n        for (int i = mappedFileNum - 1; i >= 0; i--) {\n            MappedFile mappedFile = mappedFileQueue.getMappedFiles().get(i);\n            BatchOffsetIndex tmpMinMsgOffset = getMinMsgOffset(mappedFile, false, false);\n            if (null != tmpMinMsgOffset && tmpMinMsgOffset.getMsgOffset() <= msgOffset) {\n                targetBcq = mappedFile;\n                break;\n            }\n        }\n\n        return targetBcq;\n    }",
+        "position": {
+            "line": 722,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 725,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 725,
+                    "column": 50
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 727,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 727,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getMinMsgOffset",
+                "position": {
+                    "line": 728,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getMsgOffset",
+                "position": {
+                    "line": 729,
+                    "column": 60
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)"
+        ],
+        "priority": 62
+    },
+    {
+        "name": "getOffsetInQueueByTime",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getOffsetInQueueByTime(long timestamp)",
+        "class_signature": "BatchConsumeQueue.getOffsetInQueueByTime(long timestamp)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "timestamp"
+            ]
+        ],
+        "methodBody": "{\n        return getOffsetInQueueByTime(timestamp, BoundaryType.LOWER);\n    }",
+        "position": {
+            "line": 746,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getOffsetInQueueByTime",
+                "position": {
+                    "line": 747,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getOffsetInQueueByTime(long timestamp, BoundaryType boundaryType)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "getOffsetInQueueByTime",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getOffsetInQueueByTime(long timestamp, BoundaryType boundaryType)",
+        "class_signature": "BatchConsumeQueue.getOffsetInQueueByTime(long timestamp, BoundaryType boundaryType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "timestamp"
+            ],
+            [
+                "BoundaryType",
+                "boundaryType"
+            ]
+        ],
+        "methodBody": "{\n        MappedFile targetBcq;\n        BatchOffsetIndex targetMinOffset;\n\n        // first check the last bcq\n        MappedFile lastBcq = mappedFileQueue.getLastMappedFile();\n        BatchOffsetIndex minForLastBcq = getMinMsgOffset(lastBcq, false, true);\n        if (null != minForLastBcq && minForLastBcq.getStoreTimestamp() <= timestamp) {\n            // found, it's the last bcq.\n            targetBcq = lastBcq;\n            targetMinOffset = minForLastBcq;\n        } else {\n            boolean searchBcqByCacheEnable = this.messageStore.getMessageStoreConfig().isSearchBcqByCacheEnable();\n            if (searchBcqByCacheEnable) {\n                // it's not the last BCQ file, so search it through cache.\n                targetBcq = this.searchTimeFromCache(timestamp);\n                if (targetBcq == null) {\n                    // not found in cache\n                    MappedFile firstBcq = mappedFileQueue.getFirstMappedFile();\n                    BatchOffsetIndex minForFirstBcq = getMinMsgOffset(firstBcq, false, true);\n                    if (minForFirstBcq != null && minForFirstBcq.getStoreTimestamp() <= timestamp && timestamp < minForLastBcq.getStoreTimestamp()) {\n                        // old search logic\n                        targetBcq = this.searchTimeFromFiles(timestamp);\n                    }\n                    log.warn(\"cache is not working on BCQ [Topic: {}, QueueId: {}] for timestamp: {}, targetBcq: {}\", this.topic, this.queueId, timestamp, targetBcq);\n                }\n            } else {\n                // old search logic\n                targetBcq = this.searchTimeFromFiles(timestamp);\n            }\n\n            if (targetBcq == null) {\n                return -1;\n            }\n            targetMinOffset = getMinMsgOffset(targetBcq, false, true);\n        }\n\n        BatchOffsetIndex targetMaxOffset = getMaxMsgOffset(targetBcq, false, true);\n        if (null == targetMinOffset || null == targetMaxOffset) {\n            return -1;\n        }\n\n        //then use binary search to find the indexed position\n        SelectMappedBufferResult sbr = targetMinOffset.getMappedFile().selectMappedBuffer(0);\n        try {\n            ByteBuffer byteBuffer = sbr.getByteBuffer();\n            int left = targetMinOffset.getIndexPos(), right = targetMaxOffset.getIndexPos();\n            long maxQueueTimestamp = byteBuffer.getLong(right + MSG_STORE_TIME_OFFSET_INDEX);\n            if (timestamp >= maxQueueTimestamp) {\n                return byteBuffer.getLong(right + MSG_BASE_OFFSET_INDEX);\n            }\n            int mid = binarySearchRight(byteBuffer, left, right, CQ_STORE_UNIT_SIZE, MSG_STORE_TIME_OFFSET_INDEX, timestamp, boundaryType);\n            if (mid != -1) {\n                return byteBuffer.getLong(mid + MSG_BASE_OFFSET_INDEX);\n            }\n        } finally {\n            sbr.release();\n        }\n\n        return -1;\n    }",
+        "position": {
+            "line": 751,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLastMappedFile",
+                "position": {
+                    "line": 756,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getMinMsgOffset",
+                "position": {
+                    "line": 757,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 758,
+                    "column": 52
+                }
+            },
+            {
+                "name": "isSearchBcqByCacheEnable",
+                "position": {
+                    "line": 763,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 763,
+                    "column": 64
+                }
+            },
+            {
+                "name": "searchTimeFromCache",
+                "position": {
+                    "line": 766,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getFirstMappedFile",
+                "position": {
+                    "line": 769,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getMinMsgOffset",
+                "position": {
+                    "line": 770,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 771,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 771,
+                    "column": 128
+                }
+            },
+            {
+                "name": "searchTimeFromFiles",
+                "position": {
+                    "line": 773,
+                    "column": 42
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 775,
+                    "column": 25
+                }
+            },
+            {
+                "name": "searchTimeFromFiles",
+                "position": {
+                    "line": 779,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getMinMsgOffset",
+                "position": {
+                    "line": 785,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getMaxMsgOffset",
+                "position": {
+                    "line": 788,
+                    "column": 44
+                }
+            },
+            {
+                "name": "selectMappedBuffer",
+                "position": {
+                    "line": 794,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getMappedFile",
+                "position": {
+                    "line": 794,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 796,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getIndexPos",
+                "position": {
+                    "line": 797,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getIndexPos",
+                "position": {
+                    "line": 797,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 798,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 800,
+                    "column": 35
+                }
+            },
+            {
+                "name": "binarySearchRight",
+                "position": {
+                    "line": 802,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 804,
+                    "column": 35
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 807,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+            "BatchConsumeQueue.searchTimeFromCache(long time)",
+            "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+            "BatchConsumeQueue.searchTimeFromFiles(long timestamp)",
+            "BatchConsumeQueue.searchTimeFromFiles(long timestamp)",
+            "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+            "BatchConsumeQueue.getMaxMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+            "BatchConsumeQueue.binarySearchRight(ByteBuffer byteBuffer, int left, int right, int unitSize, int unitShift, long targetValue, BoundaryType boundaryType)"
+        ],
+        "priority": 41
+    },
+    {
+        "name": "searchTimeFromFiles",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "searchTimeFromFiles(long timestamp)",
+        "class_signature": "BatchConsumeQueue.searchTimeFromFiles(long timestamp)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "timestamp"
+            ]
+        ],
+        "methodBody": "{\n        MappedFile targetBcq = null;\n\n        int mappedFileNum = this.mappedFileQueue.getMappedFiles().size();\n        for (int i = mappedFileNum - 1; i >= 0; i--) {\n            MappedFile mappedFile = mappedFileQueue.getMappedFiles().get(i);\n            BatchOffsetIndex tmpMinMsgOffset = getMinMsgOffset(mappedFile, false, true);\n            if (tmpMinMsgOffset == null) {\n                //Maybe the new file\n                continue;\n            }\n            BatchOffsetIndex tmpMaxMsgOffset = getMaxMsgOffset(mappedFile, false, true);\n            //Here should not be null\n            if (tmpMaxMsgOffset == null) {\n                break;\n            }\n            if (tmpMaxMsgOffset.getStoreTimestamp() >= timestamp) {\n                if (tmpMinMsgOffset.getStoreTimestamp() <= timestamp) {\n                    targetBcq = mappedFile;\n                    break;\n                } else {\n                    if (i - 1 < 0) {\n                        //This is the first file\n                        targetBcq = mappedFile;\n                        break;\n                    } else {\n                        //The min timestamp of this file is larger than the given timestamp, so check the next file\n                        continue;\n                    }\n                }\n            } else {\n                //The max timestamp of this file is smaller than the given timestamp, so double check the previous file\n                if (i + 1 <= mappedFileNum - 1) {\n                    mappedFile = mappedFileQueue.getMappedFiles().get(i + 1);\n                    targetBcq = mappedFile;\n                    break;\n                } else {\n                    //There is no timestamp larger than the given timestamp\n                    break;\n                }\n            }\n        }\n\n        return targetBcq;\n    }",
+        "position": {
+            "line": 813,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 816,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 816,
+                    "column": 50
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 818,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 818,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getMinMsgOffset",
+                "position": {
+                    "line": 819,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getMaxMsgOffset",
+                "position": {
+                    "line": 824,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 829,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getStoreTimestamp",
+                "position": {
+                    "line": 830,
+                    "column": 37
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 846,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getMappedFiles",
+                "position": {
+                    "line": 846,
+                    "column": 50
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getMinMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)",
+            "BatchConsumeQueue.getMaxMsgOffset(MappedFile mappedFile, boolean getBatchSize, boolean getStoreTime)"
+        ],
+        "priority": 53
+    },
+    {
+        "name": "binarySearchRight",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "binarySearchRight(ByteBuffer byteBuffer, int left, int right, int unitSize, int unitShift, long targetValue, BoundaryType boundaryType)",
+        "class_signature": "BatchConsumeQueue.binarySearchRight(ByteBuffer byteBuffer, int left, int right, int unitSize, int unitShift, long targetValue, BoundaryType boundaryType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ByteBuffer",
+                "byteBuffer"
+            ],
+            [
+                "int",
+                "left"
+            ],
+            [
+                "int",
+                "right"
+            ],
+            [
+                "int",
+                "unitSize"
+            ],
+            [
+                "int",
+                "unitShift"
+            ],
+            [
+                "long",
+                "targetValue"
+            ],
+            [
+                "BoundaryType",
+                "boundaryType"
+            ]
+        ],
+        "methodBody": "{\n        int mid = -1;\n        while (left <= right) {\n            mid = ceil((left + right) / 2);\n            long tmpValue = byteBuffer.getLong(mid + unitShift);\n            if (mid == right) {\n                //Means left and the right are the same\n                if (tmpValue >= targetValue) {\n                    return mid;\n                } else {\n                    return -1;\n                }\n            } else if (mid == left) {\n                //Means the left + unitSize = right\n                if (tmpValue >= targetValue) {\n                    return mid;\n                } else {\n                    left = mid + unitSize;\n                }\n            } else {\n                //mid is actually in the mid\n                switch (boundaryType) {\n                    case LOWER:\n                        if (tmpValue < targetValue) {\n                            left = mid + unitSize;\n                        } else {\n                            right = mid;\n                        }\n                        break;\n                    case UPPER:\n                        if (tmpValue <= targetValue) {\n                            left = mid;\n                        } else {\n                            right = mid - unitSize;\n                        }\n                        break;\n                    default:\n                        log.warn(\"Unknown boundary type\");\n                        return -1;\n                }\n            }\n        }\n        return -1;\n    }",
+        "position": {
+            "line": 864,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ceil",
+                "position": {
+                    "line": 868,
+                    "column": 19
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 869,
+                    "column": 40
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 902,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.ceil(int pos)"
+        ],
+        "priority": 54
+    },
+    {
+        "name": "binarySearch",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "binarySearch(ByteBuffer byteBuffer, int left, int right, int unitSize, int unitShift, long targetValue)",
+        "class_signature": "BatchConsumeQueue.binarySearch(ByteBuffer byteBuffer, int left, int right, int unitSize, int unitShift, long targetValue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ByteBuffer",
+                "byteBuffer"
+            ],
+            [
+                "int",
+                "left"
+            ],
+            [
+                "int",
+                "right"
+            ],
+            [
+                "int",
+                "unitSize"
+            ],
+            [
+                "int",
+                "unitShift"
+            ],
+            [
+                "long",
+                "targetValue"
+            ]
+        ],
+        "methodBody": "{\n        int maxRight = right;\n        int mid = -1;\n        while (left <= right) {\n            mid = ceil((left + right) / 2);\n            long tmpValue = byteBuffer.getLong(mid + unitShift);\n            if (tmpValue == targetValue) {\n                return mid;\n            }\n            if (tmpValue > targetValue) {\n                right = mid - unitSize;\n            } else {\n                if (mid == left) {\n                    //the binary search is converging to the left, so maybe the one on the right of mid is the exactly correct one\n                    if (mid + unitSize <= maxRight\n                        && byteBuffer.getLong(mid + unitSize + unitShift) <= targetValue) {\n                        return mid + unitSize;\n                    } else {\n                        return mid;\n                    }\n                } else {\n                    left = mid;\n                }\n            }\n        }\n        return -1;\n    }",
+        "position": {
+            "line": 914,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ceil",
+                "position": {
+                    "line": 919,
+                    "column": 19
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 920,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 930,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.ceil(int pos)"
+        ],
+        "priority": 64
+    },
+    {
+        "name": "BatchConsumeQueueIterator",
+        "category": "constructor_declaration",
+        "class": "BatchConsumeQueueIterator",
+        "signature": "BatchConsumeQueueIterator(SelectMappedBufferResult sbr)",
+        "class_signature": "BatchConsumeQueueIterator.BatchConsumeQueueIterator(SelectMappedBufferResult sbr)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "SelectMappedBufferResult",
+                "sbr"
+            ]
+        ],
+        "methodBody": "{\n            this.sbr = sbr;\n            if (sbr != null && sbr.getByteBuffer() != null) {\n                relativePos = sbr.getByteBuffer().position();\n            }\n        }",
+        "position": {
+            "line": 947,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 949,
+                    "column": 36
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 950,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 950,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 59
+    },
+    {
+        "name": "hasNext",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueueIterator",
+        "signature": "hasNext()",
+        "class_signature": "BatchConsumeQueueIterator.hasNext()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            if (sbr == null || sbr.getByteBuffer() == null) {\n                return false;\n            }\n\n            return sbr.getByteBuffer().hasRemaining();\n        }",
+        "position": {
+            "line": 955,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 956,
+                    "column": 36
+                }
+            },
+            {
+                "name": "hasRemaining",
+                "position": {
+                    "line": 960,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 960,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 55
+    },
+    {
+        "name": "next",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueueIterator",
+        "signature": "next()",
+        "class_signature": "BatchConsumeQueueIterator.next()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            if (!hasNext()) {\n                return null;\n            }\n            ByteBuffer tmpBuffer = sbr.getByteBuffer().slice();\n            tmpBuffer.position(MSG_COMPACT_OFFSET_INDEX);\n            ByteBuffer compactOffsetStoreBuffer = tmpBuffer.slice();\n            compactOffsetStoreBuffer.limit(MSG_COMPACT_OFFSET_LENGTH);\n\n            int relativePos = sbr.getByteBuffer().position();\n            long offsetPy = sbr.getByteBuffer().getLong();\n            int sizePy = sbr.getByteBuffer().getInt();\n            long tagsCode = sbr.getByteBuffer().getLong(); //tagscode\n            sbr.getByteBuffer().getLong();//timestamp\n            long msgBaseOffset = sbr.getByteBuffer().getLong();\n            short batchSize = sbr.getByteBuffer().getShort();\n            int compactedOffset = sbr.getByteBuffer().getInt();\n            sbr.getByteBuffer().position(relativePos + CQ_STORE_UNIT_SIZE);\n\n            return new CqUnit(msgBaseOffset, offsetPy, sizePy, tagsCode, batchSize, compactedOffset, compactOffsetStoreBuffer);\n        }",
+        "position": {
+            "line": 964,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "hasNext",
+                "position": {
+                    "line": 965,
+                    "column": 18
+                }
+            },
+            {
+                "name": "slice",
+                "position": {
+                    "line": 968,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 968,
+                    "column": 40
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 969,
+                    "column": 23
+                }
+            },
+            {
+                "name": "slice",
+                "position": {
+                    "line": 970,
+                    "column": 61
+                }
+            },
+            {
+                "name": "limit",
+                "position": {
+                    "line": 971,
+                    "column": 38
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 973,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 973,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 974,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 974,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 975,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 975,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 976,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 976,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 977,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 977,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 978,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 978,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getShort",
+                "position": {
+                    "line": 979,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 979,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 980,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 980,
+                    "column": 39
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 981,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 981,
+                    "column": 17
+                }
+            },
+            {
+                "name": "CqUnit",
+                "position": {
+                    "line": 983,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueueIterator.hasNext()"
+        ],
+        "priority": 42
+    },
+    {
+        "name": "remove",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueueIterator",
+        "signature": "remove()",
+        "class_signature": "BatchConsumeQueueIterator.remove()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            throw new UnsupportedOperationException(\"remove\");\n        }",
+        "position": {
+            "line": 987,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "UnsupportedOperationException",
+                "position": {
+                    "line": 988,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "release",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueueIterator",
+        "signature": "release()",
+        "class_signature": "BatchConsumeQueueIterator.release()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            if (sbr != null) {\n                sbr.release();\n                sbr = null;\n            }\n        }",
+        "position": {
+            "line": 992,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "release",
+                "position": {
+                    "line": 994,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 43
+    },
+    {
+        "name": "nextAndRelease",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueueIterator",
+        "signature": "nextAndRelease()",
+        "class_signature": "BatchConsumeQueueIterator.nextAndRelease()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            try {\n                return next();\n            } finally {\n                release();\n            }\n        }",
+        "position": {
+            "line": 1000,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "next",
+                "position": {
+                    "line": 1002,
+                    "column": 24
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 1004,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueueIterator.next()",
+            "BatchConsumeQueueIterator.release()"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "getTopic",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getTopic()",
+        "class_signature": "BatchConsumeQueue.getTopic()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return topic;\n    }",
+        "position": {
+            "line": 1010,
+            "column": 19
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 39
+    },
+    {
+        "name": "getQueueId",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getQueueId()",
+        "class_signature": "BatchConsumeQueue.getQueueId()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return queueId;\n    }",
+        "position": {
+            "line": 1015,
+            "column": 16
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 40
+    },
+    {
+        "name": "getCQType",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getCQType()",
+        "class_signature": "BatchConsumeQueue.getCQType()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return CQType.BatchCQ;\n    }",
+        "position": {
+            "line": 1020,
+            "column": 19
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 22
+    },
+    {
+        "name": "getTotalSize",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getTotalSize()",
+        "class_signature": "BatchConsumeQueue.getTotalSize()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return this.mappedFileQueue.getTotalFileSize();\n    }",
+        "position": {
+            "line": 1025,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTotalFileSize",
+                "position": {
+                    "line": 1026,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 23
+    },
+    {
+        "name": "getUnitSize",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getUnitSize()",
+        "class_signature": "BatchConsumeQueue.getUnitSize()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return CQ_STORE_UNIT_SIZE;\n    }",
+        "position": {
+            "line": 1030,
+            "column": 16
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 24
+    },
+    {
+        "name": "destroy",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "destroy()",
+        "class_signature": "BatchConsumeQueue.destroy()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        this.maxMsgPhyOffsetInCommitLog = -1;\n        this.minOffsetInQueue = -1;\n        this.maxOffsetInQueue = 0;\n        this.mappedFileQueue.destroy();\n        this.destroyCache();\n    }",
+        "position": {
+            "line": 1035,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 1039,
+                    "column": 30
+                }
+            },
+            {
+                "name": "destroyCache",
+                "position": {
+                    "line": 1040,
+                    "column": 14
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.destroyCache()"
+        ],
+        "priority": 25
+    },
+    {
+        "name": "getMessageTotalInQueue",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getMessageTotalInQueue()",
+        "class_signature": "BatchConsumeQueue.getMessageTotalInQueue()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return this.getMaxOffsetInQueue() - this.getMinOffsetInQueue();\n    }",
+        "position": {
+            "line": 1044,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMaxOffsetInQueue",
+                "position": {
+                    "line": 1045,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getMinOffsetInQueue",
+                "position": {
+                    "line": 1045,
+                    "column": 50
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getMaxOffsetInQueue()",
+            "BatchConsumeQueue.getMinOffsetInQueue()"
+        ],
+        "priority": 26
+    },
+    {
+        "name": "rollNextFile",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "rollNextFile(long nextBeginOffset)",
+        "class_signature": "BatchConsumeQueue.rollNextFile(long nextBeginOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "nextBeginOffset"
+            ]
+        ],
+        "methodBody": "{\n        return 0;\n    }",
+        "position": {
+            "line": 1049,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 27
+    },
+    {
+        "name": "getMaxOffsetInQueue",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getMaxOffsetInQueue()",
+        "class_signature": "BatchConsumeQueue.getMaxOffsetInQueue()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return maxOffsetInQueue;\n    }",
+        "position": {
+            "line": 1059,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 45
+    },
+    {
+        "name": "getMinOffsetInQueue",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getMinOffsetInQueue()",
+        "class_signature": "BatchConsumeQueue.getMinOffsetInQueue()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return minOffsetInQueue;\n    }",
+        "position": {
+            "line": 1064,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 46
+    },
+    {
+        "name": "checkSelf",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "checkSelf()",
+        "class_signature": "BatchConsumeQueue.checkSelf()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        mappedFileQueue.checkSelf();\n    }",
+        "position": {
+            "line": 1069,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkSelf",
+                "position": {
+                    "line": 1070,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 28
+    },
+    {
+        "name": "swapMap",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "swapMap(int reserveNum, long forceSwapIntervalMs, long normalSwapIntervalMs)",
+        "class_signature": "BatchConsumeQueue.swapMap(int reserveNum, long forceSwapIntervalMs, long normalSwapIntervalMs)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "reserveNum"
+            ],
+            [
+                "long",
+                "forceSwapIntervalMs"
+            ],
+            [
+                "long",
+                "normalSwapIntervalMs"
+            ]
+        ],
+        "methodBody": "{\n        mappedFileQueue.swapMap(reserveNum, forceSwapIntervalMs, normalSwapIntervalMs);\n    }",
+        "position": {
+            "line": 1074,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "swapMap",
+                "position": {
+                    "line": 1075,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 29
+    },
+    {
+        "name": "cleanSwappedMap",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "cleanSwappedMap(long forceCleanSwapIntervalMs)",
+        "class_signature": "BatchConsumeQueue.cleanSwappedMap(long forceCleanSwapIntervalMs)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "forceCleanSwapIntervalMs"
+            ]
+        ],
+        "methodBody": "{\n        mappedFileQueue.cleanSwappedMap(forceCleanSwapIntervalMs);\n    }",
+        "position": {
+            "line": 1079,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "cleanSwappedMap",
+                "position": {
+                    "line": 1080,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 30
+    },
+    {
+        "name": "getMappedFileQueue",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "getMappedFileQueue()",
+        "class_signature": "BatchConsumeQueue.getMappedFileQueue()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return mappedFileQueue;\n    }",
+        "position": {
+            "line": 1083,
+            "column": 28
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 31
+    },
+    {
+        "name": "estimateMessageCount",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "estimateMessageCount(long from, long to, MessageFilter filter)",
+        "class_signature": "BatchConsumeQueue.estimateMessageCount(long from, long to, MessageFilter filter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "from"
+            ],
+            [
+                "long",
+                "to"
+            ],
+            [
+                "MessageFilter",
+                "filter"
+            ]
+        ],
+        "methodBody": "{\n        // transfer message offset to physical offset\n        SelectMappedBufferResult firstMappedFileBuffer = getBatchMsgIndexBuffer(from);\n        if (firstMappedFileBuffer == null) {\n            return -1;\n        }\n        long physicalOffsetFrom = firstMappedFileBuffer.getStartOffset();\n\n        SelectMappedBufferResult lastMappedFileBuffer = getBatchMsgIndexBuffer(to);\n        if (lastMappedFileBuffer == null) {\n            return -1;\n        }\n        long physicalOffsetTo = lastMappedFileBuffer.getStartOffset();\n\n        List<MappedFile> mappedFiles = mappedFileQueue.range(physicalOffsetFrom, physicalOffsetTo);\n        if (mappedFiles.isEmpty()) {\n            return -1;\n        }\n\n        boolean sample = false;\n        long match = 0;\n        long matchCqUnitCount = 0;\n        long raw = 0;\n        long scanCqUnitCount = 0;\n\n        for (MappedFile mappedFile : mappedFiles) {\n            int start = 0;\n            int len = mappedFile.getFileSize();\n\n            // calculate start and len for first segment and last segment to reduce scanning\n            // first file segment\n            if (mappedFile.getFileFromOffset() <= physicalOffsetFrom) {\n                start = (int) (physicalOffsetFrom - mappedFile.getFileFromOffset());\n                if (mappedFile.getFileFromOffset() + mappedFile.getFileSize() >= physicalOffsetTo) {\n                    // current mapped file covers search range completely.\n                    len = (int) (physicalOffsetTo - physicalOffsetFrom);\n                } else {\n                    len = mappedFile.getFileSize() - start;\n                }\n            }\n\n            // last file segment\n            if (0 == start && mappedFile.getFileFromOffset() + mappedFile.getFileSize() > physicalOffsetTo) {\n                len = (int) (physicalOffsetTo - mappedFile.getFileFromOffset());\n            }\n\n            // select partial data to scan\n            SelectMappedBufferResult slice = mappedFile.selectMappedBuffer(start, len);\n            if (null != slice) {\n                try {\n                    ByteBuffer buffer = slice.getByteBuffer();\n                    int current = 0;\n                    while (current < len) {\n                        // skip physicalOffset and message length fields.\n                        buffer.position(current + MSG_TAG_OFFSET_INDEX);\n                        long tagCode = buffer.getLong();\n                        buffer.position(current + MSG_BATCH_SIZE_INDEX);\n                        long batchSize = buffer.getShort();\n                        if (filter.isMatchedByConsumeQueue(tagCode, null)) {\n                            match += batchSize;\n                            matchCqUnitCount++;\n                        }\n                        raw += batchSize;\n                        scanCqUnitCount++;\n                        current += CQ_STORE_UNIT_SIZE;\n\n                        if (scanCqUnitCount >= messageStore.getMessageStoreConfig().getMaxConsumeQueueScan()) {\n                            sample = true;\n                            break;\n                        }\n\n                        if (matchCqUnitCount > messageStore.getMessageStoreConfig().getSampleCountThreshold()) {\n                            sample = true;\n                            break;\n                        }\n                    }\n                } finally {\n                    slice.release();\n                }\n            }\n            // we have scanned enough entries, now is the time to return an educated guess.\n            if (sample) {\n                break;\n            }\n        }\n\n        long result = match;\n        if (sample) {\n            if (0 == raw) {\n                log.error(\"[BUG]. Raw should NOT be 0\");\n                return 0;\n            }\n            result = (long) (match * (to - from) * 1.0 / raw);\n        }\n        log.debug(\"Result={}, raw={}, match={}, sample={}\", result, raw, match, sample);\n        return result;\n    }",
+        "position": {
+            "line": 1088,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getBatchMsgIndexBuffer",
+                "position": {
+                    "line": 1090,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getStartOffset",
+                "position": {
+                    "line": 1094,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getBatchMsgIndexBuffer",
+                "position": {
+                    "line": 1096,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getStartOffset",
+                "position": {
+                    "line": 1100,
+                    "column": 54
+                }
+            },
+            {
+                "name": "range",
+                "position": {
+                    "line": 1102,
+                    "column": 56
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 1103,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getFileSize",
+                "position": {
+                    "line": 1115,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getFileFromOffset",
+                "position": {
+                    "line": 1119,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getFileFromOffset",
+                "position": {
+                    "line": 1120,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getFileFromOffset",
+                "position": {
+                    "line": 1121,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getFileSize",
+                "position": {
+                    "line": 1121,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getFileSize",
+                "position": {
+                    "line": 1125,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getFileFromOffset",
+                "position": {
+                    "line": 1130,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getFileSize",
+                "position": {
+                    "line": 1130,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getFileFromOffset",
+                "position": {
+                    "line": 1131,
+                    "column": 60
+                }
+            },
+            {
+                "name": "selectMappedBuffer",
+                "position": {
+                    "line": 1135,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 1138,
+                    "column": 47
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 1142,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 1143,
+                    "column": 47
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 1144,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getShort",
+                "position": {
+                    "line": 1145,
+                    "column": 49
+                }
+            },
+            {
+                "name": "isMatchedByConsumeQueue",
+                "position": {
+                    "line": 1146,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getMaxConsumeQueueScan",
+                "position": {
+                    "line": 1154,
+                    "column": 85
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 1154,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getSampleCountThreshold",
+                "position": {
+                    "line": 1159,
+                    "column": 85
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 1159,
+                    "column": 61
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 1165,
+                    "column": 27
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 1177,
+                    "column": 21
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 1182,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "BatchConsumeQueue.getBatchMsgIndexBuffer(long msgOffset)",
+            "BatchConsumeQueue.getBatchMsgIndexBuffer(long msgOffset)"
+        ],
+        "priority": 32
+    },
+    {
+        "name": "initializeWithOffset",
+        "category": "method_declaration",
+        "class": "BatchConsumeQueue",
+        "signature": "initializeWithOffset(long offset, long minPhyOffset)",
+        "class_signature": "BatchConsumeQueue.initializeWithOffset(long offset, long minPhyOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "offset"
+            ],
+            [
+                "long",
+                "minPhyOffset"
+            ]
+        ],
+        "methodBody": "{\n        // not support now\n    }",
+        "position": {
+            "line": 1187,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 33
+    }
+]

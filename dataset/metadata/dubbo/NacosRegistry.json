@@ -1,0 +1,3121 @@
+[
+    {
+        "name": "NacosRegistry",
+        "category": "constructor_declaration",
+        "class": "NacosRegistry",
+        "signature": "NacosRegistry(URL url, NacosNamingServiceWrapper namingService)",
+        "class_signature": "NacosRegistry.NacosRegistry(URL url, NacosNamingServiceWrapper namingService)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "NacosNamingServiceWrapper",
+                "namingService"
+            ]
+        ],
+        "methodBody": "{\n        super(url);\n        this.namingService = namingService;\n        this.supportLegacyServiceName = url.getParameter(\"nacos.subscribe.legacy-name\", true);\n    }",
+        "position": {
+            "line": 141,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 144,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "isAvailable",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "isAvailable()",
+        "class_signature": "NacosRegistry.isAvailable()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return UP.equals(namingService.getServerStatus());\n    }",
+        "position": {
+            "line": 148,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 149,
+                    "column": 19
+                }
+            },
+            {
+                "name": "getServerStatus",
+                "position": {
+                    "line": 149,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "lookup",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "lookup(URL url)",
+        "class_signature": "NacosRegistry.lookup(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        if (url == null) {\n            throw new IllegalArgumentException(\"lookup url == null\");\n        }\n        try {\n            List<URL> urls = new LinkedList<>();\n            Set<String> serviceNames = getServiceNames(url, null);\n            for (String serviceName : serviceNames) {\n                List<Instance> instances =\n                        namingService.getAllInstances(serviceName, getUrl().getGroup(Constants.DEFAULT_GROUP));\n                urls.addAll(buildURLs(url, instances));\n            }\n            return urls;\n        } catch (SkipFailbackWrapperException exception) {\n            throw exception;\n        } catch (Exception cause) {\n            throw new RpcException(\n                    \"Failed to lookup \" + url + \" from nacos \" + getUrl() + \", cause: \" + cause.getMessage(), cause);\n        }\n    }",
+        "position": {
+            "line": 153,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceNames",
+                "position": {
+                    "line": 159,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getAllInstances",
+                "position": {
+                    "line": 162,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 162,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 162,
+                    "column": 68
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 163,
+                    "column": 22
+                }
+            },
+            {
+                "name": "buildURLs",
+                "position": {
+                    "line": 163,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 170,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 170,
+                    "column": 97
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 155,
+                    "column": 23
+                }
+            },
+            {
+                "name": "LinkedList<>",
+                "position": {
+                    "line": 158,
+                    "column": 34
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 169,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.getServiceNames(URL url, NacosAggregateListener listener)",
+            "NacosRegistry.buildURLs(URL consumerURL, Collection<Instance> instances)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "doRegister",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "doRegister(URL url)",
+        "class_signature": "NacosRegistry.doRegister(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            if (PROVIDER_SIDE.equals(url.getSide()) || getUrl().getParameter(REGISTER_CONSUMER_URL_KEY, false)) {\n                Instance instance = createInstance(url);\n\n                Set<String> serviceNames = new HashSet<>();\n                // by default servicename is \"org.apache.dubbo.xxService:1.0.0:\"\n                String serviceName = getServiceName(url, false);\n                serviceNames.add(serviceName);\n\n                // in https://github.com/apache/dubbo/issues/14075\n                if (getUrl().getParameter(NACOE_REGISTER_COMPATIBLE, false)) {\n                    // servicename is \"org.apache.dubbo.xxService:1.0.0\"\n                    String compatibleServiceName = getServiceName(url, true);\n                    serviceNames.add(compatibleServiceName);\n                }\n\n                /**\n                 *  namingService.registerInstance with\n                 *  {@link org.apache.dubbo.registry.support.AbstractRegistry#registryUrl}\n                 *  default {@link DEFAULT_GROUP}\n                 *\n                 * in https://github.com/apache/dubbo/issues/5978\n                 */\n                for (String service : serviceNames) {\n                    namingService.registerInstance(service, getUrl().getGroup(Constants.DEFAULT_GROUP), instance);\n                }\n            } else {\n                logger.info(\"Please set 'dubbo.registry.parameters.register-consumer-url=true' to turn on consumer \"\n                        + \"url registration.\");\n            }\n        } catch (SkipFailbackWrapperException exception) {\n            throw exception;\n        } catch (Exception cause) {\n            throw new RpcException(\n                    \"Failed to register \" + url + \" to nacos \" + getUrl() + \", cause: \" + cause.getMessage(), cause);\n        }\n    }",
+        "position": {
+            "line": 175,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 177,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getSide",
+                "position": {
+                    "line": 177,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 177,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 177,
+                    "column": 56
+                }
+            },
+            {
+                "name": "createInstance",
+                "position": {
+                    "line": 178,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 182,
+                    "column": 38
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 183,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 186,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 186,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 188,
+                    "column": 52
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 189,
+                    "column": 34
+                }
+            },
+            {
+                "name": "registerInstance",
+                "position": {
+                    "line": 200,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 200,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 200,
+                    "column": 61
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 203,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 210,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 210,
+                    "column": 97
+                }
+            },
+            {
+                "name": "HashSet<>",
+                "position": {
+                    "line": 180,
+                    "column": 48
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 209,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.createInstance(URL url)",
+            "NacosRegistry.getServiceName(URL url, boolean needCompatible)",
+            "NacosRegistry.getServiceName(URL url, boolean needCompatible)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "doUnregister",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "doUnregister(URL url)",
+        "class_signature": "NacosRegistry.doUnregister(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            Instance instance = createInstance(url);\n\n            Set<String> serviceNames = new HashSet<>();\n            // by default servicename is \"org.apache.dubbo.xxService:1.0.0:\"\n            String serviceName = getServiceName(url, false);\n            serviceNames.add(serviceName);\n\n            // in https://github.com/apache/dubbo/issues/14075\n            if (getUrl().getParameter(NACOE_REGISTER_COMPATIBLE, false)) {\n                // servicename is \"org.apache.dubbo.xxService:1.0.0\"\n                String serviceName1 = getServiceName(url, true);\n                serviceNames.add(serviceName1);\n            }\n\n            for (String service : serviceNames) {\n                namingService.deregisterInstance(\n                        service, getUrl().getGroup(Constants.DEFAULT_GROUP), instance.getIp(), instance.getPort());\n            }\n        } catch (SkipFailbackWrapperException exception) {\n            throw exception;\n        } catch (Exception cause) {\n            throw new RpcException(\n                    \"Failed to unregister \" + url + \" to nacos \" + getUrl() + \", cause: \" + cause.getMessage(), cause);\n        }\n    }",
+        "position": {
+            "line": 215,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "createInstance",
+                "position": {
+                    "line": 217,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 221,
+                    "column": 34
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 222,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 225,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 225,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 227,
+                    "column": 39
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 228,
+                    "column": 30
+                }
+            },
+            {
+                "name": "deregisterInstance",
+                "position": {
+                    "line": 232,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 233,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 233,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 233,
+                    "column": 87
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 233,
+                    "column": 105
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 239,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 239,
+                    "column": 99
+                }
+            },
+            {
+                "name": "HashSet<>",
+                "position": {
+                    "line": 219,
+                    "column": 44
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 238,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.createInstance(URL url)",
+            "NacosRegistry.getServiceName(URL url, boolean needCompatible)",
+            "NacosRegistry.getServiceName(URL url, boolean needCompatible)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "doSubscribe",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "doSubscribe(URL url, NotifyListener listener)",
+        "class_signature": "NacosRegistry.doSubscribe(URL url, NotifyListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "NotifyListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        NacosAggregateListener nacosAggregateListener = new NacosAggregateListener(listener);\n        originToAggregateListener\n                .computeIfAbsent(url, k -> new ConcurrentHashMap<>())\n                .put(listener, nacosAggregateListener);\n\n        Set<String> serviceNames = getServiceNames(url, nacosAggregateListener);\n\n        doSubscribe(url, nacosAggregateListener, serviceNames);\n    }",
+        "position": {
+            "line": 244,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "put",
+                "position": {
+                    "line": 248,
+                    "column": 18
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 247,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getServiceNames",
+                "position": {
+                    "line": 250,
+                    "column": 36
+                }
+            },
+            {
+                "name": "doSubscribe",
+                "position": {
+                    "line": 252,
+                    "column": 9
+                }
+            },
+            {
+                "name": "NacosAggregateListener",
+                "position": {
+                    "line": 245,
+                    "column": 61
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 247,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.getServiceNames(URL url, NacosAggregateListener listener)",
+            "NacosRegistry.doSubscribe(URL url, NacosAggregateListener listener, Set<String> serviceNames)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "doSubscribe",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "doSubscribe(URL url, NacosAggregateListener listener, Set<String> serviceNames)",
+        "class_signature": "NacosRegistry.doSubscribe(URL url, NacosAggregateListener listener, Set<String> serviceNames)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "NacosAggregateListener",
+                "listener"
+            ],
+            [
+                "Set<String>",
+                "serviceNames"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            if (isServiceNamesWithCompatibleMode(url)) {\n\n                /**\n                 * Get all instances with serviceNames to avoid instance overwrite and but with empty instance mentioned\n                 * in https://github.com/apache/dubbo/issues/5885 and https://github.com/apache/dubbo/issues/5899\n                 *\n                 * namingService.getAllInstances with\n                 * {@link org.apache.dubbo.registry.support.AbstractRegistry#registryUrl}\n                 * default {@link DEFAULT_GROUP}\n                 *\n                 * in https://github.com/apache/dubbo/issues/5978\n                 */\n                for (String serviceName : serviceNames) {\n                    List<Instance> instances =\n                            namingService.getAllInstances(serviceName, getUrl().getGroup(Constants.DEFAULT_GROUP));\n                    notifySubscriber(url, serviceName, listener, instances);\n                }\n                for (String serviceName : serviceNames) {\n                    subscribeEventListener(serviceName, url, listener);\n                }\n            } else {\n                for (String serviceName : serviceNames) {\n                    List<Instance> instances = new LinkedList<>();\n                    instances.addAll(\n                            namingService.getAllInstances(serviceName, getUrl().getGroup(Constants.DEFAULT_GROUP)));\n                    String serviceInterface = serviceName;\n                    String[] segments = serviceName.split(SERVICE_NAME_SEPARATOR, -1);\n                    if (segments.length == 4) {\n                        serviceInterface = segments[SERVICE_INTERFACE_INDEX];\n                    }\n                    URL subscriberURL = url.setPath(serviceInterface)\n                            .addParameters(INTERFACE_KEY, serviceInterface, CHECK_KEY, String.valueOf(false));\n                    notifySubscriber(subscriberURL, serviceName, listener, instances);\n                    subscribeEventListener(serviceName, subscriberURL, listener);\n                }\n            }\n        } catch (SkipFailbackWrapperException exception) {\n            throw exception;\n        } catch (Throwable cause) {\n            throw new RpcException(\n                    \"Failed to subscribe \" + url + \" to nacos \" + getUrl() + \", cause: \" + cause.getMessage(), cause);\n        }\n    }",
+        "position": {
+            "line": 255,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isServiceNamesWithCompatibleMode",
+                "position": {
+                    "line": 257,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getAllInstances",
+                "position": {
+                    "line": 271,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 271,
+                    "column": 81
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 271,
+                    "column": 72
+                }
+            },
+            {
+                "name": "notifySubscriber",
+                "position": {
+                    "line": 272,
+                    "column": 21
+                }
+            },
+            {
+                "name": "subscribeEventListener",
+                "position": {
+                    "line": 275,
+                    "column": 21
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 280,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getAllInstances",
+                "position": {
+                    "line": 281,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 281,
+                    "column": 81
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 281,
+                    "column": 72
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 283,
+                    "column": 53
+                }
+            },
+            {
+                "name": "addParameters",
+                "position": {
+                    "line": 288,
+                    "column": 30
+                }
+            },
+            {
+                "name": "setPath",
+                "position": {
+                    "line": 287,
+                    "column": 45
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 288,
+                    "column": 95
+                }
+            },
+            {
+                "name": "notifySubscriber",
+                "position": {
+                    "line": 289,
+                    "column": 21
+                }
+            },
+            {
+                "name": "subscribeEventListener",
+                "position": {
+                    "line": 290,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 297,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 297,
+                    "column": 98
+                }
+            },
+            {
+                "name": "LinkedList<>",
+                "position": {
+                    "line": 279,
+                    "column": 52
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 296,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.isServiceNamesWithCompatibleMode(URL url)",
+            "NacosRegistry.notifySubscriber(URL url, String serviceName, NacosAggregateListener listener, Collection<Instance> instances)",
+            "NacosRegistry.subscribeEventListener(String serviceName, URL url, NacosAggregateListener listener)",
+            "NacosRegistry.notifySubscriber(URL url, String serviceName, NacosAggregateListener listener, Collection<Instance> instances)",
+            "NacosRegistry.subscribeEventListener(String serviceName, URL url, NacosAggregateListener listener)"
+        ],
+        "priority": 26
+    },
+    {
+        "name": "isServiceNamesWithCompatibleMode",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "isServiceNamesWithCompatibleMode(URL url)",
+        "class_signature": "NacosRegistry.isServiceNamesWithCompatibleMode(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        return !isAdminProtocol(url) && createServiceName(url).isConcrete();\n    }",
+        "position": {
+            "line": 308,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAdminProtocol",
+                "position": {
+                    "line": 309,
+                    "column": 17
+                }
+            },
+            {
+                "name": "isConcrete",
+                "position": {
+                    "line": 309,
+                    "column": 64
+                }
+            },
+            {
+                "name": "createServiceName",
+                "position": {
+                    "line": 309,
+                    "column": 41
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.isAdminProtocol(URL url)",
+            "NacosRegistry.createServiceName(URL url)"
+        ],
+        "priority": 31
+    },
+    {
+        "name": "doUnsubscribe",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "doUnsubscribe(URL url, NotifyListener listener)",
+        "class_signature": "NacosRegistry.doUnsubscribe(URL url, NotifyListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "NotifyListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        if (isAdminProtocol(url)) {\n            shutdownServiceNamesLookup();\n        } else {\n            Map<NotifyListener, NacosAggregateListener> listenerMap = originToAggregateListener.get(url);\n            if (listenerMap == null) {\n                logger.warn(\n                        REGISTRY_NACOS_EXCEPTION,\n                        \"\",\n                        \"\",\n                        String.format(\n                                \"No aggregate listener found for url %s, \"\n                                        + \"this service might have already been unsubscribed.\",\n                                url));\n                return;\n            }\n            NacosAggregateListener nacosAggregateListener = listenerMap.remove(listener);\n            if (nacosAggregateListener != null) {\n                Set<String> serviceNames = nacosAggregateListener.getServiceNames();\n                try {\n                    doUnsubscribe(url, nacosAggregateListener, serviceNames);\n                } catch (NacosException e) {\n                    logger.error(\n                            REGISTRY_NACOS_EXCEPTION,\n                            \"\",\n                            \"\",\n                            \"Failed to unsubscribe \" + url + \" to nacos \" + getUrl() + \", cause: \" + e.getMessage(),\n                            e);\n                }\n            }\n            if (listenerMap.isEmpty()) {\n                originToAggregateListener.remove(url);\n            }\n        }\n    }",
+        "position": {
+            "line": 313,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAdminProtocol",
+                "position": {
+                    "line": 314,
+                    "column": 13
+                }
+            },
+            {
+                "name": "shutdownServiceNamesLookup",
+                "position": {
+                    "line": 315,
+                    "column": 13
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 317,
+                    "column": 97
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 319,
+                    "column": 24
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 323,
+                    "column": 32
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 329,
+                    "column": 73
+                }
+            },
+            {
+                "name": "getServiceNames",
+                "position": {
+                    "line": 331,
+                    "column": 67
+                }
+            },
+            {
+                "name": "doUnsubscribe",
+                "position": {
+                    "line": 333,
+                    "column": 21
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 335,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 339,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 339,
+                    "column": 104
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 343,
+                    "column": 29
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 344,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.isAdminProtocol(URL url)",
+            "NacosRegistry.shutdownServiceNamesLookup()",
+            "NacosRegistry.doUnsubscribe(URL url, NacosAggregateListener nacosAggregateListener, Set<String> serviceNames)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "doUnsubscribe",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "doUnsubscribe(URL url, NacosAggregateListener nacosAggregateListener, Set<String> serviceNames)",
+        "class_signature": "NacosRegistry.doUnsubscribe(URL url, NacosAggregateListener nacosAggregateListener, Set<String> serviceNames)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "NacosAggregateListener",
+                "nacosAggregateListener"
+            ],
+            [
+                "Set<String>",
+                "serviceNames"
+            ]
+        ],
+        "methodBody": "{\n        for (String serviceName : serviceNames) {\n            unsubscribeEventListener(serviceName, url, nacosAggregateListener);\n        }\n    }",
+        "position": {
+            "line": 349,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "unsubscribeEventListener",
+                "position": {
+                    "line": 353,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.unsubscribeEventListener(String serviceName, URL url, NacosAggregateListener listener)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "shutdownServiceNamesLookup",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "shutdownServiceNamesLookup()",
+        "class_signature": "NacosRegistry.shutdownServiceNamesLookup()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (scheduledExecutorService != null) {\n            scheduledExecutorService.shutdown();\n        }\n    }",
+        "position": {
+            "line": 357,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 359,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    },
+    {
+        "name": "getServiceNames",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "getServiceNames(URL url, NacosAggregateListener listener)",
+        "class_signature": "NacosRegistry.getServiceNames(URL url, NacosAggregateListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "NacosAggregateListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        if (isAdminProtocol(url)) {\n            scheduleServiceNamesLookup(url, listener);\n            return getServiceNamesForOps(url);\n        } else {\n            return getServiceNames0(url);\n        }\n    }",
+        "position": {
+            "line": 370,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAdminProtocol",
+                "position": {
+                    "line": 371,
+                    "column": 13
+                }
+            },
+            {
+                "name": "scheduleServiceNamesLookup",
+                "position": {
+                    "line": 372,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getServiceNamesForOps",
+                "position": {
+                    "line": 373,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getServiceNames0",
+                "position": {
+                    "line": 375,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.isAdminProtocol(URL url)",
+            "NacosRegistry.scheduleServiceNamesLookup(URL url, NacosAggregateListener listener)",
+            "NacosRegistry.getServiceNamesForOps(URL url)",
+            "NacosRegistry.getServiceNames0(URL url)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "getServiceNames0",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "getServiceNames0(URL url)",
+        "class_signature": "NacosRegistry.getServiceNames0(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        NacosServiceName serviceName = createServiceName(url);\n\n        final Set<String> serviceNames;\n\n        if (serviceName.isConcrete()) { // is the concrete service name\n            serviceNames = new LinkedHashSet<>();\n            serviceNames.add(serviceName.toString());\n            if (supportLegacyServiceName) {\n                // Add the legacy service name since 2.7.6\n                String legacySubscribedServiceName = getLegacySubscribedServiceName(url);\n                if (!serviceName.toString().equals(legacySubscribedServiceName)) {\n                    // avoid duplicated service names\n                    serviceNames.add(legacySubscribedServiceName);\n                }\n            }\n        } else {\n            serviceNames = filterServiceNames(serviceName);\n        }\n\n        return serviceNames;\n    }",
+        "position": {
+            "line": 379,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "createServiceName",
+                "position": {
+                    "line": 380,
+                    "column": 40
+                }
+            },
+            {
+                "name": "isConcrete",
+                "position": {
+                    "line": 384,
+                    "column": 25
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 386,
+                    "column": 26
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 386,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getLegacySubscribedServiceName",
+                "position": {
+                    "line": 389,
+                    "column": 54
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 390,
+                    "column": 45
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 390,
+                    "column": 34
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 392,
+                    "column": 34
+                }
+            },
+            {
+                "name": "filterServiceNames",
+                "position": {
+                    "line": 396,
+                    "column": 28
+                }
+            },
+            {
+                "name": "LinkedHashSet<>",
+                "position": {
+                    "line": 385,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.createServiceName(URL url)",
+            "NacosRegistry.getLegacySubscribedServiceName(URL url)",
+            "NacosRegistry.filterServiceNames(NacosServiceName serviceName)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "filterServiceNames",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "filterServiceNames(NacosServiceName serviceName)",
+        "class_signature": "NacosRegistry.filterServiceNames(NacosServiceName serviceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "NacosServiceName",
+                "serviceName"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            Set<String> serviceNames = new LinkedHashSet<>();\n            serviceNames.addAll(\n                    namingService\n                            .getServicesOfServer(1, Integer.MAX_VALUE, getUrl().getGroup(Constants.DEFAULT_GROUP))\n                            .getData()\n                            .stream()\n                            .filter(this::isConformRules)\n                            .map(NacosServiceName::new)\n                            .filter(serviceName::isCompatible)\n                            .map(NacosServiceName::toString)\n                            .collect(Collectors.toList()));\n            return serviceNames;\n        } catch (SkipFailbackWrapperException exception) {\n            throw exception;\n        } catch (Throwable cause) {\n            throw new RpcException(\n                    \"Failed to filter serviceName from nacos, url: \" + getUrl() + \", serviceName: \" + serviceName\n                            + \", cause: \" + cause.getMessage(),\n                    cause);\n        }\n    }",
+        "position": {
+            "line": 402,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 405,
+                    "column": 26
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 414,
+                    "column": 30
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 413,
+                    "column": 30
+                }
+            },
+            {
+                "name": "filter",
+                "position": {
+                    "line": 412,
+                    "column": 30
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 411,
+                    "column": 30
+                }
+            },
+            {
+                "name": "filter",
+                "position": {
+                    "line": 410,
+                    "column": 30
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 409,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getData",
+                "position": {
+                    "line": 408,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getServicesOfServer",
+                "position": {
+                    "line": 407,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 407,
+                    "column": 81
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 407,
+                    "column": 72
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 414,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 420,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 421,
+                    "column": 51
+                }
+            },
+            {
+                "name": "LinkedHashSet<>",
+                "position": {
+                    "line": 404,
+                    "column": 44
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 419,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 30
+    },
+    {
+        "name": "isConformRules",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "isConformRules(String serviceName)",
+        "class_signature": "NacosRegistry.isConformRules(String serviceName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ]
+        ],
+        "methodBody": "{\n        return serviceName.split(NAME_SEPARATOR, -1).length == 4;\n    }",
+        "position": {
+            "line": 433,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "split",
+                "position": {
+                    "line": 434,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "getLegacySubscribedServiceName",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "getLegacySubscribedServiceName(URL url)",
+        "class_signature": "NacosRegistry.getLegacySubscribedServiceName(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        StringBuilder serviceNameBuilder = new StringBuilder(DEFAULT_CATEGORY);\n        appendIfPresent(serviceNameBuilder, url, INTERFACE_KEY);\n        appendIfPresent(serviceNameBuilder, url, VERSION_KEY);\n        appendIfPresent(serviceNameBuilder, url, GROUP_KEY);\n        return serviceNameBuilder.toString();\n    }",
+        "position": {
+            "line": 444,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "appendIfPresent",
+                "position": {
+                    "line": 446,
+                    "column": 9
+                }
+            },
+            {
+                "name": "appendIfPresent",
+                "position": {
+                    "line": 447,
+                    "column": 9
+                }
+            },
+            {
+                "name": "appendIfPresent",
+                "position": {
+                    "line": 448,
+                    "column": 9
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 449,
+                    "column": 35
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 445,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.appendIfPresent(StringBuilder target, URL url, String parameterName)",
+            "NacosRegistry.appendIfPresent(StringBuilder target, URL url, String parameterName)",
+            "NacosRegistry.appendIfPresent(StringBuilder target, URL url, String parameterName)"
+        ],
+        "priority": 29
+    },
+    {
+        "name": "appendIfPresent",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "appendIfPresent(StringBuilder target, URL url, String parameterName)",
+        "class_signature": "NacosRegistry.appendIfPresent(StringBuilder target, URL url, String parameterName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "StringBuilder",
+                "target"
+            ],
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "String",
+                "parameterName"
+            ]
+        ],
+        "methodBody": "{\n        String parameterValue = url.getParameter(parameterName);\n        if (!StringUtils.isBlank(parameterValue)) {\n            target.append(SERVICE_NAME_SEPARATOR).append(parameterValue);\n        }\n    }",
+        "position": {
+            "line": 452,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 453,
+                    "column": 37
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 454,
+                    "column": 26
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 455,
+                    "column": 51
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 455,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 35
+    },
+    {
+        "name": "isAdminProtocol",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "isAdminProtocol(URL url)",
+        "class_signature": "NacosRegistry.isAdminProtocol(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        return ADMIN_PROTOCOL.equals(url.getProtocol());\n    }",
+        "position": {
+            "line": 459,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 460,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getProtocol",
+                "position": {
+                    "line": 460,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 36
+    },
+    {
+        "name": "scheduleServiceNamesLookup",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "scheduleServiceNamesLookup(URL url, NacosAggregateListener listener)",
+        "class_signature": "NacosRegistry.scheduleServiceNamesLookup(URL url, NacosAggregateListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "NacosAggregateListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        if (scheduledExecutorService == null) {\n            scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();\n            scheduledExecutorService.scheduleAtFixedRate(\n                    () -> {\n                        Set<String> serviceNames = getAllServiceNames();\n                        filterData(serviceNames, serviceName -> {\n                            boolean accepted = false;\n                            for (String category : ALL_SUPPORTED_CATEGORIES) {\n                                String prefix = category + SERVICE_NAME_SEPARATOR;\n                                if (serviceName != null && serviceName.startsWith(prefix)) {\n                                    accepted = true;\n                                    break;\n                                }\n                            }\n                            return accepted;\n                        });\n                        doSubscribe(url, listener, serviceNames);\n                    },\n                    LOOKUP_INTERVAL,\n                    LOOKUP_INTERVAL,\n                    TimeUnit.SECONDS);\n        }\n    }",
+        "position": {
+            "line": 463,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "newSingleThreadScheduledExecutor",
+                "position": {
+                    "line": 465,
+                    "column": 50
+                }
+            },
+            {
+                "name": "scheduleAtFixedRate",
+                "position": {
+                    "line": 466,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getAllServiceNames",
+                "position": {
+                    "line": 468,
+                    "column": 52
+                }
+            },
+            {
+                "name": "filterData",
+                "position": {
+                    "line": 469,
+                    "column": 25
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 473,
+                    "column": 72
+                }
+            },
+            {
+                "name": "doSubscribe",
+                "position": {
+                    "line": 480,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.getAllServiceNames()",
+            "NacosRegistry.filterData(Collection<T> collection, NacosDataFilter<T> filter)",
+            "NacosRegistry.doSubscribe(URL url, NacosAggregateListener listener, Set<String> serviceNames)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "getServiceNamesForOps",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "getServiceNamesForOps(URL url)",
+        "class_signature": "NacosRegistry.getServiceNamesForOps(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        Set<String> serviceNames = getAllServiceNames();\n        filterServiceNames(serviceNames, url);\n        return serviceNames;\n    }",
+        "position": {
+            "line": 494,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllServiceNames",
+                "position": {
+                    "line": 495,
+                    "column": 36
+                }
+            },
+            {
+                "name": "filterServiceNames",
+                "position": {
+                    "line": 496,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.getAllServiceNames()",
+            "NacosRegistry.filterServiceNames(Set<String> serviceNames, URL url)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "getAllServiceNames",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "getAllServiceNames()",
+        "class_signature": "NacosRegistry.getAllServiceNames()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        try {\n            final Set<String> serviceNames = new LinkedHashSet<>();\n            int pageIndex = 1;\n            ListView<String> listView = namingService.getServicesOfServer(\n                    pageIndex, PAGINATION_SIZE, getUrl().getGroup(Constants.DEFAULT_GROUP));\n            // First page data\n            List<String> firstPageData = listView.getData();\n            // Append first page into list\n            serviceNames.addAll(firstPageData);\n            // the total count\n            int count = listView.getCount();\n            // the number of pages\n            int pageNumbers = count / PAGINATION_SIZE;\n            int remainder = count % PAGINATION_SIZE;\n            // remain\n            if (remainder > 0) {\n                pageNumbers += 1;\n            }\n            // If more than 1 page\n            while (pageIndex < pageNumbers) {\n                listView = namingService.getServicesOfServer(\n                        ++pageIndex, PAGINATION_SIZE, getUrl().getGroup(Constants.DEFAULT_GROUP));\n                serviceNames.addAll(listView.getData());\n            }\n            return serviceNames;\n        } catch (SkipFailbackWrapperException exception) {\n            throw exception;\n        } catch (Throwable cause) {\n            throw new RpcException(\n                    \"Failed to get all serviceName from nacos, url: \" + getUrl() + \", cause: \" + cause.getMessage(),\n                    cause);\n        }\n    }",
+        "position": {
+            "line": 500,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServicesOfServer",
+                "position": {
+                    "line": 504,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 505,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 505,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getData",
+                "position": {
+                    "line": 507,
+                    "column": 51
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 509,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getCount",
+                "position": {
+                    "line": 511,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getServicesOfServer",
+                "position": {
+                    "line": 521,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 522,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 522,
+                    "column": 55
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 523,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getData",
+                "position": {
+                    "line": 523,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 530,
+                    "column": 73
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 530,
+                    "column": 104
+                }
+            },
+            {
+                "name": "LinkedHashSet<>",
+                "position": {
+                    "line": 502,
+                    "column": 50
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 529,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 27
+    },
+    {
+        "name": "filterServiceNames",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "filterServiceNames(Set<String> serviceNames, URL url)",
+        "class_signature": "NacosRegistry.filterServiceNames(Set<String> serviceNames, URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Set<String>",
+                "serviceNames"
+            ],
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n\n        final List<String> categories = getCategories(url);\n\n        final String targetServiceInterface = url.getServiceInterface();\n\n        final String targetVersion = url.getVersion(\"\");\n\n        final String targetGroup = url.getGroup(\"\");\n\n        filterData(serviceNames, serviceName -> {\n            // split service name to segments\n            // (required) segments[0] = category\n            // (required) segments[1] = serviceInterface\n            // (optional) segments[2] = version\n            // (optional) segments[3] = group\n            String[] segments = serviceName.split(SERVICE_NAME_SEPARATOR, -1);\n            int length = segments.length;\n            if (length != 4) { // must present 4 segments\n                return false;\n            }\n\n            String category = segments[CATEGORY_INDEX];\n            if (!categories.contains(category)) { // no match category\n                return false;\n            }\n\n            String serviceInterface = segments[SERVICE_INTERFACE_INDEX];\n            // no match service interface\n            if (!WILDCARD.equals(targetServiceInterface)\n                    && !StringUtils.isEquals(targetServiceInterface, serviceInterface)) {\n                return false;\n            }\n\n            // no match service version\n            String version = segments[SERVICE_VERSION_INDEX];\n            if (!WILDCARD.equals(targetVersion) && !StringUtils.isEquals(targetVersion, version)) {\n                return false;\n            }\n\n            String group = segments[SERVICE_GROUP_INDEX];\n            return group == null || WILDCARD.equals(targetGroup) || StringUtils.isEquals(targetGroup, group);\n        });\n    }",
+        "position": {
+            "line": 535,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCategories",
+                "position": {
+                    "line": 537,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getServiceInterface",
+                "position": {
+                    "line": 539,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getVersion",
+                "position": {
+                    "line": 541,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 543,
+                    "column": 40
+                }
+            },
+            {
+                "name": "filterData",
+                "position": {
+                    "line": 545,
+                    "column": 9
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 551,
+                    "column": 45
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 558,
+                    "column": 29
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 564,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isEquals",
+                "position": {
+                    "line": 565,
+                    "column": 37
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 571,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isEquals",
+                "position": {
+                    "line": 571,
+                    "column": 65
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 576,
+                    "column": 46
+                }
+            },
+            {
+                "name": "isEquals",
+                "position": {
+                    "line": 576,
+                    "column": 81
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.getCategories(URL url)",
+            "NacosRegistry.filterData(Collection<T> collection, NacosDataFilter<T> filter)"
+        ],
+        "priority": 28
+    },
+    {
+        "name": "filterData",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "filterData(Collection<T> collection, NacosDataFilter<T> filter)",
+        "class_signature": "NacosRegistry.filterData(Collection<T> collection, NacosDataFilter<T> filter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Collection<T>",
+                "collection"
+            ],
+            [
+                "NacosDataFilter<T>",
+                "filter"
+            ]
+        ],
+        "methodBody": "{\n        // remove if not accept\n        collection.removeIf(data -> !filter.accept(data));\n    }",
+        "position": {
+            "line": 580,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "removeIf",
+                "position": {
+                    "line": 582,
+                    "column": 20
+                }
+            },
+            {
+                "name": "accept",
+                "position": {
+                    "line": 582,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosDataFilter.accept(T data)"
+        ],
+        "priority": 40
+    },
+    {
+        "name": "doGetServiceNames",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "doGetServiceNames(URL url)",
+        "class_signature": "NacosRegistry.doGetServiceNames(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        List<String> categories = getCategories(url);\n        List<String> serviceNames = new ArrayList<>(categories.size());\n        for (String category : categories) {\n            final String serviceName = getServiceName(url, category);\n            serviceNames.add(serviceName);\n        }\n        return serviceNames;\n    }",
+        "position": {
+            "line": 586,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCategories",
+                "position": {
+                    "line": 587,
+                    "column": 35
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 588,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 590,
+                    "column": 40
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 591,
+                    "column": 26
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 588,
+                    "column": 41
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.getCategories(URL url)",
+            "NacosRegistry.getServiceName(URL url, String category)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "destroy",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "destroy()",
+        "class_signature": "NacosRegistry.destroy()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        super.destroy();\n        try {\n            this.namingService.shutdown();\n        } catch (NacosException e) {\n            logger.warn(REGISTRY_NACOS_EXCEPTION, \"\", \"\", \"Unable to shutdown nacos naming service\", e);\n        }\n        this.nacosListeners.clear();\n    }",
+        "position": {
+            "line": 597,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 598,
+                    "column": 15
+                }
+            },
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 600,
+                    "column": 32
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 602,
+                    "column": 20
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 604,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "toUrlWithEmpty",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "toUrlWithEmpty(URL consumerURL, Collection<Instance> instances)",
+        "class_signature": "NacosRegistry.toUrlWithEmpty(URL consumerURL, Collection<Instance> instances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "consumerURL"
+            ],
+            [
+                "Collection<Instance>",
+                "instances"
+            ]
+        ],
+        "methodBody": "{\n        consumerURL = removeParamsFromConsumer(consumerURL);\n        List<URL> urls = buildURLs(consumerURL, instances);\n        // Nacos does not support configurators and routers from registry, so all notifications are of providers type.\n        if (urls.size() == 0 && !getUrl().getParameter(ENABLE_EMPTY_PROTECTION_KEY, DEFAULT_ENABLE_EMPTY_PROTECTION)) {\n            logger.warn(\n                    REGISTRY_NACOS_EXCEPTION,\n                    \"\",\n                    \"\",\n                    \"Received empty url address list and empty protection is \"\n                            + \"disabled, will clear current available addresses\");\n            URL empty = URLBuilder.from(consumerURL)\n                    .setProtocol(EMPTY_PROTOCOL)\n                    .addParameter(CATEGORY_KEY, DEFAULT_CATEGORY)\n                    .build();\n            urls.add(empty);\n        }\n        return urls;\n    }",
+        "position": {
+            "line": 607,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "removeParamsFromConsumer",
+                "position": {
+                    "line": 608,
+                    "column": 23
+                }
+            },
+            {
+                "name": "buildURLs",
+                "position": {
+                    "line": 609,
+                    "column": 26
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 611,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 611,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 611,
+                    "column": 34
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 612,
+                    "column": 20
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 621,
+                    "column": 22
+                }
+            },
+            {
+                "name": "addParameter",
+                "position": {
+                    "line": 620,
+                    "column": 22
+                }
+            },
+            {
+                "name": "setProtocol",
+                "position": {
+                    "line": 619,
+                    "column": 22
+                }
+            },
+            {
+                "name": "from",
+                "position": {
+                    "line": 618,
+                    "column": 36
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 622,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.buildURLs(URL consumerURL, Collection<Instance> instances)"
+        ],
+        "priority": 39
+    },
+    {
+        "name": "buildURLs",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "buildURLs(URL consumerURL, Collection<Instance> instances)",
+        "class_signature": "NacosRegistry.buildURLs(URL consumerURL, Collection<Instance> instances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "consumerURL"
+            ],
+            [
+                "Collection<Instance>",
+                "instances"
+            ]
+        ],
+        "methodBody": "{\n        List<URL> urls = new LinkedList<>();\n        if (instances != null && !instances.isEmpty()) {\n            for (Instance instance : instances) {\n                URL url = buildURL(consumerURL, instance);\n                if (UrlUtils.isMatch(consumerURL, url)) {\n                    urls.add(url);\n                }\n            }\n        }\n        return urls;\n    }",
+        "position": {
+            "line": 627,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 629,
+                    "column": 45
+                }
+            },
+            {
+                "name": "buildURL",
+                "position": {
+                    "line": 631,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isMatch",
+                "position": {
+                    "line": 632,
+                    "column": 30
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 633,
+                    "column": 26
+                }
+            },
+            {
+                "name": "LinkedList<>",
+                "position": {
+                    "line": 628,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.buildURL(URL consumerURL, Instance instance)"
+        ],
+        "priority": 41
+    },
+    {
+        "name": "subscribeEventListener",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "subscribeEventListener(String serviceName, URL url, NacosAggregateListener listener)",
+        "class_signature": "NacosRegistry.subscribeEventListener(String serviceName, URL url, NacosAggregateListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "NacosAggregateListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        Map<NacosAggregateListener, Map<String, EventListener>> listeners =\n                nacosListeners.computeIfAbsent(url, k -> new ConcurrentHashMap<>());\n\n        Map<String, EventListener> eventListeners = listeners.computeIfAbsent(listener, k -> new ConcurrentHashMap<>());\n\n        EventListener eventListener = eventListeners.computeIfAbsent(\n                serviceName, k -> new RegistryChildListenerImpl(serviceName, url, listener));\n\n        namingService.subscribe(serviceName, getUrl().getGroup(Constants.DEFAULT_GROUP), eventListener);\n    }",
+        "position": {
+            "line": 640,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 643,
+                    "column": 32
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 645,
+                    "column": 63
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 647,
+                    "column": 54
+                }
+            },
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 650,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 650,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 650,
+                    "column": 46
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 643,
+                    "column": 62
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 645,
+                    "column": 98
+                }
+            },
+            {
+                "name": "RegistryChildListenerImpl",
+                "position": {
+                    "line": 648,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 33
+    },
+    {
+        "name": "unsubscribeEventListener",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "unsubscribeEventListener(String serviceName, URL url, NacosAggregateListener listener)",
+        "class_signature": "NacosRegistry.unsubscribeEventListener(String serviceName, URL url, NacosAggregateListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "NacosAggregateListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        Map<NacosAggregateListener, Map<String, EventListener>> listenerToServiceEvent = nacosListeners.get(url);\n        if (listenerToServiceEvent == null) {\n            return;\n        }\n        Map<String, EventListener> serviceToEventMap = listenerToServiceEvent.get(listener);\n        if (serviceToEventMap == null) {\n            return;\n        }\n        EventListener eventListener = serviceToEventMap.remove(serviceName);\n        if (eventListener == null) {\n            return;\n        }\n        namingService.unsubscribe(\n                serviceName, getUrl().getParameter(GROUP_KEY, Constants.DEFAULT_GROUP), eventListener);\n        if (serviceToEventMap.isEmpty()) {\n            listenerToServiceEvent.remove(listener);\n        }\n        if (listenerToServiceEvent.isEmpty()) {\n            nacosListeners.remove(url);\n        }\n    }",
+        "position": {
+            "line": 653,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 655,
+                    "column": 105
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 659,
+                    "column": 79
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 663,
+                    "column": 57
+                }
+            },
+            {
+                "name": "unsubscribe",
+                "position": {
+                    "line": 667,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 668,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 668,
+                    "column": 30
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 669,
+                    "column": 31
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 670,
+                    "column": 36
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 672,
+                    "column": 36
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 673,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 25
+    },
+    {
+        "name": "notifySubscriber",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "notifySubscriber(URL url, String serviceName, NacosAggregateListener listener, Collection<Instance> instances)",
+        "class_signature": "NacosRegistry.notifySubscriber(URL url, String serviceName, NacosAggregateListener listener, Collection<Instance> instances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "NacosAggregateListener",
+                "listener"
+            ],
+            [
+                "Collection<Instance>",
+                "instances"
+            ]
+        ],
+        "methodBody": "{\n        List<Instance> enabledInstances = new LinkedList<>(instances);\n        if (enabledInstances.size() > 0) {\n            //  Instances\n            filterEnabledInstances(enabledInstances);\n        }\n        List<URL> aggregatedUrls =\n                toUrlWithEmpty(url, listener.saveAndAggregateAllInstances(serviceName, enabledInstances));\n        NacosRegistry.this.notify(url, listener.getNotifyListener(), aggregatedUrls);\n    }",
+        "position": {
+            "line": 684,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 687,
+                    "column": 30
+                }
+            },
+            {
+                "name": "filterEnabledInstances",
+                "position": {
+                    "line": 689,
+                    "column": 13
+                }
+            },
+            {
+                "name": "toUrlWithEmpty",
+                "position": {
+                    "line": 692,
+                    "column": 17
+                }
+            },
+            {
+                "name": "saveAndAggregateAllInstances",
+                "position": {
+                    "line": 692,
+                    "column": 46
+                }
+            },
+            {
+                "name": "notify",
+                "position": {
+                    "line": 693,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getNotifyListener",
+                "position": {
+                    "line": 693,
+                    "column": 49
+                }
+            },
+            {
+                "name": "LinkedList<>",
+                "position": {
+                    "line": 686,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.filterEnabledInstances(Collection<Instance> instances)",
+            "NacosRegistry.toUrlWithEmpty(URL consumerURL, Collection<Instance> instances)"
+        ],
+        "priority": 32
+    },
+    {
+        "name": "getCategories",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "getCategories(URL url)",
+        "class_signature": "NacosRegistry.getCategories(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        return ANY_VALUE.equals(url.getServiceInterface()) ? ALL_SUPPORTED_CATEGORIES : Arrays.asList(DEFAULT_CATEGORY);\n    }",
+        "position": {
+            "line": 702,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 703,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getServiceInterface",
+                "position": {
+                    "line": 703,
+                    "column": 37
+                }
+            },
+            {
+                "name": "asList",
+                "position": {
+                    "line": 703,
+                    "column": 96
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 34
+    },
+    {
+        "name": "buildURL",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "buildURL(URL consumerURL, Instance instance)",
+        "class_signature": "NacosRegistry.buildURL(URL consumerURL, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "consumerURL"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        Map<String, String> metadata = instance.getMetadata();\n        String protocol = metadata.get(PROTOCOL_KEY);\n        String path = metadata.get(PATH_KEY);\n        URL url = new ServiceConfigURL(protocol, instance.getIp(), instance.getPort(), path, instance.getMetadata());\n        return new DubboServiceAddressURL(url.getUrlAddress(), url.getUrlParam(), consumerURL, null);\n    }",
+        "position": {
+            "line": 706,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMetadata",
+                "position": {
+                    "line": 707,
+                    "column": 49
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 708,
+                    "column": 36
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 709,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 710,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 710,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getMetadata",
+                "position": {
+                    "line": 710,
+                    "column": 103
+                }
+            },
+            {
+                "name": "getUrlAddress",
+                "position": {
+                    "line": 711,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getUrlParam",
+                "position": {
+                    "line": 711,
+                    "column": 68
+                }
+            },
+            {
+                "name": "ServiceConfigURL",
+                "position": {
+                    "line": 710,
+                    "column": 23
+                }
+            },
+            {
+                "name": "DubboServiceAddressURL",
+                "position": {
+                    "line": 711,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 43
+    },
+    {
+        "name": "createInstance",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "createInstance(URL url)",
+        "class_signature": "NacosRegistry.createInstance(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        // Append default category if absent\n        String category = url.getCategory(DEFAULT_CATEGORY);\n        URL newURL = url.addParameter(CATEGORY_KEY, category);\n        newURL = newURL.addParameter(PROTOCOL_KEY, url.getProtocol());\n        newURL = newURL.addParameter(PATH_KEY, url.getPath());\n        String ip = url.getHost();\n        int port = url.getPort();\n        Instance instance = new Instance();\n        instance.setIp(ip);\n        instance.setPort(port);\n        instance.setMetadata(new HashMap<>(newURL.getParameters()));\n        return instance;\n    }",
+        "position": {
+            "line": 714,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCategory",
+                "position": {
+                    "line": 716,
+                    "column": 31
+                }
+            },
+            {
+                "name": "addParameter",
+                "position": {
+                    "line": 717,
+                    "column": 26
+                }
+            },
+            {
+                "name": "addParameter",
+                "position": {
+                    "line": 718,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getProtocol",
+                "position": {
+                    "line": 718,
+                    "column": 56
+                }
+            },
+            {
+                "name": "addParameter",
+                "position": {
+                    "line": 719,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getPath",
+                "position": {
+                    "line": 719,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getHost",
+                "position": {
+                    "line": 720,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 721,
+                    "column": 24
+                }
+            },
+            {
+                "name": "setIp",
+                "position": {
+                    "line": 723,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setPort",
+                "position": {
+                    "line": 724,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setMetadata",
+                "position": {
+                    "line": 725,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getParameters",
+                "position": {
+                    "line": 725,
+                    "column": 51
+                }
+            },
+            {
+                "name": "Instance",
+                "position": {
+                    "line": 722,
+                    "column": 33
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 725,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "createServiceName",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "createServiceName(URL url)",
+        "class_signature": "NacosRegistry.createServiceName(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        return valueOf(url);\n    }",
+        "position": {
+            "line": 729,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 730,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 37
+    },
+    {
+        "name": "getServiceName",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "getServiceName(URL url, boolean needCompatible)",
+        "class_signature": "NacosRegistry.getServiceName(URL url, boolean needCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "boolean",
+                "needCompatible"
+            ]
+        ],
+        "methodBody": "{\n        if (needCompatible) {\n            return getCompatibleServiceName(url, url.getCategory(DEFAULT_CATEGORY));\n        }\n        return getServiceName(url, url.getCategory(DEFAULT_CATEGORY));\n    }",
+        "position": {
+            "line": 733,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCompatibleServiceName",
+                "position": {
+                    "line": 735,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getCategory",
+                "position": {
+                    "line": 735,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 737,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getCategory",
+                "position": {
+                    "line": 737,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.getCompatibleServiceName(URL url, String category)",
+            "NacosRegistry.getServiceName(URL url, String category)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "getServiceName",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "getServiceName(URL url, String category)",
+        "class_signature": "NacosRegistry.getServiceName(URL url, String category)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "String",
+                "category"
+            ]
+        ],
+        "methodBody": "{\n        return category + SERVICE_NAME_SEPARATOR + url.getColonSeparatedKey();\n    }",
+        "position": {
+            "line": 740,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getColonSeparatedKey",
+                "position": {
+                    "line": 741,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 21
+    },
+    {
+        "name": "getCompatibleServiceName",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "getCompatibleServiceName(URL url, String category)",
+        "class_signature": "NacosRegistry.getCompatibleServiceName(URL url, String category)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "String",
+                "category"
+            ]
+        ],
+        "methodBody": "{\n        return category + SERVICE_NAME_SEPARATOR + url.getCompatibleColonSeparatedKey();\n    }",
+        "position": {
+            "line": 744,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCompatibleColonSeparatedKey",
+                "position": {
+                    "line": 745,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "filterEnabledInstances",
+        "category": "method_declaration",
+        "class": "NacosRegistry",
+        "signature": "filterEnabledInstances(Collection<Instance> instances)",
+        "class_signature": "NacosRegistry.filterEnabledInstances(Collection<Instance> instances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Collection<Instance>",
+                "instances"
+            ]
+        ],
+        "methodBody": "{\n        filterData(instances, Instance::isEnabled);\n    }",
+        "position": {
+            "line": 748,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "filterData",
+                "position": {
+                    "line": 749,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.filterData(Collection<T> collection, NacosDataFilter<T> filter)"
+        ],
+        "priority": 38
+    },
+    {
+        "name": "accept",
+        "category": "method_declaration",
+        "class": "NacosDataFilter",
+        "signature": "accept(T data)",
+        "class_signature": "NacosDataFilter.accept(T data)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "T",
+                "data"
+            ]
+        ],
+        "methodBody": "",
+        "position": {
+            "line": 766,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 42
+    },
+    {
+        "name": "RegistryChildListenerImpl",
+        "category": "constructor_declaration",
+        "class": "RegistryChildListenerImpl",
+        "signature": "RegistryChildListenerImpl(String serviceName, URL consumerUrl, NacosAggregateListener listener)",
+        "class_signature": "RegistryChildListenerImpl.RegistryChildListenerImpl(String serviceName, URL consumerUrl, NacosAggregateListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "URL",
+                "consumerUrl"
+            ],
+            [
+                "NacosAggregateListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n            this.serviceName = serviceName;\n            this.consumerUrl = consumerUrl;\n            this.listener = listener;\n            this.notifier = new RegistryNotifier(getUrl(), NacosRegistry.this.getDelay()) {\n                @Override\n                protected void doNotify(Object rawAddresses) {\n                    List<Instance> instances = (List<Instance>) rawAddresses;\n                    NacosRegistry.this.notifySubscriber(consumerUrl, serviceName, listener, instances);\n                }\n            };\n        }",
+        "position": {
+            "line": 778,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 782,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getDelay",
+                "position": {
+                    "line": 782,
+                    "column": 79
+                }
+            },
+            {
+                "name": "notifySubscriber",
+                "position": {
+                    "line": 786,
+                    "column": 40
+                }
+            },
+            {
+                "name": "RegistryNotifier",
+                "position": {
+                    "line": 782,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.notifySubscriber(URL url, String serviceName, NacosAggregateListener listener, Collection<Instance> instances)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "doNotify",
+        "category": "method_declaration",
+        "class": "RegistryChildListenerImpl",
+        "signature": "doNotify(Object rawAddresses)",
+        "class_signature": "RegistryChildListenerImpl.doNotify(Object rawAddresses)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "rawAddresses"
+            ]
+        ],
+        "methodBody": "{\n                    List<Instance> instances = (List<Instance>) rawAddresses;\n                    NacosRegistry.this.notifySubscriber(consumerUrl, serviceName, listener, instances);\n                }",
+        "position": {
+            "line": 784,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notifySubscriber",
+                "position": {
+                    "line": 786,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [
+            "NacosRegistry.notifySubscriber(URL url, String serviceName, NacosAggregateListener listener, Collection<Instance> instances)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "onEvent",
+        "category": "method_declaration",
+        "class": "RegistryChildListenerImpl",
+        "signature": "onEvent(Event event)",
+        "class_signature": "RegistryChildListenerImpl.onEvent(Event event)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Event",
+                "event"
+            ]
+        ],
+        "methodBody": "{\n            if (event instanceof NamingEvent) {\n                NamingEvent e = (NamingEvent) event;\n                notifier.notify(e.getInstances());\n            }\n        }",
+        "position": {
+            "line": 792,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notify",
+                "position": {
+                    "line": 795,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getInstances",
+                "position": {
+                    "line": 795,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 12
+    },
+    {
+        "name": "equals",
+        "category": "method_declaration",
+        "class": "RegistryChildListenerImpl",
+        "signature": "equals(Object o)",
+        "class_signature": "RegistryChildListenerImpl.equals(Object o)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "o"
+            ]
+        ],
+        "methodBody": "{\n            if (this == o) {\n                return true;\n            }\n            if (o == null || getClass() != o.getClass()) {\n                return false;\n            }\n            RegistryChildListenerImpl that = (RegistryChildListenerImpl) o;\n            return Objects.equals(serviceName, that.serviceName)\n                    && Objects.equals(consumerUrl, that.consumerUrl)\n                    && Objects.equals(listener, that.listener);\n        }",
+        "position": {
+            "line": 800,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 804,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 804,
+                    "column": 46
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 808,
+                    "column": 28
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 809,
+                    "column": 32
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 810,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 13
+    },
+    {
+        "name": "hashCode",
+        "category": "method_declaration",
+        "class": "RegistryChildListenerImpl",
+        "signature": "hashCode()",
+        "class_signature": "RegistryChildListenerImpl.hashCode()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            return Objects.hash(serviceName, consumerUrl, listener);\n        }",
+        "position": {
+            "line": 814,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "hash",
+                "position": {
+                    "line": 815,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    }
+]

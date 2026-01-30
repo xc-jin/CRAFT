@@ -1,0 +1,2154 @@
+[
+    {
+        "name": "ObjectView",
+        "category": "constructor_declaration",
+        "class": "ObjectView",
+        "signature": "ObjectView(ObjectVO objectVO)",
+        "class_signature": "ObjectView.ObjectView(ObjectVO objectVO)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ObjectVO",
+                "objectVO"
+            ]
+        ],
+        "methodBody": "{\n        this(MAX_OBJECT_LENGTH, objectVO);\n    }",
+        "position": {
+            "line": 31,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "ObjectView",
+        "category": "constructor_declaration",
+        "class": "ObjectView",
+        "signature": "ObjectView(int maxObjectLength, ObjectVO objectVO)",
+        "class_signature": "ObjectView.ObjectView(int maxObjectLength, ObjectVO objectVO)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "maxObjectLength"
+            ],
+            [
+                "ObjectVO",
+                "objectVO"
+            ]
+        ],
+        "methodBody": "{\n        this(objectVO.getObject(), objectVO.expandOrDefault(), maxObjectLength);\n    }",
+        "position": {
+            "line": 35,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getObject",
+                "position": {
+                    "line": 36,
+                    "column": 23
+                }
+            },
+            {
+                "name": "expandOrDefault",
+                "position": {
+                    "line": 36,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "ObjectView",
+        "category": "constructor_declaration",
+        "class": "ObjectView",
+        "signature": "ObjectView(Object object, int deep)",
+        "class_signature": "ObjectView.ObjectView(Object object, int deep)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "object"
+            ],
+            [
+                "int",
+                "deep"
+            ]
+        ],
+        "methodBody": "{\n        this(object, deep, MAX_OBJECT_LENGTH);\n    }",
+        "position": {
+            "line": 39,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "ObjectView",
+        "category": "constructor_declaration",
+        "class": "ObjectView",
+        "signature": "ObjectView(Object object, int deep, int maxObjectLength)",
+        "class_signature": "ObjectView.ObjectView(Object object, int deep, int maxObjectLength)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "object"
+            ],
+            [
+                "int",
+                "deep"
+            ],
+            [
+                "int",
+                "maxObjectLength"
+            ]
+        ],
+        "methodBody": "{\n        this.object = object;\n        this.deep = deep > MAX_DEEP ? MAX_DEEP : deep;\n        this.maxObjectLength = maxObjectLength;\n    }",
+        "position": {
+            "line": 43,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "draw",
+        "category": "method_declaration",
+        "class": "ObjectView",
+        "signature": "draw()",
+        "class_signature": "ObjectView.draw()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        StringBuilder buf = new StringBuilder();\n        try {\n            if (GlobalOptions.isUsingJson) {\n                return JSON.toJSONString(object, JSONWriter.Feature.IgnoreErrorGetter);\n            }\n            renderObject(object, 0, deep, buf);\n            return buf.toString();\n        } catch (ObjectTooLargeException e) {\n            buf.append(\" Object size exceeds size limit: \")\n                    .append(maxObjectLength)\n                    .append(\", try to specify -M size_limit in your command, check the help command for more.\");\n            return buf.toString();\n        } catch (Throwable t) {\n            logger.error(\"ObjectView draw error, object class: {}\", object.getClass(), t);\n            return \"ERROR DATA!!! object class: \" + object.getClass() + \", exception class: \" + t.getClass()\n                    + \", exception message: \" + t.getMessage();\n        }\n    }",
+        "position": {
+            "line": 50,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "toJSONString",
+                "position": {
+                    "line": 54,
+                    "column": 29
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 56,
+                    "column": 13
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 57,
+                    "column": 24
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 61,
+                    "column": 22
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 60,
+                    "column": 22
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 59,
+                    "column": 17
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 62,
+                    "column": 24
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 64,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 64,
+                    "column": 76
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 65,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 65,
+                    "column": 99
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 66,
+                    "column": 51
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 51,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "renderObject",
+        "category": "method_declaration",
+        "class": "ObjectView",
+        "signature": "renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+        "class_signature": "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "obj"
+            ],
+            [
+                "int",
+                "deep"
+            ],
+            [
+                "int",
+                "expand"
+            ],
+            [
+                "StringBuilder",
+                "buf"
+            ]
+        ],
+        "methodBody": "{\n\n        if (null == obj) {\n            appendStringBuilder(buf,\"null\");\n        } else {\n\n            final Class<?> clazz = obj.getClass();\n            final String className = clazz.getSimpleName();\n            if (Integer.class.isInstance(obj)\n                || Long.class.isInstance(obj)\n                || Float.class.isInstance(obj)\n                || Double.class.isInstance(obj)\n                    //                    || Character.class.isInstance(obj)\n                || Short.class.isInstance(obj)\n                || Byte.class.isInstance(obj)\n                || Boolean.class.isInstance(obj)) {\n                appendStringBuilder(buf, format(\"@%s[%s]\", className, obj));\n            }\n\n            else if (Character.class.isInstance(obj)) {\n\n                final Character c = (Character) obj;\n\n                if (c >= 32\n                    && c <= 126) {\n                    appendStringBuilder(buf, format(\"@%s[%s]\", className, c));\n                }\n\n                else if (ASCII_MAP.containsKey((byte) c.charValue())) {\n                    appendStringBuilder(buf, format(\"@%s[%s]\", className, ASCII_MAP.get((byte) c.charValue())));\n                }\n\n                else {\n                    appendStringBuilder(buf, format(\"@%s[%s]\", className, c));\n                }\n\n            }\n\n            else if (String.class.isInstance(obj)) {\n                appendStringBuilder(buf, \"@\");\n                appendStringBuilder(buf, className);\n                appendStringBuilder(buf, \"[\");\n                for (Character c : ((String) obj).toCharArray()) {\n                    switch (c) {\n                        case '\\n':\n                            appendStringBuilder(buf, \"\\\\n\");\n                            break;\n                        case '\\r':\n                            appendStringBuilder(buf, \"\\\\r\");\n                            break;\n                        default:\n                            appendStringBuilder(buf, c.toString());\n                    }//switch\n                }//for\n                appendStringBuilder(buf, \"]\");\n            }\n\n            else if (Collection.class.isInstance(obj)) {\n\n                @SuppressWarnings(\"unchecked\") final Collection<Object> collection = (Collection<Object>) obj;\n\n                if (!isExpand(deep, expand)\n                    || collection.isEmpty()) {\n\n                    appendStringBuilder(buf, format(\"@%s[isEmpty=%s;size=%d]\",\n                                      className,\n                                      collection.isEmpty(),\n                                      collection.size()));\n                }\n\n                else {\n                    appendStringBuilder(buf, format(\"@%s[\", className));\n                    for (Object e : collection) {\n                        appendStringBuilder(buf, \"\\n\");\n                        for (int i = 0; i < deep+1; i++) {\n                            appendStringBuilder(buf, TAB);\n                        }\n                        renderObject(e, deep + 1, expand, buf);\n                        appendStringBuilder(buf, \",\");\n                    }\n                    appendStringBuilder(buf, \"\\n\");\n                    for (int i = 0; i < deep; i++) {\n                        appendStringBuilder(buf, TAB);\n                    }\n                    appendStringBuilder(buf, \"]\");\n                }\n\n            }\n\n\n            else if (Map.class.isInstance(obj)) {\n                @SuppressWarnings(\"unchecked\") final Map<Object, Object> map = (Map<Object, Object>) obj;\n\n                if (!isExpand(deep, expand)\n                    || map.isEmpty()) {\n\n                    appendStringBuilder(buf, format(\"@%s[isEmpty=%s;size=%d]\",\n                                      className,\n                                      map.isEmpty(),\n                                      map.size()));\n\n                } else {\n                    appendStringBuilder(buf, format(\"@%s[\", className));\n                    for (Map.Entry<Object, Object> entry : map.entrySet()) {\n                        appendStringBuilder(buf, \"\\n\");\n                        for (int i = 0; i < deep+1; i++) {\n                            appendStringBuilder(buf, TAB);\n                        }\n                        renderObject(entry.getKey(), deep + 1, expand, buf);\n                        appendStringBuilder(buf, \":\");\n                        renderObject(entry.getValue(), deep + 1, expand, buf);\n                        appendStringBuilder(buf, \",\");\n                    }\n                    appendStringBuilder(buf, \"\\n\");\n                    for (int i = 0; i < deep; i++) {\n                        appendStringBuilder(buf, TAB);\n                    }\n                    appendStringBuilder(buf, \"]\");\n                }\n            }\n\n            else if (obj.getClass().isArray()) {\n\n\n                final String typeName = obj.getClass().getSimpleName();\n\n                // int[]\n                if (typeName.equals(\"int[]\")) {\n\n                    final int[] arrays = (int[]) obj;\n                    if (!isExpand(deep, expand)\n                        || arrays.length == 0) {\n\n                        appendStringBuilder(buf, format(\"@%s[isEmpty=%s;size=%d]\",\n                                          typeName,\n                                          arrays.length == 0,\n                                          arrays.length));\n\n                    }\n\n                    else {\n                        appendStringBuilder(buf, format(\"@%s[\", className));\n                        for (int e : arrays) {\n                            appendStringBuilder(buf, \"\\n\");\n                            for (int i = 0; i < deep+1; i++) {\n                                appendStringBuilder(buf, TAB);\n                            }\n                            renderObject(e, deep + 1, expand, buf);\n                            appendStringBuilder(buf, \",\");\n                        }\n                        appendStringBuilder(buf, \"\\n\");\n                        for (int i = 0; i < deep; i++) {\n                            appendStringBuilder(buf, TAB);\n                        }\n                        appendStringBuilder(buf, \"]\");\n                    }\n\n                }\n\n                // long[]\n                else if (typeName.equals(\"long[]\")) {\n\n                    final long[] arrays = (long[]) obj;\n                    if (!isExpand(deep, expand)\n                        || arrays.length == 0) {\n\n                        appendStringBuilder(buf, format(\"@%s[isEmpty=%s;size=%d]\",\n                                          typeName,\n                                          arrays.length == 0,\n                                          arrays.length));\n\n                    }\n\n                    else {\n                        appendStringBuilder(buf, format(\"@%s[\", className));\n                        for (long e : arrays) {\n                            appendStringBuilder(buf, \"\\n\");\n                            for (int i = 0; i < deep+1; i++) {\n                                appendStringBuilder(buf, TAB);\n                            }\n                            renderObject(e, deep + 1, expand, buf);\n                            appendStringBuilder(buf, \",\");\n                        }\n                        appendStringBuilder(buf, \"\\n\");\n                        for (int i = 0; i < deep; i++) {\n                            appendStringBuilder(buf, TAB);\n                        }\n                        appendStringBuilder(buf, \"]\");\n                    }\n\n                }\n\n                // short[]\n                else if (typeName.equals(\"short[]\")) {\n\n                    final short[] arrays = (short[]) obj;\n                    if (!isExpand(deep, expand)\n                        || arrays.length == 0) {\n\n                        appendStringBuilder(buf, format(\"@%s[isEmpty=%s;size=%d]\",\n                                          typeName,\n                                          arrays.length == 0,\n                                          arrays.length));\n\n                    }\n\n                    else {\n                        appendStringBuilder(buf, format(\"@%s[\", className));\n                        for (short e : arrays) {\n                            appendStringBuilder(buf, \"\\n\");\n                            for (int i = 0; i < deep+1; i++) {\n                                appendStringBuilder(buf, TAB);\n                            }\n                            renderObject(e, deep + 1, expand, buf);\n                            appendStringBuilder(buf, \",\");\n                        }\n                        appendStringBuilder(buf, \"\\n\");\n                        for (int i = 0; i < deep; i++) {\n                            appendStringBuilder(buf, TAB);\n                        }\n                        appendStringBuilder(buf, \"]\");\n                    }\n\n                }\n\n                // float[]\n                else if (typeName.equals(\"float[]\")) {\n\n                    final float[] arrays = (float[]) obj;\n                    if (!isExpand(deep, expand)\n                        || arrays.length == 0) {\n\n                        appendStringBuilder(buf, format(\"@%s[isEmpty=%s;size=%d]\",\n                                          typeName,\n                                          arrays.length == 0,\n                                          arrays.length));\n\n                    }\n\n                    else {\n                        appendStringBuilder(buf, format(\"@%s[\", className));\n                        for (float e : arrays) {\n                            appendStringBuilder(buf, \"\\n\");\n                            for (int i = 0; i < deep+1; i++) {\n                                appendStringBuilder(buf, TAB);\n                            }\n                            renderObject(e, deep + 1, expand, buf);\n                            appendStringBuilder(buf, \",\");\n                        }\n                        appendStringBuilder(buf, \"\\n\");\n                        for (int i = 0; i < deep; i++) {\n                            appendStringBuilder(buf, TAB);\n                        }\n                        appendStringBuilder(buf, \"]\");\n                    }\n\n                }\n\n                // double[]\n                else if (typeName.equals(\"double[]\")) {\n\n                    final double[] arrays = (double[]) obj;\n                    if (!isExpand(deep, expand)\n                        || arrays.length == 0) {\n\n                        appendStringBuilder(buf, format(\"@%s[isEmpty=%s;size=%d]\",\n                                          typeName,\n                                          arrays.length == 0,\n                                          arrays.length));\n\n                    }\n\n                    else {\n                        appendStringBuilder(buf, format(\"@%s[\", className));\n                        for (double e : arrays) {\n                            appendStringBuilder(buf, \"\\n\");\n                            for (int i = 0; i < deep+1; i++) {\n                                appendStringBuilder(buf, TAB);\n                            }\n                            renderObject(e, deep + 1, expand, buf);\n                            appendStringBuilder(buf, \",\");\n                        }\n                        appendStringBuilder(buf, \"\\n\");\n                        for (int i = 0; i < deep; i++) {\n                            appendStringBuilder(buf, TAB);\n                        }\n                        appendStringBuilder(buf, \"]\");\n                    }\n\n                }\n\n                // boolean[]\n                else if (typeName.equals(\"boolean[]\")) {\n\n                    final boolean[] arrays = (boolean[]) obj;\n                    if (!isExpand(deep, expand)\n                        || arrays.length == 0) {\n\n                        appendStringBuilder(buf, format(\"@%s[isEmpty=%s;size=%d]\",\n                                          typeName,\n                                          arrays.length == 0,\n                                          arrays.length));\n\n                    }\n\n                    else {\n                        appendStringBuilder(buf, format(\"@%s[\", className));\n                        for (boolean e : arrays) {\n                            appendStringBuilder(buf, \"\\n\");\n                            for (int i = 0; i < deep+1; i++) {\n                                appendStringBuilder(buf, TAB);\n                            }\n                            renderObject(e, deep + 1, expand, buf);\n                            appendStringBuilder(buf, \",\");\n                        }\n                        appendStringBuilder(buf, \"\\n\");\n                        for (int i = 0; i < deep; i++) {\n                            appendStringBuilder(buf, TAB);\n                        }\n                        appendStringBuilder(buf, \"]\");\n                    }\n\n                }\n\n                // char[]\n                else if (typeName.equals(\"char[]\")) {\n\n                    final char[] arrays = (char[]) obj;\n                    if (!isExpand(deep, expand)\n                        || arrays.length == 0) {\n\n                        appendStringBuilder(buf, format(\"@%s[isEmpty=%s;size=%d]\",\n                                          typeName,\n                                          arrays.length == 0,\n                                          arrays.length));\n\n                    }\n\n                    else {\n                        appendStringBuilder(buf, format(\"@%s[\", className));\n                        for (char e : arrays) {\n                            appendStringBuilder(buf, \"\\n\");\n                            for (int i = 0; i < deep+1; i++) {\n                                appendStringBuilder(buf, TAB);\n                            }\n                            renderObject(e, deep + 1, expand, buf);\n                            appendStringBuilder(buf, \",\");\n                        }\n                        appendStringBuilder(buf, \"\\n\");\n                        for (int i = 0; i < deep; i++) {\n                            appendStringBuilder(buf, TAB);\n                        }\n                        appendStringBuilder(buf, \"]\");\n                    }\n\n                }\n\n                // byte[]\n                else if (typeName.equals(\"byte[]\")) {\n\n                    final byte[] arrays = (byte[]) obj;\n                    if (!isExpand(deep, expand)\n                        || arrays.length == 0) {\n\n                        appendStringBuilder(buf, format(\"@%s[isEmpty=%s;size=%d]\",\n                                          typeName,\n                                          arrays.length == 0,\n                                          arrays.length));\n\n                    }\n\n                    else {\n                        appendStringBuilder(buf, format(\"@%s[\", className));\n                        for (byte e : arrays) {\n                            appendStringBuilder(buf, \"\\n\");\n                            for (int i = 0; i < deep+1; i++) {\n                                appendStringBuilder(buf, TAB);\n                            }\n                            renderObject(e, deep + 1, expand, buf);\n                            appendStringBuilder(buf, \",\");\n                        }\n                        appendStringBuilder(buf, \"\\n\");\n                        for (int i = 0; i < deep; i++) {\n                            appendStringBuilder(buf, TAB);\n                        }\n                        appendStringBuilder(buf, \"]\");\n                    }\n\n                }\n\n                // Object[]\n                else {\n                    final Object[] arrays = (Object[]) obj;\n                    if (!isExpand(deep, expand)\n                        || arrays.length == 0) {\n\n                        appendStringBuilder(buf, format(\"@%s[isEmpty=%s;size=%d]\",\n                                          typeName,\n                                          arrays.length == 0,\n                                          arrays.length));\n\n                    }\n\n                    else {\n                        appendStringBuilder(buf, format(\"@%s[\", className));\n                        for (Object e : arrays) {\n                            appendStringBuilder(buf, \"\\n\");\n                            for (int i = 0; i < deep+1; i++) {\n                                appendStringBuilder(buf, TAB);\n                            }\n                            renderObject(e, deep + 1, expand, buf);\n                            appendStringBuilder(buf, \",\");\n                        }\n                        appendStringBuilder(buf, \"\\n\");\n                        for (int i = 0; i < deep; i++) {\n                            appendStringBuilder(buf, TAB);\n                        }\n                        appendStringBuilder(buf, \"]\");\n                    }\n                }\n\n            }\n\n\n            else if (Throwable.class.isInstance(obj)) {\n\n                if (!isExpand(deep, expand)) {\n                    appendStringBuilder(buf, format(\"@%s[%s]\", className, obj));\n                } else {\n\n                    final Throwable throwable = (Throwable) obj;\n                    final StringWriter sw = new StringWriter();\n                    final PrintWriter pw = new PrintWriter(sw);\n                    throwable.printStackTrace(pw);\n                    appendStringBuilder(buf, sw.toString());\n                }\n\n            }\n\n            else if (Date.class.isInstance(obj)) {\n                appendStringBuilder(buf, format(\"@%s[%s]\", className, new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss,SSS\").format(obj)));\n            }\n\n            else if (object instanceof Enum<?>) {\n                appendStringBuilder(buf, format(\"@%s[%s]\", className, obj));\n            }\n\n            else {\n\n                if (!isExpand(deep, expand)) {\n                    appendStringBuilder(buf, format(\"@%s[%s]\", className, obj));\n                } else {\n                    appendStringBuilder(buf, format(\"@%s[\", className));\n                    final List<Field> fields;\n                    Class<?> objClass = obj.getClass();\n                    if (GlobalOptions.printParentFields) {\n                        fields = new ArrayList<Field>();\n                        while (objClass != null) {\n                            fields.addAll(Arrays.asList(objClass.getDeclaredFields()));\n                            objClass = objClass.getSuperclass();\n                        }\n                    } else {\n                        fields = new ArrayList<Field>(Arrays.asList(objClass.getDeclaredFields()));\n                    }\n\n                    for (Field field : fields) {\n\n                        field.setAccessible(true);\n\n                        try {\n\n                            final Object value = field.get(obj);\n\n                            appendStringBuilder(buf, \"\\n\");\n                            for (int i = 0; i < deep+1; i++) {\n                                appendStringBuilder(buf, TAB);\n                            }\n                            appendStringBuilder(buf, field.getName());\n                            appendStringBuilder(buf, \"=\");\n                            renderObject(value, deep + 1, expand, buf);\n                            appendStringBuilder(buf, \",\");\n\n                        } catch (ObjectTooLargeException t) {\n                            buf.append(\"...\");\n                            break;\n                        } catch (Throwable t) {\n                            // ignore\n                        }\n                    }//for\n                    appendStringBuilder(buf, \"\\n\");\n                    for (int i = 0; i < deep; i++) {\n                        appendStringBuilder(buf, TAB);\n                    }\n                    appendStringBuilder(buf, \"]\");\n                }\n\n            }\n        }\n    }",
+        "position": {
+            "line": 110,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 113,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 116,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 117,
+                    "column": 44
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 118,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 119,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 120,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 121,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 123,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 124,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 125,
+                    "column": 34
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 126,
+                    "column": 17
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 126,
+                    "column": 42
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 129,
+                    "column": 38
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 135,
+                    "column": 21
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 135,
+                    "column": 46
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 138,
+                    "column": 36
+                }
+            },
+            {
+                "name": "charValue",
+                "position": {
+                    "line": 138,
+                    "column": 57
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 139,
+                    "column": 21
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 139,
+                    "column": 46
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 139,
+                    "column": 85
+                }
+            },
+            {
+                "name": "charValue",
+                "position": {
+                    "line": 139,
+                    "column": 98
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 143,
+                    "column": 21
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 143,
+                    "column": 46
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 148,
+                    "column": 35
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 149,
+                    "column": 17
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 150,
+                    "column": 17
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 151,
+                    "column": 17
+                }
+            },
+            {
+                "name": "toCharArray",
+                "position": {
+                    "line": 152,
+                    "column": 51
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 155,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 158,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 161,
+                    "column": 29
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 161,
+                    "column": 56
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 164,
+                    "column": 17
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 167,
+                    "column": 39
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 171,
+                    "column": 22
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 172,
+                    "column": 35
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 174,
+                    "column": 21
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 174,
+                    "column": 46
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 176,
+                    "column": 50
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 177,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 181,
+                    "column": 21
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 181,
+                    "column": 46
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 183,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 185,
+                    "column": 29
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 187,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 188,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 190,
+                    "column": 21
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 192,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 194,
+                    "column": 21
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 200,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 203,
+                    "column": 22
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 204,
+                    "column": 28
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 206,
+                    "column": 21
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 206,
+                    "column": 46
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 208,
+                    "column": 43
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 209,
+                    "column": 43
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 212,
+                    "column": 21
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 212,
+                    "column": 46
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 213,
+                    "column": 64
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 214,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 216,
+                    "column": 29
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 218,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 218,
+                    "column": 44
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 219,
+                    "column": 25
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 220,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 220,
+                    "column": 44
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 221,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 223,
+                    "column": 21
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 225,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 227,
+                    "column": 21
+                }
+            },
+            {
+                "name": "isArray",
+                "position": {
+                    "line": 231,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 231,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 234,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 234,
+                    "column": 45
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 237,
+                    "column": 30
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 240,
+                    "column": 26
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 243,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 243,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 251,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 251,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 253,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 255,
+                    "column": 33
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 257,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 258,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 260,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 262,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 264,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 270,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 273,
+                    "column": 26
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 276,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 276,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 284,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 284,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 286,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 288,
+                    "column": 33
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 290,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 291,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 293,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 295,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 297,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 303,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 306,
+                    "column": 26
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 309,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 309,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 317,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 317,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 319,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 321,
+                    "column": 33
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 323,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 324,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 326,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 328,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 330,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 336,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 339,
+                    "column": 26
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 342,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 342,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 350,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 350,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 352,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 354,
+                    "column": 33
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 356,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 357,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 359,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 361,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 363,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 369,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 372,
+                    "column": 26
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 375,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 375,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 383,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 383,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 385,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 387,
+                    "column": 33
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 389,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 390,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 392,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 394,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 396,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 402,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 405,
+                    "column": 26
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 408,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 408,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 416,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 416,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 418,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 420,
+                    "column": 33
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 422,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 423,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 425,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 427,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 429,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 435,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 438,
+                    "column": 26
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 441,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 441,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 449,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 449,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 451,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 453,
+                    "column": 33
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 455,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 456,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 458,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 460,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 462,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 468,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 471,
+                    "column": 26
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 474,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 474,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 482,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 482,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 484,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 486,
+                    "column": 33
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 488,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 489,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 491,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 493,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 495,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 503,
+                    "column": 26
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 506,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 506,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 514,
+                    "column": 25
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 514,
+                    "column": 50
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 516,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 518,
+                    "column": 33
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 520,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 521,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 523,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 525,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 527,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 534,
+                    "column": 38
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 536,
+                    "column": 22
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 537,
+                    "column": 21
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 537,
+                    "column": 46
+                }
+            },
+            {
+                "name": "printStackTrace",
+                "position": {
+                    "line": 543,
+                    "column": 31
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 544,
+                    "column": 21
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 544,
+                    "column": 49
+                }
+            },
+            {
+                "name": "isInstance",
+                "position": {
+                    "line": 549,
+                    "column": 33
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 550,
+                    "column": 17
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 550,
+                    "column": 42
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 550,
+                    "column": 119
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 554,
+                    "column": 17
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 554,
+                    "column": 42
+                }
+            },
+            {
+                "name": "isExpand",
+                "position": {
+                    "line": 559,
+                    "column": 22
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 560,
+                    "column": 21
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 560,
+                    "column": 46
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 562,
+                    "column": 21
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 562,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 564,
+                    "column": 45
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 568,
+                    "column": 36
+                }
+            },
+            {
+                "name": "asList",
+                "position": {
+                    "line": 568,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getDeclaredFields",
+                "position": {
+                    "line": 568,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getSuperclass",
+                "position": {
+                    "line": 569,
+                    "column": 49
+                }
+            },
+            {
+                "name": "asList",
+                "position": {
+                    "line": 572,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getDeclaredFields",
+                "position": {
+                    "line": 572,
+                    "column": 78
+                }
+            },
+            {
+                "name": "setAccessible",
+                "position": {
+                    "line": 577,
+                    "column": 31
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 581,
+                    "column": 56
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 583,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 585,
+                    "column": 33
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 587,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 587,
+                    "column": 60
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 588,
+                    "column": 29
+                }
+            },
+            {
+                "name": "renderObject",
+                "position": {
+                    "line": 589,
+                    "column": 29
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 590,
+                    "column": 29
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 593,
+                    "column": 33
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 599,
+                    "column": 21
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 601,
+                    "column": 25
+                }
+            },
+            {
+                "name": "appendStringBuilder",
+                "position": {
+                    "line": 603,
+                    "column": 21
+                }
+            },
+            {
+                "name": "StringWriter",
+                "position": {
+                    "line": 541,
+                    "column": 49
+                }
+            },
+            {
+                "name": "PrintWriter",
+                "position": {
+                    "line": 542,
+                    "column": 48
+                }
+            },
+            {
+                "name": "SimpleDateFormat",
+                "position": {
+                    "line": 550,
+                    "column": 75
+                }
+            },
+            {
+                "name": "ArrayList<Field>",
+                "position": {
+                    "line": 566,
+                    "column": 38
+                }
+            },
+            {
+                "name": "ArrayList<Field>",
+                "position": {
+                    "line": 572,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.isExpand(int deep, int expand)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.renderObject(Object obj, int deep, int expand, StringBuilder buf)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+            "ObjectView.appendStringBuilder(StringBuilder buf, String data)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "isExpand",
+        "category": "method_declaration",
+        "class": "ObjectView",
+        "signature": "isExpand(int deep, int expand)",
+        "class_signature": "ObjectView.isExpand(int deep, int expand)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "deep"
+            ],
+            [
+                "int",
+                "expand"
+            ]
+        ],
+        "methodBody": "{\n        return deep < expand;\n    }",
+        "position": {
+            "line": 616,
+            "column": 28
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "appendStringBuilder",
+        "category": "method_declaration",
+        "class": "ObjectView",
+        "signature": "appendStringBuilder(StringBuilder buf, String data)",
+        "class_signature": "ObjectView.appendStringBuilder(StringBuilder buf, String data)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "StringBuilder",
+                "buf"
+            ],
+            [
+                "String",
+                "data"
+            ]
+        ],
+        "methodBody": "{\n        if (buf.length() + data.length() > maxObjectLength) {\n            throw new ObjectTooLargeException(\"Object size exceeds size limit: \" + maxObjectLength);\n        }\n        buf.append(data);\n    }",
+        "position": {
+            "line": 626,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 627,
+                    "column": 17
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 627,
+                    "column": 33
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 630,
+                    "column": 13
+                }
+            },
+            {
+                "name": "ObjectTooLargeException",
+                "position": {
+                    "line": 628,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ObjectTooLargeException.ObjectTooLargeException(String message)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "ObjectTooLargeException",
+        "category": "constructor_declaration",
+        "class": "ObjectTooLargeException",
+        "signature": "ObjectTooLargeException(String message)",
+        "class_signature": "ObjectTooLargeException.ObjectTooLargeException(String message)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "message"
+            ]
+        ],
+        "methodBody": "{\n            super(message);\n        }",
+        "position": {
+            "line": 635,
+            "column": 16
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 8
+    }
+]

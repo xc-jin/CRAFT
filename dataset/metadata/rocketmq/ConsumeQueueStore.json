@@ -1,0 +1,4186 @@
+[
+    {
+        "name": "ConsumeQueueStore",
+        "category": "constructor_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "ConsumeQueueStore(DefaultMessageStore messageStore)",
+        "class_signature": "ConsumeQueueStore.ConsumeQueueStore(DefaultMessageStore messageStore)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "DefaultMessageStore",
+                "messageStore"
+            ]
+        ],
+        "methodBody": "{\n        super(messageStore);\n        this.flushConsumeQueueService = new FlushConsumeQueueService();\n        this.correctLogicOffsetService = new CorrectLogicOffsetService();\n        this.cleanConsumeQueueService = new CleanConsumeQueueService();\n    }",
+        "position": {
+            "line": 65,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "FlushConsumeQueueService",
+                "position": {
+                    "line": 67,
+                    "column": 45
+                }
+            },
+            {
+                "name": "CorrectLogicOffsetService",
+                "position": {
+                    "line": 68,
+                    "column": 46
+                }
+            },
+            {
+                "name": "CleanConsumeQueueService",
+                "position": {
+                    "line": 69,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "start",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "start()",
+        "class_signature": "ConsumeQueueStore.start()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        this.flushConsumeQueueService.start();\n        messageStore.getScheduledCleanQueueExecutorService().scheduleWithFixedDelay(this::cleanQueueFilesPeriodically,\n            1000 * 60, this.messageStoreConfig.getCleanResourceInterval(), TimeUnit.MILLISECONDS);\n        log.info(\"Default ConsumeQueueStore start!\");\n    }",
+        "position": {
+            "line": 73,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "start",
+                "position": {
+                    "line": 74,
+                    "column": 39
+                }
+            },
+            {
+                "name": "scheduleWithFixedDelay",
+                "position": {
+                    "line": 75,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getScheduledCleanQueueExecutorService",
+                "position": {
+                    "line": 75,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getCleanResourceInterval",
+                "position": {
+                    "line": 76,
+                    "column": 48
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 77,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "cleanQueueFilesPeriodically",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "cleanQueueFilesPeriodically()",
+        "class_signature": "ConsumeQueueStore.cleanQueueFilesPeriodically()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        this.correctLogicOffsetService.run();\n        this.cleanConsumeQueueService.run();\n    }",
+        "position": {
+            "line": 80,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "run",
+                "position": {
+                    "line": 81,
+                    "column": 40
+                }
+            },
+            {
+                "name": "run",
+                "position": {
+                    "line": 82,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "CorrectLogicOffsetService.run()",
+            "CleanConsumeQueueService.run()"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "load()",
+        "class_signature": "ConsumeQueueStore.load()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        boolean cqLoadResult = loadConsumeQueues(getStorePathConsumeQueue(this.messageStoreConfig.getStorePathRootDir()), CQType.SimpleCQ);\n        boolean bcqLoadResult = loadConsumeQueues(getStorePathBatchConsumeQueue(this.messageStoreConfig.getStorePathRootDir()), CQType.BatchCQ);\n        return cqLoadResult && bcqLoadResult;\n    }",
+        "position": {
+            "line": 86,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadConsumeQueues",
+                "position": {
+                    "line": 87,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getStorePathConsumeQueue",
+                "position": {
+                    "line": 87,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getStorePathRootDir",
+                "position": {
+                    "line": 87,
+                    "column": 99
+                }
+            },
+            {
+                "name": "loadConsumeQueues",
+                "position": {
+                    "line": 88,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getStorePathBatchConsumeQueue",
+                "position": {
+                    "line": 88,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getStorePathRootDir",
+                "position": {
+                    "line": 88,
+                    "column": 105
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.loadConsumeQueues(String storePath, CQType cqType)",
+            "ConsumeQueueStore.loadConsumeQueues(String storePath, CQType cqType)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "recover",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "recover(boolean concurrently)",
+        "class_signature": "ConsumeQueueStore.recover(boolean concurrently)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "concurrently"
+            ]
+        ],
+        "methodBody": "{\n        log.info(\"Start to recover consume queue concurrently={}\", concurrently);\n        if (concurrently) {\n            recoverConcurrently();\n        } else {\n            for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : this.consumeQueueTable.values()) {\n                for (ConsumeQueueInterface logic : maps.values()) {\n                    this.recover(logic);\n                }\n            }\n        }\n\n        dispatchFromPhyOffset = this.getMaxPhyOffsetInConsumeQueue();\n        dispatchFromStoreTimestamp = this.messageStore.getStoreCheckpoint().getMinTimestamp();\n    }",
+        "position": {
+            "line": 93,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 94,
+                    "column": 13
+                }
+            },
+            {
+                "name": "recoverConcurrently",
+                "position": {
+                    "line": 96,
+                    "column": 13
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 98,
+                    "column": 94
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 99,
+                    "column": 57
+                }
+            },
+            {
+                "name": "recover",
+                "position": {
+                    "line": 100,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getMaxPhyOffsetInConsumeQueue",
+                "position": {
+                    "line": 105,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getMinTimestamp",
+                "position": {
+                    "line": 106,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getStoreCheckpoint",
+                "position": {
+                    "line": 106,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.recoverConcurrently()",
+            "ConsumeQueueStore.recover(ConsumeQueueInterface consumeQueue)",
+            "ConsumeQueueStore.getMaxPhyOffsetInConsumeQueue()"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "getDispatchFromPhyOffset",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "getDispatchFromPhyOffset()",
+        "class_signature": "ConsumeQueueStore.getDispatchFromPhyOffset()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return getMaxPhyOffsetInConsumeQueue();\n    }",
+        "position": {
+            "line": 110,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMaxPhyOffsetInConsumeQueue",
+                "position": {
+                    "line": 111,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getMaxPhyOffsetInConsumeQueue()"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "recoverConcurrently",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "recoverConcurrently()",
+        "class_signature": "ConsumeQueueStore.recoverConcurrently()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        int count = 0;\n        for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : this.consumeQueueTable.values()) {\n            count += maps.values().size();\n        }\n        final CountDownLatch countDownLatch = new CountDownLatch(count);\n        BlockingQueue<Runnable> recoverQueue = new LinkedBlockingQueue<>();\n        final ExecutorService executor = buildExecutorService(recoverQueue, \"RecoverConsumeQueueThread_\");\n        List<FutureTask<Boolean>> result = new ArrayList<>(count);\n        try {\n            for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : this.consumeQueueTable.values()) {\n                for (final ConsumeQueueInterface logic : maps.values()) {\n                    FutureTask<Boolean> futureTask = new FutureTask<>(() -> {\n                        boolean ret = true;\n                        try {\n                            logic.recover();\n                        } catch (Throwable e) {\n                            ret = false;\n                            log.error(\"Exception occurs while recover consume queue concurrently, \" +\n                                \"topic={}, queueId={}\", logic.getTopic(), logic.getQueueId(), e);\n                        } finally {\n                            countDownLatch.countDown();\n                        }\n                        return ret;\n                    });\n\n                    result.add(futureTask);\n                    executor.submit(futureTask);\n                }\n            }\n            countDownLatch.await();\n            for (FutureTask<Boolean> task : result) {\n                if (task != null && task.isDone()) {\n                    if (!task.get()) {\n                        return false;\n                    }\n                }\n            }\n        } catch (Exception e) {\n            log.error(\"Exception occurs while recover consume queue concurrently\", e);\n            return false;\n        } finally {\n            executor.shutdown();\n        }\n        return true;\n    }",
+        "position": {
+            "line": 114,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "values",
+                "position": {
+                    "line": 116,
+                    "column": 90
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 117,
+                    "column": 36
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 117,
+                    "column": 27
+                }
+            },
+            {
+                "name": "buildExecutorService",
+                "position": {
+                    "line": 121,
+                    "column": 42
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 124,
+                    "column": 94
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 125,
+                    "column": 63
+                }
+            },
+            {
+                "name": "recover",
+                "position": {
+                    "line": 129,
+                    "column": 35
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 132,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 133,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 133,
+                    "column": 81
+                }
+            },
+            {
+                "name": "countDown",
+                "position": {
+                    "line": 135,
+                    "column": 44
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 140,
+                    "column": 28
+                }
+            },
+            {
+                "name": "submit",
+                "position": {
+                    "line": 141,
+                    "column": 30
+                }
+            },
+            {
+                "name": "await",
+                "position": {
+                    "line": 144,
+                    "column": 28
+                }
+            },
+            {
+                "name": "isDone",
+                "position": {
+                    "line": 146,
+                    "column": 42
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 147,
+                    "column": 31
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 153,
+                    "column": 17
+                }
+            },
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 156,
+                    "column": 22
+                }
+            },
+            {
+                "name": "CountDownLatch",
+                "position": {
+                    "line": 119,
+                    "column": 51
+                }
+            },
+            {
+                "name": "LinkedBlockingQueue<>",
+                "position": {
+                    "line": 120,
+                    "column": 52
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 122,
+                    "column": 48
+                }
+            },
+            {
+                "name": "FutureTask<>",
+                "position": {
+                    "line": 126,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.buildExecutorService(BlockingQueue<Runnable> blockingQueue, String threadNamePrefix)"
+        ],
+        "priority": 26
+    },
+    {
+        "name": "shutdown",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "shutdown()",
+        "class_signature": "ConsumeQueueStore.shutdown()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        try {\n            flush();\n            this.flushConsumeQueueService.shutdown();\n        } catch (StoreException e) {\n            log.error(\"Failed to flush all consume queues\", e);\n            return false;\n        }\n        return true;\n    }",
+        "position": {
+            "line": 162,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "flush",
+                "position": {
+                    "line": 164,
+                    "column": 13
+                }
+            },
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 165,
+                    "column": 43
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 167,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.flush()"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "correctMinOffset",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "correctMinOffset(ConsumeQueueInterface consumeQueue, long minCommitLogOffset)",
+        "class_signature": "ConsumeQueueStore.correctMinOffset(ConsumeQueueInterface consumeQueue, long minCommitLogOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ],
+            [
+                "long",
+                "minCommitLogOffset"
+            ]
+        ],
+        "methodBody": "{\n        consumeQueue.correctMinOffset(minCommitLogOffset);\n    }",
+        "position": {
+            "line": 173,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "correctMinOffset",
+                "position": {
+                    "line": 174,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 30
+    },
+    {
+        "name": "putMessagePositionInfoWrapper",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "putMessagePositionInfoWrapper(DispatchRequest dispatchRequest)",
+        "class_signature": "ConsumeQueueStore.putMessagePositionInfoWrapper(DispatchRequest dispatchRequest)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "DispatchRequest",
+                "dispatchRequest"
+            ]
+        ],
+        "methodBody": "{\n        ConsumeQueueInterface cq = this.findOrCreateConsumeQueue(dispatchRequest.getTopic(), dispatchRequest.getQueueId());\n        this.putMessagePositionInfoWrapper(cq, dispatchRequest);\n    }",
+        "position": {
+            "line": 177,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findOrCreateConsumeQueue",
+                "position": {
+                    "line": 178,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 178,
+                    "column": 82
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 178,
+                    "column": 110
+                }
+            },
+            {
+                "name": "putMessagePositionInfoWrapper",
+                "position": {
+                    "line": 179,
+                    "column": 14
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.findOrCreateConsumeQueue(String topic, int queueId)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "getOffsetInQueueByTime",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "getOffsetInQueueByTime(String topic, int queueId, long timestamp, BoundaryType boundaryType)",
+        "class_signature": "ConsumeQueueStore.getOffsetInQueueByTime(String topic, int queueId, long timestamp, BoundaryType boundaryType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "long",
+                "timestamp"
+            ],
+            [
+                "BoundaryType",
+                "boundaryType"
+            ]
+        ],
+        "methodBody": "{\n        ConsumeQueueInterface logic = findOrCreateConsumeQueue(topic, queueId);\n        if (logic != null) {\n            long resultOffset = logic.getOffsetInQueueByTime(timestamp, boundaryType);\n            // Make sure the result offset is in valid range.\n            resultOffset = Math.max(resultOffset, logic.getMinOffsetInQueue());\n            resultOffset = Math.min(resultOffset, logic.getMaxOffsetInQueue());\n            return resultOffset;\n        }\n        return 0;\n    }",
+        "position": {
+            "line": 183,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findOrCreateConsumeQueue",
+                "position": {
+                    "line": 184,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getOffsetInQueueByTime",
+                "position": {
+                    "line": 186,
+                    "column": 39
+                }
+            },
+            {
+                "name": "max",
+                "position": {
+                    "line": 188,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getMinOffsetInQueue",
+                "position": {
+                    "line": 188,
+                    "column": 57
+                }
+            },
+            {
+                "name": "min",
+                "position": {
+                    "line": 189,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getMaxOffsetInQueue",
+                "position": {
+                    "line": 189,
+                    "column": 57
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.findOrCreateConsumeQueue(String topic, int queueId)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "getLifeCycle",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "getLifeCycle(String topic, int queueId)",
+        "class_signature": "ConsumeQueueStore.getLifeCycle(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        return findOrCreateConsumeQueue(topic, queueId);\n    }",
+        "position": {
+            "line": 195,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findOrCreateConsumeQueue",
+                "position": {
+                    "line": 196,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.findOrCreateConsumeQueue(String topic, int queueId)"
+        ],
+        "priority": 53
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "load(ConsumeQueueInterface consumeQueue)",
+        "class_signature": "ConsumeQueueStore.load(ConsumeQueueInterface consumeQueue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ]
+        ],
+        "methodBody": "{\n        FileQueueLifeCycle fileQueueLifeCycle = getLifeCycle(consumeQueue.getTopic(), consumeQueue.getQueueId());\n        return fileQueueLifeCycle.load();\n    }",
+        "position": {
+            "line": 199,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLifeCycle",
+                "position": {
+                    "line": 200,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 200,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 200,
+                    "column": 100
+                }
+            },
+            {
+                "name": "load",
+                "position": {
+                    "line": 201,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getLifeCycle(String topic, int queueId)"
+        ],
+        "priority": 45
+    },
+    {
+        "name": "loadConsumeQueues",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "loadConsumeQueues(String storePath, CQType cqType)",
+        "class_signature": "ConsumeQueueStore.loadConsumeQueues(String storePath, CQType cqType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "storePath"
+            ],
+            [
+                "CQType",
+                "cqType"
+            ]
+        ],
+        "methodBody": "{\n        File dirLogic = new File(storePath);\n        File[] fileTopicList = dirLogic.listFiles();\n        if (fileTopicList != null) {\n\n            for (File fileTopic : fileTopicList) {\n                String topic = fileTopic.getName();\n\n                File[] fileQueueIdList = fileTopic.listFiles();\n                if (fileQueueIdList != null) {\n                    for (File fileQueueId : fileQueueIdList) {\n                        int queueId;\n                        try {\n                            queueId = Integer.parseInt(fileQueueId.getName());\n                        } catch (NumberFormatException e) {\n                            continue;\n                        }\n\n                        queueTypeShouldBe(topic, cqType);\n\n                        ConsumeQueueInterface logic = createConsumeQueueByType(cqType, topic, queueId, storePath);\n                        this.putConsumeQueue(topic, queueId, logic);\n                        if (!this.load(logic)) {\n                            return false;\n                        }\n                    }\n                }\n            }\n        }\n\n        log.info(\"load {} all over, OK\", cqType);\n\n        return true;\n    }",
+        "position": {
+            "line": 204,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "listFiles",
+                "position": {
+                    "line": 206,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 210,
+                    "column": 42
+                }
+            },
+            {
+                "name": "listFiles",
+                "position": {
+                    "line": 212,
+                    "column": 52
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 217,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 217,
+                    "column": 68
+                }
+            },
+            {
+                "name": "queueTypeShouldBe",
+                "position": {
+                    "line": 222,
+                    "column": 25
+                }
+            },
+            {
+                "name": "createConsumeQueueByType",
+                "position": {
+                    "line": 224,
+                    "column": 55
+                }
+            },
+            {
+                "name": "putConsumeQueue",
+                "position": {
+                    "line": 225,
+                    "column": 30
+                }
+            },
+            {
+                "name": "load",
+                "position": {
+                    "line": 226,
+                    "column": 35
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 234,
+                    "column": 13
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 205,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.queueTypeShouldBe(String topic, CQType cqTypeExpected)",
+            "ConsumeQueueStore.createConsumeQueueByType(CQType cqType, String topic, int queueId, String storePath)",
+            "ConsumeQueueStore.putConsumeQueue(String topic, int queueId, ConsumeQueueInterface consumeQueue)",
+            "ConsumeQueueStore.load(ConsumeQueueInterface consumeQueue)"
+        ],
+        "priority": 25
+    },
+    {
+        "name": "createConsumeQueueByType",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "createConsumeQueueByType(CQType cqType, String topic, int queueId, String storePath)",
+        "class_signature": "ConsumeQueueStore.createConsumeQueueByType(CQType cqType, String topic, int queueId, String storePath)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "CQType",
+                "cqType"
+            ],
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "String",
+                "storePath"
+            ]
+        ],
+        "methodBody": "{\n        if (Objects.equals(CQType.SimpleCQ, cqType)) {\n            return new ConsumeQueue(\n                topic,\n                queueId,\n                storePath,\n                this.messageStoreConfig.getMappedFileSizeConsumeQueue(),\n                this.messageStore,\n                this);\n        } else if (Objects.equals(CQType.BatchCQ, cqType)) {\n            return new BatchConsumeQueue(\n                topic,\n                queueId,\n                storePath,\n                this.messageStoreConfig.getMapperFileSizeBatchConsumeQueue(),\n                this.messageStore);\n        } else {\n            throw new RuntimeException(format(\"queue type %s is not supported.\", cqType.toString()));\n        }\n    }",
+        "position": {
+            "line": 239,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 240,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getMappedFileSizeConsumeQueue",
+                "position": {
+                    "line": 245,
+                    "column": 41
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 248,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getMapperFileSizeBatchConsumeQueue",
+                "position": {
+                    "line": 253,
+                    "column": 41
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 256,
+                    "column": 40
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 256,
+                    "column": 89
+                }
+            },
+            {
+                "name": "ConsumeQueue",
+                "position": {
+                    "line": 241,
+                    "column": 24
+                }
+            },
+            {
+                "name": "BatchConsumeQueue",
+                "position": {
+                    "line": 249,
+                    "column": 24
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 256,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 43
+    },
+    {
+        "name": "queueTypeShouldBe",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "queueTypeShouldBe(String topic, CQType cqTypeExpected)",
+        "class_signature": "ConsumeQueueStore.queueTypeShouldBe(String topic, CQType cqTypeExpected)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "CQType",
+                "cqTypeExpected"
+            ]
+        ],
+        "methodBody": "{\n        Optional<TopicConfig> topicConfig = this.messageStore.getTopicConfig(topic);\n\n        CQType cqTypeActual = QueueTypeUtils.getCQType(topicConfig);\n\n        if (!Objects.equals(cqTypeExpected, cqTypeActual)) {\n            throw new RuntimeException(format(\"The queue type of topic: %s should be %s, but is %s\", topic, cqTypeExpected, cqTypeActual));\n        }\n    }",
+        "position": {
+            "line": 260,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTopicConfig",
+                "position": {
+                    "line": 261,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getCQType",
+                "position": {
+                    "line": 263,
+                    "column": 46
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 265,
+                    "column": 22
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 266,
+                    "column": 40
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 266,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 42
+    },
+    {
+        "name": "buildExecutorService",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "buildExecutorService(BlockingQueue<Runnable> blockingQueue, String threadNamePrefix)",
+        "class_signature": "ConsumeQueueStore.buildExecutorService(BlockingQueue<Runnable> blockingQueue, String threadNamePrefix)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "BlockingQueue<Runnable>",
+                "blockingQueue"
+            ],
+            [
+                "String",
+                "threadNamePrefix"
+            ]
+        ],
+        "methodBody": "{\n        return ThreadUtils.newThreadPoolExecutor(\n            this.messageStore.getBrokerConfig().getRecoverThreadPoolNums(),\n            this.messageStore.getBrokerConfig().getRecoverThreadPoolNums(),\n            1000 * 60,\n            TimeUnit.MILLISECONDS,\n            blockingQueue,\n            new ThreadFactoryImpl(threadNamePrefix));\n    }",
+        "position": {
+            "line": 270,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "newThreadPoolExecutor",
+                "position": {
+                    "line": 271,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getRecoverThreadPoolNums",
+                "position": {
+                    "line": 272,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getBrokerConfig",
+                "position": {
+                    "line": 272,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getRecoverThreadPoolNums",
+                "position": {
+                    "line": 273,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getBrokerConfig",
+                "position": {
+                    "line": 273,
+                    "column": 31
+                }
+            },
+            {
+                "name": "ThreadFactoryImpl",
+                "position": {
+                    "line": 277,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 46
+    },
+    {
+        "name": "recover",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "recover(ConsumeQueueInterface consumeQueue)",
+        "class_signature": "ConsumeQueueStore.recover(ConsumeQueueInterface consumeQueue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ]
+        ],
+        "methodBody": "{\n        FileQueueLifeCycle fileQueueLifeCycle = getLifeCycle(consumeQueue.getTopic(), consumeQueue.getQueueId());\n        fileQueueLifeCycle.recover();\n    }",
+        "position": {
+            "line": 280,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLifeCycle",
+                "position": {
+                    "line": 281,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 281,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 281,
+                    "column": 100
+                }
+            },
+            {
+                "name": "recover",
+                "position": {
+                    "line": 282,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getLifeCycle(String topic, int queueId)"
+        ],
+        "priority": 27
+    },
+    {
+        "name": "getMaxPhyOffsetInConsumeQueue",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "getMaxPhyOffsetInConsumeQueue()",
+        "class_signature": "ConsumeQueueStore.getMaxPhyOffsetInConsumeQueue()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        long maxPhysicOffset = -1L;\n        for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : this.consumeQueueTable.values()) {\n            for (ConsumeQueueInterface logic : maps.values()) {\n                if (logic.getMaxPhysicOffset() > maxPhysicOffset) {\n                    maxPhysicOffset = logic.getMaxPhysicOffset();\n                }\n            }\n        }\n        return maxPhysicOffset;\n    }",
+        "position": {
+            "line": 286,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "values",
+                "position": {
+                    "line": 288,
+                    "column": 90
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 289,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getMaxPhysicOffset",
+                "position": {
+                    "line": 290,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getMaxPhysicOffset",
+                "position": {
+                    "line": 291,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 34
+    },
+    {
+        "name": "getMinOffsetInQueue",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "getMinOffsetInQueue(String topic, int queueId)",
+        "class_signature": "ConsumeQueueStore.getMinOffsetInQueue(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        ConsumeQueueInterface logic = findOrCreateConsumeQueue(topic, queueId);\n        if (logic != null) {\n            return logic.getMinOffsetInQueue();\n        }\n\n        return -1;\n    }",
+        "position": {
+            "line": 299,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findOrCreateConsumeQueue",
+                "position": {
+                    "line": 300,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getMinOffsetInQueue",
+                "position": {
+                    "line": 302,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.findOrCreateConsumeQueue(String topic, int queueId)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "checkSelf",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "checkSelf(ConsumeQueueInterface consumeQueue)",
+        "class_signature": "ConsumeQueueStore.checkSelf(ConsumeQueueInterface consumeQueue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ]
+        ],
+        "methodBody": "{\n        FileQueueLifeCycle fileQueueLifeCycle = getLifeCycle(consumeQueue.getTopic(), consumeQueue.getQueueId());\n        fileQueueLifeCycle.checkSelf();\n    }",
+        "position": {
+            "line": 308,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLifeCycle",
+                "position": {
+                    "line": 309,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 309,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 309,
+                    "column": 100
+                }
+            },
+            {
+                "name": "checkSelf",
+                "position": {
+                    "line": 310,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getLifeCycle(String topic, int queueId)"
+        ],
+        "priority": 29
+    },
+    {
+        "name": "checkSelf",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "checkSelf()",
+        "class_signature": "ConsumeQueueStore.checkSelf()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        for (Map.Entry<String, ConcurrentMap<Integer, ConsumeQueueInterface>> topicEntry : this.consumeQueueTable.entrySet()) {\n            for (Map.Entry<Integer, ConsumeQueueInterface> cqEntry : topicEntry.getValue().entrySet()) {\n                this.checkSelf(cqEntry.getValue());\n            }\n        }\n    }",
+        "position": {
+            "line": 314,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 315,
+                    "column": 115
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 316,
+                    "column": 92
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 316,
+                    "column": 81
+                }
+            },
+            {
+                "name": "checkSelf",
+                "position": {
+                    "line": 317,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 317,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.checkSelf(ConsumeQueueInterface consumeQueue)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "flush",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "flush(ConsumeQueueInterface consumeQueue, int flushLeastPages)",
+        "class_signature": "ConsumeQueueStore.flush(ConsumeQueueInterface consumeQueue, int flushLeastPages)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ],
+            [
+                "int",
+                "flushLeastPages"
+            ]
+        ],
+        "methodBody": "{\n        FileQueueLifeCycle fileQueueLifeCycle = getLifeCycle(consumeQueue.getTopic(), consumeQueue.getQueueId());\n        return fileQueueLifeCycle.flush(flushLeastPages);\n    }",
+        "position": {
+            "line": 322,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLifeCycle",
+                "position": {
+                    "line": 323,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 323,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 323,
+                    "column": 100
+                }
+            },
+            {
+                "name": "flush",
+                "position": {
+                    "line": 324,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getLifeCycle(String topic, int queueId)"
+        ],
+        "priority": 47
+    },
+    {
+        "name": "flush",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "flush()",
+        "class_signature": "ConsumeQueueStore.flush()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        for (Map.Entry<String, ConcurrentMap<Integer, ConsumeQueueInterface>> topicEntry : this.consumeQueueTable.entrySet()) {\n            for (Map.Entry<Integer, ConsumeQueueInterface> cqEntry : topicEntry.getValue().entrySet()) {\n                flush(cqEntry.getValue(), 0);\n            }\n        }\n    }",
+        "position": {
+            "line": 327,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 328,
+                    "column": 115
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 329,
+                    "column": 92
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 329,
+                    "column": 81
+                }
+            },
+            {
+                "name": "flush",
+                "position": {
+                    "line": 330,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 330,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.flush(ConsumeQueueInterface consumeQueue, int flushLeastPages)"
+        ],
+        "priority": 28
+    },
+    {
+        "name": "destroy",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "destroy(ConsumeQueueInterface consumeQueue)",
+        "class_signature": "ConsumeQueueStore.destroy(ConsumeQueueInterface consumeQueue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ]
+        ],
+        "methodBody": "{\n        FileQueueLifeCycle fileQueueLifeCycle = getLifeCycle(consumeQueue.getTopic(), consumeQueue.getQueueId());\n        fileQueueLifeCycle.destroy();\n    }",
+        "position": {
+            "line": 336,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLifeCycle",
+                "position": {
+                    "line": 337,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 337,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 337,
+                    "column": 100
+                }
+            },
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 338,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getLifeCycle(String topic, int queueId)"
+        ],
+        "priority": 33
+    },
+    {
+        "name": "deleteExpiredFile",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "deleteExpiredFile(ConsumeQueueInterface consumeQueue, long minCommitLogPos)",
+        "class_signature": "ConsumeQueueStore.deleteExpiredFile(ConsumeQueueInterface consumeQueue, long minCommitLogPos)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ],
+            [
+                "long",
+                "minCommitLogPos"
+            ]
+        ],
+        "methodBody": "{\n        FileQueueLifeCycle fileQueueLifeCycle = getLifeCycle(consumeQueue.getTopic(), consumeQueue.getQueueId());\n        return fileQueueLifeCycle.deleteExpiredFile(minCommitLogPos);\n    }",
+        "position": {
+            "line": 341,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLifeCycle",
+                "position": {
+                    "line": 342,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 342,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 342,
+                    "column": 100
+                }
+            },
+            {
+                "name": "deleteExpiredFile",
+                "position": {
+                    "line": 343,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getLifeCycle(String topic, int queueId)"
+        ],
+        "priority": 52
+    },
+    {
+        "name": "truncateDirtyLogicFiles",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "truncateDirtyLogicFiles(ConsumeQueueInterface consumeQueue, long phyOffset)",
+        "class_signature": "ConsumeQueueStore.truncateDirtyLogicFiles(ConsumeQueueInterface consumeQueue, long phyOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ],
+            [
+                "long",
+                "phyOffset"
+            ]
+        ],
+        "methodBody": "{\n        FileQueueLifeCycle fileQueueLifeCycle = getLifeCycle(consumeQueue.getTopic(), consumeQueue.getQueueId());\n        fileQueueLifeCycle.truncateDirtyLogicFiles(phyOffset);\n    }",
+        "position": {
+            "line": 346,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLifeCycle",
+                "position": {
+                    "line": 347,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 347,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 347,
+                    "column": 100
+                }
+            },
+            {
+                "name": "truncateDirtyLogicFiles",
+                "position": {
+                    "line": 348,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getLifeCycle(String topic, int queueId)"
+        ],
+        "priority": 35
+    },
+    {
+        "name": "swapMap",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "swapMap(ConsumeQueueInterface consumeQueue, int reserveNum, long forceSwapIntervalMs, long normalSwapIntervalMs)",
+        "class_signature": "ConsumeQueueStore.swapMap(ConsumeQueueInterface consumeQueue, int reserveNum, long forceSwapIntervalMs, long normalSwapIntervalMs)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ],
+            [
+                "int",
+                "reserveNum"
+            ],
+            [
+                "long",
+                "forceSwapIntervalMs"
+            ],
+            [
+                "long",
+                "normalSwapIntervalMs"
+            ]
+        ],
+        "methodBody": "{\n        FileQueueLifeCycle fileQueueLifeCycle = getLifeCycle(consumeQueue.getTopic(), consumeQueue.getQueueId());\n        fileQueueLifeCycle.swapMap(reserveNum, forceSwapIntervalMs, normalSwapIntervalMs);\n    }",
+        "position": {
+            "line": 351,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLifeCycle",
+                "position": {
+                    "line": 353,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 353,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 353,
+                    "column": 100
+                }
+            },
+            {
+                "name": "swapMap",
+                "position": {
+                    "line": 354,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getLifeCycle(String topic, int queueId)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "cleanSwappedMap",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "cleanSwappedMap(ConsumeQueueInterface consumeQueue, long forceCleanSwapIntervalMs)",
+        "class_signature": "ConsumeQueueStore.cleanSwappedMap(ConsumeQueueInterface consumeQueue, long forceCleanSwapIntervalMs)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ],
+            [
+                "long",
+                "forceCleanSwapIntervalMs"
+            ]
+        ],
+        "methodBody": "{\n        FileQueueLifeCycle fileQueueLifeCycle = getLifeCycle(consumeQueue.getTopic(), consumeQueue.getQueueId());\n        fileQueueLifeCycle.cleanSwappedMap(forceCleanSwapIntervalMs);\n    }",
+        "position": {
+            "line": 357,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLifeCycle",
+                "position": {
+                    "line": 358,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 358,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 358,
+                    "column": 100
+                }
+            },
+            {
+                "name": "cleanSwappedMap",
+                "position": {
+                    "line": 359,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getLifeCycle(String topic, int queueId)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "isFirstFileAvailable",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "isFirstFileAvailable(ConsumeQueueInterface consumeQueue)",
+        "class_signature": "ConsumeQueueStore.isFirstFileAvailable(ConsumeQueueInterface consumeQueue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ]
+        ],
+        "methodBody": "{\n        FileQueueLifeCycle fileQueueLifeCycle = getLifeCycle(consumeQueue.getTopic(), consumeQueue.getQueueId());\n        return fileQueueLifeCycle.isFirstFileAvailable();\n    }",
+        "position": {
+            "line": 362,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLifeCycle",
+                "position": {
+                    "line": 363,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 363,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 363,
+                    "column": 100
+                }
+            },
+            {
+                "name": "isFirstFileAvailable",
+                "position": {
+                    "line": 364,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getLifeCycle(String topic, int queueId)"
+        ],
+        "priority": 51
+    },
+    {
+        "name": "isFirstFileExist",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "isFirstFileExist(ConsumeQueueInterface consumeQueue)",
+        "class_signature": "ConsumeQueueStore.isFirstFileExist(ConsumeQueueInterface consumeQueue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ]
+        ],
+        "methodBody": "{\n        FileQueueLifeCycle fileQueueLifeCycle = getLifeCycle(consumeQueue.getTopic(), consumeQueue.getQueueId());\n        return fileQueueLifeCycle.isFirstFileExist();\n    }",
+        "position": {
+            "line": 367,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLifeCycle",
+                "position": {
+                    "line": 368,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 368,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 368,
+                    "column": 100
+                }
+            },
+            {
+                "name": "isFirstFileExist",
+                "position": {
+                    "line": 369,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getLifeCycle(String topic, int queueId)"
+        ],
+        "priority": 50
+    },
+    {
+        "name": "findOrCreateConsumeQueue",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "findOrCreateConsumeQueue(String topic, int queueId)",
+        "class_signature": "ConsumeQueueStore.findOrCreateConsumeQueue(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        ConcurrentMap<Integer, ConsumeQueueInterface> map = consumeQueueTable.get(topic);\n        if (null == map) {\n            ConcurrentMap<Integer, ConsumeQueueInterface> newMap = new ConcurrentHashMap<>(128);\n            ConcurrentMap<Integer, ConsumeQueueInterface> oldMap = consumeQueueTable.putIfAbsent(topic, newMap);\n            if (oldMap != null) {\n                map = oldMap;\n            } else {\n                map = newMap;\n            }\n        }\n\n        ConsumeQueueInterface logic = map.get(queueId);\n        if (logic != null) {\n            return logic;\n        }\n\n        ConsumeQueueInterface newLogic;\n\n        Optional<TopicConfig> topicConfig = this.messageStore.getTopicConfig(topic);\n        // TODO maybe the topic has been deleted.\n        if (Objects.equals(CQType.BatchCQ, QueueTypeUtils.getCQType(topicConfig))) {\n            newLogic = new BatchConsumeQueue(\n                topic,\n                queueId,\n                getStorePathBatchConsumeQueue(this.messageStoreConfig.getStorePathRootDir()),\n                this.messageStoreConfig.getMapperFileSizeBatchConsumeQueue(),\n                this.messageStore);\n        } else {\n            newLogic = new ConsumeQueue(\n                topic,\n                queueId,\n                getStorePathConsumeQueue(this.messageStoreConfig.getStorePathRootDir()),\n                this.messageStoreConfig.getMappedFileSizeConsumeQueue(),\n                this.messageStore, this);\n        }\n\n        ConsumeQueueInterface oldLogic = map.putIfAbsent(queueId, newLogic);\n        if (oldLogic != null) {\n            logic = oldLogic;\n        } else {\n            logic = newLogic;\n        }\n\n        return logic;\n    }",
+        "position": {
+            "line": 373,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 374,
+                    "column": 79
+                }
+            },
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 377,
+                    "column": 86
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 385,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getTopicConfig",
+                "position": {
+                    "line": 392,
+                    "column": 63
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 394,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getCQType",
+                "position": {
+                    "line": 394,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getStorePathBatchConsumeQueue",
+                "position": {
+                    "line": 398,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getStorePathRootDir",
+                "position": {
+                    "line": 398,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getMapperFileSizeBatchConsumeQueue",
+                "position": {
+                    "line": 399,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getStorePathConsumeQueue",
+                "position": {
+                    "line": 405,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getStorePathRootDir",
+                "position": {
+                    "line": 405,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getMappedFileSizeConsumeQueue",
+                "position": {
+                    "line": 406,
+                    "column": 41
+                }
+            },
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 410,
+                    "column": 46
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 376,
+                    "column": 72
+                }
+            },
+            {
+                "name": "BatchConsumeQueue",
+                "position": {
+                    "line": 395,
+                    "column": 28
+                }
+            },
+            {
+                "name": "ConsumeQueue",
+                "position": {
+                    "line": 402,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 54
+    },
+    {
+        "name": "getConsumeQueue",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "getConsumeQueue(String topic, int queueId)",
+        "class_signature": "ConsumeQueueStore.getConsumeQueue(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        ConcurrentMap<Integer, ConsumeQueueInterface> map = this.getConsumeQueueTable().get(topic);\n        if (map == null) {\n            return null;\n        }\n        return map.get(queueId);\n    }",
+        "position": {
+            "line": 421,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 422,
+                    "column": 89
+                }
+            },
+            {
+                "name": "getConsumeQueueTable",
+                "position": {
+                    "line": 422,
+                    "column": 66
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 426,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 13
+    },
+    {
+        "name": "setBatchTopicQueueTable",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "setBatchTopicQueueTable(ConcurrentMap<String, Long> batchTopicQueueTable)",
+        "class_signature": "ConsumeQueueStore.setBatchTopicQueueTable(ConcurrentMap<String, Long> batchTopicQueueTable)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConcurrentMap<String, Long>",
+                "batchTopicQueueTable"
+            ]
+        ],
+        "methodBody": "{\n        this.queueOffsetOperator.setBatchTopicQueueTable(batchTopicQueueTable);\n    }",
+        "position": {
+            "line": 429,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setBatchTopicQueueTable",
+                "position": {
+                    "line": 430,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 32
+    },
+    {
+        "name": "updateQueueOffset",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "updateQueueOffset(String topic, int queueId, long offset)",
+        "class_signature": "ConsumeQueueStore.updateQueueOffset(String topic, int queueId, long offset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "long",
+                "offset"
+            ]
+        ],
+        "methodBody": "{\n        String topicQueueKey = topic + \"-\" + queueId;\n        this.queueOffsetOperator.updateQueueOffset(topicQueueKey, offset);\n    }",
+        "position": {
+            "line": 433,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "updateQueueOffset",
+                "position": {
+                    "line": 435,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "putConsumeQueue",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "putConsumeQueue(String topic, int queueId, ConsumeQueueInterface consumeQueue)",
+        "class_signature": "ConsumeQueueStore.putConsumeQueue(String topic, int queueId, ConsumeQueueInterface consumeQueue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "ConsumeQueueInterface",
+                "consumeQueue"
+            ]
+        ],
+        "methodBody": "{\n        ConcurrentMap<Integer/* queueId */, ConsumeQueueInterface> map = this.consumeQueueTable.get(topic);\n        if (null == map) {\n            map = new ConcurrentHashMap<>();\n            map.put(queueId, consumeQueue);\n            this.consumeQueueTable.put(topic, map);\n        } else {\n            map.put(queueId, consumeQueue);\n        }\n    }",
+        "position": {
+            "line": 438,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 439,
+                    "column": 97
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 442,
+                    "column": 17
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 443,
+                    "column": 36
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 445,
+                    "column": 17
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 441,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 44
+    },
+    {
+        "name": "recoverOffsetTable",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "recoverOffsetTable(long minPhyOffset)",
+        "class_signature": "ConsumeQueueStore.recoverOffsetTable(long minPhyOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "minPhyOffset"
+            ]
+        ],
+        "methodBody": "{\n        ConcurrentMap<String, Long> cqOffsetTable = new ConcurrentHashMap<>(1024);\n        ConcurrentMap<String, Long> bcqOffsetTable = new ConcurrentHashMap<>(1024);\n\n        for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : this.consumeQueueTable.values()) {\n            for (ConsumeQueueInterface logic : maps.values()) {\n                String key = logic.getTopic() + \"-\" + logic.getQueueId();\n\n                long maxOffsetInQueue = logic.getMaxOffsetInQueue();\n                if (Objects.equals(CQType.BatchCQ, logic.getCQType())) {\n                    bcqOffsetTable.put(key, maxOffsetInQueue);\n                } else {\n                    cqOffsetTable.put(key, maxOffsetInQueue);\n                }\n\n                this.correctMinOffset(logic, minPhyOffset);\n            }\n        }\n\n        // Correct unSubmit consumeOffset\n        if (messageStoreConfig.isDuplicationEnable() || messageStore.getBrokerConfig().isEnableControllerMode()) {\n            compensateForHA(cqOffsetTable);\n        }\n\n        this.setTopicQueueTable(cqOffsetTable);\n        this.setBatchTopicQueueTable(bcqOffsetTable);\n    }",
+        "position": {
+            "line": 450,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "values",
+                "position": {
+                    "line": 454,
+                    "column": 90
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 455,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 456,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 456,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getMaxOffsetInQueue",
+                "position": {
+                    "line": 458,
+                    "column": 47
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 459,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getCQType",
+                "position": {
+                    "line": 459,
+                    "column": 58
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 460,
+                    "column": 36
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 462,
+                    "column": 35
+                }
+            },
+            {
+                "name": "correctMinOffset",
+                "position": {
+                    "line": 465,
+                    "column": 22
+                }
+            },
+            {
+                "name": "isDuplicationEnable",
+                "position": {
+                    "line": 470,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isEnableControllerMode",
+                "position": {
+                    "line": 470,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getBrokerConfig",
+                "position": {
+                    "line": 470,
+                    "column": 70
+                }
+            },
+            {
+                "name": "compensateForHA",
+                "position": {
+                    "line": 471,
+                    "column": 13
+                }
+            },
+            {
+                "name": "setTopicQueueTable",
+                "position": {
+                    "line": 474,
+                    "column": 14
+                }
+            },
+            {
+                "name": "setBatchTopicQueueTable",
+                "position": {
+                    "line": 475,
+                    "column": 14
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 451,
+                    "column": 57
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 452,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.correctMinOffset(ConsumeQueueInterface consumeQueue, long minCommitLogOffset)",
+            "ConsumeQueueStore.compensateForHA(ConcurrentMap<String, Long> cqOffsetTable)",
+            "ConsumeQueueStore.setBatchTopicQueueTable(ConcurrentMap<String, Long> batchTopicQueueTable)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "compensateForHA",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "compensateForHA(ConcurrentMap<String, Long> cqOffsetTable)",
+        "class_signature": "ConsumeQueueStore.compensateForHA(ConcurrentMap<String, Long> cqOffsetTable)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConcurrentMap<String, Long>",
+                "cqOffsetTable"
+            ]
+        ],
+        "methodBody": "{\n        SelectMappedBufferResult lastBuffer = null;\n        long startReadOffset = messageStore.getCommitLog().getConfirmOffset() == -1 ? 0 : messageStore.getCommitLog().getConfirmOffset();\n        log.info(\"Correct unsubmitted offset...StartReadOffset = {}\", startReadOffset);\n        while ((lastBuffer = messageStore.selectOneMessageByOffset(startReadOffset)) != null) {\n            try {\n                if (lastBuffer.getStartOffset() > startReadOffset) {\n                    startReadOffset = lastBuffer.getStartOffset();\n                    continue;\n                }\n\n                ByteBuffer bb = lastBuffer.getByteBuffer();\n                int magicCode = bb.getInt(bb.position() + 4);\n                if (magicCode == CommitLog.BLANK_MAGIC_CODE) {\n                    startReadOffset += bb.getInt(bb.position());\n                    continue;\n                } else if (magicCode != MessageDecoder.MESSAGE_MAGIC_CODE) {\n                    throw new RuntimeException(\"Unknown magicCode: \" + magicCode);\n                }\n\n                lastBuffer.getByteBuffer().mark();\n                DispatchRequest dispatchRequest = messageStore.getCommitLog().checkMessageAndReturnSize(lastBuffer.getByteBuffer(), true, messageStoreConfig.isDuplicationEnable(), true);\n                if (!dispatchRequest.isSuccess())\n                    break;\n                lastBuffer.getByteBuffer().reset();\n\n                MessageExt msg = MessageDecoder.decode(lastBuffer.getByteBuffer(), true, false, false, false, true);\n                if (msg == null)\n                    break;\n\n                String key = msg.getTopic() + \"-\" + msg.getQueueId();\n                cqOffsetTable.put(key, msg.getQueueOffset() + 1);\n                startReadOffset += msg.getStoreSize();\n                log.info(\"Correcting. Key:{}, start read Offset: {}\", key, startReadOffset);\n            } finally {\n                if (lastBuffer != null)\n                    lastBuffer.release();\n            }\n        }\n    }",
+        "position": {
+            "line": 477,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfirmOffset",
+                "position": {
+                    "line": 479,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getCommitLog",
+                "position": {
+                    "line": 479,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getConfirmOffset",
+                "position": {
+                    "line": 479,
+                    "column": 119
+                }
+            },
+            {
+                "name": "getCommitLog",
+                "position": {
+                    "line": 479,
+                    "column": 104
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 480,
+                    "column": 13
+                }
+            },
+            {
+                "name": "selectOneMessageByOffset",
+                "position": {
+                    "line": 481,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getStartOffset",
+                "position": {
+                    "line": 483,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getStartOffset",
+                "position": {
+                    "line": 484,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 488,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 489,
+                    "column": 36
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 489,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 491,
+                    "column": 43
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 491,
+                    "column": 53
+                }
+            },
+            {
+                "name": "mark",
+                "position": {
+                    "line": 497,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 497,
+                    "column": 28
+                }
+            },
+            {
+                "name": "checkMessageAndReturnSize",
+                "position": {
+                    "line": 498,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getCommitLog",
+                "position": {
+                    "line": 498,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 498,
+                    "column": 116
+                }
+            },
+            {
+                "name": "isDuplicationEnable",
+                "position": {
+                    "line": 498,
+                    "column": 158
+                }
+            },
+            {
+                "name": "isSuccess",
+                "position": {
+                    "line": 499,
+                    "column": 38
+                }
+            },
+            {
+                "name": "reset",
+                "position": {
+                    "line": 501,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 501,
+                    "column": 28
+                }
+            },
+            {
+                "name": "decode",
+                "position": {
+                    "line": 503,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getByteBuffer",
+                "position": {
+                    "line": 503,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 507,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 507,
+                    "column": 57
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 508,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getQueueOffset",
+                "position": {
+                    "line": 508,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getStoreSize",
+                "position": {
+                    "line": 509,
+                    "column": 40
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 510,
+                    "column": 21
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 513,
+                    "column": 32
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 494,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 31
+    },
+    {
+        "name": "destroy",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "destroy(boolean loadAfterDestroy)",
+        "class_signature": "ConsumeQueueStore.destroy(boolean loadAfterDestroy)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "loadAfterDestroy"
+            ]
+        ],
+        "methodBody": "{\n        for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : this.consumeQueueTable.values()) {\n            for (ConsumeQueueInterface logic : maps.values()) {\n                this.destroy(logic);\n            }\n        }\n    }",
+        "position": {
+            "line": 522,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "values",
+                "position": {
+                    "line": 523,
+                    "column": 90
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 524,
+                    "column": 53
+                }
+            },
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 525,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.destroy(ConsumeQueueInterface consumeQueue)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "cleanExpired",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "cleanExpired(long minCommitLogOffset)",
+        "class_signature": "ConsumeQueueStore.cleanExpired(long minCommitLogOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "minCommitLogOffset"
+            ]
+        ],
+        "methodBody": "{\n        Iterator<Entry<String, ConcurrentMap<Integer, ConsumeQueueInterface>>> it = this.consumeQueueTable.entrySet().iterator();\n        while (it.hasNext()) {\n            Map.Entry<String, ConcurrentMap<Integer, ConsumeQueueInterface>> next = it.next();\n            String topic = next.getKey();\n            if (!TopicValidator.isSystemTopic(topic)) {\n                ConcurrentMap<Integer, ConsumeQueueInterface> queueTable = next.getValue();\n                Iterator<Map.Entry<Integer, ConsumeQueueInterface>> itQT = queueTable.entrySet().iterator();\n                while (itQT.hasNext()) {\n                    Map.Entry<Integer, ConsumeQueueInterface> nextQT = itQT.next();\n                    long maxCLOffsetInConsumeQueue = nextQT.getValue().getLastOffset();\n\n                    if (maxCLOffsetInConsumeQueue == -1) {\n                        log.warn(\"maybe ConsumeQueue was created just now. topic={} queueId={} maxPhysicOffset={} minLogicOffset={}.\",\n                            nextQT.getValue().getTopic(),\n                            nextQT.getValue().getQueueId(),\n                            nextQT.getValue().getMaxPhysicOffset(),\n                            nextQT.getValue().getMinLogicOffset());\n                    } else if (maxCLOffsetInConsumeQueue < minCommitLogOffset) {\n                        log.info(\n                            \"cleanExpiredConsumerQueue: {} {} consumer queue destroyed, minCommitLogOffset: {} maxCLOffsetInConsumeQueue: {}\",\n                            topic,\n                            nextQT.getKey(),\n                            minCommitLogOffset,\n                            maxCLOffsetInConsumeQueue);\n\n                        removeTopicQueueTable(nextQT.getValue().getTopic(),\n                            nextQT.getValue().getQueueId());\n\n                        this.destroy(nextQT.getValue());\n                        itQT.remove();\n                    }\n                }\n\n                if (queueTable.isEmpty()) {\n                    log.info(\"cleanExpiredConsumerQueue: {},topic destroyed\", topic);\n                    it.remove();\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 531,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "iterator",
+                "position": {
+                    "line": 532,
+                    "column": 119
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 532,
+                    "column": 108
+                }
+            },
+            {
+                "name": "hasNext",
+                "position": {
+                    "line": 533,
+                    "column": 19
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 534,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 535,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isSystemTopic",
+                "position": {
+                    "line": 536,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 537,
+                    "column": 81
+                }
+            },
+            {
+                "name": "iterator",
+                "position": {
+                    "line": 538,
+                    "column": 98
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 538,
+                    "column": 87
+                }
+            },
+            {
+                "name": "hasNext",
+                "position": {
+                    "line": 539,
+                    "column": 29
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 540,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getLastOffset",
+                "position": {
+                    "line": 541,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 541,
+                    "column": 61
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 544,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 545,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 545,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 546,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 546,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getMaxPhysicOffset",
+                "position": {
+                    "line": 547,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 547,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getMinLogicOffset",
+                "position": {
+                    "line": 548,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 548,
+                    "column": 36
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 550,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 553,
+                    "column": 36
+                }
+            },
+            {
+                "name": "removeTopicQueueTable",
+                "position": {
+                    "line": 557,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 557,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 557,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 558,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 558,
+                    "column": 36
+                }
+            },
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 560,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 560,
+                    "column": 45
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 561,
+                    "column": 30
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 565,
+                    "column": 32
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 566,
+                    "column": 25
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 567,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.destroy(ConsumeQueueInterface consumeQueue)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "truncateDirty",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "truncateDirty(long offsetToTruncate)",
+        "class_signature": "ConsumeQueueStore.truncateDirty(long offsetToTruncate)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "offsetToTruncate"
+            ]
+        ],
+        "methodBody": "{\n        long maxPhyOffsetOfConsumeQueue = getMaxPhyOffsetInConsumeQueue();\n        if (maxPhyOffsetOfConsumeQueue >= offsetToTruncate) {\n            log.warn(\"maxPhyOffsetOfConsumeQueue({}) >= processOffset({}), truncate dirty logic files\", maxPhyOffsetOfConsumeQueue, offsetToTruncate);\n            for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : this.consumeQueueTable.values()) {\n                for (ConsumeQueueInterface logic : maps.values()) {\n                    this.truncateDirtyLogicFiles(logic, offsetToTruncate);\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 574,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMaxPhyOffsetInConsumeQueue",
+                "position": {
+                    "line": 575,
+                    "column": 43
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 577,
+                    "column": 17
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 578,
+                    "column": 94
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 579,
+                    "column": 57
+                }
+            },
+            {
+                "name": "truncateDirtyLogicFiles",
+                "position": {
+                    "line": 580,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.getMaxPhyOffsetInConsumeQueue()",
+            "ConsumeQueueStore.truncateDirtyLogicFiles(ConsumeQueueInterface consumeQueue, long phyOffset)"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "getTotalSize",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "getTotalSize()",
+        "class_signature": "ConsumeQueueStore.getTotalSize()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        long totalSize = 0;\n        for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : this.consumeQueueTable.values()) {\n            for (ConsumeQueueInterface logic : maps.values()) {\n                totalSize += logic.getTotalSize();\n            }\n        }\n        return totalSize;\n    }",
+        "position": {
+            "line": 587,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "values",
+                "position": {
+                    "line": 589,
+                    "column": 90
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 590,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getTotalSize",
+                "position": {
+                    "line": 591,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 19
+    },
+    {
+        "name": "isMappedFileMatchedRecover",
+        "category": "method_declaration",
+        "class": "ConsumeQueueStore",
+        "signature": "isMappedFileMatchedRecover(long phyOffset, long storeTimestamp, boolean recoverNormally)",
+        "class_signature": "ConsumeQueueStore.isMappedFileMatchedRecover(long phyOffset, long storeTimestamp, boolean recoverNormally)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "phyOffset"
+            ],
+            [
+                "long",
+                "storeTimestamp"
+            ],
+            [
+                "boolean",
+                "recoverNormally"
+            ]
+        ],
+        "methodBody": "{\n        if (recoverNormally) {\n            return phyOffset <= this.dispatchFromPhyOffset;\n        } else {\n            return storeTimestamp <= this.dispatchFromStoreTimestamp;\n        }\n    }",
+        "position": {
+            "line": 598,
+            "column": 20
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "doFlush",
+        "category": "method_declaration",
+        "class": "FlushConsumeQueueService",
+        "signature": "doFlush(int retryTimes)",
+        "class_signature": "FlushConsumeQueueService.doFlush(int retryTimes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "retryTimes"
+            ]
+        ],
+        "methodBody": "{\n            int flushConsumeQueueLeastPages = messageStoreConfig.getFlushConsumeQueueLeastPages();\n\n            if (retryTimes == RETRY_TIMES_OVER) {\n                flushConsumeQueueLeastPages = 0;\n            }\n\n            long logicsMsgTimestamp = 0;\n\n            int flushConsumeQueueThoroughInterval = messageStoreConfig.getFlushConsumeQueueThoroughInterval();\n            long currentTimeMillis = System.currentTimeMillis();\n            if (currentTimeMillis >= (this.lastFlushTimestamp + flushConsumeQueueThoroughInterval)) {\n                this.lastFlushTimestamp = currentTimeMillis;\n                flushConsumeQueueLeastPages = 0;\n                logicsMsgTimestamp = messageStore.getStoreCheckpoint().getLogicsMsgTimestamp();\n            }\n\n            for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : consumeQueueTable.values()) {\n                for (ConsumeQueueInterface cq : maps.values()) {\n                    boolean result = false;\n                    for (int i = 0; i < retryTimes && !result; i++) {\n                        result = flush(cq, flushConsumeQueueLeastPages);\n                    }\n                }\n            }\n\n            if (messageStoreConfig.isEnableCompaction()) {\n                messageStore.getCompactionStore().flush(flushConsumeQueueLeastPages);\n            }\n\n            if (0 == flushConsumeQueueLeastPages) {\n                if (logicsMsgTimestamp > 0) {\n                    messageStore.getStoreCheckpoint().setLogicsMsgTimestamp(logicsMsgTimestamp);\n                }\n                messageStore.getStoreCheckpoint().flush();\n            }\n        }",
+        "position": {
+            "line": 610,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getFlushConsumeQueueLeastPages",
+                "position": {
+                    "line": 611,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getFlushConsumeQueueThoroughInterval",
+                "position": {
+                    "line": 619,
+                    "column": 72
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 620,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getLogicsMsgTimestamp",
+                "position": {
+                    "line": 624,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getStoreCheckpoint",
+                "position": {
+                    "line": 624,
+                    "column": 51
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 627,
+                    "column": 89
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 628,
+                    "column": 54
+                }
+            },
+            {
+                "name": "flush",
+                "position": {
+                    "line": 631,
+                    "column": 34
+                }
+            },
+            {
+                "name": "isEnableCompaction",
+                "position": {
+                    "line": 636,
+                    "column": 36
+                }
+            },
+            {
+                "name": "flush",
+                "position": {
+                    "line": 637,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getCompactionStore",
+                "position": {
+                    "line": 637,
+                    "column": 30
+                }
+            },
+            {
+                "name": "setLogicsMsgTimestamp",
+                "position": {
+                    "line": 642,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getStoreCheckpoint",
+                "position": {
+                    "line": 642,
+                    "column": 34
+                }
+            },
+            {
+                "name": "flush",
+                "position": {
+                    "line": 644,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getStoreCheckpoint",
+                "position": {
+                    "line": 644,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.flush(ConsumeQueueInterface consumeQueue, int flushLeastPages)"
+        ],
+        "priority": 37
+    },
+    {
+        "name": "run",
+        "category": "method_declaration",
+        "class": "FlushConsumeQueueService",
+        "signature": "run()",
+        "class_signature": "FlushConsumeQueueService.run()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            log.info(this.getServiceName() + \" service started\");\n\n            while (!this.isStopped()) {\n                try {\n                    int interval = messageStoreConfig.getFlushIntervalConsumeQueue();\n                    this.waitForRunning(interval);\n                    this.doFlush(1);\n                } catch (Exception e) {\n                    log.warn(this.getServiceName() + \" service has exception. \", e);\n                }\n            }\n\n            this.doFlush(RETRY_TIMES_OVER);\n\n            log.info(this.getServiceName() + \" service end\");\n        }",
+        "position": {
+            "line": 649,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 650,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 650,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isStopped",
+                "position": {
+                    "line": 652,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getFlushIntervalConsumeQueue",
+                "position": {
+                    "line": 654,
+                    "column": 55
+                }
+            },
+            {
+                "name": "waitForRunning",
+                "position": {
+                    "line": 655,
+                    "column": 26
+                }
+            },
+            {
+                "name": "doFlush",
+                "position": {
+                    "line": 656,
+                    "column": 26
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 658,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 658,
+                    "column": 35
+                }
+            },
+            {
+                "name": "doFlush",
+                "position": {
+                    "line": 662,
+                    "column": 18
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 664,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 664,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [
+            "FlushConsumeQueueService.getServiceName()",
+            "FlushConsumeQueueService.doFlush(int retryTimes)",
+            "FlushConsumeQueueService.getServiceName()",
+            "FlushConsumeQueueService.doFlush(int retryTimes)",
+            "FlushConsumeQueueService.getServiceName()"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "getServiceName",
+        "category": "method_declaration",
+        "class": "FlushConsumeQueueService",
+        "signature": "getServiceName()",
+        "class_signature": "FlushConsumeQueueService.getServiceName()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            if (messageStore.getBrokerConfig().isInBrokerContainer()) {\n                return messageStore.getBrokerIdentity().getIdentifier() + FlushConsumeQueueService.class.getSimpleName();\n            }\n            return FlushConsumeQueueService.class.getSimpleName();\n        }",
+        "position": {
+            "line": 668,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isInBrokerContainer",
+                "position": {
+                    "line": 669,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getBrokerConfig",
+                "position": {
+                    "line": 669,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getIdentifier",
+                "position": {
+                    "line": 670,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getBrokerIdentity",
+                "position": {
+                    "line": 670,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 670,
+                    "column": 106
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 672,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 36
+    },
+    {
+        "name": "getJoinTime",
+        "category": "method_declaration",
+        "class": "FlushConsumeQueueService",
+        "signature": "getJoinTime()",
+        "class_signature": "FlushConsumeQueueService.getJoinTime()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            return 1000 * 60;\n        }",
+        "position": {
+            "line": 676,
+            "column": 21
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 22
+    },
+    {
+        "name": "run",
+        "category": "method_declaration",
+        "class": "CorrectLogicOffsetService",
+        "signature": "run()",
+        "class_signature": "CorrectLogicOffsetService.run()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            try {\n                this.correctLogicMinOffset();\n            } catch (Throwable e) {\n                log.warn(this.getServiceName() + \" service has exception. \", e);\n            }\n        }",
+        "position": {
+            "line": 684,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "correctLogicMinOffset",
+                "position": {
+                    "line": 686,
+                    "column": 22
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 688,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 688,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "CorrectLogicOffsetService.correctLogicMinOffset()",
+            "CorrectLogicOffsetService.getServiceName()"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "needCorrect",
+        "category": "method_declaration",
+        "class": "CorrectLogicOffsetService",
+        "signature": "needCorrect(ConsumeQueueInterface logic, long minPhyOffset, long lastForeCorrectTimeCurRun)",
+        "class_signature": "CorrectLogicOffsetService.needCorrect(ConsumeQueueInterface logic, long minPhyOffset, long lastForeCorrectTimeCurRun)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "logic"
+            ],
+            [
+                "long",
+                "minPhyOffset"
+            ],
+            [
+                "long",
+                "lastForeCorrectTimeCurRun"
+            ]
+        ],
+        "methodBody": "{\n            if (logic == null) {\n                return false;\n            }\n            // If first exist and not available, it means first file may destroy failed, delete it.\n            if (isFirstFileExist(logic) && !isFirstFileAvailable(logic)) {\n                log.error(\"CorrectLogicOffsetService.needCorrect. first file not available, trigger correct.\" +\n                        \" topic:{}, queue:{}, maxPhyOffset in queue:{}, minPhyOffset \" +\n                        \"in commit log:{}, minOffset in queue:{}, maxOffset in queue:{}, cqType:{}\"\n                    , logic.getTopic(), logic.getQueueId(), logic.getMaxPhysicOffset()\n                    , minPhyOffset, logic.getMinOffsetInQueue(), logic.getMaxOffsetInQueue(), logic.getCQType());\n                return true;\n            }\n\n            // logic.getMaxPhysicOffset() or minPhyOffset = -1\n            // means there is no message in current queue, so no need to correct.\n            if (logic.getMaxPhysicOffset() == -1 || minPhyOffset == -1) {\n                return false;\n            }\n\n            if (logic.getMaxPhysicOffset() < minPhyOffset) {\n                if (logic.getMinOffsetInQueue() < logic.getMaxOffsetInQueue()) {\n                    log.error(\"CorrectLogicOffsetService.needCorrect. logic max phy offset: {} is less than min phy offset: {}, \" +\n                            \"but min offset: {} is less than max offset: {}. topic:{}, queue:{}, cqType:{}.\"\n                        , logic.getMaxPhysicOffset(), minPhyOffset, logic.getMinOffsetInQueue()\n                        , logic.getMaxOffsetInQueue(), logic.getTopic(), logic.getQueueId(), logic.getCQType());\n                    return true;\n                } else if (logic.getMinOffsetInQueue() == logic.getMaxOffsetInQueue()) {\n                    return false;\n                } else {\n                    log.error(\"CorrectLogicOffsetService.needCorrect. It should not happen, logic max phy offset: {} is less than min phy offset: {},\" +\n                            \" but min offset: {} is larger than max offset: {}. topic:{}, queue:{}, cqType:{}\"\n                        , logic.getMaxPhysicOffset(), minPhyOffset, logic.getMinOffsetInQueue()\n                        , logic.getMaxOffsetInQueue(), logic.getTopic(), logic.getQueueId(), logic.getCQType());\n                    return false;\n                }\n            }\n            //the logic.getMaxPhysicOffset() >= minPhyOffset\n            int forceCorrectInterval = messageStoreConfig.getCorrectLogicMinOffsetForceInterval();\n            if ((System.currentTimeMillis() - lastForeCorrectTimeCurRun) > forceCorrectInterval) {\n                lastForceCorrectTime = System.currentTimeMillis();\n                CqUnit cqUnit = logic.getEarliestUnit();\n                if (cqUnit == null) {\n                    if (logic.getMinOffsetInQueue() == logic.getMaxOffsetInQueue()) {\n                        return false;\n                    } else {\n                        log.error(\"CorrectLogicOffsetService.needCorrect. cqUnit is null, logic max phy offset: {} is greater than min phy offset: {}, \" +\n                                \"but min offset: {} is not equal to max offset: {}. topic:{}, queue:{}, cqType:{}.\"\n                            , logic.getMaxPhysicOffset(), minPhyOffset, logic.getMinOffsetInQueue()\n                            , logic.getMaxOffsetInQueue(), logic.getTopic(), logic.getQueueId(), logic.getCQType());\n                        return true;\n                    }\n                }\n\n                if (cqUnit.getPos() < minPhyOffset) {\n                    log.error(\"CorrectLogicOffsetService.needCorrect. logic max phy offset: {} is greater than min phy offset: {}, \" +\n                            \"but minPhyPos in cq is: {}. min offset in queue: {}, max offset in queue: {}, topic:{}, queue:{}, cqType:{}.\"\n                        , logic.getMaxPhysicOffset(), minPhyOffset, cqUnit.getPos(), logic.getMinOffsetInQueue()\n                        , logic.getMaxOffsetInQueue(), logic.getTopic(), logic.getQueueId(), logic.getCQType());\n                    return true;\n                }\n\n                if (cqUnit.getPos() >= minPhyOffset) {\n\n                    // Normal case, do not need to correct.\n                    return false;\n                }\n            }\n\n            return false;\n        }",
+        "position": {
+            "line": 692,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isFirstFileExist",
+                "position": {
+                    "line": 697,
+                    "column": 17
+                }
+            },
+            {
+                "name": "isFirstFileAvailable",
+                "position": {
+                    "line": 697,
+                    "column": 45
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 698,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 701,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 701,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getMaxPhysicOffset",
+                "position": {
+                    "line": 701,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getMinOffsetInQueue",
+                "position": {
+                    "line": 702,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getMaxOffsetInQueue",
+                "position": {
+                    "line": 702,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getCQType",
+                "position": {
+                    "line": 702,
+                    "column": 101
+                }
+            },
+            {
+                "name": "getMaxPhysicOffset",
+                "position": {
+                    "line": 708,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getMaxPhysicOffset",
+                "position": {
+                    "line": 712,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getMinOffsetInQueue",
+                "position": {
+                    "line": 713,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getMaxOffsetInQueue",
+                "position": {
+                    "line": 713,
+                    "column": 57
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 714,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getMaxPhysicOffset",
+                "position": {
+                    "line": 716,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getMinOffsetInQueue",
+                "position": {
+                    "line": 716,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getMaxOffsetInQueue",
+                "position": {
+                    "line": 717,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 717,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 717,
+                    "column": 80
+                }
+            },
+            {
+                "name": "getCQType",
+                "position": {
+                    "line": 717,
+                    "column": 100
+                }
+            },
+            {
+                "name": "getMinOffsetInQueue",
+                "position": {
+                    "line": 719,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getMaxOffsetInQueue",
+                "position": {
+                    "line": 719,
+                    "column": 65
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 722,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getMaxPhysicOffset",
+                "position": {
+                    "line": 724,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getMinOffsetInQueue",
+                "position": {
+                    "line": 724,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getMaxOffsetInQueue",
+                "position": {
+                    "line": 725,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 725,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 725,
+                    "column": 80
+                }
+            },
+            {
+                "name": "getCQType",
+                "position": {
+                    "line": 725,
+                    "column": 100
+                }
+            },
+            {
+                "name": "getCorrectLogicMinOffsetForceInterval",
+                "position": {
+                    "line": 730,
+                    "column": 59
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 731,
+                    "column": 25
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 732,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getEarliestUnit",
+                "position": {
+                    "line": 733,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getMinOffsetInQueue",
+                "position": {
+                    "line": 735,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getMaxOffsetInQueue",
+                "position": {
+                    "line": 735,
+                    "column": 62
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 738,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getMaxPhysicOffset",
+                "position": {
+                    "line": 740,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getMinOffsetInQueue",
+                "position": {
+                    "line": 740,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getMaxOffsetInQueue",
+                "position": {
+                    "line": 741,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 741,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 741,
+                    "column": 84
+                }
+            },
+            {
+                "name": "getCQType",
+                "position": {
+                    "line": 741,
+                    "column": 104
+                }
+            },
+            {
+                "name": "getPos",
+                "position": {
+                    "line": 746,
+                    "column": 28
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 747,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getMaxPhysicOffset",
+                "position": {
+                    "line": 749,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getPos",
+                "position": {
+                    "line": 749,
+                    "column": 76
+                }
+            },
+            {
+                "name": "getMinOffsetInQueue",
+                "position": {
+                    "line": 749,
+                    "column": 92
+                }
+            },
+            {
+                "name": "getMaxOffsetInQueue",
+                "position": {
+                    "line": 750,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getTopic",
+                "position": {
+                    "line": 750,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getQueueId",
+                "position": {
+                    "line": 750,
+                    "column": 80
+                }
+            },
+            {
+                "name": "getCQType",
+                "position": {
+                    "line": 750,
+                    "column": 100
+                }
+            },
+            {
+                "name": "getPos",
+                "position": {
+                    "line": 754,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.isFirstFileExist(ConsumeQueueInterface consumeQueue)",
+            "ConsumeQueueStore.isFirstFileAvailable(ConsumeQueueInterface consumeQueue)"
+        ],
+        "priority": 48
+    },
+    {
+        "name": "correctLogicMinOffset",
+        "category": "method_declaration",
+        "class": "CorrectLogicOffsetService",
+        "signature": "correctLogicMinOffset()",
+        "class_signature": "CorrectLogicOffsetService.correctLogicMinOffset()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n\n            long lastForeCorrectTimeCurRun = lastForceCorrectTime;\n            long minPhyOffset = messageStore.getMinPhyOffset();\n            for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : consumeQueueTable.values()) {\n                for (ConsumeQueueInterface logic : maps.values()) {\n                    if (Objects.equals(CQType.SimpleCQ, logic.getCQType())) {\n                        // cq is not supported for now.\n                        continue;\n                    }\n                    if (needCorrect(logic, minPhyOffset, lastForeCorrectTimeCurRun)) {\n                        doCorrect(logic, minPhyOffset);\n                    }\n                }\n            }\n        }",
+        "position": {
+            "line": 764,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMinPhyOffset",
+                "position": {
+                    "line": 767,
+                    "column": 46
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 768,
+                    "column": 89
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 769,
+                    "column": 57
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 770,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getCQType",
+                "position": {
+                    "line": 770,
+                    "column": 63
+                }
+            },
+            {
+                "name": "needCorrect",
+                "position": {
+                    "line": 774,
+                    "column": 25
+                }
+            },
+            {
+                "name": "doCorrect",
+                "position": {
+                    "line": 775,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [
+            "CorrectLogicOffsetService.needCorrect(ConsumeQueueInterface logic, long minPhyOffset, long lastForeCorrectTimeCurRun)",
+            "CorrectLogicOffsetService.doCorrect(ConsumeQueueInterface logic, long minPhyOffset)"
+        ],
+        "priority": 38
+    },
+    {
+        "name": "doCorrect",
+        "category": "method_declaration",
+        "class": "CorrectLogicOffsetService",
+        "signature": "doCorrect(ConsumeQueueInterface logic, long minPhyOffset)",
+        "class_signature": "CorrectLogicOffsetService.doCorrect(ConsumeQueueInterface logic, long minPhyOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConsumeQueueInterface",
+                "logic"
+            ],
+            [
+                "long",
+                "minPhyOffset"
+            ]
+        ],
+        "methodBody": "{\n            deleteExpiredFile(logic, minPhyOffset);\n            int sleepIntervalWhenCorrectMinOffset = messageStoreConfig.getCorrectLogicMinOffsetSleepInterval();\n            if (sleepIntervalWhenCorrectMinOffset > 0) {\n                try {\n                    Thread.sleep(sleepIntervalWhenCorrectMinOffset);\n                } catch (InterruptedException ignored) {\n                }\n            }\n        }",
+        "position": {
+            "line": 781,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "deleteExpiredFile",
+                "position": {
+                    "line": 782,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getCorrectLogicMinOffsetSleepInterval",
+                "position": {
+                    "line": 783,
+                    "column": 72
+                }
+            },
+            {
+                "name": "sleep",
+                "position": {
+                    "line": 786,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.deleteExpiredFile(ConsumeQueueInterface consumeQueue, long minCommitLogPos)"
+        ],
+        "priority": 49
+    },
+    {
+        "name": "getServiceName",
+        "category": "method_declaration",
+        "class": "CorrectLogicOffsetService",
+        "signature": "getServiceName()",
+        "class_signature": "CorrectLogicOffsetService.getServiceName()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            if (messageStore.getBrokerConfig().isInBrokerContainer()) {\n                return messageStore.getBrokerConfig().getIdentifier() + CorrectLogicOffsetService.class.getSimpleName();\n            }\n            return CorrectLogicOffsetService.class.getSimpleName();\n        }",
+        "position": {
+            "line": 792,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isInBrokerContainer",
+                "position": {
+                    "line": 793,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getBrokerConfig",
+                "position": {
+                    "line": 793,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getIdentifier",
+                "position": {
+                    "line": 794,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getBrokerConfig",
+                "position": {
+                    "line": 794,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 794,
+                    "column": 105
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 796,
+                    "column": 52
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 39
+    },
+    {
+        "name": "run",
+        "category": "method_declaration",
+        "class": "CleanConsumeQueueService",
+        "signature": "run()",
+        "class_signature": "CleanConsumeQueueService.run()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            try {\n                this.deleteExpiredFiles();\n            } catch (Throwable e) {\n                log.warn(this.getServiceName() + \" service has exception. \", e);\n            }\n        }",
+        "position": {
+            "line": 803,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "deleteExpiredFiles",
+                "position": {
+                    "line": 805,
+                    "column": 22
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 807,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 807,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "CleanConsumeQueueService.deleteExpiredFiles()",
+            "CleanConsumeQueueService.getServiceName()"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "deleteExpiredFiles",
+        "category": "method_declaration",
+        "class": "CleanConsumeQueueService",
+        "signature": "deleteExpiredFiles()",
+        "class_signature": "CleanConsumeQueueService.deleteExpiredFiles()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            int deleteLogicsFilesInterval = messageStoreConfig.getDeleteConsumeQueueFilesInterval();\n\n            long minOffset = messageStore.getCommitLog().getMinOffset();\n            if (minOffset > this.lastPhysicalMinOffset) {\n                this.lastPhysicalMinOffset = minOffset;\n\n                for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : consumeQueueTable.values()) {\n                    for (ConsumeQueueInterface logic : maps.values()) {\n                        int deleteCount = deleteExpiredFile(logic, minOffset);\n                        if (deleteCount > 0 && deleteLogicsFilesInterval > 0) {\n                            try {\n                                Thread.sleep(deleteLogicsFilesInterval);\n                            } catch (InterruptedException ignored) {\n                            }\n                        }\n                    }\n                }\n\n                messageStore.getIndexService().deleteExpiredFile(minOffset);\n            }\n        }",
+        "position": {
+            "line": 811,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDeleteConsumeQueueFilesInterval",
+                "position": {
+                    "line": 812,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getMinOffset",
+                "position": {
+                    "line": 814,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getCommitLog",
+                "position": {
+                    "line": 814,
+                    "column": 43
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 818,
+                    "column": 93
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 819,
+                    "column": 61
+                }
+            },
+            {
+                "name": "deleteExpiredFile",
+                "position": {
+                    "line": 820,
+                    "column": 43
+                }
+            },
+            {
+                "name": "sleep",
+                "position": {
+                    "line": 823,
+                    "column": 40
+                }
+            },
+            {
+                "name": "deleteExpiredFile",
+                "position": {
+                    "line": 830,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getIndexService",
+                "position": {
+                    "line": 830,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsumeQueueStore.deleteExpiredFile(ConsumeQueueInterface consumeQueue, long minCommitLogPos)"
+        ],
+        "priority": 40
+    },
+    {
+        "name": "getServiceName",
+        "category": "method_declaration",
+        "class": "CleanConsumeQueueService",
+        "signature": "getServiceName()",
+        "class_signature": "CleanConsumeQueueService.getServiceName()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            return messageStore.getBrokerConfig().getIdentifier() + CleanConsumeQueueService.class.getSimpleName();\n        }",
+        "position": {
+            "line": 834,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getIdentifier",
+                "position": {
+                    "line": 835,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getBrokerConfig",
+                "position": {
+                    "line": 835,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 835,
+                    "column": 100
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 41
+    }
+]

@@ -1,0 +1,1647 @@
+[
+    {
+        "name": "Enhancer",
+        "category": "constructor_declaration",
+        "class": "Enhancer",
+        "signature": "Enhancer(AdviceListener listener, boolean isTracing, boolean skipJDKTrace, Matcher classNameMatcher, Matcher classNameExcludeMatcher, Matcher methodNameMatcher)",
+        "class_signature": "Enhancer.Enhancer(AdviceListener listener, boolean isTracing, boolean skipJDKTrace, Matcher classNameMatcher, Matcher classNameExcludeMatcher, Matcher methodNameMatcher)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AdviceListener",
+                "listener"
+            ],
+            [
+                "boolean",
+                "isTracing"
+            ],
+            [
+                "boolean",
+                "skipJDKTrace"
+            ],
+            [
+                "Matcher",
+                "classNameMatcher"
+            ],
+            [
+                "Matcher",
+                "classNameExcludeMatcher"
+            ],
+            [
+                "Matcher",
+                "methodNameMatcher"
+            ]
+        ],
+        "methodBody": "{\n        this.listener = listener;\n        this.isTracing = isTracing;\n        this.skipJDKTrace = skipJDKTrace;\n        this.classNameMatcher = classNameMatcher;\n        this.classNameExcludeMatcher = classNameExcludeMatcher;\n        this.methodNameMatcher = methodNameMatcher;\n        this.affect = new EnhancerAffect();\n        affect.setListenerId(listener.id());\n    }",
+        "position": {
+            "line": 96,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setListenerId",
+                "position": {
+                    "line": 106,
+                    "column": 16
+                }
+            },
+            {
+                "name": "id",
+                "position": {
+                    "line": 106,
+                    "column": 39
+                }
+            },
+            {
+                "name": "EnhancerAffect",
+                "position": {
+                    "line": 105,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "transform",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "transform(ClassLoader inClassLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer)",
+        "class_signature": "Enhancer.transform(ClassLoader inClassLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ClassLoader",
+                "inClassLoader"
+            ],
+            [
+                "String",
+                "className"
+            ],
+            [
+                "Class<?>",
+                "classBeingRedefined"
+            ],
+            [
+                "ProtectionDomain",
+                "protectionDomain"
+            ],
+            [
+                "byte[]",
+                "classfileBuffer"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            try {\n                if (inClassLoader != null) {\n                    inClassLoader.loadClass(SpyAPI.class.getName());\n                }\n            } catch (Throwable e) {\n                logger.error(\"the classloader can not load SpyAPI, ignore it. classloader: {}, className: {}\",\n                        inClassLoader.getClass().getName(), className, e);\n                return null;\n            }\n\n            if (matchingClasses != null && !matchingClasses.contains(classBeingRedefined)) {\n                return null;\n            }\n\n            //keep origin class reader for bytecode optimizations, avoiding JVM metaspace OOM.\n            ClassNode classNode = new ClassNode(Opcodes.ASM9);\n            ClassReader classReader = AsmUtils.toClassNode(classfileBuffer, classNode);\n            // remove JSR https://github.com/alibaba/arthas/issues/1304\n            classNode = AsmUtils.removeJSRInstructions(classNode);\n\n            DefaultInterceptorClassParser defaultInterceptorClassParser = new DefaultInterceptorClassParser();\n\n            final List<InterceptorProcessor> interceptorProcessors = new ArrayList<InterceptorProcessor>();\n\n            interceptorProcessors.addAll(defaultInterceptorClassParser.parse(SpyInterceptor1.class));\n            interceptorProcessors.addAll(defaultInterceptorClassParser.parse(SpyInterceptor2.class));\n            interceptorProcessors.addAll(defaultInterceptorClassParser.parse(SpyInterceptor3.class));\n\n            if (this.isTracing) {\n                if (!this.skipJDKTrace) {\n                    interceptorProcessors.addAll(defaultInterceptorClassParser.parse(SpyTraceInterceptor1.class));\n                    interceptorProcessors.addAll(defaultInterceptorClassParser.parse(SpyTraceInterceptor2.class));\n                    interceptorProcessors.addAll(defaultInterceptorClassParser.parse(SpyTraceInterceptor3.class));\n                } else {\n                    interceptorProcessors.addAll(defaultInterceptorClassParser.parse(SpyTraceExcludeJDKInterceptor1.class));\n                    interceptorProcessors.addAll(defaultInterceptorClassParser.parse(SpyTraceExcludeJDKInterceptor2.class));\n                    interceptorProcessors.addAll(defaultInterceptorClassParser.parse(SpyTraceExcludeJDKInterceptor3.class));\n                }\n            }\n\n            List<MethodNode> matchedMethods = new ArrayList<MethodNode>();\n            for (MethodNode methodNode : classNode.methods) {\n                if (!isIgnore(methodNode, methodNameMatcher)) {\n                    matchedMethods.add(methodNode);\n                }\n            }\n\n            // https://github.com/alibaba/arthas/issues/1690\n            if (AsmUtils.isEnhancerByCGLIB(className)) {\n                for (MethodNode methodNode : matchedMethods) {\n                    if (AsmUtils.isConstructor(methodNode)) {\n                        AsmUtils.fixConstructorExceptionTable(methodNode);\n                    }\n                }\n            }\n\n            GroupLocationFilter groupLocationFilter = new GroupLocationFilter();\n\n            LocationFilter enterFilter = new InvokeContainLocationFilter(Type.getInternalName(SpyAPI.class), \"atEnter\",\n                    LocationType.ENTER);\n            LocationFilter existFilter = new InvokeContainLocationFilter(Type.getInternalName(SpyAPI.class), \"atExit\",\n                    LocationType.EXIT);\n            LocationFilter exceptionFilter = new InvokeContainLocationFilter(Type.getInternalName(SpyAPI.class),\n                    \"atExceptionExit\", LocationType.EXCEPTION_EXIT);\n\n            groupLocationFilter.addFilter(enterFilter);\n            groupLocationFilter.addFilter(existFilter);\n            groupLocationFilter.addFilter(exceptionFilter);\n\n            LocationFilter invokeBeforeFilter = new InvokeCheckLocationFilter(Type.getInternalName(SpyAPI.class),\n                    \"atBeforeInvoke\", LocationType.INVOKE);\n            LocationFilter invokeAfterFilter = new InvokeCheckLocationFilter(Type.getInternalName(SpyAPI.class),\n                    \"atInvokeException\", LocationType.INVOKE_COMPLETED);\n            LocationFilter invokeExceptionFilter = new InvokeCheckLocationFilter(Type.getInternalName(SpyAPI.class),\n                    \"atInvokeException\", LocationType.INVOKE_EXCEPTION_EXIT);\n            groupLocationFilter.addFilter(invokeBeforeFilter);\n            groupLocationFilter.addFilter(invokeAfterFilter);\n            groupLocationFilter.addFilter(invokeExceptionFilter);\n\n            for (MethodNode methodNode : matchedMethods) {\n                if (AsmUtils.isNative(methodNode)) {\n                    logger.info(\"ignore native method: {}\",\n                            AsmUtils.methodDeclaration(Type.getObjectType(classNode.name), methodNode));\n                    continue;\n                }\n                if(AsmUtils.containsMethodInsnNode(methodNode, Type.getInternalName(SpyAPI.class), \"atBeforeInvoke\")) {\n                    for (AbstractInsnNode insnNode = methodNode.instructions.getFirst(); insnNode != null; insnNode = insnNode\n                            .getNext()) {\n                        if (insnNode instanceof MethodInsnNode) {\n                            final MethodInsnNode methodInsnNode = (MethodInsnNode) insnNode;\n                            if(this.skipJDKTrace) {\n                                if(methodInsnNode.owner.startsWith(\"java/\")) {\n                                    continue;\n                                }\n                            }\n                            if(AsmOpUtils.isBoxType(Type.getObjectType(methodInsnNode.owner))) {\n                                continue;\n                            }\n                            AdviceListenerManager.registerTraceAdviceListener(inClassLoader, className,\n                                    methodInsnNode.owner, methodInsnNode.name, methodInsnNode.desc, listener);\n                        }\n                    }\n                }else {\n                    MethodProcessor methodProcessor = new MethodProcessor(classNode, methodNode, groupLocationFilter);\n                    for (InterceptorProcessor interceptor : interceptorProcessors) {\n                        try {\n                            List<Location> locations = interceptor.process(methodProcessor);\n                            for (Location location : locations) {\n                                if (location instanceof MethodInsnNodeWare) {\n                                    MethodInsnNodeWare methodInsnNodeWare = (MethodInsnNodeWare) location;\n                                    MethodInsnNode methodInsnNode = methodInsnNodeWare.methodInsnNode();\n\n                                    AdviceListenerManager.registerTraceAdviceListener(inClassLoader, className,\n                                            methodInsnNode.owner, methodInsnNode.name, methodInsnNode.desc, listener);\n                                }\n                            }\n\n                        } catch (Throwable e) {\n                            logger.error(\"enhancer error, class: {}, method: {}, interceptor: {}\", classNode.name, methodNode.name, interceptor.getClass().getName(), e);\n                        }\n                    }\n                }\n\n                AdviceListenerManager.registerAdviceListener(inClassLoader, className, methodNode.name, methodNode.desc,\n                        listener);\n                affect.addMethodAndCount(inClassLoader, className, methodNode.name, methodNode.desc);\n            }\n\n            if (AsmUtils.getMajorVersion(classNode.version) < 49) {\n                classNode.version = AsmUtils.setMajorVersion(classNode.version, 49);\n            }\n\n            byte[] enhanceClassByteArray = AsmUtils.toBytes(classNode, inClassLoader, classReader);\n\n            classBytesCache.put(classBeingRedefined, new Object());\n\n            // dump the class\n            dumpClassIfNecessary(className, enhanceClassByteArray, affect);\n\n            affect.cCnt(1);\n\n            return enhanceClassByteArray;\n        } catch (Throwable t) {\n            logger.warn(\"transform loader[{}]:class[{}] failed.\", inClassLoader, className, t);\n            affect.setThrowable(t);\n        }\n\n        return null;\n    }",
+        "position": {
+            "line": 110,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadClass",
+                "position": {
+                    "line": 115,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 115,
+                    "column": 58
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 118,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 119,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 119,
+                    "column": 39
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 123,
+                    "column": 61
+                }
+            },
+            {
+                "name": "toClassNode",
+                "position": {
+                    "line": 129,
+                    "column": 48
+                }
+            },
+            {
+                "name": "removeJSRInstructions",
+                "position": {
+                    "line": 131,
+                    "column": 34
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 137,
+                    "column": 35
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 137,
+                    "column": 72
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 138,
+                    "column": 35
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 138,
+                    "column": 72
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 139,
+                    "column": 35
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 139,
+                    "column": 72
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 143,
+                    "column": 43
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 143,
+                    "column": 80
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 144,
+                    "column": 43
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 144,
+                    "column": 80
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 145,
+                    "column": 43
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 145,
+                    "column": 80
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 147,
+                    "column": 43
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 147,
+                    "column": 80
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 148,
+                    "column": 43
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 148,
+                    "column": 80
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 149,
+                    "column": 43
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 149,
+                    "column": 80
+                }
+            },
+            {
+                "name": "isIgnore",
+                "position": {
+                    "line": 155,
+                    "column": 22
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 156,
+                    "column": 36
+                }
+            },
+            {
+                "name": "isEnhancerByCGLIB",
+                "position": {
+                    "line": 161,
+                    "column": 26
+                }
+            },
+            {
+                "name": "isConstructor",
+                "position": {
+                    "line": 163,
+                    "column": 34
+                }
+            },
+            {
+                "name": "fixConstructorExceptionTable",
+                "position": {
+                    "line": 164,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getInternalName",
+                "position": {
+                    "line": 171,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getInternalName",
+                "position": {
+                    "line": 173,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getInternalName",
+                "position": {
+                    "line": 175,
+                    "column": 83
+                }
+            },
+            {
+                "name": "addFilter",
+                "position": {
+                    "line": 178,
+                    "column": 33
+                }
+            },
+            {
+                "name": "addFilter",
+                "position": {
+                    "line": 179,
+                    "column": 33
+                }
+            },
+            {
+                "name": "addFilter",
+                "position": {
+                    "line": 180,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getInternalName",
+                "position": {
+                    "line": 182,
+                    "column": 84
+                }
+            },
+            {
+                "name": "getInternalName",
+                "position": {
+                    "line": 184,
+                    "column": 83
+                }
+            },
+            {
+                "name": "getInternalName",
+                "position": {
+                    "line": 186,
+                    "column": 87
+                }
+            },
+            {
+                "name": "addFilter",
+                "position": {
+                    "line": 188,
+                    "column": 33
+                }
+            },
+            {
+                "name": "addFilter",
+                "position": {
+                    "line": 189,
+                    "column": 33
+                }
+            },
+            {
+                "name": "addFilter",
+                "position": {
+                    "line": 190,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isNative",
+                "position": {
+                    "line": 193,
+                    "column": 30
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 194,
+                    "column": 28
+                }
+            },
+            {
+                "name": "methodDeclaration",
+                "position": {
+                    "line": 195,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getObjectType",
+                "position": {
+                    "line": 195,
+                    "column": 61
+                }
+            },
+            {
+                "name": "containsMethodInsnNode",
+                "position": {
+                    "line": 198,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getInternalName",
+                "position": {
+                    "line": 198,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getFirst",
+                "position": {
+                    "line": 199,
+                    "column": 78
+                }
+            },
+            {
+                "name": "getNext",
+                "position": {
+                    "line": 200,
+                    "column": 30
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 204,
+                    "column": 57
+                }
+            },
+            {
+                "name": "isBoxType",
+                "position": {
+                    "line": 208,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getObjectType",
+                "position": {
+                    "line": 208,
+                    "column": 58
+                }
+            },
+            {
+                "name": "registerTraceAdviceListener",
+                "position": {
+                    "line": 211,
+                    "column": 51
+                }
+            },
+            {
+                "name": "process",
+                "position": {
+                    "line": 219,
+                    "column": 68
+                }
+            },
+            {
+                "name": "methodInsnNode",
+                "position": {
+                    "line": 223,
+                    "column": 88
+                }
+            },
+            {
+                "name": "registerTraceAdviceListener",
+                "position": {
+                    "line": 225,
+                    "column": 59
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 231,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 231,
+                    "column": 156
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 231,
+                    "column": 145
+                }
+            },
+            {
+                "name": "registerAdviceListener",
+                "position": {
+                    "line": 236,
+                    "column": 39
+                }
+            },
+            {
+                "name": "addMethodAndCount",
+                "position": {
+                    "line": 238,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getMajorVersion",
+                "position": {
+                    "line": 241,
+                    "column": 26
+                }
+            },
+            {
+                "name": "setMajorVersion",
+                "position": {
+                    "line": 242,
+                    "column": 46
+                }
+            },
+            {
+                "name": "toBytes",
+                "position": {
+                    "line": 245,
+                    "column": 53
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 247,
+                    "column": 29
+                }
+            },
+            {
+                "name": "dumpClassIfNecessary",
+                "position": {
+                    "line": 250,
+                    "column": 13
+                }
+            },
+            {
+                "name": "cCnt",
+                "position": {
+                    "line": 252,
+                    "column": 20
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 256,
+                    "column": 20
+                }
+            },
+            {
+                "name": "setThrowable",
+                "position": {
+                    "line": 257,
+                    "column": 20
+                }
+            },
+            {
+                "name": "ClassNode",
+                "position": {
+                    "line": 128,
+                    "column": 39
+                }
+            },
+            {
+                "name": "DefaultInterceptorClassParser",
+                "position": {
+                    "line": 133,
+                    "column": 79
+                }
+            },
+            {
+                "name": "ArrayList<InterceptorProcessor>",
+                "position": {
+                    "line": 135,
+                    "column": 74
+                }
+            },
+            {
+                "name": "ArrayList<MethodNode>",
+                "position": {
+                    "line": 153,
+                    "column": 51
+                }
+            },
+            {
+                "name": "GroupLocationFilter",
+                "position": {
+                    "line": 169,
+                    "column": 59
+                }
+            },
+            {
+                "name": "InvokeContainLocationFilter",
+                "position": {
+                    "line": 171,
+                    "column": 46
+                }
+            },
+            {
+                "name": "InvokeContainLocationFilter",
+                "position": {
+                    "line": 173,
+                    "column": 46
+                }
+            },
+            {
+                "name": "InvokeContainLocationFilter",
+                "position": {
+                    "line": 175,
+                    "column": 50
+                }
+            },
+            {
+                "name": "InvokeCheckLocationFilter",
+                "position": {
+                    "line": 182,
+                    "column": 53
+                }
+            },
+            {
+                "name": "InvokeCheckLocationFilter",
+                "position": {
+                    "line": 184,
+                    "column": 52
+                }
+            },
+            {
+                "name": "InvokeCheckLocationFilter",
+                "position": {
+                    "line": 186,
+                    "column": 56
+                }
+            },
+            {
+                "name": "MethodProcessor",
+                "position": {
+                    "line": 216,
+                    "column": 59
+                }
+            },
+            {
+                "name": "Object",
+                "position": {
+                    "line": 247,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [
+            "Enhancer.isIgnore(MethodNode methodNode, Matcher methodNameMatcher)",
+            "Enhancer.dumpClassIfNecessary(String className, byte[] data, EnhancerAffect affect)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "isAbstract",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "isAbstract(int access)",
+        "class_signature": "Enhancer.isAbstract(int access)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "access"
+            ]
+        ],
+        "methodBody": "{\n        return (Opcodes.ACC_ABSTRACT & access) == Opcodes.ACC_ABSTRACT;\n    }",
+        "position": {
+            "line": 265,
+            "column": 21
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "isIgnore",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "isIgnore(MethodNode methodNode, Matcher methodNameMatcher)",
+        "class_signature": "Enhancer.isIgnore(MethodNode methodNode, Matcher methodNameMatcher)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MethodNode",
+                "methodNode"
+            ],
+            [
+                "Matcher",
+                "methodNameMatcher"
+            ]
+        ],
+        "methodBody": "{\n        return null == methodNode || isAbstract(methodNode.access) || !methodNameMatcher.matching(methodNode.name)\n                || ArthasCheckUtils.isEquals(methodNode.name, \"<clinit>\");\n    }",
+        "position": {
+            "line": 271,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAbstract",
+                "position": {
+                    "line": 272,
+                    "column": 38
+                }
+            },
+            {
+                "name": "matching",
+                "position": {
+                    "line": 272,
+                    "column": 90
+                }
+            },
+            {
+                "name": "isEquals",
+                "position": {
+                    "line": 273,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "Enhancer.isAbstract(int access)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "dumpClassIfNecessary",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "dumpClassIfNecessary(String className, byte[] data, EnhancerAffect affect)",
+        "class_signature": "Enhancer.dumpClassIfNecessary(String className, byte[] data, EnhancerAffect affect)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "className"
+            ],
+            [
+                "byte[]",
+                "data"
+            ],
+            [
+                "EnhancerAffect",
+                "affect"
+            ]
+        ],
+        "methodBody": "{\n        if (!GlobalOptions.isDump) {\n            return;\n        }\n        final File dumpClassFile = new File(\"./arthas-class-dump/\" + className + \".class\");\n        final File classPath = new File(dumpClassFile.getParent());\n\n        if (!classPath.mkdirs() && !classPath.exists()) {\n            logger.warn(\"create dump classpath:{} failed.\", classPath);\n            return;\n        }\n\n        try {\n            FileUtils.writeByteArrayToFile(dumpClassFile, data);\n            affect.addClassDumpFile(dumpClassFile);\n            if (GlobalOptions.verbose) {\n                logger.info(\"dump enhanced class: {}, path: {}\", className, dumpClassFile);\n            }\n        } catch (IOException e) {\n            logger.warn(\"dump class:{} to file {} failed.\", className, dumpClassFile, e);\n        }\n\n    }",
+        "position": {
+            "line": 279,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParent",
+                "position": {
+                    "line": 284,
+                    "column": 55
+                }
+            },
+            {
+                "name": "mkdirs",
+                "position": {
+                    "line": 286,
+                    "column": 24
+                }
+            },
+            {
+                "name": "exists",
+                "position": {
+                    "line": 286,
+                    "column": 47
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 287,
+                    "column": 20
+                }
+            },
+            {
+                "name": "writeByteArrayToFile",
+                "position": {
+                    "line": 292,
+                    "column": 23
+                }
+            },
+            {
+                "name": "addClassDumpFile",
+                "position": {
+                    "line": 293,
+                    "column": 20
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 295,
+                    "column": 24
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 298,
+                    "column": 20
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 283,
+                    "column": 40
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 284,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "filter",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "filter(Set<Class<?>> classes)",
+        "class_signature": "Enhancer.filter(Set<Class<?>> classes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Set<Class<?>>",
+                "classes"
+            ]
+        ],
+        "methodBody": "{\n        List<Pair<Class<?>, String>> filteredClasses = new ArrayList<Pair<Class<?>, String>>();\n        final Iterator<Class<?>> it = classes.iterator();\n        while (it.hasNext()) {\n            final Class<?> clazz = it.next();\n            boolean removeFlag = false;\n            if (null == clazz) {\n                removeFlag = true;\n            } else if (isSelf(clazz)) {\n                filteredClasses.add(new Pair<Class<?>, String>(clazz, \"class loaded by arthas itself\"));\n                removeFlag = true;\n            } else if (isUnsafeClass(clazz)) {\n                filteredClasses.add(new Pair<Class<?>, String>(clazz, \"class loaded by Bootstrap Classloader, try to execute `options unsafe true`\"));\n                removeFlag = true;\n            } else if (isExclude(clazz)) {\n                filteredClasses.add(new Pair<Class<?>, String>(clazz, \"class is excluded\"));\n                removeFlag = true;\n            } else {\n                Pair<Boolean, String> unsupportedResult = isUnsupportedClass(clazz);\n                if (unsupportedResult.getFirst()) {\n                    filteredClasses.add(new Pair<Class<?>, String>(clazz, unsupportedResult.getSecond()));\n                    removeFlag = true;\n                }\n            }\n            if (removeFlag) {\n                it.remove();\n            }\n        }\n        return filteredClasses;\n    }",
+        "position": {
+            "line": 307,
+            "column": 42
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "iterator",
+                "position": {
+                    "line": 309,
+                    "column": 47
+                }
+            },
+            {
+                "name": "hasNext",
+                "position": {
+                    "line": 310,
+                    "column": 19
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 311,
+                    "column": 39
+                }
+            },
+            {
+                "name": "isSelf",
+                "position": {
+                    "line": 315,
+                    "column": 24
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 316,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isUnsafeClass",
+                "position": {
+                    "line": 318,
+                    "column": 24
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 319,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isExclude",
+                "position": {
+                    "line": 321,
+                    "column": 24
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 322,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isUnsupportedClass",
+                "position": {
+                    "line": 325,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getFirst",
+                "position": {
+                    "line": 326,
+                    "column": 39
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 327,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getSecond",
+                "position": {
+                    "line": 327,
+                    "column": 93
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 332,
+                    "column": 20
+                }
+            },
+            {
+                "name": "ArrayList<Pair<Class<?>, String>>",
+                "position": {
+                    "line": 308,
+                    "column": 60
+                }
+            },
+            {
+                "name": "Pair<Class<?>, String>",
+                "position": {
+                    "line": 316,
+                    "column": 41
+                }
+            },
+            {
+                "name": "Pair<Class<?>, String>",
+                "position": {
+                    "line": 319,
+                    "column": 41
+                }
+            },
+            {
+                "name": "Pair<Class<?>, String>",
+                "position": {
+                    "line": 322,
+                    "column": 41
+                }
+            },
+            {
+                "name": "Pair<Class<?>, String>",
+                "position": {
+                    "line": 327,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [
+            "Enhancer.isSelf(Class<?> clazz)",
+            "Enhancer.isUnsafeClass(Class<?> clazz)",
+            "Enhancer.isExclude(Class<?> clazz)",
+            "Enhancer.isUnsupportedClass(Class<?> clazz)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "isExclude",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "isExclude(Class<?> clazz)",
+        "class_signature": "Enhancer.isExclude(Class<?> clazz)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ]
+        ],
+        "methodBody": "{\n        if (this.classNameExcludeMatcher != null) {\n            return classNameExcludeMatcher.matching(clazz.getName());\n        }\n        return false;\n    }",
+        "position": {
+            "line": 338,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "matching",
+                "position": {
+                    "line": 340,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 340,
+                    "column": 59
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "isSelf",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "isSelf(Class<?> clazz)",
+        "class_signature": "Enhancer.isSelf(Class<?> clazz)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ]
+        ],
+        "methodBody": "{\n        return null != clazz && isEquals(clazz.getClassLoader(), selfClassLoader);\n    }",
+        "position": {
+            "line": 347,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEquals",
+                "position": {
+                    "line": 348,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 348,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "isUnsafeClass",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "isUnsafeClass(Class<?> clazz)",
+        "class_signature": "Enhancer.isUnsafeClass(Class<?> clazz)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ]
+        ],
+        "methodBody": "{\n        return !GlobalOptions.isUnsafe && clazz.getClassLoader() == null;\n    }",
+        "position": {
+            "line": 353,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 354,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "isUnsupportedClass",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "isUnsupportedClass(Class<?> clazz)",
+        "class_signature": "Enhancer.isUnsupportedClass(Class<?> clazz)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ]
+        ],
+        "methodBody": "{\n        if (ClassUtils.isLambdaClass(clazz)) {\n            return new Pair<Boolean, String>(Boolean.TRUE, \"class is lambda\");\n        }\n\n        if (clazz.isInterface() && !GlobalOptions.isSupportDefaultMethod) {\n            return new Pair<Boolean, String>(Boolean.TRUE, \"class is interface\");\n        }\n\n        if (clazz.equals(Integer.class)) {\n            return new Pair<Boolean, String>(Boolean.TRUE, \"class is java.lang.Integer\");\n        }\n\n        if (clazz.equals(Class.class)) {\n            return new Pair<Boolean, String>(Boolean.TRUE, \"class is java.lang.Class\");\n        }\n\n        if (clazz.equals(Method.class)) {\n            return new Pair<Boolean, String>(Boolean.TRUE, \"class is java.lang.Method\");\n        }\n\n        if (clazz.isArray()) {\n            return new Pair<Boolean, String>(Boolean.TRUE, \"class is array\");\n        }\n        return new Pair<Boolean, String>(Boolean.FALSE, \"\");\n    }",
+        "position": {
+            "line": 359,
+            "column": 42
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isLambdaClass",
+                "position": {
+                    "line": 360,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isInterface",
+                "position": {
+                    "line": 364,
+                    "column": 19
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 368,
+                    "column": 19
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 372,
+                    "column": 19
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 376,
+                    "column": 19
+                }
+            },
+            {
+                "name": "isArray",
+                "position": {
+                    "line": 380,
+                    "column": 19
+                }
+            },
+            {
+                "name": "Pair<Boolean, String>",
+                "position": {
+                    "line": 361,
+                    "column": 24
+                }
+            },
+            {
+                "name": "Pair<Boolean, String>",
+                "position": {
+                    "line": 365,
+                    "column": 24
+                }
+            },
+            {
+                "name": "Pair<Boolean, String>",
+                "position": {
+                    "line": 369,
+                    "column": 24
+                }
+            },
+            {
+                "name": "Pair<Boolean, String>",
+                "position": {
+                    "line": 373,
+                    "column": 24
+                }
+            },
+            {
+                "name": "Pair<Boolean, String>",
+                "position": {
+                    "line": 377,
+                    "column": 24
+                }
+            },
+            {
+                "name": "Pair<Boolean, String>",
+                "position": {
+                    "line": 381,
+                    "column": 24
+                }
+            },
+            {
+                "name": "Pair<Boolean, String>",
+                "position": {
+                    "line": 383,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 12
+    },
+    {
+        "name": "enhance",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "enhance(Instrumentation inst, int maxNumOfMatchedClass)",
+        "class_signature": "Enhancer.enhance(Instrumentation inst, int maxNumOfMatchedClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Instrumentation",
+                "inst"
+            ],
+            [
+                "int",
+                "maxNumOfMatchedClass"
+            ]
+        ],
+        "methodBody": "{\n        this.matchingClasses = GlobalOptions.isDisableSubClass\n                ? SearchUtils.searchClass(inst, classNameMatcher)\n                : SearchUtils.searchSubClass(inst, SearchUtils.searchClass(inst, classNameMatcher));\n\n        if (matchingClasses.size() > maxNumOfMatchedClass) {\n            affect.setOverLimitMsg(\"The number of matched classes is \" +matchingClasses.size()+ \", greater than the limit value \" + maxNumOfMatchedClass + \". Try to change the limit with option '-m <arg>'.\");\n            return affect;\n        }\n        List<Pair<Class<?>, String>> filtedList = filter(matchingClasses);\n        if (!filtedList.isEmpty()) {\n            for (Pair<Class<?>, String> filted : filtedList) {\n                logger.info(\"ignore class: {}, reason: {}\", filted.getFirst().getName(), filted.getSecond());\n            }\n        }\n\n        logger.info(\"enhance matched classes: {}\", matchingClasses);\n\n        affect.setTransformer(this);\n\n        try {\n            ArthasBootstrap.getInstance().getTransformerManager().addTransformer(this, isTracing);\n\n            if (GlobalOptions.isBatchReTransform) {\n                final int size = matchingClasses.size();\n                final Class<?>[] classArray = new Class<?>[size];\n                arraycopy(matchingClasses.toArray(), 0, classArray, 0, size);\n                if (classArray.length > 0) {\n                    inst.retransformClasses(classArray);\n                    logger.info(\"Success to batch transform classes: \" + Arrays.toString(classArray));\n                }\n            } else {\n                for (Class<?> clazz : matchingClasses) {\n                    try {\n                        inst.retransformClasses(clazz);\n                        logger.info(\"Success to transform class: \" + clazz);\n                    } catch (Throwable t) {\n                        logger.warn(\"retransform {} failed.\", clazz, t);\n                        if (t instanceof UnmodifiableClassException) {\n                            throw (UnmodifiableClassException) t;\n                        } else if (t instanceof RuntimeException) {\n                            throw (RuntimeException) t;\n                        } else {\n                            throw new RuntimeException(t);\n                        }\n                    }\n                }\n            }\n        } catch (Throwable e) {\n            logger.error(\"Enhancer error, matchingClasses: {}\", matchingClasses, e);\n            affect.setThrowable(e);\n        }\n\n        return affect;\n    }",
+        "position": {
+            "line": 393,
+            "column": 40
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "searchClass",
+                "position": {
+                    "line": 395,
+                    "column": 31
+                }
+            },
+            {
+                "name": "searchSubClass",
+                "position": {
+                    "line": 396,
+                    "column": 31
+                }
+            },
+            {
+                "name": "searchClass",
+                "position": {
+                    "line": 396,
+                    "column": 64
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 398,
+                    "column": 29
+                }
+            },
+            {
+                "name": "setOverLimitMsg",
+                "position": {
+                    "line": 399,
+                    "column": 20
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 399,
+                    "column": 89
+                }
+            },
+            {
+                "name": "filter",
+                "position": {
+                    "line": 402,
+                    "column": 51
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 403,
+                    "column": 25
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 405,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 405,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getFirst",
+                "position": {
+                    "line": 405,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getSecond",
+                "position": {
+                    "line": 405,
+                    "column": 97
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 409,
+                    "column": 16
+                }
+            },
+            {
+                "name": "setTransformer",
+                "position": {
+                    "line": 411,
+                    "column": 16
+                }
+            },
+            {
+                "name": "addTransformer",
+                "position": {
+                    "line": 414,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getTransformerManager",
+                "position": {
+                    "line": 414,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 414,
+                    "column": 29
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 417,
+                    "column": 50
+                }
+            },
+            {
+                "name": "arraycopy",
+                "position": {
+                    "line": 419,
+                    "column": 17
+                }
+            },
+            {
+                "name": "toArray",
+                "position": {
+                    "line": 419,
+                    "column": 43
+                }
+            },
+            {
+                "name": "retransformClasses",
+                "position": {
+                    "line": 421,
+                    "column": 26
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 422,
+                    "column": 28
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 422,
+                    "column": 81
+                }
+            },
+            {
+                "name": "retransformClasses",
+                "position": {
+                    "line": 427,
+                    "column": 30
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 428,
+                    "column": 32
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 430,
+                    "column": 32
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 442,
+                    "column": 20
+                }
+            },
+            {
+                "name": "setThrowable",
+                "position": {
+                    "line": 443,
+                    "column": 20
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 436,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "Enhancer.filter(Set<Class<?>> classes)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "reset",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "reset(Instrumentation inst, Matcher classNameMatcher)",
+        "class_signature": "Enhancer.reset(Instrumentation inst, Matcher classNameMatcher)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Instrumentation",
+                "inst"
+            ],
+            [
+                "Matcher",
+                "classNameMatcher"
+            ]
+        ],
+        "methodBody": "{\n\n        final EnhancerAffect affect = new EnhancerAffect();\n        final Set<Class<?>> enhanceClassSet = new HashSet<Class<?>>();\n\n        for (Class<?> classInCache : classBytesCache.keySet()) {\n            if (classNameMatcher.matching(classInCache.getName())) {\n                enhanceClassSet.add(classInCache);\n            }\n        }\n\n        try {\n            enhance(inst, enhanceClassSet);\n            logger.info(\"Success to reset classes: \" + enhanceClassSet);\n        } finally {\n            for (Class<?> resetClass : enhanceClassSet) {\n                classBytesCache.remove(resetClass);\n                affect.cCnt(1);\n            }\n        }\n\n        return affect;\n    }",
+        "position": {
+            "line": 456,
+            "column": 47
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 462,
+                    "column": 54
+                }
+            },
+            {
+                "name": "matching",
+                "position": {
+                    "line": 463,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 463,
+                    "column": 56
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 464,
+                    "column": 33
+                }
+            },
+            {
+                "name": "enhance",
+                "position": {
+                    "line": 469,
+                    "column": 13
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 470,
+                    "column": 20
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 473,
+                    "column": 33
+                }
+            },
+            {
+                "name": "cCnt",
+                "position": {
+                    "line": 474,
+                    "column": 24
+                }
+            },
+            {
+                "name": "EnhancerAffect",
+                "position": {
+                    "line": 459,
+                    "column": 43
+                }
+            },
+            {
+                "name": "HashSet<Class<?>>",
+                "position": {
+                    "line": 460,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "Enhancer.enhance(Instrumentation inst, Set<Class<?>> classes)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "enhance",
+        "category": "method_declaration",
+        "class": "Enhancer",
+        "signature": "enhance(Instrumentation inst, Set<Class<?>> classes)",
+        "class_signature": "Enhancer.enhance(Instrumentation inst, Set<Class<?>> classes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Instrumentation",
+                "inst"
+            ],
+            [
+                "Set<Class<?>>",
+                "classes"
+            ]
+        ],
+        "methodBody": "{\n        int size = classes.size();\n        Class<?>[] classArray = new Class<?>[size];\n        arraycopy(classes.toArray(), 0, classArray, 0, size);\n        if (classArray.length > 0) {\n            inst.retransformClasses(classArray);\n        }\n    }",
+        "position": {
+            "line": 481,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 483,
+                    "column": 28
+                }
+            },
+            {
+                "name": "arraycopy",
+                "position": {
+                    "line": 485,
+                    "column": 9
+                }
+            },
+            {
+                "name": "toArray",
+                "position": {
+                    "line": 485,
+                    "column": 27
+                }
+            },
+            {
+                "name": "retransformClasses",
+                "position": {
+                    "line": 487,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    }
+]

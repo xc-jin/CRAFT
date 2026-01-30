@@ -1,0 +1,1027 @@
+[
+    {
+        "name": "ConfigsExportService",
+        "category": "constructor_declaration",
+        "class": "ConfigsExportService",
+        "signature": "ConfigsExportService(AppService appService, ClusterService clusterService, NamespaceService namespaceService, AppNamespaceService appNamespaceService, PortalSettings portalSettings, PermissionValidator permissionValidator)",
+        "class_signature": "ConfigsExportService.ConfigsExportService(AppService appService, ClusterService clusterService, NamespaceService namespaceService, AppNamespaceService appNamespaceService, PortalSettings portalSettings, PermissionValidator permissionValidator)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AppService",
+                "appService"
+            ],
+            [
+                "ClusterService",
+                "clusterService"
+            ],
+            [
+                "NamespaceService",
+                "namespaceService"
+            ],
+            [
+                "AppNamespaceService",
+                "appNamespaceService"
+            ],
+            [
+                "PortalSettings",
+                "portalSettings"
+            ],
+            [
+                "PermissionValidator",
+                "permissionValidator"
+            ]
+        ],
+        "methodBody": "{\n    this.appService = appService;\n    this.clusterService = clusterService;\n    this.namespaceService = namespaceService;\n    this.appNamespaceService = appNamespaceService;\n    this.portalSettings = portalSettings;\n    this.permissionValidator = permissionValidator;\n  }",
+        "position": {
+            "line": 71,
+            "column": 10
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "exportData",
+        "category": "method_declaration",
+        "class": "ConfigsExportService",
+        "signature": "exportData(OutputStream outputStream, List<Env> exportEnvs)",
+        "class_signature": "ConfigsExportService.exportData(OutputStream outputStream, List<Env> exportEnvs)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "OutputStream",
+                "outputStream"
+            ],
+            [
+                "List<Env>",
+                "exportEnvs"
+            ]
+        ],
+        "methodBody": "{\n    if (CollectionUtils.isEmpty(exportEnvs)) {\n      exportEnvs = portalSettings.getActiveEnvs();\n    }\n\n    exportApps(exportEnvs, outputStream);\n  }",
+        "position": {
+            "line": 99,
+            "column": 15
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 100,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getActiveEnvs",
+                "position": {
+                    "line": 101,
+                    "column": 35
+                }
+            },
+            {
+                "name": "exportApps",
+                "position": {
+                    "line": 104,
+                    "column": 5
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigsExportService.exportApps(Collection<Env> exportEnvs, OutputStream outputStream)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "exportApps",
+        "category": "method_declaration",
+        "class": "ConfigsExportService",
+        "signature": "exportApps(Collection<Env> exportEnvs, OutputStream outputStream)",
+        "class_signature": "ConfigsExportService.exportApps(Collection<Env> exportEnvs, OutputStream outputStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Collection<Env>",
+                "exportEnvs"
+            ],
+            [
+                "OutputStream",
+                "outputStream"
+            ]
+        ],
+        "methodBody": "{\n    List<App> hasPermissionApps = findHasPermissionApps();\n\n    if (CollectionUtils.isEmpty(hasPermissionApps)) {\n      return;\n    }\n\n    try (final ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream)) {\n      //write app info to zip\n      writeAppInfoToZip(hasPermissionApps, zipOutputStream);\n\n      //export app namespace\n      exportAppNamespaces(zipOutputStream);\n\n      //export app's clusters\n      exportEnvs.parallelStream().forEach(env -> {\n        try {\n          this.exportClusters(env, hasPermissionApps, zipOutputStream);\n        } catch (Exception e) {\n          logger.error(\"export cluster error. env = {}\", env, e);\n        }\n      });\n    } catch (IOException e) {\n      logger.error(\"export config error\", e);\n      throw new ServiceException(\"export config error\", e);\n    }\n  }",
+        "position": {
+            "line": 107,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findHasPermissionApps",
+                "position": {
+                    "line": 108,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 110,
+                    "column": 25
+                }
+            },
+            {
+                "name": "writeAppInfoToZip",
+                "position": {
+                    "line": 116,
+                    "column": 7
+                }
+            },
+            {
+                "name": "exportAppNamespaces",
+                "position": {
+                    "line": 119,
+                    "column": 7
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 122,
+                    "column": 35
+                }
+            },
+            {
+                "name": "parallelStream",
+                "position": {
+                    "line": 122,
+                    "column": 18
+                }
+            },
+            {
+                "name": "exportClusters",
+                "position": {
+                    "line": 124,
+                    "column": 16
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 126,
+                    "column": 18
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 130,
+                    "column": 14
+                }
+            },
+            {
+                "name": "ZipOutputStream",
+                "position": {
+                    "line": 114,
+                    "column": 54
+                }
+            },
+            {
+                "name": "ServiceException",
+                "position": {
+                    "line": 131,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigsExportService.findHasPermissionApps()",
+            "ConfigsExportService.writeAppInfoToZip(List<App> apps, ZipOutputStream zipOutputStream)",
+            "ConfigsExportService.exportAppNamespaces(ZipOutputStream zipOutputStream)",
+            "ConfigsExportService.exportClusters(Env env, List<App> exportApps, ZipOutputStream zipOutputStream)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "findHasPermissionApps",
+        "category": "method_declaration",
+        "class": "ConfigsExportService",
+        "signature": "findHasPermissionApps()",
+        "class_signature": "ConfigsExportService.findHasPermissionApps()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n    // get all apps\n    final List<App> apps = appService.findAll();\n\n    if (CollectionUtils.isEmpty(apps)) {\n      return Collections.emptyList();\n    }\n\n    // permission check\n    final Predicate<App> isAppAdmin =\n        app -> {\n          try {\n            return permissionValidator.isAppAdmin(app.getAppId());\n          } catch (Exception e) {\n            logger.error(\"permission check failed. app = {}\", app);\n            return false;\n          }\n        };\n\n    // app admin permission filter\n    return apps.stream().filter(isAppAdmin).collect(Collectors.toList());\n  }",
+        "position": {
+            "line": 135,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findAll",
+                "position": {
+                    "line": 137,
+                    "column": 39
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 139,
+                    "column": 25
+                }
+            },
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 140,
+                    "column": 26
+                }
+            },
+            {
+                "name": "isAppAdmin",
+                "position": {
+                    "line": 147,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 147,
+                    "column": 55
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 149,
+                    "column": 20
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 155,
+                    "column": 45
+                }
+            },
+            {
+                "name": "filter",
+                "position": {
+                    "line": 155,
+                    "column": 26
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 155,
+                    "column": 17
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 155,
+                    "column": 64
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "writeAppInfoToZip",
+        "category": "method_declaration",
+        "class": "ConfigsExportService",
+        "signature": "writeAppInfoToZip(List<App> apps, ZipOutputStream zipOutputStream)",
+        "class_signature": "ConfigsExportService.writeAppInfoToZip(List<App> apps, ZipOutputStream zipOutputStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<App>",
+                "apps"
+            ],
+            [
+                "ZipOutputStream",
+                "zipOutputStream"
+            ]
+        ],
+        "methodBody": "{\n    logger.info(\"to import app size = {}\", apps.size());\n\n    final Consumer<App> appConsumer =\n        app -> {\n          try {\n            synchronized (zipOutputStream) {\n              String fileName = ConfigFileUtils.genAppInfoPath(app);\n              String content = gson.toJson(app);\n\n              writeToZip(fileName, content, zipOutputStream);\n            }\n          } catch (IOException e) {\n            logger.error(\"Write error. {}\", app);\n            throw new ServiceException(\"Write app error. {}\", e);\n          }\n        };\n\n    apps.forEach(appConsumer);\n  }",
+        "position": {
+            "line": 158,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 159,
+                    "column": 12
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 159,
+                    "column": 49
+                }
+            },
+            {
+                "name": "genAppInfoPath",
+                "position": {
+                    "line": 165,
+                    "column": 49
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 166,
+                    "column": 37
+                }
+            },
+            {
+                "name": "writeToZip",
+                "position": {
+                    "line": 168,
+                    "column": 15
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 171,
+                    "column": 20
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 176,
+                    "column": 10
+                }
+            },
+            {
+                "name": "ServiceException",
+                "position": {
+                    "line": 172,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigsExportService.writeToZip(String filePath, String content, ZipOutputStream zipOutputStream)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "exportAppNamespaces",
+        "category": "method_declaration",
+        "class": "ConfigsExportService",
+        "signature": "exportAppNamespaces(ZipOutputStream zipOutputStream)",
+        "class_signature": "ConfigsExportService.exportAppNamespaces(ZipOutputStream zipOutputStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ZipOutputStream",
+                "zipOutputStream"
+            ]
+        ],
+        "methodBody": "{\n    List<AppNamespace> appNamespaces = appNamespaceService.findAll();\n\n    logger.info(\"to import appnamespace size = \" + appNamespaces.size());\n\n    Consumer<AppNamespace> appNamespaceConsumer = appNamespace -> {\n      try {\n        synchronized (zipOutputStream) {\n          String fileName = ConfigFileUtils.genAppNamespaceInfoPath(appNamespace);\n          String content = gson.toJson(appNamespace);\n\n          writeToZip(fileName, content, zipOutputStream);\n        }\n      } catch (Exception e) {\n        logger.error(\"Write appnamespace error. {}\", appNamespace);\n        throw new IllegalStateException(e);\n      }\n    };\n\n    appNamespaces.forEach(appNamespaceConsumer);\n\n  }",
+        "position": {
+            "line": 179,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findAll",
+                "position": {
+                    "line": 180,
+                    "column": 60
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 182,
+                    "column": 12
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 182,
+                    "column": 66
+                }
+            },
+            {
+                "name": "genAppNamespaceInfoPath",
+                "position": {
+                    "line": 187,
+                    "column": 45
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 188,
+                    "column": 33
+                }
+            },
+            {
+                "name": "writeToZip",
+                "position": {
+                    "line": 190,
+                    "column": 11
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 193,
+                    "column": 16
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 198,
+                    "column": 19
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 194,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigsExportService.writeToZip(String filePath, String content, ZipOutputStream zipOutputStream)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "exportClusters",
+        "category": "method_declaration",
+        "class": "ConfigsExportService",
+        "signature": "exportClusters(Env env, List<App> exportApps, ZipOutputStream zipOutputStream)",
+        "class_signature": "ConfigsExportService.exportClusters(Env env, List<App> exportApps, ZipOutputStream zipOutputStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Env",
+                "env"
+            ],
+            [
+                "List<App>",
+                "exportApps"
+            ],
+            [
+                "ZipOutputStream",
+                "zipOutputStream"
+            ]
+        ],
+        "methodBody": "{\n    exportApps.parallelStream().forEach(exportApp -> {\n      try {\n        this.exportCluster(env, exportApp, zipOutputStream);\n      } catch (Exception e) {\n        logger.error(\"export cluster error. appId = {}\", exportApp.getAppId(), e);\n      }\n    });\n  }",
+        "position": {
+            "line": 202,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 203,
+                    "column": 33
+                }
+            },
+            {
+                "name": "parallelStream",
+                "position": {
+                    "line": 203,
+                    "column": 16
+                }
+            },
+            {
+                "name": "exportCluster",
+                "position": {
+                    "line": 205,
+                    "column": 14
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 207,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 207,
+                    "column": 68
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigsExportService.exportCluster(Env env, App exportApp, ZipOutputStream zipOutputStream)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "exportCluster",
+        "category": "method_declaration",
+        "class": "ConfigsExportService",
+        "signature": "exportCluster(Env env, App exportApp, ZipOutputStream zipOutputStream)",
+        "class_signature": "ConfigsExportService.exportCluster(Env env, App exportApp, ZipOutputStream zipOutputStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Env",
+                "env"
+            ],
+            [
+                "App",
+                "exportApp"
+            ],
+            [
+                "ZipOutputStream",
+                "zipOutputStream"
+            ]
+        ],
+        "methodBody": "{\n    final List<ClusterDTO> exportClusters = clusterService.findClusters(env, exportApp.getAppId());\n\n    if (CollectionUtils.isEmpty(exportClusters)) {\n      return;\n    }\n\n    //write cluster info to zip\n    writeClusterInfoToZip(env, exportApp, exportClusters, zipOutputStream);\n\n    //export namespaces\n    exportClusters.parallelStream().forEach(cluster -> {\n      try {\n        this.exportNamespaces(env, exportApp, cluster, zipOutputStream);\n      } catch (BadRequestException badRequestException) {\n        //ignore\n      } catch (Exception e) {\n        logger.error(\"export namespace error. appId = {}, cluster = {}\", exportApp.getAppId(), cluster, e);\n      }\n    });\n  }",
+        "position": {
+            "line": 212,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findClusters",
+                "position": {
+                    "line": 213,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 213,
+                    "column": 88
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 215,
+                    "column": 25
+                }
+            },
+            {
+                "name": "writeClusterInfoToZip",
+                "position": {
+                    "line": 220,
+                    "column": 5
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 223,
+                    "column": 37
+                }
+            },
+            {
+                "name": "parallelStream",
+                "position": {
+                    "line": 223,
+                    "column": 20
+                }
+            },
+            {
+                "name": "exportNamespaces",
+                "position": {
+                    "line": 225,
+                    "column": 14
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 229,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 229,
+                    "column": 84
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigsExportService.writeClusterInfoToZip(Env env, App app, List<ClusterDTO> exportClusters, ZipOutputStream zipOutputStream)",
+            "ConfigsExportService.exportNamespaces(Env env, App exportApp, ClusterDTO exportCluster, ZipOutputStream zipOutputStream)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "exportNamespaces",
+        "category": "method_declaration",
+        "class": "ConfigsExportService",
+        "signature": "exportNamespaces(Env env, App exportApp, ClusterDTO exportCluster, ZipOutputStream zipOutputStream)",
+        "class_signature": "ConfigsExportService.exportNamespaces(Env env, App exportApp, ClusterDTO exportCluster, ZipOutputStream zipOutputStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Env",
+                "env"
+            ],
+            [
+                "App",
+                "exportApp"
+            ],
+            [
+                "ClusterDTO",
+                "exportCluster"
+            ],
+            [
+                "ZipOutputStream",
+                "zipOutputStream"
+            ]
+        ],
+        "methodBody": "{\n    String clusterName = exportCluster.getName();\n\n    List<NamespaceBO> namespaceBOS = namespaceService.findNamespaceBOs(exportApp.getAppId(), env, clusterName, false);\n\n    if (CollectionUtils.isEmpty(namespaceBOS)) {\n      return;\n    }\n\n    Stream<ConfigBO> configBOStream = namespaceBOS.stream()\n        .map(\n            namespaceBO -> new ConfigBO(env, exportApp.getOwnerName(), exportApp.getAppId(), clusterName, namespaceBO));\n\n    writeNamespacesToZip(configBOStream, zipOutputStream);\n  }",
+        "position": {
+            "line": 234,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getName",
+                "position": {
+                    "line": 236,
+                    "column": 40
+                }
+            },
+            {
+                "name": "findNamespaceBOs",
+                "position": {
+                    "line": 238,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 238,
+                    "column": 82
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 240,
+                    "column": 25
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 245,
+                    "column": 10
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 244,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getOwnerName",
+                "position": {
+                    "line": 246,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 246,
+                    "column": 82
+                }
+            },
+            {
+                "name": "writeNamespacesToZip",
+                "position": {
+                    "line": 248,
+                    "column": 5
+                }
+            },
+            {
+                "name": "ConfigBO",
+                "position": {
+                    "line": 246,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigsExportService.writeNamespacesToZip(Stream<ConfigBO> configBOStream, ZipOutputStream zipOutputStream)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "writeNamespacesToZip",
+        "category": "method_declaration",
+        "class": "ConfigsExportService",
+        "signature": "writeNamespacesToZip(Stream<ConfigBO> configBOStream, ZipOutputStream zipOutputStream)",
+        "class_signature": "ConfigsExportService.writeNamespacesToZip(Stream<ConfigBO> configBOStream, ZipOutputStream zipOutputStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Stream<ConfigBO>",
+                "configBOStream"
+            ],
+            [
+                "ZipOutputStream",
+                "zipOutputStream"
+            ]
+        ],
+        "methodBody": "{\n    final Consumer<ConfigBO> configBOConsumer =\n        configBO -> {\n          try {\n            synchronized (zipOutputStream) {\n              String appId = configBO.getAppId();\n              String clusterName = configBO.getClusterName();\n              String namespace = configBO.getNamespace();\n              String configFileContent = configBO.getConfigFileContent();\n              ConfigFileFormat configFileFormat = configBO.getFormat();\n\n              String\n                  configFileName =\n                  ConfigFileUtils.toFilename(appId, clusterName, namespace, configFileFormat);\n              String filePath =\n                  ConfigFileUtils.genNamespacePath(configBO.getOwnerName(), appId, configBO.getEnv(), configFileName);\n\n              writeToZip(filePath, configFileContent, zipOutputStream);\n            }\n          } catch (IOException e) {\n            logger.error(\"Write error. {}\", configBO);\n            throw new ServiceException(\"Write namespace error. {}\", e);\n          }\n        };\n\n    configBOStream.forEach(configBOConsumer);\n  }",
+        "position": {
+            "line": 251,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 256,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 257,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getNamespace",
+                "position": {
+                    "line": 258,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getConfigFileContent",
+                "position": {
+                    "line": 259,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getFormat",
+                "position": {
+                    "line": 260,
+                    "column": 60
+                }
+            },
+            {
+                "name": "toFilename",
+                "position": {
+                    "line": 264,
+                    "column": 35
+                }
+            },
+            {
+                "name": "genNamespacePath",
+                "position": {
+                    "line": 266,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getOwnerName",
+                "position": {
+                    "line": 266,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getEnv",
+                "position": {
+                    "line": 266,
+                    "column": 93
+                }
+            },
+            {
+                "name": "writeToZip",
+                "position": {
+                    "line": 268,
+                    "column": 15
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 271,
+                    "column": 20
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 276,
+                    "column": 20
+                }
+            },
+            {
+                "name": "ServiceException",
+                "position": {
+                    "line": 272,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigsExportService.writeToZip(String filePath, String content, ZipOutputStream zipOutputStream)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "writeClusterInfoToZip",
+        "category": "method_declaration",
+        "class": "ConfigsExportService",
+        "signature": "writeClusterInfoToZip(Env env, App app, List<ClusterDTO> exportClusters, ZipOutputStream zipOutputStream)",
+        "class_signature": "ConfigsExportService.writeClusterInfoToZip(Env env, App app, List<ClusterDTO> exportClusters, ZipOutputStream zipOutputStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Env",
+                "env"
+            ],
+            [
+                "App",
+                "app"
+            ],
+            [
+                "List<ClusterDTO>",
+                "exportClusters"
+            ],
+            [
+                "ZipOutputStream",
+                "zipOutputStream"
+            ]
+        ],
+        "methodBody": "{\n    final Consumer<ClusterDTO> clusterConsumer =\n        cluster -> {\n          try {\n            synchronized (zipOutputStream) {\n              String fileName = ConfigFileUtils.genClusterInfoPath(app, env, cluster);\n              String content = gson.toJson(cluster);\n\n              writeToZip(fileName, content, zipOutputStream);\n            }\n          } catch (IOException e) {\n            logger.error(\"Write error. {}\", cluster);\n            throw new ServiceException(\"Write error. {}\", e);\n          }\n        };\n\n    exportClusters.forEach(clusterConsumer);\n  }",
+        "position": {
+            "line": 279,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "genClusterInfoPath",
+                "position": {
+                    "line": 285,
+                    "column": 49
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 286,
+                    "column": 37
+                }
+            },
+            {
+                "name": "writeToZip",
+                "position": {
+                    "line": 288,
+                    "column": 15
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 291,
+                    "column": 20
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 296,
+                    "column": 20
+                }
+            },
+            {
+                "name": "ServiceException",
+                "position": {
+                    "line": 292,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigsExportService.writeToZip(String filePath, String content, ZipOutputStream zipOutputStream)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "writeToZip",
+        "category": "method_declaration",
+        "class": "ConfigsExportService",
+        "signature": "writeToZip(String filePath, String content, ZipOutputStream zipOutputStream)",
+        "class_signature": "ConfigsExportService.writeToZip(String filePath, String content, ZipOutputStream zipOutputStream)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "filePath"
+            ],
+            [
+                "String",
+                "content"
+            ],
+            [
+                "ZipOutputStream",
+                "zipOutputStream"
+            ]
+        ],
+        "methodBody": "{\n    final ZipEntry zipEntry = new ZipEntry(filePath);\n    try {\n      zipOutputStream.putNextEntry(zipEntry);\n      zipOutputStream.write(content.getBytes());\n      zipOutputStream.closeEntry();\n    } catch (IOException e) {\n      String errorMsg = \"write content to zip error. file = \" + filePath + \", content = \" + content;\n      logger.error(errorMsg);\n      throw new IOException(errorMsg, e);\n    }\n  }",
+        "position": {
+            "line": 299,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "putNextEntry",
+                "position": {
+                    "line": 303,
+                    "column": 23
+                }
+            },
+            {
+                "name": "write",
+                "position": {
+                    "line": 304,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 304,
+                    "column": 37
+                }
+            },
+            {
+                "name": "closeEntry",
+                "position": {
+                    "line": 305,
+                    "column": 23
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 308,
+                    "column": 14
+                }
+            },
+            {
+                "name": "ZipEntry",
+                "position": {
+                    "line": 301,
+                    "column": 35
+                }
+            },
+            {
+                "name": "IOException",
+                "position": {
+                    "line": 309,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    }
+]

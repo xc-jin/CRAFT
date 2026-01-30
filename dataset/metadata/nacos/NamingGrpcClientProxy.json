@@ -1,0 +1,2269 @@
+[
+    {
+        "name": "NamingGrpcClientProxy",
+        "category": "constructor_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "NamingGrpcClientProxy(String namespaceId, SecurityProxy securityProxy, ServerListFactory serverListFactory, NacosClientProperties properties, ServiceInfoHolder serviceInfoHolder)",
+        "class_signature": "NamingGrpcClientProxy.NamingGrpcClientProxy(String namespaceId, SecurityProxy securityProxy, ServerListFactory serverListFactory, NacosClientProperties properties, ServiceInfoHolder serviceInfoHolder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "namespaceId"
+            ],
+            [
+                "SecurityProxy",
+                "securityProxy"
+            ],
+            [
+                "ServerListFactory",
+                "serverListFactory"
+            ],
+            [
+                "NacosClientProperties",
+                "properties"
+            ],
+            [
+                "ServiceInfoHolder",
+                "serviceInfoHolder"
+            ]
+        ],
+        "methodBody": "{\n        super(securityProxy);\n        this.namespaceId = namespaceId;\n        this.uuid = UUID.randomUUID().toString();\n        this.requestTimeout = Long.parseLong(properties.getProperty(CommonParams.NAMING_REQUEST_TIMEOUT, \"-1\"));\n        Map<String, String> labels = new HashMap<>();\n        labels.put(RemoteConstants.LABEL_SOURCE, RemoteConstants.LABEL_SOURCE_SDK);\n        labels.put(RemoteConstants.LABEL_MODULE, RemoteConstants.LABEL_MODULE_NAMING);\n        labels.put(Constants.APPNAME, AppNameUtils.getAppName());\n        this.rpcClient = RpcClientFactory.createClient(uuid, ConnectionType.GRPC, labels,\n                RpcClientTlsConfigFactory.getInstance().createSdkConfig(properties.asProperties()));\n        this.redoService = new NamingGrpcRedoService(this, properties);\n        NAMING_LOGGER.info(\"Create naming rpc client for uuid->{}\", uuid);\n        start(serverListFactory, serviceInfoHolder);\n    }",
+        "position": {
+            "line": 96,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "toString",
+                "position": {
+                    "line": 100,
+                    "column": 39
+                }
+            },
+            {
+                "name": "randomUUID",
+                "position": {
+                    "line": 100,
+                    "column": 26
+                }
+            },
+            {
+                "name": "parseLong",
+                "position": {
+                    "line": 101,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 101,
+                    "column": 57
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 103,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 104,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 105,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getAppName",
+                "position": {
+                    "line": 105,
+                    "column": 52
+                }
+            },
+            {
+                "name": "createClient",
+                "position": {
+                    "line": 106,
+                    "column": 43
+                }
+            },
+            {
+                "name": "createSdkConfig",
+                "position": {
+                    "line": 107,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 107,
+                    "column": 43
+                }
+            },
+            {
+                "name": "asProperties",
+                "position": {
+                    "line": 107,
+                    "column": 84
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 109,
+                    "column": 23
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 110,
+                    "column": 9
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 102,
+                    "column": 42
+                }
+            },
+            {
+                "name": "NamingGrpcRedoService",
+                "position": {
+                    "line": 108,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.start(ServerListFactory serverListFactory, ServiceInfoHolder serviceInfoHolder)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "start",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "start(ServerListFactory serverListFactory, ServiceInfoHolder serviceInfoHolder)",
+        "class_signature": "NamingGrpcClientProxy.start(ServerListFactory serverListFactory, ServiceInfoHolder serviceInfoHolder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ServerListFactory",
+                "serverListFactory"
+            ],
+            [
+                "ServiceInfoHolder",
+                "serviceInfoHolder"
+            ]
+        ],
+        "methodBody": "{\n        rpcClient.serverListFactory(serverListFactory);\n        rpcClient.registerConnectionListener(redoService);\n        rpcClient.registerServerRequestHandler(new NamingPushRequestHandler(serviceInfoHolder));\n        rpcClient.start();\n        NotifyCenter.registerSubscriber(this);\n    }",
+        "position": {
+            "line": 113,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "serverListFactory",
+                "position": {
+                    "line": 114,
+                    "column": 19
+                }
+            },
+            {
+                "name": "registerConnectionListener",
+                "position": {
+                    "line": 115,
+                    "column": 19
+                }
+            },
+            {
+                "name": "registerServerRequestHandler",
+                "position": {
+                    "line": 116,
+                    "column": 19
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 117,
+                    "column": 19
+                }
+            },
+            {
+                "name": "registerSubscriber",
+                "position": {
+                    "line": 118,
+                    "column": 22
+                }
+            },
+            {
+                "name": "NamingPushRequestHandler",
+                "position": {
+                    "line": 116,
+                    "column": 52
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 19
+    },
+    {
+        "name": "onEvent",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "onEvent(ServerListChangedEvent event)",
+        "class_signature": "NamingGrpcClientProxy.onEvent(ServerListChangedEvent event)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ServerListChangedEvent",
+                "event"
+            ]
+        ],
+        "methodBody": "{\n        rpcClient.onServerListChange();\n    }",
+        "position": {
+            "line": 122,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "onServerListChange",
+                "position": {
+                    "line": 123,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "subscribeType",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "subscribeType()",
+        "class_signature": "NamingGrpcClientProxy.subscribeType()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return ServerListChangedEvent.class;\n    }",
+        "position": {
+            "line": 127,
+            "column": 35
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "registerService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "registerService(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingGrpcClientProxy.registerService(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        NAMING_LOGGER.info(\"[REGISTER-SERVICE] {} registering service {} with instance {}\", namespaceId, serviceName,\n                instance);\n        if (instance.isEphemeral()) {\n            registerServiceForEphemeral(serviceName, groupName, instance);\n        } else {\n            doRegisterServiceForPersistent(serviceName, groupName, instance);\n        }\n    }",
+        "position": {
+            "line": 132,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 133,
+                    "column": 23
+                }
+            },
+            {
+                "name": "isEphemeral",
+                "position": {
+                    "line": 135,
+                    "column": 22
+                }
+            },
+            {
+                "name": "registerServiceForEphemeral",
+                "position": {
+                    "line": 136,
+                    "column": 13
+                }
+            },
+            {
+                "name": "doRegisterServiceForPersistent",
+                "position": {
+                    "line": 138,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.registerServiceForEphemeral(String serviceName, String groupName, Instance instance)",
+            "NamingGrpcClientProxy.doRegisterServiceForPersistent(String serviceName, String groupName, Instance instance)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "registerServiceForEphemeral",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "registerServiceForEphemeral(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingGrpcClientProxy.registerServiceForEphemeral(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        redoService.cacheInstanceForRedo(serviceName, groupName, instance);\n        doRegisterService(serviceName, groupName, instance);\n    }",
+        "position": {
+            "line": 142,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "cacheInstanceForRedo",
+                "position": {
+                    "line": 144,
+                    "column": 21
+                }
+            },
+            {
+                "name": "doRegisterService",
+                "position": {
+                    "line": 145,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.doRegisterService(String serviceName, String groupName, Instance instance)"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "batchRegisterService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "batchRegisterService(String serviceName, String groupName, List<Instance> instances)",
+        "class_signature": "NamingGrpcClientProxy.batchRegisterService(String serviceName, String groupName, List<Instance> instances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<Instance>",
+                "instances"
+            ]
+        ],
+        "methodBody": "{\n        redoService.cacheInstanceForRedo(serviceName, groupName, instances);\n        doBatchRegisterService(serviceName, groupName, instances);\n    }",
+        "position": {
+            "line": 149,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "cacheInstanceForRedo",
+                "position": {
+                    "line": 151,
+                    "column": 21
+                }
+            },
+            {
+                "name": "doBatchRegisterService",
+                "position": {
+                    "line": 152,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.doBatchRegisterService(String serviceName, String groupName, List<Instance> instances)"
+        ],
+        "priority": 31
+    },
+    {
+        "name": "batchDeregisterService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "batchDeregisterService(String serviceName, String groupName, List<Instance> instances)",
+        "class_signature": "NamingGrpcClientProxy.batchDeregisterService(String serviceName, String groupName, List<Instance> instances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<Instance>",
+                "instances"
+            ]
+        ],
+        "methodBody": "{\n        synchronized (redoService.getRegisteredInstances()) {\n            List<Instance> retainInstance = getRetainInstance(serviceName, groupName, instances);\n            batchRegisterService(serviceName, groupName, retainInstance);\n        }\n    }",
+        "position": {
+            "line": 156,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getRegisteredInstances",
+                "position": {
+                    "line": 158,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getRetainInstance",
+                "position": {
+                    "line": 159,
+                    "column": 45
+                }
+            },
+            {
+                "name": "batchRegisterService",
+                "position": {
+                    "line": 160,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.getRetainInstance(String serviceName, String groupName, List<Instance> deRegisterInstances)",
+            "NamingGrpcClientProxy.batchRegisterService(String serviceName, String groupName, List<Instance> instances)"
+        ],
+        "priority": 28
+    },
+    {
+        "name": "getRetainInstance",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "getRetainInstance(String serviceName, String groupName, List<Instance> deRegisterInstances)",
+        "class_signature": "NamingGrpcClientProxy.getRetainInstance(String serviceName, String groupName, List<Instance> deRegisterInstances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<Instance>",
+                "deRegisterInstances"
+            ]
+        ],
+        "methodBody": "{\n        if (CollectionUtils.isEmpty(deRegisterInstances)) {\n            throw new NacosException(NacosException.INVALID_PARAM,\n                    String.format(\"[Batch deRegistration] need deRegister instance is empty, instances: %s,\",\n                            deRegisterInstances));\n        }\n        String combinedServiceName = NamingUtils.getGroupedName(serviceName, groupName);\n        InstanceRedoData instanceRedoData = redoService.getRegisteredInstancesByKey(combinedServiceName);\n        if (!(instanceRedoData instanceof BatchInstanceRedoData)) {\n            throw new NacosException(NacosException.INVALID_PARAM, String.format(\n                    \"[Batch deRegistration] batch deRegister is not BatchInstanceRedoData type , instances: %s,\",\n                    deRegisterInstances));\n        }\n        \n        BatchInstanceRedoData batchInstanceRedoData = (BatchInstanceRedoData) instanceRedoData;\n        List<Instance> allRedoInstances = batchInstanceRedoData.getInstances();\n        if (CollectionUtils.isEmpty(allRedoInstances)) {\n            throw new NacosException(NacosException.INVALID_PARAM, String.format(\n                    \"[Batch deRegistration] not found all registerInstance , serviceName%s , groupName: %s\",\n                    serviceName, groupName));\n        }\n        \n        Map<Instance, Instance> deRegisterInstanceMap = deRegisterInstances.stream()\n                .collect(Collectors.toMap(Function.identity(), Function.identity()));\n        List<Instance> retainInstances = new ArrayList<>();\n        for (Instance redoInstance : allRedoInstances) {\n            boolean needRetained = true;\n            Iterator<Map.Entry<Instance, Instance>> it = deRegisterInstanceMap.entrySet().iterator();\n            while (it.hasNext()) {\n                Instance deRegisterInstance = it.next().getKey();\n                // only compare Ip & Port because redoInstance's instanceId or serviceName might be null but deRegisterInstance's might not be null.\n                if (compareIpAndPort(deRegisterInstance, redoInstance)) {\n                    needRetained = false;\n                    // clear current entry to speed up next redoInstance comparing.\n                    it.remove();\n                    break;\n                }\n            }\n            if (needRetained) {\n                retainInstances.add(redoInstance);\n            }\n        }\n        return retainInstances;\n    }",
+        "position": {
+            "line": 172,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 174,
+                    "column": 29
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 176,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getGroupedName",
+                "position": {
+                    "line": 179,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getRegisteredInstancesByKey",
+                "position": {
+                    "line": 180,
+                    "column": 57
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 182,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getInstances",
+                "position": {
+                    "line": 188,
+                    "column": 65
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 189,
+                    "column": 29
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 190,
+                    "column": 75
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 196,
+                    "column": 18
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 195,
+                    "column": 77
+                }
+            },
+            {
+                "name": "toMap",
+                "position": {
+                    "line": 196,
+                    "column": 37
+                }
+            },
+            {
+                "name": "identity",
+                "position": {
+                    "line": 196,
+                    "column": 52
+                }
+            },
+            {
+                "name": "identity",
+                "position": {
+                    "line": 196,
+                    "column": 73
+                }
+            },
+            {
+                "name": "iterator",
+                "position": {
+                    "line": 200,
+                    "column": 91
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 200,
+                    "column": 80
+                }
+            },
+            {
+                "name": "hasNext",
+                "position": {
+                    "line": 201,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 202,
+                    "column": 57
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 202,
+                    "column": 50
+                }
+            },
+            {
+                "name": "compareIpAndPort",
+                "position": {
+                    "line": 204,
+                    "column": 21
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 207,
+                    "column": 24
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 212,
+                    "column": 33
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 175,
+                    "column": 23
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 182,
+                    "column": 23
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 190,
+                    "column": 23
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 197,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.compareIpAndPort(Instance deRegisterInstance, Instance redoInstance)"
+        ],
+        "priority": 30
+    },
+    {
+        "name": "compareIpAndPort",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "compareIpAndPort(Instance deRegisterInstance, Instance redoInstance)",
+        "class_signature": "NamingGrpcClientProxy.compareIpAndPort(Instance deRegisterInstance, Instance redoInstance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Instance",
+                "deRegisterInstance"
+            ],
+            [
+                "Instance",
+                "redoInstance"
+            ]
+        ],
+        "methodBody": "{\n        return ((deRegisterInstance.getIp().equals(redoInstance.getIp())) && (deRegisterInstance.getPort()\n                == redoInstance.getPort()));\n    }",
+        "position": {
+            "line": 218,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 219,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 219,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 219,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 219,
+                    "column": 98
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 220,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 32
+    },
+    {
+        "name": "doBatchRegisterService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "doBatchRegisterService(String serviceName, String groupName, List<Instance> instances)",
+        "class_signature": "NamingGrpcClientProxy.doBatchRegisterService(String serviceName, String groupName, List<Instance> instances)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "List<Instance>",
+                "instances"
+            ]
+        ],
+        "methodBody": "{\n        BatchInstanceRequest request = new BatchInstanceRequest(namespaceId, serviceName, groupName,\n                NamingRemoteConstants.BATCH_REGISTER_INSTANCE, instances);\n        requestToServer(request, BatchInstanceResponse.class);\n        redoService.instanceRegistered(serviceName, groupName);\n    }",
+        "position": {
+            "line": 231,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "requestToServer",
+                "position": {
+                    "line": 235,
+                    "column": 9
+                }
+            },
+            {
+                "name": "instanceRegistered",
+                "position": {
+                    "line": 236,
+                    "column": 21
+                }
+            },
+            {
+                "name": "BatchInstanceRequest",
+                "position": {
+                    "line": 233,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.requestToServer(AbstractNamingRequest request, Class<T> responseClass)"
+        ],
+        "priority": 33
+    },
+    {
+        "name": "doRegisterService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "doRegisterService(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingGrpcClientProxy.doRegisterService(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        InstanceRequest request = new InstanceRequest(namespaceId, serviceName, groupName,\n                NamingRemoteConstants.REGISTER_INSTANCE, instance);\n        requestToServer(request, Response.class);\n        redoService.instanceRegistered(serviceName, groupName);\n    }",
+        "position": {
+            "line": 247,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "requestToServer",
+                "position": {
+                    "line": 250,
+                    "column": 9
+                }
+            },
+            {
+                "name": "instanceRegistered",
+                "position": {
+                    "line": 251,
+                    "column": 21
+                }
+            },
+            {
+                "name": "InstanceRequest",
+                "position": {
+                    "line": 248,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.requestToServer(AbstractNamingRequest request, Class<T> responseClass)"
+        ],
+        "priority": 27
+    },
+    {
+        "name": "doRegisterServiceForPersistent",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "doRegisterServiceForPersistent(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingGrpcClientProxy.doRegisterServiceForPersistent(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        PersistentInstanceRequest request = new PersistentInstanceRequest(namespaceId, serviceName, groupName,\n                NamingRemoteConstants.REGISTER_INSTANCE, instance);\n        requestToServer(request, Response.class);\n    }",
+        "position": {
+            "line": 262,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "requestToServer",
+                "position": {
+                    "line": 266,
+                    "column": 9
+                }
+            },
+            {
+                "name": "PersistentInstanceRequest",
+                "position": {
+                    "line": 264,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.requestToServer(AbstractNamingRequest request, Class<T> responseClass)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "deregisterService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "deregisterService(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingGrpcClientProxy.deregisterService(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        NAMING_LOGGER\n                .info(\"[DEREGISTER-SERVICE] {} deregistering service {} with instance: {}\", namespaceId, serviceName,\n                        instance);\n        if (instance.isEphemeral()) {\n            deregisterServiceForEphemeral(serviceName, groupName, instance);\n        } else {\n            doDeregisterServiceForPersistent(serviceName, groupName, instance);\n        }\n    }",
+        "position": {
+            "line": 270,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 272,
+                    "column": 18
+                }
+            },
+            {
+                "name": "isEphemeral",
+                "position": {
+                    "line": 274,
+                    "column": 22
+                }
+            },
+            {
+                "name": "deregisterServiceForEphemeral",
+                "position": {
+                    "line": 275,
+                    "column": 13
+                }
+            },
+            {
+                "name": "doDeregisterServiceForPersistent",
+                "position": {
+                    "line": 277,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.deregisterServiceForEphemeral(String serviceName, String groupName, Instance instance)",
+            "NamingGrpcClientProxy.doDeregisterServiceForPersistent(String serviceName, String groupName, Instance instance)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "deregisterServiceForEphemeral",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "deregisterServiceForEphemeral(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingGrpcClientProxy.deregisterServiceForEphemeral(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        String key = NamingUtils.getGroupedName(serviceName, groupName);\n        InstanceRedoData instanceRedoData = redoService.getRegisteredInstancesByKey(key);\n        if (instanceRedoData instanceof BatchInstanceRedoData) {\n            List<Instance> instances = new ArrayList<>();\n            if (null != instance) {\n                instances.add(instance);\n            }\n            batchDeregisterService(serviceName, groupName, instances);\n        } else {\n            redoService.instanceDeregister(serviceName, groupName);\n            doDeregisterService(serviceName, groupName, instance);\n        }\n    }",
+        "position": {
+            "line": 281,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getGroupedName",
+                "position": {
+                    "line": 283,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getRegisteredInstancesByKey",
+                "position": {
+                    "line": 284,
+                    "column": 57
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 288,
+                    "column": 27
+                }
+            },
+            {
+                "name": "batchDeregisterService",
+                "position": {
+                    "line": 290,
+                    "column": 13
+                }
+            },
+            {
+                "name": "instanceDeregister",
+                "position": {
+                    "line": 292,
+                    "column": 25
+                }
+            },
+            {
+                "name": "doDeregisterService",
+                "position": {
+                    "line": 293,
+                    "column": 13
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 286,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.batchDeregisterService(String serviceName, String groupName, List<Instance> instances)",
+            "NamingGrpcClientProxy.doDeregisterService(String serviceName, String groupName, Instance instance)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "doDeregisterService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "doDeregisterService(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingGrpcClientProxy.doDeregisterService(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        InstanceRequest request = new InstanceRequest(namespaceId, serviceName, groupName,\n                NamingRemoteConstants.DE_REGISTER_INSTANCE, instance);\n        requestToServer(request, Response.class);\n        redoService.instanceDeregistered(serviceName, groupName);\n    }",
+        "position": {
+            "line": 305,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "requestToServer",
+                "position": {
+                    "line": 308,
+                    "column": 9
+                }
+            },
+            {
+                "name": "instanceDeregistered",
+                "position": {
+                    "line": 309,
+                    "column": 21
+                }
+            },
+            {
+                "name": "InstanceRequest",
+                "position": {
+                    "line": 306,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.requestToServer(AbstractNamingRequest request, Class<T> responseClass)"
+        ],
+        "priority": 29
+    },
+    {
+        "name": "doDeregisterServiceForPersistent",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "doDeregisterServiceForPersistent(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingGrpcClientProxy.doDeregisterServiceForPersistent(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        PersistentInstanceRequest request = new PersistentInstanceRequest(namespaceId, serviceName, groupName,\n                NamingRemoteConstants.DE_REGISTER_INSTANCE, instance);\n        requestToServer(request, Response.class);\n    }",
+        "position": {
+            "line": 320,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "requestToServer",
+                "position": {
+                    "line": 324,
+                    "column": 9
+                }
+            },
+            {
+                "name": "PersistentInstanceRequest",
+                "position": {
+                    "line": 322,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.requestToServer(AbstractNamingRequest request, Class<T> responseClass)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "updateInstance",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "updateInstance(String serviceName, String groupName, Instance instance)",
+        "class_signature": "NamingGrpcClientProxy.updateInstance(String serviceName, String groupName, Instance instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "Instance",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n    }",
+        "position": {
+            "line": 328,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "queryInstancesOfService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "queryInstancesOfService(String serviceName, String groupName, String clusters, boolean healthyOnly)",
+        "class_signature": "NamingGrpcClientProxy.queryInstancesOfService(String serviceName, String groupName, String clusters, boolean healthyOnly)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusters"
+            ],
+            [
+                "boolean",
+                "healthyOnly"
+            ]
+        ],
+        "methodBody": "{\n        ServiceQueryRequest request = new ServiceQueryRequest(namespaceId, serviceName, groupName);\n        request.setCluster(clusters);\n        request.setHealthyOnly(healthyOnly);\n        QueryServiceResponse response = requestToServer(request, QueryServiceResponse.class);\n        return response.getServiceInfo();\n    }",
+        "position": {
+            "line": 332,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setCluster",
+                "position": {
+                    "line": 335,
+                    "column": 17
+                }
+            },
+            {
+                "name": "setHealthyOnly",
+                "position": {
+                    "line": 336,
+                    "column": 17
+                }
+            },
+            {
+                "name": "requestToServer",
+                "position": {
+                    "line": 337,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getServiceInfo",
+                "position": {
+                    "line": 338,
+                    "column": 25
+                }
+            },
+            {
+                "name": "ServiceQueryRequest",
+                "position": {
+                    "line": 334,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.requestToServer(AbstractNamingRequest request, Class<T> responseClass)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "queryService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "queryService(String serviceName, String groupName)",
+        "class_signature": "NamingGrpcClientProxy.queryService(String serviceName, String groupName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ]
+        ],
+        "methodBody": "{\n        return null;\n    }",
+        "position": {
+            "line": 342,
+            "column": 20
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "createService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "createService(Service service, AbstractSelector selector)",
+        "class_signature": "NamingGrpcClientProxy.createService(Service service, AbstractSelector selector)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Service",
+                "service"
+            ],
+            [
+                "AbstractSelector",
+                "selector"
+            ]
+        ],
+        "methodBody": "{\n    }",
+        "position": {
+            "line": 347,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "deleteService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "deleteService(String serviceName, String groupName)",
+        "class_signature": "NamingGrpcClientProxy.deleteService(String serviceName, String groupName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ]
+        ],
+        "methodBody": "{\n        return false;\n    }",
+        "position": {
+            "line": 351,
+            "column": 20
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "updateService",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "updateService(Service service, AbstractSelector selector)",
+        "class_signature": "NamingGrpcClientProxy.updateService(Service service, AbstractSelector selector)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Service",
+                "service"
+            ],
+            [
+                "AbstractSelector",
+                "selector"
+            ]
+        ],
+        "methodBody": "{\n    }",
+        "position": {
+            "line": 356,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "getServiceList",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "getServiceList(int pageNo, int pageSize, String groupName, AbstractSelector selector)",
+        "class_signature": "NamingGrpcClientProxy.getServiceList(int pageNo, int pageSize, String groupName, AbstractSelector selector)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "pageNo"
+            ],
+            [
+                "int",
+                "pageSize"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "AbstractSelector",
+                "selector"
+            ]
+        ],
+        "methodBody": "{\n        ServiceListRequest request = new ServiceListRequest(namespaceId, groupName, pageNo, pageSize);\n        if (selector != null) {\n            if (SelectorType.valueOf(selector.getType()) == SelectorType.label) {\n                request.setSelector(JacksonUtils.toJson(selector));\n            }\n        }\n        ServiceListResponse response = requestToServer(request, ServiceListResponse.class);\n        ListView<String> result = new ListView<>();\n        result.setCount(response.getCount());\n        result.setData(response.getServiceNames());\n        return result;\n    }",
+        "position": {
+            "line": 360,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 364,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 364,
+                    "column": 47
+                }
+            },
+            {
+                "name": "setSelector",
+                "position": {
+                    "line": 365,
+                    "column": 25
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 365,
+                    "column": 50
+                }
+            },
+            {
+                "name": "requestToServer",
+                "position": {
+                    "line": 368,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setCount",
+                "position": {
+                    "line": 370,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getCount",
+                "position": {
+                    "line": 370,
+                    "column": 34
+                }
+            },
+            {
+                "name": "setData",
+                "position": {
+                    "line": 371,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getServiceNames",
+                "position": {
+                    "line": 371,
+                    "column": 33
+                }
+            },
+            {
+                "name": "ServiceListRequest",
+                "position": {
+                    "line": 362,
+                    "column": 42
+                }
+            },
+            {
+                "name": "ListView<>",
+                "position": {
+                    "line": 369,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.requestToServer(AbstractNamingRequest request, Class<T> responseClass)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "subscribe",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "subscribe(String serviceName, String groupName, String clusters)",
+        "class_signature": "NamingGrpcClientProxy.subscribe(String serviceName, String groupName, String clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n        NAMING_LOGGER.info(\"[GRPC-SUBSCRIBE] service:{}, group:{}, cluster:{} \", serviceName, groupName, clusters);\n        redoService.cacheSubscriberForRedo(serviceName, groupName, clusters);\n        return doSubscribe(serviceName, groupName, clusters);\n    }",
+        "position": {
+            "line": 376,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 377,
+                    "column": 23
+                }
+            },
+            {
+                "name": "cacheSubscriberForRedo",
+                "position": {
+                    "line": 378,
+                    "column": 21
+                }
+            },
+            {
+                "name": "doSubscribe",
+                "position": {
+                    "line": 379,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.doSubscribe(String serviceName, String groupName, String clusters)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "doSubscribe",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "doSubscribe(String serviceName, String groupName, String clusters)",
+        "class_signature": "NamingGrpcClientProxy.doSubscribe(String serviceName, String groupName, String clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n        SubscribeServiceRequest request = new SubscribeServiceRequest(namespaceId, groupName, serviceName, clusters,\n                true);\n        SubscribeServiceResponse response = requestToServer(request, SubscribeServiceResponse.class);\n        redoService.subscriberRegistered(serviceName, groupName, clusters);\n        return response.getServiceInfo();\n    }",
+        "position": {
+            "line": 391,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "requestToServer",
+                "position": {
+                    "line": 394,
+                    "column": 45
+                }
+            },
+            {
+                "name": "subscriberRegistered",
+                "position": {
+                    "line": 395,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getServiceInfo",
+                "position": {
+                    "line": 396,
+                    "column": 25
+                }
+            },
+            {
+                "name": "SubscribeServiceRequest",
+                "position": {
+                    "line": 392,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.requestToServer(AbstractNamingRequest request, Class<T> responseClass)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "unsubscribe",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "unsubscribe(String serviceName, String groupName, String clusters)",
+        "class_signature": "NamingGrpcClientProxy.unsubscribe(String serviceName, String groupName, String clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n        NAMING_LOGGER.info(\"[GRPC-UNSUBSCRIBE] service:{}, group:{}, cluster:{} \", serviceName, groupName, clusters);\n        redoService.subscriberDeregister(serviceName, groupName, clusters);\n        doUnsubscribe(serviceName, groupName, clusters);\n    }",
+        "position": {
+            "line": 400,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 401,
+                    "column": 23
+                }
+            },
+            {
+                "name": "subscriberDeregister",
+                "position": {
+                    "line": 402,
+                    "column": 21
+                }
+            },
+            {
+                "name": "doUnsubscribe",
+                "position": {
+                    "line": 403,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.doUnsubscribe(String serviceName, String groupName, String clusters)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "isSubscribed",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "isSubscribed(String serviceName, String groupName, String clusters)",
+        "class_signature": "NamingGrpcClientProxy.isSubscribed(String serviceName, String groupName, String clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n        return redoService.isSubscriberRegistered(serviceName, groupName, clusters);\n    }",
+        "position": {
+            "line": 407,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isSubscriberRegistered",
+                "position": {
+                    "line": 408,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "doUnsubscribe",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "doUnsubscribe(String serviceName, String groupName, String clusters)",
+        "class_signature": "NamingGrpcClientProxy.doUnsubscribe(String serviceName, String groupName, String clusters)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serviceName"
+            ],
+            [
+                "String",
+                "groupName"
+            ],
+            [
+                "String",
+                "clusters"
+            ]
+        ],
+        "methodBody": "{\n        SubscribeServiceRequest request = new SubscribeServiceRequest(namespaceId, groupName, serviceName, clusters,\n                false);\n        requestToServer(request, SubscribeServiceResponse.class);\n        redoService.removeSubscriberForRedo(serviceName, groupName, clusters);\n    }",
+        "position": {
+            "line": 419,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "requestToServer",
+                "position": {
+                    "line": 422,
+                    "column": 9
+                }
+            },
+            {
+                "name": "removeSubscriberForRedo",
+                "position": {
+                    "line": 423,
+                    "column": 21
+                }
+            },
+            {
+                "name": "SubscribeServiceRequest",
+                "position": {
+                    "line": 420,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.requestToServer(AbstractNamingRequest request, Class<T> responseClass)"
+        ],
+        "priority": 25
+    },
+    {
+        "name": "serverHealthy",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "serverHealthy()",
+        "class_signature": "NamingGrpcClientProxy.serverHealthy()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return rpcClient.isRunning();\n    }",
+        "position": {
+            "line": 427,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isRunning",
+                "position": {
+                    "line": 428,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "isAbilitySupportedByServer",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "isAbilitySupportedByServer(AbilityKey abilityKey)",
+        "class_signature": "NamingGrpcClientProxy.isAbilitySupportedByServer(AbilityKey abilityKey)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AbilityKey",
+                "abilityKey"
+            ]
+        ],
+        "methodBody": "{\n        return rpcClient.getConnectionAbility(abilityKey) == AbilityStatus.SUPPORTED;\n    }",
+        "position": {
+            "line": 437,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConnectionAbility",
+                "position": {
+                    "line": 438,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "requestToServer",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "requestToServer(AbstractNamingRequest request, Class<T> responseClass)",
+        "class_signature": "NamingGrpcClientProxy.requestToServer(AbstractNamingRequest request, Class<T> responseClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AbstractNamingRequest",
+                "request"
+            ],
+            [
+                "Class<T>",
+                "responseClass"
+            ]
+        ],
+        "methodBody": "{\n        Response response = null;\n        try {\n            request.putAllHeader(\n                    getSecurityHeaders(request.getNamespace(), request.getGroupName(), request.getServiceName()));\n            response = requestTimeout < 0 ? rpcClient.request(request) : rpcClient.request(request, requestTimeout);\n            if (ResponseCode.SUCCESS.getCode() != response.getResultCode()) {\n                throw new NacosException(response.getErrorCode(), response.getMessage());\n            }\n            if (responseClass.isAssignableFrom(response.getClass())) {\n                return (T) response;\n            }\n            NAMING_LOGGER.error(\"Server return unexpected response '{}', expected response should be '{}'\",\n                    response.getClass().getName(), responseClass.getName());\n            throw new NacosException(NacosException.SERVER_ERROR, \"Server return invalid response\");\n        } catch (NacosException e) {\n            recordRequestFailedMetrics(request, e, response);\n            throw e;\n        } catch (Exception e) {\n            recordRequestFailedMetrics(request, e, response);\n            throw new NacosException(NacosException.SERVER_ERROR, \"Request nacos server failed: \", e);\n        }\n    }",
+        "position": {
+            "line": 441,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "putAllHeader",
+                "position": {
+                    "line": 445,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getSecurityHeaders",
+                "position": {
+                    "line": 446,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getNamespace",
+                "position": {
+                    "line": 446,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getGroupName",
+                "position": {
+                    "line": 446,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getServiceName",
+                "position": {
+                    "line": 446,
+                    "column": 96
+                }
+            },
+            {
+                "name": "request",
+                "position": {
+                    "line": 447,
+                    "column": 55
+                }
+            },
+            {
+                "name": "request",
+                "position": {
+                    "line": 447,
+                    "column": 84
+                }
+            },
+            {
+                "name": "getCode",
+                "position": {
+                    "line": 448,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getResultCode",
+                "position": {
+                    "line": 448,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getErrorCode",
+                "position": {
+                    "line": 449,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 449,
+                    "column": 76
+                }
+            },
+            {
+                "name": "isAssignableFrom",
+                "position": {
+                    "line": 451,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 451,
+                    "column": 57
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 454,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 455,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 455,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 455,
+                    "column": 66
+                }
+            },
+            {
+                "name": "recordRequestFailedMetrics",
+                "position": {
+                    "line": 458,
+                    "column": 13
+                }
+            },
+            {
+                "name": "recordRequestFailedMetrics",
+                "position": {
+                    "line": 461,
+                    "column": 13
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 449,
+                    "column": 27
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 456,
+                    "column": 23
+                }
+            },
+            {
+                "name": "NacosException",
+                "position": {
+                    "line": 462,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.recordRequestFailedMetrics(AbstractNamingRequest request, Exception exception, Response response)",
+            "NamingGrpcClientProxy.recordRequestFailedMetrics(AbstractNamingRequest request, Exception exception, Response response)"
+        ],
+        "priority": 34
+    },
+    {
+        "name": "recordRequestFailedMetrics",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "recordRequestFailedMetrics(AbstractNamingRequest request, Exception exception, Response response)",
+        "class_signature": "NamingGrpcClientProxy.recordRequestFailedMetrics(AbstractNamingRequest request, Exception exception, Response response)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AbstractNamingRequest",
+                "request"
+            ],
+            [
+                "Exception",
+                "exception"
+            ],
+            [
+                "Response",
+                "response"
+            ]
+        ],
+        "methodBody": "{\n        if (Objects.isNull(response)) {\n            MetricsMonitor.getNamingRequestFailedMonitor(request.getClass().getSimpleName(), MONITOR_LABEL_NONE,\n                    MONITOR_LABEL_NONE, exception.getClass().getSimpleName()).inc();\n        } else {\n            MetricsMonitor.getNamingRequestFailedMonitor(request.getClass().getSimpleName(),\n                    String.valueOf(response.getResultCode()), String.valueOf(response.getErrorCode()),\n                    MONITOR_LABEL_NONE).inc();\n        }\n    }",
+        "position": {
+            "line": 474,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNull",
+                "position": {
+                    "line": 475,
+                    "column": 21
+                }
+            },
+            {
+                "name": "inc",
+                "position": {
+                    "line": 477,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getNamingRequestFailedMonitor",
+                "position": {
+                    "line": 476,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 476,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 476,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 477,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 477,
+                    "column": 51
+                }
+            },
+            {
+                "name": "inc",
+                "position": {
+                    "line": 481,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getNamingRequestFailedMonitor",
+                "position": {
+                    "line": 479,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 479,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 479,
+                    "column": 66
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 480,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getResultCode",
+                "position": {
+                    "line": 480,
+                    "column": 45
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 480,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getErrorCode",
+                "position": {
+                    "line": 480,
+                    "column": 87
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 35
+    },
+    {
+        "name": "shutdown",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "shutdown()",
+        "class_signature": "NamingGrpcClientProxy.shutdown()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        NAMING_LOGGER.info(\"Shutdown naming grpc client proxy for  uuid->{}\", uuid);\n        redoService.shutdown();\n        shutDownAndRemove(uuid);\n        NotifyCenter.deregisterSubscriber(this);\n    }",
+        "position": {
+            "line": 486,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 487,
+                    "column": 23
+                }
+            },
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 488,
+                    "column": 21
+                }
+            },
+            {
+                "name": "shutDownAndRemove",
+                "position": {
+                    "line": 489,
+                    "column": 9
+                }
+            },
+            {
+                "name": "deregisterSubscriber",
+                "position": {
+                    "line": 490,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamingGrpcClientProxy.shutDownAndRemove(String uuid)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "shutDownAndRemove",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "shutDownAndRemove(String uuid)",
+        "class_signature": "NamingGrpcClientProxy.shutDownAndRemove(String uuid)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "uuid"
+            ]
+        ],
+        "methodBody": "{\n        synchronized (RpcClientFactory.getAllClientEntries()) {\n            try {\n                RpcClientFactory.destroyClient(uuid);\n                NAMING_LOGGER.info(\"shutdown and remove naming rpc client  for uuid ->{}\", uuid);\n            } catch (NacosException e) {\n                NAMING_LOGGER.warn(\"Fail to shutdown naming rpc client  for uuid ->{}\", uuid);\n            }\n        }\n    }",
+        "position": {
+            "line": 493,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllClientEntries",
+                "position": {
+                    "line": 494,
+                    "column": 40
+                }
+            },
+            {
+                "name": "destroyClient",
+                "position": {
+                    "line": 496,
+                    "column": 34
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 497,
+                    "column": 31
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 499,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 26
+    },
+    {
+        "name": "isEnable",
+        "category": "method_declaration",
+        "class": "NamingGrpcClientProxy",
+        "signature": "isEnable()",
+        "class_signature": "NamingGrpcClientProxy.isEnable()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return rpcClient.isRunning();\n    }",
+        "position": {
+            "line": 504,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isRunning",
+                "position": {
+                    "line": 505,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    }
+]

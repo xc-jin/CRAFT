@@ -1,0 +1,1476 @@
+[
+    {
+        "name": "Builder",
+        "category": "constructor_declaration",
+        "class": "Builder",
+        "signature": "Builder()",
+        "class_signature": "Builder.Builder()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        }",
+        "position": {
+            "line": 35,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "build",
+        "category": "method_declaration",
+        "class": "Builder",
+        "signature": "build()",
+        "class_signature": "Builder.build()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            return new ArtifactCoordsPattern(groupIdPattern, artifactIdPattern, classifierPattern, typePattern, versionPattern);\n        }",
+        "position": {
+            "line": 38,
+            "column": 38
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ArtifactCoordsPattern",
+                "position": {
+                    "line": 39,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsPattern.ArtifactCoordsPattern(ArtifactCoordsSegmentPattern groupIdPattern, ArtifactCoordsSegmentPattern artifactIdPattern, ArtifactCoordsSegmentPattern classifierPattern, ArtifactCoordsSegmentPattern typePattern, ArtifactCoordsSegmentPattern versionPattern)"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "setGroupId",
+        "category": "method_declaration",
+        "class": "Builder",
+        "signature": "setGroupId(String wildcardPattern)",
+        "class_signature": "Builder.setGroupId(String wildcardPattern)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "wildcardPattern"
+            ]
+        ],
+        "methodBody": "{\n            this.groupIdPattern = new ArtifactCoordsSegmentPattern(wildcardPattern);\n            return this;\n        }",
+        "position": {
+            "line": 48,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 49,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "setArtifactId",
+        "category": "method_declaration",
+        "class": "Builder",
+        "signature": "setArtifactId(String wildcardPattern)",
+        "class_signature": "Builder.setArtifactId(String wildcardPattern)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "wildcardPattern"
+            ]
+        ],
+        "methodBody": "{\n            this.artifactIdPattern = new ArtifactCoordsSegmentPattern(wildcardPattern);\n            return this;\n        }",
+        "position": {
+            "line": 59,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 60,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "setClassifier",
+        "category": "method_declaration",
+        "class": "Builder",
+        "signature": "setClassifier(String wildcardPattern)",
+        "class_signature": "Builder.setClassifier(String wildcardPattern)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "wildcardPattern"
+            ]
+        ],
+        "methodBody": "{\n            this.classifierPattern = new ArtifactCoordsSegmentPattern(wildcardPattern);\n            return this;\n        }",
+        "position": {
+            "line": 70,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 71,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "setType",
+        "category": "method_declaration",
+        "class": "Builder",
+        "signature": "setType(String wildcardPattern)",
+        "class_signature": "Builder.setType(String wildcardPattern)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "wildcardPattern"
+            ]
+        ],
+        "methodBody": "{\n            this.typePattern = new ArtifactCoordsSegmentPattern(wildcardPattern);\n            return this;\n        }",
+        "position": {
+            "line": 75,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 76,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "setVersion",
+        "category": "method_declaration",
+        "class": "Builder",
+        "signature": "setVersion(String wildcardPattern)",
+        "class_signature": "Builder.setVersion(String wildcardPattern)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "wildcardPattern"
+            ]
+        ],
+        "methodBody": "{\n            this.versionPattern = new ArtifactCoordsSegmentPattern(wildcardPattern);\n            return this;\n        }",
+        "position": {
+            "line": 86,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 87,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "ArtifactCoordsSegmentPattern",
+        "category": "constructor_declaration",
+        "class": "ArtifactCoordsSegmentPattern",
+        "signature": "ArtifactCoordsSegmentPattern(String wildcardSource)",
+        "class_signature": "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "wildcardSource"
+            ]
+        ],
+        "methodBody": "{\n            super();\n            this.pattern = Pattern.compile(GlobUtil.toRegexPattern(wildcardSource));\n            this.source = wildcardSource;\n        }",
+        "position": {
+            "line": 103,
+            "column": 9
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "compile",
+                "position": {
+                    "line": 105,
+                    "column": 36
+                }
+            },
+            {
+                "name": "toRegexPattern",
+                "position": {
+                    "line": 105,
+                    "column": 53
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 22
+    },
+    {
+        "name": "equals",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsSegmentPattern",
+        "signature": "equals(Object obj)",
+        "class_signature": "ArtifactCoordsSegmentPattern.equals(Object obj)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "obj"
+            ]
+        ],
+        "methodBody": "{\n            if (obj == null)\n                return false;\n            if (getClass() != obj.getClass())\n                return false;\n            ArtifactCoordsSegmentPattern other = (ArtifactCoordsSegmentPattern) obj;\n            return source.equals(other.source);\n        }",
+        "position": {
+            "line": 110,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 113,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 113,
+                    "column": 35
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 116,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 25
+    },
+    {
+        "name": "getSource",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsSegmentPattern",
+        "signature": "getSource()",
+        "class_signature": "ArtifactCoordsSegmentPattern.getSource()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            return source;\n        }",
+        "position": {
+            "line": 122,
+            "column": 23
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 23
+    },
+    {
+        "name": "hashCode",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsSegmentPattern",
+        "signature": "hashCode()",
+        "class_signature": "ArtifactCoordsSegmentPattern.hashCode()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            return source.hashCode();\n        }",
+        "position": {
+            "line": 127,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "hashCode",
+                "position": {
+                    "line": 128,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "matches",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsSegmentPattern",
+        "signature": "matches(String input)",
+        "class_signature": "ArtifactCoordsSegmentPattern.matches(String input)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "input"
+            ]
+        ],
+        "methodBody": "{\n            if (input == null) {\n                /* null input returns true only if the pattern is * */\n                return MATCH_ALL.equals(this);\n            }\n            return pattern.matcher(input).matches();\n        }",
+        "position": {
+            "line": 131,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 134,
+                    "column": 34
+                }
+            },
+            {
+                "name": "matches",
+                "position": {
+                    "line": 136,
+                    "column": 43
+                }
+            },
+            {
+                "name": "matcher",
+                "position": {
+                    "line": 136,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsSegmentPattern.equals(Object obj)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "matchesAll",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsSegmentPattern",
+        "signature": "matchesAll()",
+        "class_signature": "ArtifactCoordsSegmentPattern.matchesAll()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            return MATCH_ALL.equals(this);\n        }",
+        "position": {
+            "line": 143,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 144,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsSegmentPattern.equals(Object obj)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "toString",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsSegmentPattern",
+        "signature": "toString()",
+        "class_signature": "ArtifactCoordsSegmentPattern.toString()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            return source;\n        }",
+        "position": {
+            "line": 148,
+            "column": 23
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "builder",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "builder()",
+        "class_signature": "ArtifactCoordsPattern.builder()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return new Builder();\n    }",
+        "position": {
+            "line": 163,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "Builder",
+                "position": {
+                    "line": 164,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "Builder.Builder()"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "of",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "of(ArtifactCoords c)",
+        "class_signature": "ArtifactCoordsPattern.of(ArtifactCoords c)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ArtifactCoords",
+                "c"
+            ]
+        ],
+        "methodBody": "{\n        final Builder pattern = ArtifactCoordsPattern.builder();\n        pattern.setGroupId(c.getGroupId());\n        pattern.setArtifactId(c.getArtifactId());\n        if (c.getClassifier() != null && !c.getClassifier().isEmpty()) {\n            pattern.setClassifier(c.getClassifier());\n        }\n        if (c.getType() != null && !c.getType().isEmpty()) {\n            pattern.setType(c.getType());\n        }\n        return pattern.setVersion(c.getVersion()).build();\n    }",
+        "position": {
+            "line": 167,
+            "column": 41
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "builder",
+                "position": {
+                    "line": 168,
+                    "column": 55
+                }
+            },
+            {
+                "name": "setGroupId",
+                "position": {
+                    "line": 169,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getGroupId",
+                "position": {
+                    "line": 169,
+                    "column": 30
+                }
+            },
+            {
+                "name": "setArtifactId",
+                "position": {
+                    "line": 170,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getArtifactId",
+                "position": {
+                    "line": 170,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getClassifier",
+                "position": {
+                    "line": 171,
+                    "column": 15
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 171,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getClassifier",
+                "position": {
+                    "line": 171,
+                    "column": 45
+                }
+            },
+            {
+                "name": "setClassifier",
+                "position": {
+                    "line": 172,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getClassifier",
+                "position": {
+                    "line": 172,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 174,
+                    "column": 15
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 174,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 174,
+                    "column": 39
+                }
+            },
+            {
+                "name": "setType",
+                "position": {
+                    "line": 175,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 175,
+                    "column": 31
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 177,
+                    "column": 51
+                }
+            },
+            {
+                "name": "setVersion",
+                "position": {
+                    "line": 177,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getVersion",
+                "position": {
+                    "line": 177,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsPattern.builder()",
+            "Builder.setGroupId(String wildcardPattern)",
+            "Builder.setArtifactId(String wildcardPattern)",
+            "Builder.setClassifier(String wildcardPattern)",
+            "Builder.setType(String wildcardPattern)",
+            "Builder.build()",
+            "Builder.setVersion(String wildcardPattern)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "toPatterns",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "toPatterns(Collection<ArtifactCoords> coords)",
+        "class_signature": "ArtifactCoordsPattern.toPatterns(Collection<ArtifactCoords> coords)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Collection<ArtifactCoords>",
+                "coords"
+            ]
+        ],
+        "methodBody": "{\n        if (coords.isEmpty()) {\n            return List.of();\n        }\n        final List<ArtifactCoordsPattern> result = new ArrayList<>(coords.size());\n        for (ArtifactCoords c : coords) {\n            result.add(of(c));\n        }\n        return result;\n    }",
+        "position": {
+            "line": 180,
+            "column": 47
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 181,
+                    "column": 20
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 182,
+                    "column": 25
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 184,
+                    "column": 75
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 186,
+                    "column": 20
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 186,
+                    "column": 24
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 184,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsPattern.of(ArtifactCoords c)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "matchAll",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "matchAll()",
+        "class_signature": "ArtifactCoordsPattern.matchAll()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (matchAll == null) {\n            matchAll = new ArtifactCoordsPattern(\n                    ArtifactCoordsSegmentPattern.MATCH_ALL,\n                    ArtifactCoordsSegmentPattern.MATCH_ALL,\n                    ArtifactCoordsSegmentPattern.MATCH_ALL,\n                    ArtifactCoordsSegmentPattern.MATCH_ALL,\n                    ArtifactCoordsSegmentPattern.MATCH_ALL);\n        }\n        return matchAll;\n    }",
+        "position": {
+            "line": 194,
+            "column": 41
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ArtifactCoordsPattern",
+                "position": {
+                    "line": 196,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsPattern.ArtifactCoordsPattern(ArtifactCoordsSegmentPattern groupIdPattern, ArtifactCoordsSegmentPattern artifactIdPattern, ArtifactCoordsSegmentPattern classifierPattern, ArtifactCoordsSegmentPattern typePattern, ArtifactCoordsSegmentPattern versionPattern)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "matchSnapshots",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "matchSnapshots()",
+        "class_signature": "ArtifactCoordsPattern.matchSnapshots()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (matchSnapshots == null) {\n            matchSnapshots = new ArtifactCoordsPattern(\n                    ArtifactCoordsSegmentPattern.MATCH_ALL,\n                    ArtifactCoordsSegmentPattern.MATCH_ALL,\n                    ArtifactCoordsSegmentPattern.MATCH_ALL,\n                    ArtifactCoordsSegmentPattern.MATCH_ALL,\n                    new ArtifactCoordsSegmentPattern(MULTI_WILDCARD + SNAPSHOT_SUFFIX));\n        }\n        return matchSnapshots;\n    }",
+        "position": {
+            "line": 209,
+            "column": 41
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ArtifactCoordsPattern",
+                "position": {
+                    "line": 211,
+                    "column": 34
+                }
+            },
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 216,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsPattern.ArtifactCoordsPattern(ArtifactCoordsSegmentPattern groupIdPattern, ArtifactCoordsSegmentPattern artifactIdPattern, ArtifactCoordsSegmentPattern classifierPattern, ArtifactCoordsSegmentPattern typePattern, ArtifactCoordsSegmentPattern versionPattern)",
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "of",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "of(String wildcardPattern)",
+        "class_signature": "ArtifactCoordsPattern.of(String wildcardPattern)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "wildcardPattern"
+            ]
+        ],
+        "methodBody": "{\n        var groupIdPattern = ArtifactCoordsSegmentPattern.MATCH_ALL;\n        var artifactIdPattern = ArtifactCoordsSegmentPattern.MATCH_ALL;\n        var typePattern = ArtifactCoordsSegmentPattern.MATCH_ALL;\n        var classifierPattern = ArtifactCoordsSegmentPattern.MATCH_ALL;\n        var versionPattern = ArtifactCoordsSegmentPattern.MATCH_ALL;\n        var parts = wildcardPattern.split(DELIMITER_STRING);\n        if (parts.length > 0) {\n            groupIdPattern = new ArtifactCoordsSegmentPattern(parts[0]);\n            if (parts.length > 1) {\n                artifactIdPattern = new ArtifactCoordsSegmentPattern(parts[1]);\n                if (parts.length > 2) {\n                    final String third = parts[2];\n                    if (parts.length > 3) {\n                        final String fourth = parts[3];\n                        if (parts.length > 4) {\n                            classifierPattern = new ArtifactCoordsSegmentPattern(third);\n                            typePattern = new ArtifactCoordsSegmentPattern(fourth);\n                            versionPattern = new ArtifactCoordsSegmentPattern(parts[4]);\n                        } else {\n                            throw new IllegalStateException(\n                                    ArtifactCoordsSegmentPattern.class.getName()\n                                            + \".of() expects groupId:artifactId:version or groupId:artifactId:classifier:type:version; found: \"\n                                            + wildcardPattern);\n                        }\n                    } else {\n                        versionPattern = new ArtifactCoordsSegmentPattern(third);\n                    }\n                }\n            }\n        }\n        return new ArtifactCoordsPattern(groupIdPattern, artifactIdPattern, classifierPattern, typePattern, versionPattern);\n    }",
+        "position": {
+            "line": 262,
+            "column": 41
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "split",
+                "position": {
+                    "line": 268,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 283,
+                    "column": 72
+                }
+            },
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 270,
+                    "column": 34
+                }
+            },
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 272,
+                    "column": 41
+                }
+            },
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 278,
+                    "column": 53
+                }
+            },
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 279,
+                    "column": 47
+                }
+            },
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 280,
+                    "column": 50
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 282,
+                    "column": 39
+                }
+            },
+            {
+                "name": "ArtifactCoordsSegmentPattern",
+                "position": {
+                    "line": 288,
+                    "column": 46
+                }
+            },
+            {
+                "name": "ArtifactCoordsPattern",
+                "position": {
+                    "line": 293,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)",
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)",
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)",
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)",
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)",
+            "ArtifactCoordsSegmentPattern.ArtifactCoordsSegmentPattern(String wildcardSource)",
+            "ArtifactCoordsPattern.ArtifactCoordsPattern(ArtifactCoordsSegmentPattern groupIdPattern, ArtifactCoordsSegmentPattern artifactIdPattern, ArtifactCoordsSegmentPattern classifierPattern, ArtifactCoordsSegmentPattern typePattern, ArtifactCoordsSegmentPattern versionPattern)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "ArtifactCoordsPattern",
+        "category": "constructor_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "ArtifactCoordsPattern(ArtifactCoordsSegmentPattern groupIdPattern, ArtifactCoordsSegmentPattern artifactIdPattern, ArtifactCoordsSegmentPattern classifierPattern, ArtifactCoordsSegmentPattern typePattern, ArtifactCoordsSegmentPattern versionPattern)",
+        "class_signature": "ArtifactCoordsPattern.ArtifactCoordsPattern(ArtifactCoordsSegmentPattern groupIdPattern, ArtifactCoordsSegmentPattern artifactIdPattern, ArtifactCoordsSegmentPattern classifierPattern, ArtifactCoordsSegmentPattern typePattern, ArtifactCoordsSegmentPattern versionPattern)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ArtifactCoordsSegmentPattern",
+                "groupIdPattern"
+            ],
+            [
+                "ArtifactCoordsSegmentPattern",
+                "artifactIdPattern"
+            ],
+            [
+                "ArtifactCoordsSegmentPattern",
+                "classifierPattern"
+            ],
+            [
+                "ArtifactCoordsSegmentPattern",
+                "typePattern"
+            ],
+            [
+                "ArtifactCoordsSegmentPattern",
+                "versionPattern"
+            ]
+        ],
+        "methodBody": "{\n        super();\n        this.groupIdPattern = groupIdPattern;\n        this.artifactIdPattern = artifactIdPattern;\n        this.classifierPattern = classifierPattern;\n        this.typePattern = typePattern;\n        this.versionPattern = versionPattern;\n\n        StringBuilder source = new StringBuilder(\n                groupIdPattern.getSource().length() + artifactIdPattern.getSource().length()\n                        + classifierPattern.getSource().length() + typePattern.getSource().length()\n                        + versionPattern.getSource().length() + 3);\n\n        source.append(groupIdPattern.getSource());\n        final boolean artifactMatchesAll = artifactIdPattern.matchesAll();\n        final boolean classifierMatchesAll = classifierPattern.matchesAll();\n        final boolean typeMatchesAll = typePattern.matchesAll();\n        final boolean versionMatchesAll = versionPattern.matchesAll();\n        if (!versionMatchesAll) {\n            source.append(DELIMITER).append(artifactIdPattern.getSource());\n            if (!typeMatchesAll || !classifierMatchesAll) {\n                source.append(DELIMITER).append(classifierPattern.getSource());\n                source.append(DELIMITER).append(typePattern.getSource());\n            }\n            source.append(DELIMITER).append(versionPattern.getSource());\n        } else if (!typeMatchesAll || !classifierMatchesAll) {\n            source.append(DELIMITER).append(artifactIdPattern.getSource());\n            source.append(DELIMITER).append(classifierPattern.getSource());\n            source.append(DELIMITER).append(typePattern.getSource());\n        } else if (!artifactMatchesAll) {\n            source.append(DELIMITER).append(artifactIdPattern.getSource());\n        }\n        this.source = source.toString();\n    }",
+        "position": {
+            "line": 303,
+            "column": 5
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 317,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 317,
+                    "column": 32
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 317,
+                    "column": 85
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 317,
+                    "column": 73
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 318,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 318,
+                    "column": 45
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 318,
+                    "column": 92
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 318,
+                    "column": 80
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 319,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 319,
+                    "column": 42
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 321,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 321,
+                    "column": 38
+                }
+            },
+            {
+                "name": "matchesAll",
+                "position": {
+                    "line": 322,
+                    "column": 62
+                }
+            },
+            {
+                "name": "matchesAll",
+                "position": {
+                    "line": 323,
+                    "column": 64
+                }
+            },
+            {
+                "name": "matchesAll",
+                "position": {
+                    "line": 324,
+                    "column": 52
+                }
+            },
+            {
+                "name": "matchesAll",
+                "position": {
+                    "line": 325,
+                    "column": 58
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 327,
+                    "column": 38
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 327,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 327,
+                    "column": 63
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 329,
+                    "column": 42
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 329,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 329,
+                    "column": 67
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 330,
+                    "column": 42
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 330,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 330,
+                    "column": 61
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 332,
+                    "column": 38
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 332,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 332,
+                    "column": 60
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 334,
+                    "column": 38
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 334,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 334,
+                    "column": 63
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 335,
+                    "column": 38
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 335,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 335,
+                    "column": 63
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 336,
+                    "column": 38
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 336,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 336,
+                    "column": 57
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 338,
+                    "column": 38
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 338,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getSource",
+                "position": {
+                    "line": 338,
+                    "column": 63
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 340,
+                    "column": 30
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 316,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.matchesAll()",
+            "ArtifactCoordsSegmentPattern.matchesAll()",
+            "ArtifactCoordsSegmentPattern.matchesAll()",
+            "ArtifactCoordsSegmentPattern.matchesAll()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()",
+            "ArtifactCoordsSegmentPattern.getSource()"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "equals",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "equals(Object obj)",
+        "class_signature": "ArtifactCoordsPattern.equals(Object obj)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "obj"
+            ]
+        ],
+        "methodBody": "{\n        if (this == obj)\n            return true;\n        if (obj == null)\n            return false;\n        if (getClass() != obj.getClass())\n            return false;\n        ArtifactCoordsPattern other = (ArtifactCoordsPattern) obj;\n        return this.source.equals(other.source);\n    }",
+        "position": {
+            "line": 344,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 349,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 349,
+                    "column": 31
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 352,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "hashCode",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "hashCode()",
+        "class_signature": "ArtifactCoordsPattern.hashCode()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return this.source.hashCode();\n    }",
+        "position": {
+            "line": 356,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "hashCode",
+                "position": {
+                    "line": 357,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "matches",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "matches(ArtifactCoords coords)",
+        "class_signature": "ArtifactCoordsPattern.matches(ArtifactCoords coords)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ArtifactCoords",
+                "coords"
+            ]
+        ],
+        "methodBody": "{\n        return groupIdPattern.matches(coords.getGroupId()) &&\n                artifactIdPattern.matches(coords.getArtifactId()) &&\n                classifierPattern.matches(coords.getClassifier()) &&\n                typePattern.matches(coords.getType()) &&\n                versionPattern.matches(coords.getVersion());\n    }",
+        "position": {
+            "line": 367,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "matches",
+                "position": {
+                    "line": 368,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getGroupId",
+                "position": {
+                    "line": 368,
+                    "column": 46
+                }
+            },
+            {
+                "name": "matches",
+                "position": {
+                    "line": 369,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getArtifactId",
+                "position": {
+                    "line": 369,
+                    "column": 50
+                }
+            },
+            {
+                "name": "matches",
+                "position": {
+                    "line": 370,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getClassifier",
+                "position": {
+                    "line": 370,
+                    "column": 50
+                }
+            },
+            {
+                "name": "matches",
+                "position": {
+                    "line": 371,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 371,
+                    "column": 44
+                }
+            },
+            {
+                "name": "matches",
+                "position": {
+                    "line": 372,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getVersion",
+                "position": {
+                    "line": 372,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsSegmentPattern.matches(String input)",
+            "ArtifactCoordsSegmentPattern.matches(String input)",
+            "ArtifactCoordsSegmentPattern.matches(String input)",
+            "ArtifactCoordsSegmentPattern.matches(String input)",
+            "ArtifactCoordsSegmentPattern.matches(String input)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "matches",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "matches(String groupId, String artifactId, String classifier, String type, String version)",
+        "class_signature": "ArtifactCoordsPattern.matches(String groupId, String artifactId, String classifier, String type, String version)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "groupId"
+            ],
+            [
+                "String",
+                "artifactId"
+            ],
+            [
+                "String",
+                "classifier"
+            ],
+            [
+                "String",
+                "type"
+            ],
+            [
+                "String",
+                "version"
+            ]
+        ],
+        "methodBody": "{\n        return groupIdPattern.matches(groupId) && //\n                artifactIdPattern.matches(artifactId) && //\n                classifierPattern.matches(classifier) && //\n                typePattern.matches(type) && //\n                versionPattern.matches(version);\n    }",
+        "position": {
+            "line": 387,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "matches",
+                "position": {
+                    "line": 388,
+                    "column": 31
+                }
+            },
+            {
+                "name": "matches",
+                "position": {
+                    "line": 389,
+                    "column": 35
+                }
+            },
+            {
+                "name": "matches",
+                "position": {
+                    "line": 390,
+                    "column": 35
+                }
+            },
+            {
+                "name": "matches",
+                "position": {
+                    "line": 391,
+                    "column": 29
+                }
+            },
+            {
+                "name": "matches",
+                "position": {
+                    "line": 392,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArtifactCoordsSegmentPattern.matches(String input)",
+            "ArtifactCoordsSegmentPattern.matches(String input)",
+            "ArtifactCoordsSegmentPattern.matches(String input)",
+            "ArtifactCoordsSegmentPattern.matches(String input)",
+            "ArtifactCoordsSegmentPattern.matches(String input)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "toString",
+        "category": "method_declaration",
+        "class": "ArtifactCoordsPattern",
+        "signature": "toString()",
+        "class_signature": "ArtifactCoordsPattern.toString()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return source;\n    }",
+        "position": {
+            "line": 396,
+            "column": 19
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 10
+    }
+]

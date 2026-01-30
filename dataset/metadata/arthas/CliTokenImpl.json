@@ -1,0 +1,783 @@
+[
+    {
+        "name": "CliTokenImpl",
+        "category": "constructor_declaration",
+        "class": "CliTokenImpl",
+        "signature": "CliTokenImpl(boolean text, String value)",
+        "class_signature": "CliTokenImpl.CliTokenImpl(boolean text, String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "text"
+            ],
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        this(text, value, value);\n    }",
+        "position": {
+            "line": 19,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 12
+    },
+    {
+        "name": "CliTokenImpl",
+        "category": "constructor_declaration",
+        "class": "CliTokenImpl",
+        "signature": "CliTokenImpl(boolean text, String raw, String value)",
+        "class_signature": "CliTokenImpl.CliTokenImpl(boolean text, String raw, String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "text"
+            ],
+            [
+                "String",
+                "raw"
+            ],
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        this.text = text;\n        this.raw = raw;\n        this.value = value;\n    }",
+        "position": {
+            "line": 23,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "isText",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "isText()",
+        "class_signature": "CliTokenImpl.isText()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return text;\n    }",
+        "position": {
+            "line": 30,
+            "column": 20
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "isBlank",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "isBlank()",
+        "class_signature": "CliTokenImpl.isBlank()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return !text;\n    }",
+        "position": {
+            "line": 35,
+            "column": 20
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "raw",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "raw()",
+        "class_signature": "CliTokenImpl.raw()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return raw;\n    }",
+        "position": {
+            "line": 39,
+            "column": 19
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "value",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "value()",
+        "class_signature": "CliTokenImpl.value()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return value;\n    }",
+        "position": {
+            "line": 43,
+            "column": 19
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "hashCode",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "hashCode()",
+        "class_signature": "CliTokenImpl.hashCode()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return value.hashCode();\n    }",
+        "position": {
+            "line": 48,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "hashCode",
+                "position": {
+                    "line": 49,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "equals",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "equals(Object obj)",
+        "class_signature": "CliTokenImpl.equals(Object obj)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "obj"
+            ]
+        ],
+        "methodBody": "{\n        if (obj == this) {\n            return true;\n        } else if (obj instanceof CliTokenImpl) {\n            CliTokenImpl that = (CliTokenImpl) obj;\n            return text == that.text && value.equals(that.value);\n        }\n        return false;\n    }",
+        "position": {
+            "line": 53,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 58,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "toString",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "toString()",
+        "class_signature": "CliTokenImpl.toString()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return \"CliToken[text=\" + text + \",value=\" + value + \"]\";\n    }",
+        "position": {
+            "line": 64,
+            "column": 19
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "tokenize",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "tokenize(String s)",
+        "class_signature": "CliTokenImpl.tokenize(String s)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "s"
+            ]
+        ],
+        "methodBody": "{\n\n        List<CliToken> tokens = new LinkedList<CliToken>();\n\n        tokenize(s, 0, tokens);\n\n        tokens = correctPipeChar(tokens);\n        return tokens;\n\n    }",
+        "position": {
+            "line": 68,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "tokenize",
+                "position": {
+                    "line": 72,
+                    "column": 9
+                }
+            },
+            {
+                "name": "correctPipeChar",
+                "position": {
+                    "line": 74,
+                    "column": 18
+                }
+            },
+            {
+                "name": "LinkedList<CliToken>",
+                "position": {
+                    "line": 70,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "CliTokenImpl.tokenize(String s, int index, List<CliToken> builder)",
+            "CliTokenImpl.correctPipeChar(List<CliToken> tokens)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "correctPipeChar",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "correctPipeChar(List<CliToken> tokens)",
+        "class_signature": "CliTokenImpl.correctPipeChar(List<CliToken> tokens)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<CliToken>",
+                "tokens"
+            ]
+        ],
+        "methodBody": "{\n        List<CliToken> newTokens = new ArrayList<CliToken>(tokens.size()+4);\n        for (CliToken token : tokens) {\n            String tokenValue = token.value();\n            if (tokenValue.length()>1 && tokenValue.endsWith(\"|\")) {\n                //split last char '|'\n                tokenValue = tokenValue.substring(0, tokenValue.length()-1);\n                String rawValue = token.raw();\n                rawValue = rawValue.substring(0, rawValue.length()-1);\n                newTokens.add(new CliTokenImpl(token.isText(), rawValue, tokenValue));\n                //add '|' char\n                newTokens.add(new CliTokenImpl(true, \"|\", \"|\"));\n\n            } else if (tokenValue.length()>1 && tokenValue.startsWith(\"|\")) {\n                //add '|' char\n                newTokens.add(new CliTokenImpl(true, \"|\", \"|\"));\n                //remove first char '|'\n                tokenValue = tokenValue.substring(1);\n                String rawValue = token.raw();\n                rawValue = rawValue.substring(1);\n                newTokens.add(new CliTokenImpl(token.isText(), rawValue, tokenValue));\n            } else {\n                newTokens.add(token);\n            }\n        }\n        return newTokens;\n    }",
+        "position": {
+            "line": 93,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 94,
+                    "column": 67
+                }
+            },
+            {
+                "name": "value",
+                "position": {
+                    "line": 96,
+                    "column": 39
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 97,
+                    "column": 28
+                }
+            },
+            {
+                "name": "endsWith",
+                "position": {
+                    "line": 97,
+                    "column": 53
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 99,
+                    "column": 41
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 99,
+                    "column": 65
+                }
+            },
+            {
+                "name": "raw",
+                "position": {
+                    "line": 100,
+                    "column": 41
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 101,
+                    "column": 37
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 101,
+                    "column": 59
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 102,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isText",
+                "position": {
+                    "line": 102,
+                    "column": 54
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 104,
+                    "column": 27
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 106,
+                    "column": 35
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 106,
+                    "column": 60
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 108,
+                    "column": 27
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 110,
+                    "column": 41
+                }
+            },
+            {
+                "name": "raw",
+                "position": {
+                    "line": 111,
+                    "column": 41
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 112,
+                    "column": 37
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 113,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isText",
+                "position": {
+                    "line": 113,
+                    "column": 54
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 115,
+                    "column": 27
+                }
+            },
+            {
+                "name": "ArrayList<CliToken>",
+                "position": {
+                    "line": 94,
+                    "column": 40
+                }
+            },
+            {
+                "name": "CliTokenImpl",
+                "position": {
+                    "line": 102,
+                    "column": 35
+                }
+            },
+            {
+                "name": "CliTokenImpl",
+                "position": {
+                    "line": 104,
+                    "column": 35
+                }
+            },
+            {
+                "name": "CliTokenImpl",
+                "position": {
+                    "line": 108,
+                    "column": 35
+                }
+            },
+            {
+                "name": "CliTokenImpl",
+                "position": {
+                    "line": 113,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "CliTokenImpl.CliTokenImpl(boolean text, String raw, String value)",
+            "CliTokenImpl.CliTokenImpl(boolean text, String raw, String value)",
+            "CliTokenImpl.CliTokenImpl(boolean text, String raw, String value)",
+            "CliTokenImpl.CliTokenImpl(boolean text, String raw, String value)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "tokenize",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "tokenize(String s, int index, List<CliToken> builder)",
+        "class_signature": "CliTokenImpl.tokenize(String s, int index, List<CliToken> builder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "s"
+            ],
+            [
+                "int",
+                "index"
+            ],
+            [
+                "List<CliToken>",
+                "builder"
+            ]
+        ],
+        "methodBody": "{\n        while (index < s.length()) {\n            char c = s.charAt(index);\n            switch (c) {\n                case ' ':\n                case '\\t':\n                    index = blankToken(s, index, builder);\n                    break;\n                default:\n                    index = textToken(s, index, builder);\n                    break;\n            }\n        }\n    }",
+        "position": {
+            "line": 121,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 122,
+                    "column": 26
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 123,
+                    "column": 24
+                }
+            },
+            {
+                "name": "blankToken",
+                "position": {
+                    "line": 127,
+                    "column": 29
+                }
+            },
+            {
+                "name": "textToken",
+                "position": {
+                    "line": 130,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "CliTokenImpl.blankToken(String s, int index, List<CliToken> builder)",
+            "CliTokenImpl.textToken(String s, int index, List<CliToken> builder)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "textToken",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "textToken(String s, int index, List<CliToken> builder)",
+        "class_signature": "CliTokenImpl.textToken(String s, int index, List<CliToken> builder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "s"
+            ],
+            [
+                "int",
+                "index"
+            ],
+            [
+                "List<CliToken>",
+                "builder"
+            ]
+        ],
+        "methodBody": "{\n        LineStatus quoter = new LineStatus();\n        int from = index;\n        StringBuilder value = new StringBuilder();\n        while (index < s.length()) {\n            char c = s.charAt(index);\n            quoter.accept(c);\n            if (!quoter.isQuoted() && !quoter.isEscaped() && isBlank(c)) {\n                break;\n            }\n            if (quoter.isCodePoint()) {\n                if (quoter.isEscaped() && quoter.isWeaklyQuoted() && c != '\"') {\n                    value.append('\\\\');\n                }\n                value.append(c);\n            }\n            index++;\n        }\n        builder.add(new CliTokenImpl(true, s.substring(from, index), value.toString()));\n        return index;\n    }",
+        "position": {
+            "line": 137,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 141,
+                    "column": 26
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 142,
+                    "column": 24
+                }
+            },
+            {
+                "name": "accept",
+                "position": {
+                    "line": 143,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isQuoted",
+                "position": {
+                    "line": 144,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isEscaped",
+                "position": {
+                    "line": 144,
+                    "column": 47
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 144,
+                    "column": 62
+                }
+            },
+            {
+                "name": "isCodePoint",
+                "position": {
+                    "line": 147,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isEscaped",
+                "position": {
+                    "line": 148,
+                    "column": 28
+                }
+            },
+            {
+                "name": "isWeaklyQuoted",
+                "position": {
+                    "line": 148,
+                    "column": 50
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 149,
+                    "column": 27
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 151,
+                    "column": 23
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 155,
+                    "column": 17
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 155,
+                    "column": 46
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 155,
+                    "column": 76
+                }
+            },
+            {
+                "name": "LineStatus",
+                "position": {
+                    "line": 138,
+                    "column": 33
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 140,
+                    "column": 35
+                }
+            },
+            {
+                "name": "CliTokenImpl",
+                "position": {
+                    "line": 155,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [
+            "CliTokenImpl.isBlank(char c)",
+            "CliTokenImpl.CliTokenImpl(boolean text, String raw, String value)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "blankToken",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "blankToken(String s, int index, List<CliToken> builder)",
+        "class_signature": "CliTokenImpl.blankToken(String s, int index, List<CliToken> builder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "s"
+            ],
+            [
+                "int",
+                "index"
+            ],
+            [
+                "List<CliToken>",
+                "builder"
+            ]
+        ],
+        "methodBody": "{\n        int from = index;\n        while (index < s.length() && isBlank(s.charAt(index))) {\n            index++;\n        }\n        builder.add(new CliTokenImpl(false, s.substring(from, index)));\n        return index;\n    }",
+        "position": {
+            "line": 159,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 161,
+                    "column": 26
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 161,
+                    "column": 38
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 161,
+                    "column": 48
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 164,
+                    "column": 17
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 164,
+                    "column": 47
+                }
+            },
+            {
+                "name": "CliTokenImpl",
+                "position": {
+                    "line": 164,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [
+            "CliTokenImpl.isBlank(char c)",
+            "CliTokenImpl.CliTokenImpl(boolean text, String value)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "isBlank",
+        "category": "method_declaration",
+        "class": "CliTokenImpl",
+        "signature": "isBlank(char c)",
+        "class_signature": "CliTokenImpl.isBlank(char c)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "char",
+                "c"
+            ]
+        ],
+        "methodBody": "{\n        return c == ' ' || c == '\\t';\n    }",
+        "position": {
+            "line": 168,
+            "column": 28
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 13
+    }
+]

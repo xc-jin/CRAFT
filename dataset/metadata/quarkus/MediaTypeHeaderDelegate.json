@@ -1,0 +1,700 @@
+[
+    {
+        "name": "isValid",
+        "category": "method_declaration",
+        "class": "MediaTypeHeaderDelegate",
+        "signature": "isValid(String str)",
+        "class_signature": "MediaTypeHeaderDelegate.isValid(String str)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "str"
+            ]
+        ],
+        "methodBody": "{\n        if (str == null || str.length() == 0)\n            return false;\n        for (int i = 0; i < str.length(); i++) {\n            switch (str.charAt(i)) {\n                case '/':\n                case '\\\\':\n                case '?':\n                case ':':\n                case '<':\n                case '>':\n                case ';':\n                case '(':\n                case ')':\n                case '@':\n                case ',':\n                case '[':\n                case ']':\n                case '=':\n                case '\\n':\n                    return false;\n                default:\n                    break;\n            }\n        }\n        return true;\n    }",
+        "position": {
+            "line": 22,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 23,
+                    "column": 32
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 25,
+                    "column": 33
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 26,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "parse",
+        "category": "method_declaration",
+        "class": "MediaTypeHeaderDelegate",
+        "signature": "parse(String type)",
+        "class_signature": "MediaTypeHeaderDelegate.parse(String type)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "type"
+            ]
+        ],
+        "methodBody": "{\n        MediaType result = map.get(type);\n        if (result == null) {\n            result = internalParse(type);\n            final int size = map.size();\n            if (size >= MAX_MT_CACHE_SIZE) {\n                map.clear();\n                reverseMap.clear();\n            }\n            map.put(type, result);\n            reverseMap.put(result, internalToString(result));\n        }\n        return result;\n    }",
+        "position": {
+            "line": 50,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 51,
+                    "column": 32
+                }
+            },
+            {
+                "name": "internalParse",
+                "position": {
+                    "line": 53,
+                    "column": 22
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 54,
+                    "column": 34
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 56,
+                    "column": 21
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 57,
+                    "column": 28
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 59,
+                    "column": 17
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 60,
+                    "column": 24
+                }
+            },
+            {
+                "name": "internalToString",
+                "position": {
+                    "line": 60,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "MediaTypeHeaderDelegate.internalParse(String type)",
+            "MediaTypeHeaderDelegate.internalToString(MediaType type)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "internalParse",
+        "category": "method_declaration",
+        "class": "MediaTypeHeaderDelegate",
+        "signature": "internalParse(String type)",
+        "class_signature": "MediaTypeHeaderDelegate.internalParse(String type)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "type"
+            ]
+        ],
+        "methodBody": "{\n        int typeIndex = type.indexOf('/');\n        int paramIndex = type.indexOf(';');\n        String major = null;\n        String subtype = null;\n        if (typeIndex < 0) // possible \"*\"\n        {\n            major = type;\n            if (paramIndex > -1) {\n                major = major.substring(0, paramIndex);\n            }\n            if (!MediaType.MEDIA_TYPE_WILDCARD.equals(major)) {\n                throw new IllegalArgumentException(\"Failed to parse media type \" + type);\n            }\n            subtype = MediaType.MEDIA_TYPE_WILDCARD;\n        } else {\n            major = type.substring(0, typeIndex);\n            if (paramIndex > -1) {\n                if (typeIndex + 1 > paramIndex) {\n                    throw new IllegalArgumentException(\"Failed to parse media type \" + type);\n                }\n                subtype = type.substring(typeIndex + 1, paramIndex);\n            } else {\n                subtype = type.substring(typeIndex + 1);\n            }\n        }\n        if (major.length() < 1 || subtype.length() < 1) {\n            throw new IllegalArgumentException(\"Failed to parse media type \" + type);\n        }\n        if (!isValid(major) || !isValid(subtype)) {\n            throw new IllegalArgumentException(\"Failed to parse media type \" + type);\n        }\n        String params = null;\n        if (paramIndex > -1)\n            params = type.substring(paramIndex + 1);\n        if (params != null && !params.equals(\"\")) {\n            HashMap<String, String> typeParams = new HashMap<String, String>();\n\n            int start = 0;\n\n            while (start < params.length()) {\n                start = HeaderParameterParser.setParam(typeParams, params, start);\n            }\n            return new MediaType(major, subtype, typeParams);\n        } else {\n            return new MediaType(major, subtype);\n        }\n    }",
+        "position": {
+            "line": 65,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "indexOf",
+                "position": {
+                    "line": 66,
+                    "column": 30
+                }
+            },
+            {
+                "name": "indexOf",
+                "position": {
+                    "line": 67,
+                    "column": 31
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 74,
+                    "column": 31
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 76,
+                    "column": 48
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 81,
+                    "column": 26
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 86,
+                    "column": 32
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 88,
+                    "column": 32
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 91,
+                    "column": 19
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 91,
+                    "column": 43
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 94,
+                    "column": 14
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 94,
+                    "column": 33
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 99,
+                    "column": 27
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 100,
+                    "column": 39
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 105,
+                    "column": 35
+                }
+            },
+            {
+                "name": "setParam",
+                "position": {
+                    "line": 106,
+                    "column": 47
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 77,
+                    "column": 27
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 84,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 92,
+                    "column": 23
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 95,
+                    "column": 23
+                }
+            },
+            {
+                "name": "HashMap<String, String>",
+                "position": {
+                    "line": 101,
+                    "column": 54
+                }
+            },
+            {
+                "name": "MediaType",
+                "position": {
+                    "line": 108,
+                    "column": 24
+                }
+            },
+            {
+                "name": "MediaType",
+                "position": {
+                    "line": 110,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "MediaTypeHeaderDelegate.isValid(String str)",
+            "MediaTypeHeaderDelegate.isValid(String str)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "quoted",
+        "category": "method_declaration",
+        "class": "MediaTypeHeaderDelegate",
+        "signature": "quoted(String str)",
+        "class_signature": "MediaTypeHeaderDelegate.quoted(String str)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "str"
+            ]
+        ],
+        "methodBody": "{\n        for (int i = 0; i < str.length(); i++) {\n            char c = str.charAt(i);\n            for (char q : quotedChars) {\n                if (c == q)\n                    return true;\n            }\n        }\n        return false;\n    }",
+        "position": {
+            "line": 114,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 115,
+                    "column": 33
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 116,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "fromString",
+        "category": "method_declaration",
+        "class": "MediaTypeHeaderDelegate",
+        "signature": "fromString(String type)",
+        "class_signature": "MediaTypeHeaderDelegate.fromString(String type)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "type"
+            ]
+        ],
+        "methodBody": "{\n        if (type == null)\n            throw new IllegalArgumentException(\"Media type was null\");\n        return parse(type);\n    }",
+        "position": {
+            "line": 125,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "parse",
+                "position": {
+                    "line": 128,
+                    "column": 16
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 127,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MediaTypeHeaderDelegate.parse(String type)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "toString",
+        "category": "method_declaration",
+        "class": "MediaTypeHeaderDelegate",
+        "signature": "toString(MediaType o)",
+        "class_signature": "MediaTypeHeaderDelegate.toString(MediaType o)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MediaType",
+                "o"
+            ]
+        ],
+        "methodBody": "{\n        if (o == null)\n            throw new IllegalArgumentException(\"Param was null\");\n        MediaType type = o;\n        String result = reverseMap.get(type);\n        if (result == null) {\n            result = internalToString(type);\n            final int size = reverseMap.size();\n            if (size >= MAX_MT_CACHE_SIZE) {\n                reverseMap.clear();\n                map.clear();\n            }\n            reverseMap.put(type, result);\n            map.put(result, type);\n        }\n        return result;\n    }",
+        "position": {
+            "line": 131,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 135,
+                    "column": 36
+                }
+            },
+            {
+                "name": "internalToString",
+                "position": {
+                    "line": 137,
+                    "column": 22
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 138,
+                    "column": 41
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 140,
+                    "column": 28
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 141,
+                    "column": 21
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 143,
+                    "column": 24
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 144,
+                    "column": 17
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 133,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "MediaTypeHeaderDelegate.internalToString(MediaType type)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "internalToString",
+        "category": "method_declaration",
+        "class": "MediaTypeHeaderDelegate",
+        "signature": "internalToString(MediaType type)",
+        "class_signature": "MediaTypeHeaderDelegate.internalToString(MediaType type)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MediaType",
+                "type"
+            ]
+        ],
+        "methodBody": "{\n        StringBuilder buf = new StringBuilder(type.getType().length() + type.getSubtype().length() + 1);\n\n        buf.append(type.getType().toLowerCase()).append('/').append(type.getSubtype().toLowerCase());\n        if (type.getParameters() == null || type.getParameters().size() == 0)\n            return buf.toString();\n        for (String name : type.getParameters().keySet()) {\n            buf.append(';').append(name).append('=');\n            String val = type.getParameters().get(name);\n            if (quoted(val))\n                buf.append('\"').append(val).append('\"');\n            else\n                buf.append(val);\n        }\n        return buf.toString();\n    }",
+        "position": {
+            "line": 149,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 150,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 150,
+                    "column": 52
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 150,
+                    "column": 91
+                }
+            },
+            {
+                "name": "getSubtype",
+                "position": {
+                    "line": 150,
+                    "column": 78
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 152,
+                    "column": 62
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 152,
+                    "column": 50
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 152,
+                    "column": 13
+                }
+            },
+            {
+                "name": "toLowerCase",
+                "position": {
+                    "line": 152,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 152,
+                    "column": 25
+                }
+            },
+            {
+                "name": "toLowerCase",
+                "position": {
+                    "line": 152,
+                    "column": 87
+                }
+            },
+            {
+                "name": "getSubtype",
+                "position": {
+                    "line": 152,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getParameters",
+                "position": {
+                    "line": 153,
+                    "column": 18
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 153,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getParameters",
+                "position": {
+                    "line": 153,
+                    "column": 50
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 154,
+                    "column": 24
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 155,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getParameters",
+                "position": {
+                    "line": 155,
+                    "column": 33
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 156,
+                    "column": 42
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 156,
+                    "column": 29
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 156,
+                    "column": 17
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 157,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getParameters",
+                "position": {
+                    "line": 157,
+                    "column": 31
+                }
+            },
+            {
+                "name": "quoted",
+                "position": {
+                    "line": 158,
+                    "column": 17
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 159,
+                    "column": 45
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 159,
+                    "column": 33
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 159,
+                    "column": 21
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 161,
+                    "column": 21
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 163,
+                    "column": 20
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 150,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [
+            "MediaTypeHeaderDelegate.quoted(String str)"
+        ],
+        "priority": 4
+    }
+]

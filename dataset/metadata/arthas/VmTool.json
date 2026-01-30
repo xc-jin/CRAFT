@@ -1,0 +1,530 @@
+[
+    {
+        "name": "VmTool",
+        "category": "constructor_declaration",
+        "class": "VmTool",
+        "signature": "VmTool()",
+        "class_signature": "VmTool.VmTool()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n    }",
+        "position": {
+            "line": 18,
+            "column": 13
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "getInstance",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "getInstance()",
+        "class_signature": "VmTool.getInstance()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return getInstance(null);\n    }",
+        "position": {
+            "line": 21,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 22,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "VmTool.getInstance(String libPath)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "getInstance",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "getInstance(String libPath)",
+        "class_signature": "VmTool.getInstance(String libPath)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "libPath"
+            ]
+        ],
+        "methodBody": "{\n        if (instance != null) {\n            return instance;\n        }\n\n        if (libPath == null) {\n            System.loadLibrary(JNI_LIBRARY_NAME);\n        } else {\n            System.load(libPath);\n        }\n\n        instance = new VmTool();\n        return instance;\n    }",
+        "position": {
+            "line": 25,
+            "column": 39
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadLibrary",
+                "position": {
+                    "line": 31,
+                    "column": 20
+                }
+            },
+            {
+                "name": "load",
+                "position": {
+                    "line": 33,
+                    "column": 20
+                }
+            },
+            {
+                "name": "VmTool",
+                "position": {
+                    "line": 36,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "VmTool.VmTool()"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "forceGc0",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "forceGc0()",
+        "class_signature": "VmTool.forceGc0()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "",
+        "position": {
+            "line": 40,
+            "column": 45
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "getInstances0",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "getInstances0(Class<T> klass, int limit)",
+        "class_signature": "VmTool.getInstances0(Class<T> klass, int limit)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<T>",
+                "klass"
+            ],
+            [
+                "int",
+                "limit"
+            ]
+        ],
+        "methodBody": "",
+        "position": {
+            "line": 44,
+            "column": 48
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "sumInstanceSize0",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "sumInstanceSize0(Class<?> klass)",
+        "class_signature": "VmTool.sumInstanceSize0(Class<?> klass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "klass"
+            ]
+        ],
+        "methodBody": "",
+        "position": {
+            "line": 48,
+            "column": 45
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 12
+    },
+    {
+        "name": "getInstanceSize0",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "getInstanceSize0(Object instance)",
+        "class_signature": "VmTool.getInstanceSize0(Object instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "instance"
+            ]
+        ],
+        "methodBody": "",
+        "position": {
+            "line": 52,
+            "column": 32
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 13
+    },
+    {
+        "name": "countInstances0",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "countInstances0(Class<?> klass)",
+        "class_signature": "VmTool.countInstances0(Class<?> klass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "klass"
+            ]
+        ],
+        "methodBody": "",
+        "position": {
+            "line": 56,
+            "column": 45
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "getAllLoadedClasses0",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "getAllLoadedClasses0(Class<?> klass)",
+        "class_signature": "VmTool.getAllLoadedClasses0(Class<?> klass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "klass"
+            ]
+        ],
+        "methodBody": "",
+        "position": {
+            "line": 62,
+            "column": 51
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "forceGc",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "forceGc()",
+        "class_signature": "VmTool.forceGc()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        forceGc0();\n    }",
+        "position": {
+            "line": 65,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "forceGc0",
+                "position": {
+                    "line": 66,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "VmTool.forceGc0()"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "interruptSpecialThread",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "interruptSpecialThread(int threadId)",
+        "class_signature": "VmTool.interruptSpecialThread(int threadId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "threadId"
+            ]
+        ],
+        "methodBody": "{\n        Map<Thread, StackTraceElement[]> allThread = Thread.getAllStackTraces();\n        for (Map.Entry<Thread, StackTraceElement[]> entry : allThread.entrySet()) {\n            if (entry.getKey().getId() == threadId) {\n                entry.getKey().interrupt();\n                return;\n            }\n        }\n    }",
+        "position": {
+            "line": 70,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllStackTraces",
+                "position": {
+                    "line": 71,
+                    "column": 61
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 72,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 73,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 73,
+                    "column": 23
+                }
+            },
+            {
+                "name": "interrupt",
+                "position": {
+                    "line": 74,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 74,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "getInstances",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "getInstances(Class<T> klass)",
+        "class_signature": "VmTool.getInstances(Class<T> klass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<T>",
+                "klass"
+            ]
+        ],
+        "methodBody": "{\n        return getInstances0(klass, -1);\n    }",
+        "position": {
+            "line": 81,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getInstances0",
+                "position": {
+                    "line": 82,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "VmTool.getInstances0(Class<T> klass, int limit)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "getInstances",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "getInstances(Class<T> klass, int limit)",
+        "class_signature": "VmTool.getInstances(Class<T> klass, int limit)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<T>",
+                "klass"
+            ],
+            [
+                "int",
+                "limit"
+            ]
+        ],
+        "methodBody": "{\n        if (limit == 0) {\n            throw new IllegalArgumentException(\"limit can not be 0\");\n        }\n        return getInstances0(klass, limit);\n    }",
+        "position": {
+            "line": 86,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getInstances0",
+                "position": {
+                    "line": 90,
+                    "column": 16
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 88,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "VmTool.getInstances0(Class<T> klass, int limit)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "sumInstanceSize",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "sumInstanceSize(Class<?> klass)",
+        "class_signature": "VmTool.sumInstanceSize(Class<?> klass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "klass"
+            ]
+        ],
+        "methodBody": "{\n        return sumInstanceSize0(klass);\n    }",
+        "position": {
+            "line": 94,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "sumInstanceSize0",
+                "position": {
+                    "line": 95,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "VmTool.sumInstanceSize0(Class<?> klass)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "getInstanceSize",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "getInstanceSize(Object instance)",
+        "class_signature": "VmTool.getInstanceSize(Object instance)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "instance"
+            ]
+        ],
+        "methodBody": "{\n        return getInstanceSize0(instance);\n    }",
+        "position": {
+            "line": 99,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getInstanceSize0",
+                "position": {
+                    "line": 100,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "VmTool.getInstanceSize0(Object instance)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "countInstances",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "countInstances(Class<?> klass)",
+        "class_signature": "VmTool.countInstances(Class<?> klass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "klass"
+            ]
+        ],
+        "methodBody": "{\n        return countInstances0(klass);\n    }",
+        "position": {
+            "line": 104,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "countInstances0",
+                "position": {
+                    "line": 105,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "VmTool.countInstances0(Class<?> klass)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "getAllLoadedClasses",
+        "category": "method_declaration",
+        "class": "VmTool",
+        "signature": "getAllLoadedClasses()",
+        "class_signature": "VmTool.getAllLoadedClasses()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return getAllLoadedClasses0(Class.class);\n    }",
+        "position": {
+            "line": 109,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllLoadedClasses0",
+                "position": {
+                    "line": 110,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "VmTool.getAllLoadedClasses0(Class<?> klass)"
+        ],
+        "priority": 8
+    }
+]

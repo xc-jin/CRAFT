@@ -1,0 +1,1320 @@
+[
+    {
+        "name": "NettyClientChannelManager",
+        "category": "constructor_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "NettyClientChannelManager(NettyPoolableFactory keyPoolableFactory, Function<String, NettyPoolKey> poolKeyFunction, NettyClientConfig clientConfig)",
+        "class_signature": "NettyClientChannelManager.NettyClientChannelManager(NettyPoolableFactory keyPoolableFactory, Function<String, NettyPoolKey> poolKeyFunction, NettyClientConfig clientConfig)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "NettyPoolableFactory",
+                "keyPoolableFactory"
+            ],
+            [
+                "Function<String, NettyPoolKey>",
+                "poolKeyFunction"
+            ],
+            [
+                "NettyClientConfig",
+                "clientConfig"
+            ]
+        ],
+        "methodBody": "{\n        nettyClientKeyPool = new GenericKeyedObjectPool<>(keyPoolableFactory);\n        nettyClientKeyPool.setConfig(getNettyPoolConfig(clientConfig));\n        this.poolKeyFunction = poolKeyFunction;\n    }",
+        "position": {
+            "line": 64,
+            "column": 5
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setConfig",
+                "position": {
+                    "line": 67,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getNettyPoolConfig",
+                "position": {
+                    "line": 67,
+                    "column": 38
+                }
+            },
+            {
+                "name": "GenericKeyedObjectPool<>",
+                "position": {
+                    "line": 66,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [
+            "NettyClientChannelManager.getNettyPoolConfig(NettyClientConfig clientConfig)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "getNettyPoolConfig",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "getNettyPoolConfig(NettyClientConfig clientConfig)",
+        "class_signature": "NettyClientChannelManager.getNettyPoolConfig(NettyClientConfig clientConfig)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "NettyClientConfig",
+                "clientConfig"
+            ]
+        ],
+        "methodBody": "{\n        GenericKeyedObjectPool.Config poolConfig = new GenericKeyedObjectPool.Config();\n        poolConfig.maxActive = clientConfig.getMaxPoolActive();\n        poolConfig.minIdle = clientConfig.getMinPoolIdle();\n        poolConfig.maxWait = clientConfig.getMaxAcquireConnMills();\n        poolConfig.testOnBorrow = clientConfig.isPoolTestBorrow();\n        poolConfig.testOnReturn = clientConfig.isPoolTestReturn();\n        poolConfig.lifo = clientConfig.isPoolLifo();\n        return poolConfig;\n    }",
+        "position": {
+            "line": 71,
+            "column": 43
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMaxPoolActive",
+                "position": {
+                    "line": 73,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getMinPoolIdle",
+                "position": {
+                    "line": 74,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getMaxAcquireConnMills",
+                "position": {
+                    "line": 75,
+                    "column": 43
+                }
+            },
+            {
+                "name": "isPoolTestBorrow",
+                "position": {
+                    "line": 76,
+                    "column": 48
+                }
+            },
+            {
+                "name": "isPoolTestReturn",
+                "position": {
+                    "line": 77,
+                    "column": 48
+                }
+            },
+            {
+                "name": "isPoolLifo",
+                "position": {
+                    "line": 78,
+                    "column": 40
+                }
+            },
+            {
+                "name": "GenericKeyedObjectPool.Config",
+                "position": {
+                    "line": 72,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "getChannels",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "getChannels()",
+        "class_signature": "NettyClientChannelManager.getChannels()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return channels;\n    }",
+        "position": {
+            "line": 87,
+            "column": 36
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "acquireChannel",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "acquireChannel(String serverAddress)",
+        "class_signature": "NettyClientChannelManager.acquireChannel(String serverAddress)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverAddress"
+            ]
+        ],
+        "methodBody": "{\n        Channel channelToServer = channels.get(serverAddress);\n        if (channelToServer != null) {\n            channelToServer = getExistAliveChannel(channelToServer, serverAddress);\n            if (channelToServer != null) {\n                return channelToServer;\n            }\n        }\n        if (LOGGER.isInfoEnabled()) {\n            LOGGER.info(\"will connect to {}\", serverAddress);\n        }\n        Object lockObj = CollectionUtils.computeIfAbsent(channelLocks, serverAddress, key -> new Object());\n        synchronized (lockObj) {\n            return doConnect(serverAddress);\n        }\n    }",
+        "position": {
+            "line": 97,
+            "column": 13
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 98,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getExistAliveChannel",
+                "position": {
+                    "line": 100,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isInfoEnabled",
+                "position": {
+                    "line": 105,
+                    "column": 20
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 106,
+                    "column": 20
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 108,
+                    "column": 42
+                }
+            },
+            {
+                "name": "doConnect",
+                "position": {
+                    "line": 110,
+                    "column": 20
+                }
+            },
+            {
+                "name": "Object",
+                "position": {
+                    "line": 108,
+                    "column": 98
+                }
+            }
+        ],
+        "calledMethods": [
+            "NettyClientChannelManager.getExistAliveChannel(Channel rmChannel, String serverAddress)",
+            "NettyClientChannelManager.doConnect(String serverAddress)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "releaseChannel",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "releaseChannel(Channel channel, String serverAddress)",
+        "class_signature": "NettyClientChannelManager.releaseChannel(Channel channel, String serverAddress)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Channel",
+                "channel"
+            ],
+            [
+                "String",
+                "serverAddress"
+            ]
+        ],
+        "methodBody": "{\n        if (channel == null || serverAddress == null) { return; }\n        try {\n            synchronized (channelLocks.get(serverAddress)) {\n                Channel ch = channels.get(serverAddress);\n                if (ch == null) {\n                    nettyClientKeyPool.returnObject(poolKeyMap.get(serverAddress), channel);\n                    return;\n                }\n                if (ch.compareTo(channel) == 0) {\n                    if (LOGGER.isInfoEnabled()) {\n                        LOGGER.info(\"return to pool, rm channel:{}\", channel);\n                    }\n                    destroyChannel(serverAddress, channel);\n                } else {\n                    nettyClientKeyPool.returnObject(poolKeyMap.get(serverAddress), channel);\n                }\n            }\n        } catch (Exception exx) {\n            LOGGER.error(exx.getMessage());\n        }\n    }",
+        "position": {
+            "line": 120,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 123,
+                    "column": 40
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 124,
+                    "column": 39
+                }
+            },
+            {
+                "name": "returnObject",
+                "position": {
+                    "line": 126,
+                    "column": 40
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 126,
+                    "column": 64
+                }
+            },
+            {
+                "name": "compareTo",
+                "position": {
+                    "line": 129,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isInfoEnabled",
+                "position": {
+                    "line": 130,
+                    "column": 32
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 131,
+                    "column": 32
+                }
+            },
+            {
+                "name": "destroyChannel",
+                "position": {
+                    "line": 133,
+                    "column": 21
+                }
+            },
+            {
+                "name": "returnObject",
+                "position": {
+                    "line": 135,
+                    "column": 40
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 135,
+                    "column": 64
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 139,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 139,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "NettyClientChannelManager.destroyChannel(String serverAddress, Channel channel)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "destroyChannel",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "destroyChannel(String serverAddress, Channel channel)",
+        "class_signature": "NettyClientChannelManager.destroyChannel(String serverAddress, Channel channel)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverAddress"
+            ],
+            [
+                "Channel",
+                "channel"
+            ]
+        ],
+        "methodBody": "{\n        if (channel == null) { return; }\n        try {\n            if (channel.equals(channels.get(serverAddress))) {\n                channels.remove(serverAddress);\n            }\n            nettyClientKeyPool.returnObject(poolKeyMap.get(serverAddress), channel);\n        } catch (Exception exx) {\n            LOGGER.error(\"return channel to rmPool error:{}\", exx.getMessage());\n        }\n    }",
+        "position": {
+            "line": 149,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 152,
+                    "column": 25
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 152,
+                    "column": 41
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 153,
+                    "column": 26
+                }
+            },
+            {
+                "name": "returnObject",
+                "position": {
+                    "line": 155,
+                    "column": 32
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 155,
+                    "column": 56
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 157,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 157,
+                    "column": 67
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "reconnect",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "reconnect(String transactionServiceGroup)",
+        "class_signature": "NettyClientChannelManager.reconnect(String transactionServiceGroup)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "transactionServiceGroup"
+            ]
+        ],
+        "methodBody": "{\n        doReconnect(transactionServiceGroup, false);\n    }",
+        "position": {
+            "line": 166,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "doReconnect",
+                "position": {
+                    "line": 167,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NettyClientChannelManager.doReconnect(String transactionServiceGroup, boolean failFast)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "initReconnect",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "initReconnect(String transactionServiceGroup, boolean failFast)",
+        "class_signature": "NettyClientChannelManager.initReconnect(String transactionServiceGroup, boolean failFast)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "transactionServiceGroup"
+            ],
+            [
+                "boolean",
+                "failFast"
+            ]
+        ],
+        "methodBody": "{\n        doReconnect(transactionServiceGroup, failFast);\n    }",
+        "position": {
+            "line": 175,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "doReconnect",
+                "position": {
+                    "line": 176,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "NettyClientChannelManager.doReconnect(String transactionServiceGroup, boolean failFast)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "doReconnect",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "doReconnect(String transactionServiceGroup, boolean failFast)",
+        "class_signature": "NettyClientChannelManager.doReconnect(String transactionServiceGroup, boolean failFast)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "transactionServiceGroup"
+            ],
+            [
+                "boolean",
+                "failFast"
+            ]
+        ],
+        "methodBody": "{\n        List<String> availList;\n        try {\n            availList = getAvailServerList(transactionServiceGroup);\n        } catch (Exception e) {\n            LOGGER.error(\"Failed to get available servers: {}\", e.getMessage(), e);\n            throwFailFastException(failFast, \"Failed to get available servers\");\n            return;\n        }\n        if (CollectionUtils.isEmpty(availList)) {\n            RegistryService registryService = RegistryFactory.getInstance();\n            String clusterName = registryService.getServiceGroup(transactionServiceGroup);\n\n            if (StringUtils.isBlank(clusterName)) {\n                LOGGER.error(\"can not get cluster name in registry config '{}{}', please make sure registry config correct\",\n                        ConfigurationKeys.SERVICE_GROUP_MAPPING_PREFIX,\n                        transactionServiceGroup);\n                throwFailFastException(failFast, \"can not get cluster name in registry config.\");\n                return;\n            }\n\n            if (!(registryService instanceof FileRegistryServiceImpl)) {\n                LOGGER.error(\"no available service found in cluster '{}', please make sure registry config correct and keep your seata server running\", clusterName);\n            }\n            throwFailFastException(failFast, \"no available service found in cluster.\");\n            return;\n        }\n        try {\n            doReconnect(availList, transactionServiceGroup);\n        } catch (Exception e) {\n            if (failFast) {\n                throw e;\n            }\n            LOGGER.error(\"connect server failed. {}\", e.getMessage(), e);\n        }\n    }",
+        "position": {
+            "line": 184,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAvailServerList",
+                "position": {
+                    "line": 187,
+                    "column": 25
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 189,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 189,
+                    "column": 67
+                }
+            },
+            {
+                "name": "throwFailFastException",
+                "position": {
+                    "line": 190,
+                    "column": 13
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 193,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 194,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getServiceGroup",
+                "position": {
+                    "line": 195,
+                    "column": 50
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 197,
+                    "column": 29
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 198,
+                    "column": 24
+                }
+            },
+            {
+                "name": "throwFailFastException",
+                "position": {
+                    "line": 201,
+                    "column": 17
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 206,
+                    "column": 24
+                }
+            },
+            {
+                "name": "throwFailFastException",
+                "position": {
+                    "line": 208,
+                    "column": 13
+                }
+            },
+            {
+                "name": "doReconnect",
+                "position": {
+                    "line": 212,
+                    "column": 13
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 217,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 217,
+                    "column": 57
+                }
+            }
+        ],
+        "calledMethods": [
+            "NettyClientChannelManager.getAvailServerList(String transactionServiceGroup)",
+            "NettyClientChannelManager.throwFailFastException(boolean failFast, String message)",
+            "NettyClientChannelManager.throwFailFastException(boolean failFast, String message)",
+            "NettyClientChannelManager.throwFailFastException(boolean failFast, String message)",
+            "NettyClientChannelManager.doReconnect(List<String> availList, String transactionServiceGroup)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "doReconnect",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "doReconnect(List<String> availList, String transactionServiceGroup)",
+        "class_signature": "NettyClientChannelManager.doReconnect(List<String> availList, String transactionServiceGroup)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<String>",
+                "availList"
+            ],
+            [
+                "String",
+                "transactionServiceGroup"
+            ]
+        ],
+        "methodBody": "{\n        Set<String> channelAddress = new HashSet<>(availList.size());\n        Map<String, Exception> failedMap = new HashMap<>();\n        try {\n            for (String serverAddress : availList) {\n                try {\n                    acquireChannel(serverAddress);\n                    channelAddress.add(serverAddress);\n                } catch (Exception e) {\n                    failedMap.put(serverAddress, e);\n                }\n            }\n            if (failedMap.size() > 0) {\n                if (LOGGER.isInfoEnabled()) {\n                    LOGGER.error(\"{} can not connect to {} cause:{}\", FrameworkErrorCode.NetConnect.getErrCode(),\n                            failedMap.keySet(),\n                            failedMap.values().stream().map(Throwable::getMessage).collect(Collectors.toSet()));\n                } else if (LOGGER.isDebugEnabled()) {\n                    failedMap.forEach((key, value) -> {\n                        LOGGER.error(\"{} can not connect to {} cause:{} trace information:{}\",\n                                FrameworkErrorCode.NetConnect.getErrCode(), key, value.getMessage(), value);\n                    });\n                }\n                String invalidAddress = StringUtils.join(failedMap.keySet().iterator(), \", \");\n                throw new FrameworkException(\"can not connect to [\" + invalidAddress + \"]\");\n            }\n        } finally {\n            if (CollectionUtils.isNotEmpty(channelAddress)) {\n                List<InetSocketAddress> aliveAddress = new ArrayList<>(channelAddress.size());\n                for (String address : channelAddress) {\n                    String[] array = NetUtil.splitIPPortStr(address);\n                    aliveAddress.add(new InetSocketAddress(array[0], Integer.parseInt(array[1])));\n                }\n                RegistryFactory.getInstance().refreshAliveLookup(transactionServiceGroup, aliveAddress);\n            } else {\n                RegistryFactory.getInstance().refreshAliveLookup(transactionServiceGroup, Collections.emptyList());\n            }\n        }\n    }",
+        "position": {
+            "line": 227,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 228,
+                    "column": 62
+                }
+            },
+            {
+                "name": "acquireChannel",
+                "position": {
+                    "line": 233,
+                    "column": 21
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 234,
+                    "column": 36
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 236,
+                    "column": 31
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 239,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isInfoEnabled",
+                "position": {
+                    "line": 240,
+                    "column": 28
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 241,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getErrCode",
+                "position": {
+                    "line": 241,
+                    "column": 101
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 242,
+                    "column": 39
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 243,
+                    "column": 84
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 243,
+                    "column": 57
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 243,
+                    "column": 48
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 243,
+                    "column": 39
+                }
+            },
+            {
+                "name": "toSet",
+                "position": {
+                    "line": 243,
+                    "column": 103
+                }
+            },
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 244,
+                    "column": 35
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 245,
+                    "column": 31
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 246,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getErrCode",
+                "position": {
+                    "line": 247,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 247,
+                    "column": 88
+                }
+            },
+            {
+                "name": "join",
+                "position": {
+                    "line": 250,
+                    "column": 53
+                }
+            },
+            {
+                "name": "iterator",
+                "position": {
+                    "line": 250,
+                    "column": 77
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 250,
+                    "column": 68
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 254,
+                    "column": 33
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 255,
+                    "column": 87
+                }
+            },
+            {
+                "name": "splitIPPortStr",
+                "position": {
+                    "line": 257,
+                    "column": 46
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 258,
+                    "column": 34
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 258,
+                    "column": 78
+                }
+            },
+            {
+                "name": "refreshAliveLookup",
+                "position": {
+                    "line": 260,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 260,
+                    "column": 33
+                }
+            },
+            {
+                "name": "refreshAliveLookup",
+                "position": {
+                    "line": 262,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 262,
+                    "column": 33
+                }
+            },
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 262,
+                    "column": 103
+                }
+            },
+            {
+                "name": "HashSet<>",
+                "position": {
+                    "line": 228,
+                    "column": 42
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 229,
+                    "column": 48
+                }
+            },
+            {
+                "name": "FrameworkException",
+                "position": {
+                    "line": 251,
+                    "column": 27
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 255,
+                    "column": 60
+                }
+            },
+            {
+                "name": "InetSocketAddress",
+                "position": {
+                    "line": 258,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [
+            "NettyClientChannelManager.acquireChannel(String serverAddress)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "invalidateObject",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "invalidateObject(String serverAddress, Channel channel)",
+        "class_signature": "NettyClientChannelManager.invalidateObject(String serverAddress, Channel channel)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverAddress"
+            ],
+            [
+                "Channel",
+                "channel"
+            ]
+        ],
+        "methodBody": "{\n        nettyClientKeyPool.invalidateObject(poolKeyMap.get(serverAddress), channel);\n    }",
+        "position": {
+            "line": 267,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "invalidateObject",
+                "position": {
+                    "line": 268,
+                    "column": 28
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 268,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "registerChannel",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "registerChannel(String serverAddress, Channel channel)",
+        "class_signature": "NettyClientChannelManager.registerChannel(String serverAddress, Channel channel)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverAddress"
+            ],
+            [
+                "Channel",
+                "channel"
+            ]
+        ],
+        "methodBody": "{\n        Channel channelToServer = channels.get(serverAddress);\n        if (channelToServer != null && channelToServer.isActive()) {\n            return;\n        }\n        channels.put(serverAddress, channel);\n    }",
+        "position": {
+            "line": 271,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 272,
+                    "column": 44
+                }
+            },
+            {
+                "name": "isActive",
+                "position": {
+                    "line": 273,
+                    "column": 56
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 276,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "doConnect",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "doConnect(String serverAddress)",
+        "class_signature": "NettyClientChannelManager.doConnect(String serverAddress)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverAddress"
+            ]
+        ],
+        "methodBody": "{\n        Channel channelToServer = channels.get(serverAddress);\n        if (channelToServer != null && channelToServer.isActive()) {\n            return channelToServer;\n        }\n        Channel channelFromPool;\n        try {\n            NettyPoolKey currentPoolKey = poolKeyFunction.apply(serverAddress);\n            poolKeyMap.put(serverAddress, currentPoolKey);\n            channelFromPool = nettyClientKeyPool.borrowObject(currentPoolKey);\n            channels.put(serverAddress, channelFromPool);\n        } catch (Exception exx) {\n            LOGGER.error(\"{} register RM failed.\", FrameworkErrorCode.RegisterRM.getErrCode(), exx);\n            throw new FrameworkException(\"can not register RM,err:\" + exx.getMessage());\n        }\n        return channelFromPool;\n    }",
+        "position": {
+            "line": 279,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 280,
+                    "column": 44
+                }
+            },
+            {
+                "name": "isActive",
+                "position": {
+                    "line": 281,
+                    "column": 56
+                }
+            },
+            {
+                "name": "apply",
+                "position": {
+                    "line": 286,
+                    "column": 59
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 287,
+                    "column": 24
+                }
+            },
+            {
+                "name": "borrowObject",
+                "position": {
+                    "line": 288,
+                    "column": 50
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 289,
+                    "column": 22
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 291,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getErrCode",
+                "position": {
+                    "line": 291,
+                    "column": 82
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 292,
+                    "column": 75
+                }
+            },
+            {
+                "name": "FrameworkException",
+                "position": {
+                    "line": 292,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 13
+    },
+    {
+        "name": "getAvailServerList",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "getAvailServerList(String transactionServiceGroup)",
+        "class_signature": "NettyClientChannelManager.getAvailServerList(String transactionServiceGroup)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "transactionServiceGroup"
+            ]
+        ],
+        "methodBody": "{\n        List<InetSocketAddress> availInetSocketAddressList = RegistryFactory.getInstance()\n                .lookup(transactionServiceGroup);\n        if (CollectionUtils.isEmpty(availInetSocketAddressList)) {\n            return Collections.emptyList();\n        }\n\n        return availInetSocketAddressList.stream()\n                .map(NetUtil::toStringAddress)\n                .collect(Collectors.toList());\n    }",
+        "position": {
+            "line": 297,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "lookup",
+                "position": {
+                    "line": 299,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 298,
+                    "column": 78
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 300,
+                    "column": 29
+                }
+            },
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 301,
+                    "column": 32
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 306,
+                    "column": 18
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 305,
+                    "column": 18
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 304,
+                    "column": 43
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 306,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "getExistAliveChannel",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "getExistAliveChannel(Channel rmChannel, String serverAddress)",
+        "class_signature": "NettyClientChannelManager.getExistAliveChannel(Channel rmChannel, String serverAddress)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Channel",
+                "rmChannel"
+            ],
+            [
+                "String",
+                "serverAddress"
+            ]
+        ],
+        "methodBody": "{\n        if (rmChannel.isActive()) {\n            return rmChannel;\n        } else {\n            int i = 0;\n            for (; i < NettyClientConfig.getMaxCheckAliveRetry(); i++) {\n                try {\n                    Thread.sleep(NettyClientConfig.getCheckAliveInterval());\n                } catch (InterruptedException exx) {\n                    LOGGER.error(exx.getMessage());\n                }\n                rmChannel = channels.get(serverAddress);\n                if (rmChannel != null && rmChannel.isActive()) {\n                    return rmChannel;\n                }\n            }\n            if (i == NettyClientConfig.getMaxCheckAliveRetry()) {\n                LOGGER.warn(\"channel {} is not active after long wait, close it.\", rmChannel);\n                releaseChannel(rmChannel, serverAddress);\n                return null;\n            }\n        }\n        return null;\n    }",
+        "position": {
+            "line": 309,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isActive",
+                "position": {
+                    "line": 310,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getMaxCheckAliveRetry",
+                "position": {
+                    "line": 314,
+                    "column": 42
+                }
+            },
+            {
+                "name": "sleep",
+                "position": {
+                    "line": 316,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getCheckAliveInterval",
+                "position": {
+                    "line": 316,
+                    "column": 52
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 318,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 318,
+                    "column": 38
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 320,
+                    "column": 38
+                }
+            },
+            {
+                "name": "isActive",
+                "position": {
+                    "line": 321,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getMaxCheckAliveRetry",
+                "position": {
+                    "line": 325,
+                    "column": 40
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 326,
+                    "column": 24
+                }
+            },
+            {
+                "name": "releaseChannel",
+                "position": {
+                    "line": 327,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "NettyClientChannelManager.releaseChannel(Channel channel, String serverAddress)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "throwFailFastException",
+        "category": "method_declaration",
+        "class": "NettyClientChannelManager",
+        "signature": "throwFailFastException(boolean failFast, String message)",
+        "class_signature": "NettyClientChannelManager.throwFailFastException(boolean failFast, String message)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "failFast"
+            ],
+            [
+                "String",
+                "message"
+            ]
+        ],
+        "methodBody": "{\n        if (failFast) {\n            throw new FrameworkException(message);\n        }\n    }",
+        "position": {
+            "line": 334,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "FrameworkException",
+                "position": {
+                    "line": 336,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9
+    }
+]

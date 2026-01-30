@@ -1,0 +1,397 @@
+[
+    {
+        "name": "isReference",
+        "category": "method_declaration",
+        "class": "LocalTCCRemotingParser",
+        "signature": "isReference(Object bean, String beanName)",
+        "class_signature": "LocalTCCRemotingParser.isReference(Object bean, String beanName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "bean"
+            ],
+            [
+                "String",
+                "beanName"
+            ]
+        ],
+        "methodBody": "{\n        return isLocalTCC(bean);\n    }",
+        "position": {
+            "line": 36,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isLocalTCC",
+                "position": {
+                    "line": 37,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "LocalTCCRemotingParser.isLocalTCC(Object bean)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "isService",
+        "category": "method_declaration",
+        "class": "LocalTCCRemotingParser",
+        "signature": "isService(Object bean, String beanName)",
+        "class_signature": "LocalTCCRemotingParser.isService(Object bean, String beanName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "bean"
+            ],
+            [
+                "String",
+                "beanName"
+            ]
+        ],
+        "methodBody": "{\n        return isLocalTCC(bean);\n    }",
+        "position": {
+            "line": 41,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isLocalTCC",
+                "position": {
+                    "line": 42,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "LocalTCCRemotingParser.isLocalTCC(Object bean)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "isService",
+        "category": "method_declaration",
+        "class": "LocalTCCRemotingParser",
+        "signature": "isService(Class<?> beanClass)",
+        "class_signature": "LocalTCCRemotingParser.isService(Class<?> beanClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "beanClass"
+            ]
+        ],
+        "methodBody": "{\n        return isLocalTCC(beanClass);\n    }",
+        "position": {
+            "line": 46,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isLocalTCC",
+                "position": {
+                    "line": 47,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "LocalTCCRemotingParser.isLocalTCC(Class<?> classType)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "getServiceDesc",
+        "category": "method_declaration",
+        "class": "LocalTCCRemotingParser",
+        "signature": "getServiceDesc(Object bean, String beanName)",
+        "class_signature": "LocalTCCRemotingParser.getServiceDesc(Object bean, String beanName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "bean"
+            ],
+            [
+                "String",
+                "beanName"
+            ]
+        ],
+        "methodBody": "{\n        if (!this.isRemoting(bean, beanName)) {\n            return null;\n        }\n        RemotingDesc remotingDesc = new RemotingDesc();\n        remotingDesc.setReference(this.isReference(bean, beanName));\n        remotingDesc.setService(this.isService(bean, beanName));\n        remotingDesc.setProtocol(Protocols.IN_JVM);\n        Class<?> classType = bean.getClass();\n        // check if LocalTCC annotation is marked on the implementation class\n        if (classType.isAnnotationPresent(LocalTCC.class)) {\n            remotingDesc.setServiceClass(AopProxyUtils.ultimateTargetClass(bean));\n            remotingDesc.setServiceClassName(remotingDesc.getServiceClass().getName());\n            remotingDesc.setTargetBean(bean);\n            return remotingDesc;\n        }\n        // check if LocalTCC annotation is marked on the interface\n        Set<Class<?>> interfaceClasses = ReflectionUtil.getInterfaces(classType);\n        for (Class<?> interClass : interfaceClasses) {\n            if (interClass.isAnnotationPresent(LocalTCC.class)) {\n                remotingDesc.setServiceClassName(interClass.getName());\n                remotingDesc.setServiceClass(interClass);\n                remotingDesc.setTargetBean(bean);\n                return remotingDesc;\n            }\n        }\n        throw new FrameworkException(\"Couldn't parser any Remoting info\");\n    }",
+        "position": {
+            "line": 51,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isRemoting",
+                "position": {
+                    "line": 52,
+                    "column": 19
+                }
+            },
+            {
+                "name": "setReference",
+                "position": {
+                    "line": 56,
+                    "column": 22
+                }
+            },
+            {
+                "name": "isReference",
+                "position": {
+                    "line": 56,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setService",
+                "position": {
+                    "line": 57,
+                    "column": 22
+                }
+            },
+            {
+                "name": "isService",
+                "position": {
+                    "line": 57,
+                    "column": 38
+                }
+            },
+            {
+                "name": "setProtocol",
+                "position": {
+                    "line": 58,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 59,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isAnnotationPresent",
+                "position": {
+                    "line": 61,
+                    "column": 23
+                }
+            },
+            {
+                "name": "setServiceClass",
+                "position": {
+                    "line": 62,
+                    "column": 26
+                }
+            },
+            {
+                "name": "ultimateTargetClass",
+                "position": {
+                    "line": 62,
+                    "column": 56
+                }
+            },
+            {
+                "name": "setServiceClassName",
+                "position": {
+                    "line": 63,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 63,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getServiceClass",
+                "position": {
+                    "line": 63,
+                    "column": 59
+                }
+            },
+            {
+                "name": "setTargetBean",
+                "position": {
+                    "line": 64,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getInterfaces",
+                "position": {
+                    "line": 68,
+                    "column": 57
+                }
+            },
+            {
+                "name": "isAnnotationPresent",
+                "position": {
+                    "line": 70,
+                    "column": 28
+                }
+            },
+            {
+                "name": "setServiceClassName",
+                "position": {
+                    "line": 71,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 71,
+                    "column": 61
+                }
+            },
+            {
+                "name": "setServiceClass",
+                "position": {
+                    "line": 72,
+                    "column": 30
+                }
+            },
+            {
+                "name": "setTargetBean",
+                "position": {
+                    "line": 73,
+                    "column": 30
+                }
+            },
+            {
+                "name": "RemotingDesc",
+                "position": {
+                    "line": 55,
+                    "column": 41
+                }
+            },
+            {
+                "name": "FrameworkException",
+                "position": {
+                    "line": 77,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [
+            "LocalTCCRemotingParser.isReference(Object bean, String beanName)",
+            "LocalTCCRemotingParser.isService(Object bean, String beanName)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "getProtocol",
+        "category": "method_declaration",
+        "class": "LocalTCCRemotingParser",
+        "signature": "getProtocol()",
+        "class_signature": "LocalTCCRemotingParser.getProtocol()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return Protocols.IN_JVM;\n    }",
+        "position": {
+            "line": 81,
+            "column": 18
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "isLocalTCC",
+        "category": "method_declaration",
+        "class": "LocalTCCRemotingParser",
+        "signature": "isLocalTCC(Object bean)",
+        "class_signature": "LocalTCCRemotingParser.isLocalTCC(Object bean)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Object",
+                "bean"
+            ]
+        ],
+        "methodBody": "{\n        Class<?> classType = bean.getClass();\n        return isLocalTCC(classType);\n    }",
+        "position": {
+            "line": 90,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 91,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isLocalTCC",
+                "position": {
+                    "line": 92,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "LocalTCCRemotingParser.isLocalTCC(Class<?> classType)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "isLocalTCC",
+        "category": "method_declaration",
+        "class": "LocalTCCRemotingParser",
+        "signature": "isLocalTCC(Class<?> classType)",
+        "class_signature": "LocalTCCRemotingParser.isLocalTCC(Class<?> classType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "classType"
+            ]
+        ],
+        "methodBody": "{\n        Set<Class<?>> interfaceClasses = ReflectionUtil.getInterfaces(classType);\n        for (Class<?> interClass : interfaceClasses) {\n            if (interClass.isAnnotationPresent(LocalTCC.class)) {\n                return true;\n            }\n        }\n        return classType.isAnnotationPresent(LocalTCC.class);\n    }",
+        "position": {
+            "line": 95,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getInterfaces",
+                "position": {
+                    "line": 96,
+                    "column": 57
+                }
+            },
+            {
+                "name": "isAnnotationPresent",
+                "position": {
+                    "line": 98,
+                    "column": 28
+                }
+            },
+            {
+                "name": "isAnnotationPresent",
+                "position": {
+                    "line": 102,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    }
+]

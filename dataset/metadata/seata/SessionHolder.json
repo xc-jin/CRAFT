@@ -1,0 +1,1296 @@
+[
+    {
+        "name": "init",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "init()",
+        "class_signature": "SessionHolder.init()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        init(null);\n    }",
+        "position": {
+            "line": 83,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "init",
+                "position": {
+                    "line": 84,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "SessionHolder.init(SessionMode sessionMode)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "init",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "init(SessionMode sessionMode)",
+        "class_signature": "SessionHolder.init(SessionMode sessionMode)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "SessionMode",
+                "sessionMode"
+            ]
+        ],
+        "methodBody": "{\n        if (null == sessionMode) {\n            sessionMode = StoreConfig.getSessionMode();\n        }\n        LOGGER.info(\"use session store mode: {}\", sessionMode.getName());\n        DISTRIBUTED_LOCKER = DistributedLockerFactory.getDistributedLocker(sessionMode.getName());\n        if (SessionMode.DB.equals(sessionMode)) {\n            ROOT_SESSION_MANAGER = EnhancedServiceLoader.load(SessionManager.class, SessionMode.DB.getName());\n            reload(sessionMode);\n        } else if (SessionMode.RAFT.equals(sessionMode) || SessionMode.FILE.equals(sessionMode)) {\n            RaftServerManager.init();\n            if (CollectionUtils.isNotEmpty(RaftServerManager.getRaftServers())) {\n                sessionMode = SessionMode.RAFT;\n            }\n            if (SessionMode.RAFT.equals(sessionMode)) {\n                String group = CONFIG.getConfig(ConfigurationKeys.SERVER_RAFT_GROUP, DEFAULT_SEATA_GROUP);\n                ROOT_SESSION_MANAGER = EnhancedServiceLoader.load(SessionManager.class, SessionMode.RAFT.getName(),\n                    new Object[] {ROOT_SESSION_MANAGER_NAME});\n                SESSION_MANAGER_MAP = new HashMap<>();\n                SESSION_MANAGER_MAP.put(group, ROOT_SESSION_MANAGER);\n                RaftServerManager.start();\n            } else {\n                String sessionStorePath =\n                    CONFIG.getConfig(ConfigurationKeys.STORE_FILE_DIR, DEFAULT_SESSION_STORE_FILE_DIR) + separator\n                        + System.getProperty(SERVER_SERVICE_PORT_CAMEL);\n                if (StringUtils.isBlank(sessionStorePath)) {\n                    throw new StoreException(\"the {store.file.dir} is empty.\");\n                }\n                ROOT_SESSION_MANAGER = EnhancedServiceLoader.load(SessionManager.class, SessionMode.FILE.getName(),\n                    new Object[] {ROOT_SESSION_MANAGER_NAME, sessionStorePath});\n                reload(sessionMode);\n            }\n        } else if (SessionMode.REDIS.equals(sessionMode)) {\n            ROOT_SESSION_MANAGER = EnhancedServiceLoader.load(SessionManager.class, SessionMode.REDIS.getName());\n            reload(sessionMode);\n        } else {\n            // unknown store\n            throw new IllegalArgumentException(\"unknown store mode:\" + sessionMode.getName());\n        }\n    }",
+        "position": {
+            "line": 92,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getSessionMode",
+                "position": {
+                    "line": 94,
+                    "column": 39
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 96,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 96,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getDistributedLocker",
+                "position": {
+                    "line": 97,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 97,
+                    "column": 88
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 98,
+                    "column": 28
+                }
+            },
+            {
+                "name": "load",
+                "position": {
+                    "line": 99,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 99,
+                    "column": 100
+                }
+            },
+            {
+                "name": "reload",
+                "position": {
+                    "line": 100,
+                    "column": 13
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 101,
+                    "column": 37
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 101,
+                    "column": 77
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 102,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 103,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getRaftServers",
+                "position": {
+                    "line": 103,
+                    "column": 62
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 106,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 107,
+                    "column": 39
+                }
+            },
+            {
+                "name": "load",
+                "position": {
+                    "line": 108,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 108,
+                    "column": 106
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 111,
+                    "column": 37
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 112,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 115,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 116,
+                    "column": 34
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 117,
+                    "column": 33
+                }
+            },
+            {
+                "name": "load",
+                "position": {
+                    "line": 120,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 120,
+                    "column": 106
+                }
+            },
+            {
+                "name": "reload",
+                "position": {
+                    "line": 122,
+                    "column": 17
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 124,
+                    "column": 38
+                }
+            },
+            {
+                "name": "load",
+                "position": {
+                    "line": 125,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 125,
+                    "column": 103
+                }
+            },
+            {
+                "name": "reload",
+                "position": {
+                    "line": 126,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 129,
+                    "column": 84
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 110,
+                    "column": 43
+                }
+            },
+            {
+                "name": "StoreException",
+                "position": {
+                    "line": 118,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 129,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "SessionHolder.reload(SessionMode sessionMode)",
+            "SessionHolder.reload(SessionMode sessionMode)",
+            "SessionHolder.reload(SessionMode sessionMode)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "reload",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "reload(SessionMode sessionMode)",
+        "class_signature": "SessionHolder.reload(SessionMode sessionMode)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "SessionMode",
+                "sessionMode"
+            ]
+        ],
+        "methodBody": "{\n        if (sessionMode == SessionMode.FILE) {\n            ((Reloadable)ROOT_SESSION_MANAGER).reload();\n            reload(ROOT_SESSION_MANAGER.allSessions(), sessionMode);\n        } else {\n            reload(null, sessionMode);\n        }\n    }",
+        "position": {
+            "line": 138,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "reload",
+                "position": {
+                    "line": 140,
+                    "column": 48
+                }
+            },
+            {
+                "name": "reload",
+                "position": {
+                    "line": 141,
+                    "column": 13
+                }
+            },
+            {
+                "name": "allSessions",
+                "position": {
+                    "line": 141,
+                    "column": 41
+                }
+            },
+            {
+                "name": "reload",
+                "position": {
+                    "line": 143,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "SessionHolder.reload(Collection<GlobalSession> allSessions, SessionMode storeMode)",
+            "SessionHolder.reload(Collection<GlobalSession> allSessions, SessionMode storeMode)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "reload",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "reload(Collection<GlobalSession> allSessions, SessionMode storeMode)",
+        "class_signature": "SessionHolder.reload(Collection<GlobalSession> allSessions, SessionMode storeMode)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Collection<GlobalSession>",
+                "allSessions"
+            ],
+            [
+                "SessionMode",
+                "storeMode"
+            ]
+        ],
+        "methodBody": "{\n        reload(allSessions, storeMode, true);\n    }",
+        "position": {
+            "line": 147,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "reload",
+                "position": {
+                    "line": 148,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "SessionHolder.reload(Collection<GlobalSession> allSessions, SessionMode storeMode, boolean acquireLock)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "reload",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "reload(Collection<GlobalSession> allSessions, SessionMode storeMode, boolean acquireLock)",
+        "class_signature": "SessionHolder.reload(Collection<GlobalSession> allSessions, SessionMode storeMode, boolean acquireLock)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Collection<GlobalSession>",
+                "allSessions"
+            ],
+            [
+                "SessionMode",
+                "storeMode"
+            ],
+            [
+                "boolean",
+                "acquireLock"
+            ]
+        ],
+        "methodBody": "{\n        if ((SessionMode.FILE == storeMode || SessionMode.RAFT == storeMode)\n            && CollectionUtils.isNotEmpty(allSessions)) {\n            for (GlobalSession globalSession : allSessions) {\n                GlobalStatus globalStatus = globalSession.getStatus();\n                switch (globalStatus) {\n                    case TimeoutRollbacked:\n                    case Rollbacked:\n                        try {\n                            SessionHelper.endRollbacked(globalSession, true);\n                        } catch (TransactionException e) {\n                            LOGGER.error(\"Could not handle the global session, xid: {},error: {}\",\n                                globalSession.getXid(), e.getMessage());\n                        }\n                        break;\n                    case Committed:\n                        try {\n                            SessionHelper.endCommitted(globalSession, true);\n                        } catch (TransactionException e) {\n                            LOGGER.error(\"Could not handle the global session, xid: {},error: {}\",\n                                globalSession.getXid(), e.getMessage());\n                        }\n                        break;\n                    case Finished:\n                    case UnKnown:\n                    case CommitFailed:\n                    case RollbackFailed:\n                    case TimeoutRollbackFailed:\n                        removeInErrorState(globalSession);\n                        break;\n                    case AsyncCommitting:\n                    case Committing:\n                    case CommitRetrying:\n                        if (Objects.equals(SessionMode.RAFT, storeMode)) {\n                            // When a state change occurs, re-electing the leader may result in the lock not being unlocked yet\n                            // so a COMMIT unlock operation needs to be performed at the time of re-election\n                            try {\n                                globalSession.clean();\n                            } catch (TransactionException e) {\n                                throw new RuntimeException(e);\n                            }\n                        }\n                        break;\n                    default: {\n                        if (acquireLock) {\n                            lockBranchSessions(globalSession.getSortedBranches());\n                            if (GlobalStatus.Rollbacking.equals(globalSession.getStatus())\n                                || GlobalStatus.TimeoutRollbacking.equals(globalSession.getStatus())) {\n                                globalSession.getBranchSessions().parallelStream()\n                                    .forEach(branchSession -> branchSession.setLockStatus(LockStatus.Rollbacking));\n                            }\n                        }\n                        switch (globalStatus) {\n                            case Rollbacking:\n                            case RollbackRetrying:\n                            case TimeoutRollbacking:\n                            case TimeoutRollbackRetrying:\n                                break;\n                            case Begin:\n                                if (Objects.equals(storeMode, SessionMode.RAFT)) {\n                                    try {\n                                        globalSession.changeGlobalStatus(GlobalStatus.RollbackRetrying);\n                                        LOGGER.info(\"change global status: {}, xid: {}\", globalSession.getStatus(),\n                                            globalSession.getXid());\n                                    } catch (TransactionException e) {\n                                        LOGGER.error(\"change global status fail: {}\", e.getMessage(), e);\n                                    }\n                                } else {\n                                    globalSession.setActive(true);\n                                }\n                                break;\n                            default:\n                                LOGGER.error(\"Could not handle the global session, xid: {}\", globalSession.getXid());\n                                throw new ShouldNeverHappenException(\"NOT properly handled \" + globalStatus);\n                        }\n                        break;\n                    }\n                }\n            }\n        } else {\n            // Redis, db and so on\n            CompletableFuture.runAsync(() -> {\n                SessionCondition searchCondition = new SessionCondition(GlobalStatus.UnKnown, GlobalStatus.Committed,\n                        GlobalStatus.Rollbacked, GlobalStatus.TimeoutRollbacked, GlobalStatus.Finished);\n                searchCondition.setLazyLoadBranch(true);\n\n                long now = System.currentTimeMillis();\n                List<GlobalSession> errorStatusGlobalSessions = ROOT_SESSION_MANAGER.findGlobalSessions(searchCondition);\n                while (!CollectionUtils.isEmpty(errorStatusGlobalSessions)) {\n                    for (GlobalSession errorStatusGlobalSession : errorStatusGlobalSessions) {\n                        if (errorStatusGlobalSession.getBeginTime() >= now) {\n                            // Exit when the global transaction begin after the instance started\n                            return;\n                        }\n\n                        removeInErrorState(errorStatusGlobalSession);\n                    }\n\n                    // Load the next part\n                    errorStatusGlobalSessions = ROOT_SESSION_MANAGER.findGlobalSessions(searchCondition);\n                }\n            });\n        }\n    }",
+        "position": {
+            "line": 151,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 153,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getStatus",
+                "position": {
+                    "line": 155,
+                    "column": 59
+                }
+            },
+            {
+                "name": "endRollbacked",
+                "position": {
+                    "line": 160,
+                    "column": 43
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 162,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getXid",
+                "position": {
+                    "line": 163,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 163,
+                    "column": 59
+                }
+            },
+            {
+                "name": "endCommitted",
+                "position": {
+                    "line": 168,
+                    "column": 43
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 170,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getXid",
+                "position": {
+                    "line": 171,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 171,
+                    "column": 59
+                }
+            },
+            {
+                "name": "removeInErrorState",
+                "position": {
+                    "line": 179,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 184,
+                    "column": 37
+                }
+            },
+            {
+                "name": "clean",
+                "position": {
+                    "line": 188,
+                    "column": 47
+                }
+            },
+            {
+                "name": "lockBranchSessions",
+                "position": {
+                    "line": 196,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getSortedBranches",
+                "position": {
+                    "line": 196,
+                    "column": 62
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 197,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getStatus",
+                "position": {
+                    "line": 197,
+                    "column": 79
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 198,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getStatus",
+                "position": {
+                    "line": 198,
+                    "column": 89
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 200,
+                    "column": 38
+                }
+            },
+            {
+                "name": "parallelStream",
+                "position": {
+                    "line": 199,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getBranchSessions",
+                "position": {
+                    "line": 199,
+                    "column": 47
+                }
+            },
+            {
+                "name": "setLockStatus",
+                "position": {
+                    "line": 200,
+                    "column": 77
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 210,
+                    "column": 45
+                }
+            },
+            {
+                "name": "changeGlobalStatus",
+                "position": {
+                    "line": 212,
+                    "column": 55
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 213,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getStatus",
+                "position": {
+                    "line": 213,
+                    "column": 104
+                }
+            },
+            {
+                "name": "getXid",
+                "position": {
+                    "line": 214,
+                    "column": 59
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 216,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 216,
+                    "column": 89
+                }
+            },
+            {
+                "name": "setActive",
+                "position": {
+                    "line": 219,
+                    "column": 51
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 223,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getXid",
+                "position": {
+                    "line": 223,
+                    "column": 108
+                }
+            },
+            {
+                "name": "runAsync",
+                "position": {
+                    "line": 232,
+                    "column": 31
+                }
+            },
+            {
+                "name": "setLazyLoadBranch",
+                "position": {
+                    "line": 235,
+                    "column": 33
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 237,
+                    "column": 35
+                }
+            },
+            {
+                "name": "findGlobalSessions",
+                "position": {
+                    "line": 238,
+                    "column": 86
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 239,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getBeginTime",
+                "position": {
+                    "line": 241,
+                    "column": 54
+                }
+            },
+            {
+                "name": "removeInErrorState",
+                "position": {
+                    "line": 246,
+                    "column": 25
+                }
+            },
+            {
+                "name": "findGlobalSessions",
+                "position": {
+                    "line": 250,
+                    "column": 70
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 190,
+                    "column": 43
+                }
+            },
+            {
+                "name": "ShouldNeverHappenException",
+                "position": {
+                    "line": 224,
+                    "column": 43
+                }
+            },
+            {
+                "name": "SessionCondition",
+                "position": {
+                    "line": 233,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [
+            "SessionHolder.removeInErrorState(GlobalSession globalSession)",
+            "SessionHolder.lockBranchSessions(List<BranchSession> branchSessions)",
+            "SessionHolder.removeInErrorState(GlobalSession globalSession)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "removeInErrorState",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "removeInErrorState(GlobalSession globalSession)",
+        "class_signature": "SessionHolder.removeInErrorState(GlobalSession globalSession)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "GlobalSession",
+                "globalSession"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            LOGGER.warn(\"The global session should NOT be {}, remove it. xid = {}\", globalSession.getStatus(), globalSession.getXid());\n            getRootSessionManager().removeGlobalSession(globalSession);\n            if (LOGGER.isInfoEnabled()) {\n                LOGGER.info(\"Remove global session succeed, xid = {}, status = {}\", globalSession.getXid(), globalSession.getStatus());\n            }\n        } catch (Exception e) {\n            LOGGER.error(\"Remove global session failed, xid = {}, status = {}\", globalSession.getXid(), globalSession.getStatus(), e);\n        }\n    }",
+        "position": {
+            "line": 256,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "warn",
+                "position": {
+                    "line": 258,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getStatus",
+                "position": {
+                    "line": 258,
+                    "column": 99
+                }
+            },
+            {
+                "name": "getXid",
+                "position": {
+                    "line": 258,
+                    "column": 126
+                }
+            },
+            {
+                "name": "removeGlobalSession",
+                "position": {
+                    "line": 259,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getRootSessionManager",
+                "position": {
+                    "line": 259,
+                    "column": 13
+                }
+            },
+            {
+                "name": "isInfoEnabled",
+                "position": {
+                    "line": 260,
+                    "column": 24
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 261,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getXid",
+                "position": {
+                    "line": 261,
+                    "column": 99
+                }
+            },
+            {
+                "name": "getStatus",
+                "position": {
+                    "line": 261,
+                    "column": 123
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 264,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getXid",
+                "position": {
+                    "line": 264,
+                    "column": 95
+                }
+            },
+            {
+                "name": "getStatus",
+                "position": {
+                    "line": 264,
+                    "column": 119
+                }
+            }
+        ],
+        "calledMethods": [
+            "SessionHolder.getRootSessionManager()"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "lockBranchSessions",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "lockBranchSessions(List<BranchSession> branchSessions)",
+        "class_signature": "SessionHolder.lockBranchSessions(List<BranchSession> branchSessions)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<BranchSession>",
+                "branchSessions"
+            ]
+        ],
+        "methodBody": "{\n        branchSessions.forEach(branchSession -> {\n            try {\n                branchSession.lock();\n            } catch (TransactionException e) {\n                throw new ShouldNeverHappenException(e);\n            }\n        });\n    }",
+        "position": {
+            "line": 269,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 270,
+                    "column": 24
+                }
+            },
+            {
+                "name": "lock",
+                "position": {
+                    "line": 272,
+                    "column": 31
+                }
+            },
+            {
+                "name": "ShouldNeverHappenException",
+                "position": {
+                    "line": 274,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "getRootSessionManager",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "getRootSessionManager()",
+        "class_signature": "SessionHolder.getRootSessionManager()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        String group = SeataClusterContext.getGroup();\n        return getRootSessionManager(group);\n    }",
+        "position": {
+            "line": 290,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 291,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getRootSessionManager",
+                "position": {
+                    "line": 292,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SessionHolder.getRootSessionManager(String group)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "getRootSessionManager",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "getRootSessionManager(String group)",
+        "class_signature": "SessionHolder.getRootSessionManager(String group)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "group"
+            ]
+        ],
+        "methodBody": "{\n        return StringUtils.isNotBlank(group) && SESSION_MANAGER_MAP != null\n            ? SESSION_MANAGER_MAP.computeIfAbsent(group, k -> ROOT_SESSION_MANAGER) : ROOT_SESSION_MANAGER;\n    }",
+        "position": {
+            "line": 295,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 296,
+                    "column": 28
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 297,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "findGlobalSession",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "findGlobalSession(String xid)",
+        "class_signature": "SessionHolder.findGlobalSession(String xid)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "xid"
+            ]
+        ],
+        "methodBody": "{\n        return findGlobalSession(xid, true);\n    }",
+        "position": {
+            "line": 308,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findGlobalSession",
+                "position": {
+                    "line": 309,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SessionHolder.findGlobalSession(String xid, boolean withBranchSessions)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "findGlobalSession",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "findGlobalSession(String xid, boolean withBranchSessions)",
+        "class_signature": "SessionHolder.findGlobalSession(String xid, boolean withBranchSessions)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "xid"
+            ],
+            [
+                "boolean",
+                "withBranchSessions"
+            ]
+        ],
+        "methodBody": "{\n        return getRootSessionManager().findGlobalSession(xid, withBranchSessions);\n    }",
+        "position": {
+            "line": 319,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findGlobalSession",
+                "position": {
+                    "line": 320,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getRootSessionManager",
+                "position": {
+                    "line": 320,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SessionHolder.getRootSessionManager()"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "lockAndExecute",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "lockAndExecute(GlobalSession globalSession, GlobalSession.LockCallable<T> lockCallable)",
+        "class_signature": "SessionHolder.lockAndExecute(GlobalSession globalSession, GlobalSession.LockCallable<T> lockCallable)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "GlobalSession",
+                "globalSession"
+            ],
+            [
+                "GlobalSession.LockCallable<T>",
+                "lockCallable"
+            ]
+        ],
+        "methodBody": "{\n        return getRootSessionManager().lockAndExecute(globalSession, lockCallable);\n    }",
+        "position": {
+            "line": 330,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "lockAndExecute",
+                "position": {
+                    "line": 332,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getRootSessionManager",
+                "position": {
+                    "line": 332,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "SessionHolder.getRootSessionManager()"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "acquireDistributedLock",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "acquireDistributedLock(String lockKey)",
+        "class_signature": "SessionHolder.acquireDistributedLock(String lockKey)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "lockKey"
+            ]
+        ],
+        "methodBody": "{\n        return DISTRIBUTED_LOCKER.acquireLock(new DistributedLockDO(lockKey, XID.getIpAddressAndPort(), DISTRIBUTED_LOCK_EXPIRE_TIME));\n    }",
+        "position": {
+            "line": 341,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "acquireLock",
+                "position": {
+                    "line": 342,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getIpAddressAndPort",
+                "position": {
+                    "line": 342,
+                    "column": 82
+                }
+            },
+            {
+                "name": "DistributedLockDO",
+                "position": {
+                    "line": 342,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "releaseDistributedLock",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "releaseDistributedLock(String lockKey)",
+        "class_signature": "SessionHolder.releaseDistributedLock(String lockKey)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "lockKey"
+            ]
+        ],
+        "methodBody": "{\n        return DISTRIBUTED_LOCKER.releaseLock(new DistributedLockDO(lockKey, XID.getIpAddressAndPort(), DISTRIBUTED_LOCK_EXPIRE_TIME));\n    }",
+        "position": {
+            "line": 350,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "releaseLock",
+                "position": {
+                    "line": 351,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getIpAddressAndPort",
+                "position": {
+                    "line": 351,
+                    "column": 82
+                }
+            },
+            {
+                "name": "DistributedLockDO",
+                "position": {
+                    "line": 351,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "distributedLockAndExecute",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "distributedLockAndExecute(String key, NoArgsFunc func)",
+        "class_signature": "SessionHolder.distributedLockAndExecute(String key, NoArgsFunc func)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "key"
+            ],
+            [
+                "NoArgsFunc",
+                "func"
+            ]
+        ],
+        "methodBody": "{\n        boolean lock = false;\n        try {\n            lock = acquireDistributedLock(key);\n            if (lock) {\n                func.call();\n            }\n        } catch (Exception e) {\n            LOGGER.error(\"Exception running function with key = {}\", key, e);\n        } finally {\n            if (lock) {\n                try {\n                    SessionHolder.releaseDistributedLock(key);\n                } catch (Exception ex) {\n                    LOGGER.warn(\"release distribute lock failure, message = {}\", ex.getMessage(), ex);\n                }\n            }\n        }\n        return lock;\n    }",
+        "position": {
+            "line": 361,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "acquireDistributedLock",
+                "position": {
+                    "line": 364,
+                    "column": 20
+                }
+            },
+            {
+                "name": "call",
+                "position": {
+                    "line": 366,
+                    "column": 22
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 369,
+                    "column": 20
+                }
+            },
+            {
+                "name": "releaseDistributedLock",
+                "position": {
+                    "line": 373,
+                    "column": 35
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 375,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 375,
+                    "column": 85
+                }
+            }
+        ],
+        "calledMethods": [
+            "SessionHolder.acquireDistributedLock(String lockKey)",
+            "NoArgsFunc.call()",
+            "SessionHolder.releaseDistributedLock(String lockKey)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "destroy",
+        "category": "method_declaration",
+        "class": "SessionHolder",
+        "signature": "destroy()",
+        "class_signature": "SessionHolder.destroy()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        RaftServerManager.destroy();\n        if (ROOT_SESSION_MANAGER != null) {\n            ROOT_SESSION_MANAGER.destroy();\n        }\n        SESSION_MANAGER_MAP = null;\n    }",
+        "position": {
+            "line": 382,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 383,
+                    "column": 27
+                }
+            },
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 385,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "call",
+        "category": "method_declaration",
+        "class": "NoArgsFunc",
+        "signature": "call()",
+        "class_signature": "NoArgsFunc.call()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "",
+        "position": {
+            "line": 392,
+            "column": 14
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 8
+    }
+]

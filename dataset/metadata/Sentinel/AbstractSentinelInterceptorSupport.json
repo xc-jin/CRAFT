@@ -1,0 +1,1475 @@
+[
+    {
+        "name": "traceException",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "traceException(Throwable ex)",
+        "class_signature": "AbstractSentinelInterceptorSupport.traceException(Throwable ex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Throwable",
+                "ex"
+            ]
+        ],
+        "methodBody": "{\n        Tracer.trace(ex);\n    }",
+        "position": {
+            "line": 41,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "trace",
+                "position": {
+                    "line": 42,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "traceException",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "traceException(Throwable ex, SentinelResourceBinding annotation)",
+        "class_signature": "AbstractSentinelInterceptorSupport.traceException(Throwable ex, SentinelResourceBinding annotation)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Throwable",
+                "ex"
+            ],
+            [
+                "SentinelResourceBinding",
+                "annotation"
+            ]
+        ],
+        "methodBody": "{\n        Class<? extends Throwable>[] exceptionsToIgnore = annotation.exceptionsToIgnore();\n        // The ignore list will be checked first.\n        if (exceptionsToIgnore.length > 0 && exceptionBelongsTo(ex, exceptionsToIgnore)) {\n            return;\n        }\n        if (exceptionBelongsTo(ex, annotation.exceptionsToTrace())) {\n            traceException(ex);\n        }\n    }",
+        "position": {
+            "line": 45,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "exceptionsToIgnore",
+                "position": {
+                    "line": 46,
+                    "column": 70
+                }
+            },
+            {
+                "name": "exceptionBelongsTo",
+                "position": {
+                    "line": 48,
+                    "column": 46
+                }
+            },
+            {
+                "name": "exceptionBelongsTo",
+                "position": {
+                    "line": 51,
+                    "column": 13
+                }
+            },
+            {
+                "name": "exceptionsToTrace",
+                "position": {
+                    "line": 51,
+                    "column": 47
+                }
+            },
+            {
+                "name": "traceException",
+                "position": {
+                    "line": 52,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.exceptionBelongsTo(Throwable ex, Class<? extends Throwable>[] exceptions)",
+            "AbstractSentinelInterceptorSupport.exceptionBelongsTo(Throwable ex, Class<? extends Throwable>[] exceptions)",
+            "AbstractSentinelInterceptorSupport.traceException(Throwable ex)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "exceptionBelongsTo",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "exceptionBelongsTo(Throwable ex, Class<? extends Throwable>[] exceptions)",
+        "class_signature": "AbstractSentinelInterceptorSupport.exceptionBelongsTo(Throwable ex, Class<? extends Throwable>[] exceptions)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Throwable",
+                "ex"
+            ],
+            [
+                "Class<? extends Throwable>[]",
+                "exceptions"
+            ]
+        ],
+        "methodBody": "{\n        if (exceptions == null) {\n            return false;\n        }\n        for (Class<? extends Throwable> exceptionClass : exceptions) {\n            if (exceptionClass.isAssignableFrom(ex.getClass())) {\n                return true;\n            }\n        }\n        return false;\n    }",
+        "position": {
+            "line": 63,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAssignableFrom",
+                "position": {
+                    "line": 68,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 68,
+                    "column": 52
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "getResourceName",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "getResourceName(String resourceName, Method method)",
+        "class_signature": "AbstractSentinelInterceptorSupport.getResourceName(String resourceName, Method method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "resourceName"
+            ],
+            [
+                "Method",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        // If resource name is present in annotation, use this value.\n        if (StringUtil.isNotBlank(resourceName)) {\n            return resourceName;\n        }\n        // Parse name of target method.\n        return MethodUtil.resolveMethodName(method);\n    }",
+        "position": {
+            "line": 75,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 77,
+                    "column": 24
+                }
+            },
+            {
+                "name": "resolveMethodName",
+                "position": {
+                    "line": 81,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "handleFallback",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "handleFallback(InvocationContext ctx, SentinelResourceBinding annotation, Throwable ex)",
+        "class_signature": "AbstractSentinelInterceptorSupport.handleFallback(InvocationContext ctx, SentinelResourceBinding annotation, Throwable ex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InvocationContext",
+                "ctx"
+            ],
+            [
+                "SentinelResourceBinding",
+                "annotation"
+            ],
+            [
+                "Throwable",
+                "ex"
+            ]
+        ],
+        "methodBody": "{\n        return handleFallback(ctx, annotation.fallback(), annotation.defaultFallback(), annotation.fallbackClass(), ex);\n    }",
+        "position": {
+            "line": 84,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "handleFallback",
+                "position": {
+                    "line": 86,
+                    "column": 16
+                }
+            },
+            {
+                "name": "fallback",
+                "position": {
+                    "line": 86,
+                    "column": 47
+                }
+            },
+            {
+                "name": "defaultFallback",
+                "position": {
+                    "line": 86,
+                    "column": 70
+                }
+            },
+            {
+                "name": "fallbackClass",
+                "position": {
+                    "line": 86,
+                    "column": 100
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.handleFallback(InvocationContext ctx, String fallback, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "handleFallback",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "handleFallback(InvocationContext ctx, String fallback, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)",
+        "class_signature": "AbstractSentinelInterceptorSupport.handleFallback(InvocationContext ctx, String fallback, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InvocationContext",
+                "ctx"
+            ],
+            [
+                "String",
+                "fallback"
+            ],
+            [
+                "String",
+                "defaultFallback"
+            ],
+            [
+                "Class<?>[]",
+                "fallbackClass"
+            ],
+            [
+                "Throwable",
+                "ex"
+            ]
+        ],
+        "methodBody": "{\n        Object[] originArgs = ctx.getParameters();\n\n        // Execute fallback function if configured.\n        Method fallbackMethod = extractFallbackMethod(ctx, fallback, fallbackClass);\n        if (fallbackMethod != null) {\n            // Construct args.\n            int paramCount = fallbackMethod.getParameterTypes().length;\n            Object[] args;\n            if (paramCount == originArgs.length) {\n                args = originArgs;\n            } else {\n                args = Arrays.copyOf(originArgs, originArgs.length + 1);\n                args[args.length - 1] = ex;\n            }\n\n            try {\n                if (isStatic(fallbackMethod)) {\n                    return fallbackMethod.invoke(null, args);\n                }\n                return fallbackMethod.invoke(ctx.getTarget(), args);\n            } catch (InvocationTargetException e) {\n                // throw the actual exception\n                throw e.getTargetException();\n            }\n        }\n        // If fallback is absent, we'll try the defaultFallback if provided.\n        return handleDefaultFallback(ctx, defaultFallback, fallbackClass, ex);\n    }",
+        "position": {
+            "line": 89,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameters",
+                "position": {
+                    "line": 91,
+                    "column": 35
+                }
+            },
+            {
+                "name": "extractFallbackMethod",
+                "position": {
+                    "line": 94,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 97,
+                    "column": 45
+                }
+            },
+            {
+                "name": "copyOf",
+                "position": {
+                    "line": 102,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isStatic",
+                "position": {
+                    "line": 107,
+                    "column": 21
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 108,
+                    "column": 43
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 110,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 110,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getTargetException",
+                "position": {
+                    "line": 113,
+                    "column": 25
+                }
+            },
+            {
+                "name": "handleDefaultFallback",
+                "position": {
+                    "line": 117,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.extractFallbackMethod(InvocationContext ctx, String fallbackName, Class<?>[] locationClass)",
+            "AbstractSentinelInterceptorSupport.isStatic(Method method)",
+            "AbstractSentinelInterceptorSupport.handleDefaultFallback(InvocationContext ctx, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "handleDefaultFallback",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "handleDefaultFallback(InvocationContext ctx, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)",
+        "class_signature": "AbstractSentinelInterceptorSupport.handleDefaultFallback(InvocationContext ctx, String defaultFallback, Class<?>[] fallbackClass, Throwable ex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InvocationContext",
+                "ctx"
+            ],
+            [
+                "String",
+                "defaultFallback"
+            ],
+            [
+                "Class<?>[]",
+                "fallbackClass"
+            ],
+            [
+                "Throwable",
+                "ex"
+            ]
+        ],
+        "methodBody": "{\n        // Execute the default fallback function if configured.\n        Method fallbackMethod = extractDefaultFallbackMethod(ctx, defaultFallback, fallbackClass);\n        if (fallbackMethod != null) {\n            // Construct args.\n            Object[] args = fallbackMethod.getParameterTypes().length == 0 ? new Object[0] : new Object[] {ex};\n            try {\n                if (isStatic(fallbackMethod)) {\n                    return fallbackMethod.invoke(null, args);\n                }\n                return fallbackMethod.invoke(ctx.getTarget(), args);\n            } catch (InvocationTargetException e) {\n                // throw the actual exception\n                throw e.getTargetException();\n            }\n        }\n\n        // If no any fallback is present, then directly throw the exception.\n        throw ex;\n    }",
+        "position": {
+            "line": 120,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "extractDefaultFallbackMethod",
+                "position": {
+                    "line": 123,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 126,
+                    "column": 44
+                }
+            },
+            {
+                "name": "isStatic",
+                "position": {
+                    "line": 128,
+                    "column": 21
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 129,
+                    "column": 43
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 131,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 131,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getTargetException",
+                "position": {
+                    "line": 134,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.extractDefaultFallbackMethod(InvocationContext ctx, String defaultFallback, Class<?>[] locationClass)",
+            "AbstractSentinelInterceptorSupport.isStatic(Method method)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "handleBlockException",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "handleBlockException(InvocationContext ctx, SentinelResourceBinding annotation, BlockException ex)",
+        "class_signature": "AbstractSentinelInterceptorSupport.handleBlockException(InvocationContext ctx, SentinelResourceBinding annotation, BlockException ex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InvocationContext",
+                "ctx"
+            ],
+            [
+                "SentinelResourceBinding",
+                "annotation"
+            ],
+            [
+                "BlockException",
+                "ex"
+            ]
+        ],
+        "methodBody": "{\n\n        // Execute block handler if configured.\n        Method blockHandlerMethod = extractBlockHandlerMethod(ctx, annotation.blockHandler(),\n            annotation.blockHandlerClass());\n        if (blockHandlerMethod != null) {\n            Object[] originArgs = ctx.getParameters();\n            // Construct args.\n            Object[] args = Arrays.copyOf(originArgs, originArgs.length + 1);\n            args[args.length - 1] = ex;\n            try {\n                if (isStatic(blockHandlerMethod)) {\n                    return blockHandlerMethod.invoke(null, args);\n                }\n                return blockHandlerMethod.invoke(ctx.getTarget(), args);\n            } catch (InvocationTargetException e) {\n                // throw the actual exception\n                throw e.getTargetException();\n            }\n        }\n\n        // If no block handler is present, then go to fallback.\n        return handleFallback(ctx, annotation, ex);\n    }",
+        "position": {
+            "line": 142,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "extractBlockHandlerMethod",
+                "position": {
+                    "line": 146,
+                    "column": 37
+                }
+            },
+            {
+                "name": "blockHandler",
+                "position": {
+                    "line": 146,
+                    "column": 79
+                }
+            },
+            {
+                "name": "blockHandlerClass",
+                "position": {
+                    "line": 147,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getParameters",
+                "position": {
+                    "line": 149,
+                    "column": 39
+                }
+            },
+            {
+                "name": "copyOf",
+                "position": {
+                    "line": 151,
+                    "column": 36
+                }
+            },
+            {
+                "name": "isStatic",
+                "position": {
+                    "line": 154,
+                    "column": 21
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 155,
+                    "column": 47
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 157,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 157,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getTargetException",
+                "position": {
+                    "line": 160,
+                    "column": 25
+                }
+            },
+            {
+                "name": "handleFallback",
+                "position": {
+                    "line": 165,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.extractBlockHandlerMethod(InvocationContext ctx, String name, Class<?>[] locationClass)",
+            "AbstractSentinelInterceptorSupport.isStatic(Method method)",
+            "AbstractSentinelInterceptorSupport.handleFallback(InvocationContext ctx, SentinelResourceBinding annotation, Throwable ex)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "extractFallbackMethod",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "extractFallbackMethod(InvocationContext ctx, String fallbackName, Class<?>[] locationClass)",
+        "class_signature": "AbstractSentinelInterceptorSupport.extractFallbackMethod(InvocationContext ctx, String fallbackName, Class<?>[] locationClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InvocationContext",
+                "ctx"
+            ],
+            [
+                "String",
+                "fallbackName"
+            ],
+            [
+                "Class<?>[]",
+                "locationClass"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(fallbackName)) {\n            return null;\n        }\n        boolean mustStatic = locationClass != null && locationClass.length >= 1;\n        Class<?> clazz = mustStatic ? locationClass[0] : ctx.getTarget().getClass();\n        Method originMethod = resolveMethod(ctx);\n        MethodWrapper m = ResourceMetadataRegistry.lookupFallback(clazz, fallbackName, originMethod.getParameterTypes());\n        if (m == null) {\n            // First time, resolve the fallback.\n            Method method = resolveFallbackInternal(originMethod, fallbackName, clazz, mustStatic);\n            // Cache the method instance.\n            ResourceMetadataRegistry.updateFallbackFor(clazz, fallbackName, originMethod.getParameterTypes(), method);\n            return method;\n        }\n        if (!m.isPresent()) {\n            return null;\n        }\n        return m.getMethod();\n    }",
+        "position": {
+            "line": 168,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 169,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 173,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 173,
+                    "column": 62
+                }
+            },
+            {
+                "name": "resolveMethod",
+                "position": {
+                    "line": 174,
+                    "column": 31
+                }
+            },
+            {
+                "name": "lookupFallback",
+                "position": {
+                    "line": 175,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 175,
+                    "column": 101
+                }
+            },
+            {
+                "name": "resolveFallbackInternal",
+                "position": {
+                    "line": 178,
+                    "column": 29
+                }
+            },
+            {
+                "name": "updateFallbackFor",
+                "position": {
+                    "line": 180,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 180,
+                    "column": 90
+                }
+            },
+            {
+                "name": "isPresent",
+                "position": {
+                    "line": 183,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 186,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.resolveMethod(InvocationContext ctx)",
+            "AbstractSentinelInterceptorSupport.resolveFallbackInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "extractDefaultFallbackMethod",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "extractDefaultFallbackMethod(InvocationContext ctx, String defaultFallback, Class<?>[] locationClass)",
+        "class_signature": "AbstractSentinelInterceptorSupport.extractDefaultFallbackMethod(InvocationContext ctx, String defaultFallback, Class<?>[] locationClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InvocationContext",
+                "ctx"
+            ],
+            [
+                "String",
+                "defaultFallback"
+            ],
+            [
+                "Class<?>[]",
+                "locationClass"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(defaultFallback)) {\n            SentinelResource annotationClass = ctx.getTarget().getClass().getAnnotation(SentinelResource.class);\n            if (annotationClass != null && StringUtil.isNotBlank(annotationClass.defaultFallback())) {\n                defaultFallback = annotationClass.defaultFallback();\n                if (locationClass == null || locationClass.length < 1) {\n                    locationClass = annotationClass.fallbackClass();\n                }\n            } else {\n                return null;\n            }\n        }\n        boolean mustStatic = locationClass != null && locationClass.length >= 1;\n        Class<?> clazz = mustStatic ? locationClass[0] : ctx.getTarget().getClass();\n\n        MethodWrapper m = ResourceMetadataRegistry.lookupDefaultFallback(clazz, defaultFallback);\n        if (m == null) {\n            // First time, resolve the default fallback.\n            Class<?> originReturnType = resolveMethod(ctx).getReturnType();\n            // Default fallback allows two kinds of parameter list.\n            // One is empty parameter list.\n            Class<?>[] defaultParamTypes = new Class<?>[0];\n            // The other is a single parameter {@link Throwable} to get relevant exception info.\n            Class<?>[] paramTypeWithException = new Class<?>[] {Throwable.class};\n            // We first find the default fallback with empty parameter list.\n            Method method = findMethod(mustStatic, clazz, defaultFallback, originReturnType, defaultParamTypes);\n            // If default fallback with empty params is absent, we then try to find the other one.\n            if (method == null) {\n                method = findMethod(mustStatic, clazz, defaultFallback, originReturnType, paramTypeWithException);\n            }\n            // Cache the method instance.\n            ResourceMetadataRegistry.updateDefaultFallbackFor(clazz, defaultFallback, method);\n            return method;\n        }\n        if (!m.isPresent()) {\n            return null;\n        }\n        return m.getMethod();\n    }",
+        "position": {
+            "line": 189,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 191,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 192,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 192,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 192,
+                    "column": 52
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 193,
+                    "column": 55
+                }
+            },
+            {
+                "name": "defaultFallback",
+                "position": {
+                    "line": 193,
+                    "column": 82
+                }
+            },
+            {
+                "name": "defaultFallback",
+                "position": {
+                    "line": 194,
+                    "column": 51
+                }
+            },
+            {
+                "name": "fallbackClass",
+                "position": {
+                    "line": 196,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 203,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 203,
+                    "column": 62
+                }
+            },
+            {
+                "name": "lookupDefaultFallback",
+                "position": {
+                    "line": 205,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getReturnType",
+                "position": {
+                    "line": 208,
+                    "column": 60
+                }
+            },
+            {
+                "name": "resolveMethod",
+                "position": {
+                    "line": 208,
+                    "column": 41
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 215,
+                    "column": 29
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 218,
+                    "column": 26
+                }
+            },
+            {
+                "name": "updateDefaultFallbackFor",
+                "position": {
+                    "line": 221,
+                    "column": 38
+                }
+            },
+            {
+                "name": "isPresent",
+                "position": {
+                    "line": 224,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 227,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.resolveMethod(InvocationContext ctx)",
+            "AbstractSentinelInterceptorSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)",
+            "AbstractSentinelInterceptorSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "resolveFallbackInternal",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "resolveFallbackInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)",
+        "class_signature": "AbstractSentinelInterceptorSupport.resolveFallbackInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "originMethod"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "boolean",
+                "mustStatic"
+            ]
+        ],
+        "methodBody": "{\n        // Fallback function allows two kinds of parameter list.\n        Class<?>[] defaultParamTypes = originMethod.getParameterTypes();\n        Class<?>[] paramTypesWithException = Arrays.copyOf(defaultParamTypes, defaultParamTypes.length + 1);\n        paramTypesWithException[paramTypesWithException.length - 1] = Throwable.class;\n        // We first find the fallback matching the signature of origin method.\n        Method method = findMethod(mustStatic, clazz, name, originMethod.getReturnType(), defaultParamTypes);\n        // If fallback matching the origin method is absent, we then try to find the other one.\n        if (method == null) {\n            method = findMethod(mustStatic, clazz, name, originMethod.getReturnType(), paramTypesWithException);\n        }\n        return method;\n    }",
+        "position": {
+            "line": 230,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 232,
+                    "column": 53
+                }
+            },
+            {
+                "name": "copyOf",
+                "position": {
+                    "line": 233,
+                    "column": 53
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 236,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getReturnType",
+                "position": {
+                    "line": 236,
+                    "column": 74
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 239,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getReturnType",
+                "position": {
+                    "line": 239,
+                    "column": 71
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)",
+            "AbstractSentinelInterceptorSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "extractBlockHandlerMethod",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "extractBlockHandlerMethod(InvocationContext ctx, String name, Class<?>[] locationClass)",
+        "class_signature": "AbstractSentinelInterceptorSupport.extractBlockHandlerMethod(InvocationContext ctx, String name, Class<?>[] locationClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InvocationContext",
+                "ctx"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "Class<?>[]",
+                "locationClass"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtil.isBlank(name)) {\n            return null;\n        }\n\n        boolean mustStatic = locationClass != null && locationClass.length >= 1;\n        Class<?> clazz;\n        if (mustStatic) {\n            clazz = locationClass[0];\n        } else {\n            // By default current class.\n            clazz = ctx.getTarget().getClass();\n        }\n        Method originMethod = resolveMethod(ctx);\n        MethodWrapper m = ResourceMetadataRegistry.lookupBlockHandler(clazz, name, originMethod.getParameterTypes());\n        if (m == null) {\n            // First time, resolve the block handler.\n            Method method = resolveBlockHandlerInternal(originMethod, name, clazz, mustStatic);\n            // Cache the method instance.\n            ResourceMetadataRegistry.updateBlockHandlerFor(clazz, name, originMethod.getParameterTypes(), method);\n            return method;\n        }\n        if (!m.isPresent()) {\n            return null;\n        }\n        return m.getMethod();\n    }",
+        "position": {
+            "line": 244,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 245,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 255,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 255,
+                    "column": 25
+                }
+            },
+            {
+                "name": "resolveMethod",
+                "position": {
+                    "line": 257,
+                    "column": 31
+                }
+            },
+            {
+                "name": "lookupBlockHandler",
+                "position": {
+                    "line": 258,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 258,
+                    "column": 97
+                }
+            },
+            {
+                "name": "resolveBlockHandlerInternal",
+                "position": {
+                    "line": 261,
+                    "column": 29
+                }
+            },
+            {
+                "name": "updateBlockHandlerFor",
+                "position": {
+                    "line": 263,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 263,
+                    "column": 86
+                }
+            },
+            {
+                "name": "isPresent",
+                "position": {
+                    "line": 266,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 269,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.resolveMethod(InvocationContext ctx)",
+            "AbstractSentinelInterceptorSupport.resolveBlockHandlerInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "resolveBlockHandlerInternal",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "resolveBlockHandlerInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)",
+        "class_signature": "AbstractSentinelInterceptorSupport.resolveBlockHandlerInternal(Method originMethod, String name, Class<?> clazz, boolean mustStatic)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "originMethod"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "boolean",
+                "mustStatic"
+            ]
+        ],
+        "methodBody": "{\n        Class<?>[] originList = originMethod.getParameterTypes();\n        Class<?>[] parameterTypes = Arrays.copyOf(originList, originList.length + 1);\n        parameterTypes[parameterTypes.length - 1] = BlockException.class;\n        return findMethod(mustStatic, clazz, name, originMethod.getReturnType(), parameterTypes);\n    }",
+        "position": {
+            "line": 272,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 273,
+                    "column": 46
+                }
+            },
+            {
+                "name": "copyOf",
+                "position": {
+                    "line": 274,
+                    "column": 44
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 276,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getReturnType",
+                "position": {
+                    "line": 276,
+                    "column": 65
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "checkStatic",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "checkStatic(boolean mustStatic, Method method)",
+        "class_signature": "AbstractSentinelInterceptorSupport.checkStatic(boolean mustStatic, Method method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "mustStatic"
+            ],
+            [
+                "Method",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        return !mustStatic || isStatic(method);\n    }",
+        "position": {
+            "line": 279,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isStatic",
+                "position": {
+                    "line": 280,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.isStatic(Method method)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "findMethod",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)",
+        "class_signature": "AbstractSentinelInterceptorSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "boolean",
+                "mustStatic"
+            ],
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "Class<?>",
+                "returnType"
+            ],
+            [
+                "Class<?>...",
+                "parameterTypes"
+            ]
+        ],
+        "methodBody": "{\n        Method[] methods = clazz.getDeclaredMethods();\n        for (Method method : methods) {\n            if (name.equals(method.getName()) && checkStatic(mustStatic, method)\n                && returnType.isAssignableFrom(method.getReturnType())\n                && Arrays.equals(parameterTypes, method.getParameterTypes())) {\n\n                RecordLog.info(\"Resolved method [{}] in class [{}]\", name, clazz.getCanonicalName());\n                return method;\n            }\n        }\n        // Current class not found, find in the super classes recursively.\n        Class<?> superClass = clazz.getSuperclass();\n        if (superClass != null && !Object.class.equals(superClass)) {\n            return findMethod(mustStatic, superClass, name, returnType, parameterTypes);\n        } else {\n            String methodType = mustStatic ? \" static\" : \"\";\n            RecordLog.warn(\"Cannot find{} method [{}] in class [{}] with parameters {}\",\n                methodType, name, clazz.getCanonicalName(), Arrays.toString(parameterTypes));\n            return null;\n        }\n    }",
+        "position": {
+            "line": 283,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDeclaredMethods",
+                "position": {
+                    "line": 285,
+                    "column": 34
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 287,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 287,
+                    "column": 36
+                }
+            },
+            {
+                "name": "checkStatic",
+                "position": {
+                    "line": 287,
+                    "column": 50
+                }
+            },
+            {
+                "name": "isAssignableFrom",
+                "position": {
+                    "line": 288,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getReturnType",
+                "position": {
+                    "line": 288,
+                    "column": 55
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 289,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 289,
+                    "column": 57
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 291,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getCanonicalName",
+                "position": {
+                    "line": 291,
+                    "column": 82
+                }
+            },
+            {
+                "name": "getSuperclass",
+                "position": {
+                    "line": 296,
+                    "column": 37
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 297,
+                    "column": 49
+                }
+            },
+            {
+                "name": "findMethod",
+                "position": {
+                    "line": 298,
+                    "column": 20
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 301,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getCanonicalName",
+                "position": {
+                    "line": 302,
+                    "column": 41
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 302,
+                    "column": 68
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.checkStatic(boolean mustStatic, Method method)",
+            "AbstractSentinelInterceptorSupport.findMethod(boolean mustStatic, Class<?> clazz, String name, Class<?> returnType, Class<?>... parameterTypes)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "isStatic",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "isStatic(Method method)",
+        "class_signature": "AbstractSentinelInterceptorSupport.isStatic(Method method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        return Modifier.isStatic(method.getModifiers());\n    }",
+        "position": {
+            "line": 307,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isStatic",
+                "position": {
+                    "line": 308,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getModifiers",
+                "position": {
+                    "line": 308,
+                    "column": 41
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 17
+    },
+    {
+        "name": "resolveMethod",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "resolveMethod(InvocationContext ctx)",
+        "class_signature": "AbstractSentinelInterceptorSupport.resolveMethod(InvocationContext ctx)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InvocationContext",
+                "ctx"
+            ]
+        ],
+        "methodBody": "{\n        Class<?> targetClass = ctx.getTarget().getClass();\n\n        Method method = getDeclaredMethodFor(targetClass, ctx.getMethod().getName(),\n            ctx.getMethod().getParameterTypes());\n        if (method == null) {\n            throw new IllegalStateException(\"Cannot resolve target method: \" + ctx.getMethod().getName());\n        }\n        return method;\n    }",
+        "position": {
+            "line": 311,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 312,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getTarget",
+                "position": {
+                    "line": 312,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getDeclaredMethodFor",
+                "position": {
+                    "line": 314,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 314,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 314,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 315,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 315,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 317,
+                    "column": 96
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 317,
+                    "column": 84
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 317,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.getDeclaredMethodFor(Class<?> clazz, String name, Class<?>... parameterTypes)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "getDeclaredMethodFor",
+        "category": "method_declaration",
+        "class": "AbstractSentinelInterceptorSupport",
+        "signature": "getDeclaredMethodFor(Class<?> clazz, String name, Class<?>... parameterTypes)",
+        "class_signature": "AbstractSentinelInterceptorSupport.getDeclaredMethodFor(Class<?> clazz, String name, Class<?>... parameterTypes)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "name"
+            ],
+            [
+                "Class<?>...",
+                "parameterTypes"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            return clazz.getDeclaredMethod(name, parameterTypes);\n        } catch (NoSuchMethodException e) {\n            Class<?> superClass = clazz.getSuperclass();\n            if (superClass != null) {\n                return getDeclaredMethodFor(superClass, name, parameterTypes);\n            }\n        }\n        return null;\n    }",
+        "position": {
+            "line": 331,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDeclaredMethod",
+                "position": {
+                    "line": 333,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getSuperclass",
+                "position": {
+                    "line": 335,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getDeclaredMethodFor",
+                "position": {
+                    "line": 337,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "AbstractSentinelInterceptorSupport.getDeclaredMethodFor(Class<?> clazz, String name, Class<?>... parameterTypes)"
+        ],
+        "priority": 15
+    }
+]

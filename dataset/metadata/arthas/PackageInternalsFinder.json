@@ -1,0 +1,1011 @@
+[
+    {
+        "name": "PackageInternalsFinder",
+        "category": "constructor_declaration",
+        "class": "PackageInternalsFinder",
+        "signature": "PackageInternalsFinder(ClassLoader classLoader)",
+        "class_signature": "PackageInternalsFinder.PackageInternalsFinder(ClassLoader classLoader)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ClassLoader",
+                "classLoader"
+            ]
+        ],
+        "methodBody": "{\n        this.classLoader = classLoader;\n    }",
+        "position": {
+            "line": 48,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "find",
+        "category": "method_declaration",
+        "class": "PackageInternalsFinder",
+        "signature": "find(String packageName)",
+        "class_signature": "PackageInternalsFinder.find(String packageName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "packageName"
+            ]
+        ],
+        "methodBody": "{\n        String javaPackageName = packageName.replaceAll(\"\\\\.\", \"/\");\n\n        List<JavaFileObject> result = new ArrayList<JavaFileObject>();\n\n        Enumeration<URL> urlEnumeration = classLoader.getResources(javaPackageName);\n        while (urlEnumeration.hasMoreElements()) { // one URL for each jar on the classpath that has the given package\n            URL packageFolderURL = urlEnumeration.nextElement();\n            result.addAll(listUnder(packageName, packageFolderURL));\n        }\n\n        return result;\n    }",
+        "position": {
+            "line": 52,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "replaceAll",
+                "position": {
+                    "line": 53,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getResources",
+                "position": {
+                    "line": 57,
+                    "column": 55
+                }
+            },
+            {
+                "name": "hasMoreElements",
+                "position": {
+                    "line": 58,
+                    "column": 31
+                }
+            },
+            {
+                "name": "nextElement",
+                "position": {
+                    "line": 59,
+                    "column": 51
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 60,
+                    "column": 20
+                }
+            },
+            {
+                "name": "listUnder",
+                "position": {
+                    "line": 60,
+                    "column": 27
+                }
+            },
+            {
+                "name": "ArrayList<JavaFileObject>",
+                "position": {
+                    "line": 55,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "PackageInternalsFinder.listUnder(String packageName, URL packageFolderURL)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "listUnder",
+        "category": "method_declaration",
+        "class": "PackageInternalsFinder",
+        "signature": "listUnder(String packageName, URL packageFolderURL)",
+        "class_signature": "PackageInternalsFinder.listUnder(String packageName, URL packageFolderURL)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "packageName"
+            ],
+            [
+                "URL",
+                "packageFolderURL"
+            ]
+        ],
+        "methodBody": "{\n        File directory = new File(decode(packageFolderURL.getFile()));\n        if (directory.isDirectory()) { // browse local .class files - useful for local execution\n            return processDir(packageName, directory);\n        } else { // browse a jar file\n            return processJar(packageName, packageFolderURL);\n        }\n    }",
+        "position": {
+            "line": 66,
+            "column": 40
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "decode",
+                "position": {
+                    "line": 67,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getFile",
+                "position": {
+                    "line": 67,
+                    "column": 59
+                }
+            },
+            {
+                "name": "isDirectory",
+                "position": {
+                    "line": 68,
+                    "column": 23
+                }
+            },
+            {
+                "name": "processDir",
+                "position": {
+                    "line": 69,
+                    "column": 20
+                }
+            },
+            {
+                "name": "processJar",
+                "position": {
+                    "line": 71,
+                    "column": 20
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 67,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "PackageInternalsFinder.decode(String filePath)",
+            "PackageInternalsFinder.processDir(String packageName, File directory)",
+            "PackageInternalsFinder.processJar(String packageName, URL packageFolderURL)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "processJar",
+        "category": "method_declaration",
+        "class": "PackageInternalsFinder",
+        "signature": "processJar(String packageName, URL packageFolderURL)",
+        "class_signature": "PackageInternalsFinder.processJar(String packageName, URL packageFolderURL)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "packageName"
+            ],
+            [
+                "URL",
+                "packageFolderURL"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            String jarUri = packageFolderURL.toExternalForm().substring(0, packageFolderURL.toExternalForm().lastIndexOf(\"!/\"));\n            JarFileIndex jarFileIndex = INDEXS.get(jarUri);\n            if (jarFileIndex == null) {\n                jarFileIndex = new JarFileIndex(jarUri, URI.create(jarUri + \"!/\"));\n                INDEXS.put(jarUri, jarFileIndex);\n            }\n            List<JavaFileObject> result = jarFileIndex.search(packageName);\n            if (result != null) {\n                return result;\n            }\n        } catch (Exception e) {\n            // ignore\n        }\n        // \n        return fuse(packageFolderURL);\n    }",
+        "position": {
+            "line": 75,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "substring",
+                "position": {
+                    "line": 77,
+                    "column": 63
+                }
+            },
+            {
+                "name": "toExternalForm",
+                "position": {
+                    "line": 77,
+                    "column": 46
+                }
+            },
+            {
+                "name": "lastIndexOf",
+                "position": {
+                    "line": 77,
+                    "column": 110
+                }
+            },
+            {
+                "name": "toExternalForm",
+                "position": {
+                    "line": 77,
+                    "column": 93
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 78,
+                    "column": 48
+                }
+            },
+            {
+                "name": "create",
+                "position": {
+                    "line": 80,
+                    "column": 61
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 81,
+                    "column": 24
+                }
+            },
+            {
+                "name": "search",
+                "position": {
+                    "line": 83,
+                    "column": 56
+                }
+            },
+            {
+                "name": "fuse",
+                "position": {
+                    "line": 91,
+                    "column": 16
+                }
+            },
+            {
+                "name": "JarFileIndex",
+                "position": {
+                    "line": 80,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "JarFileIndex.search(String packageName)",
+            "PackageInternalsFinder.fuse(URL packageFolderURL)",
+            "JarFileIndex.JarFileIndex(String jarUri, URI uri)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "fuse",
+        "category": "method_declaration",
+        "class": "PackageInternalsFinder",
+        "signature": "fuse(URL packageFolderURL)",
+        "class_signature": "PackageInternalsFinder.fuse(URL packageFolderURL)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "packageFolderURL"
+            ]
+        ],
+        "methodBody": "{\n        List<JavaFileObject> result = new ArrayList<JavaFileObject>();\n        try {\n            String jarUri = packageFolderURL.toExternalForm().substring(0, packageFolderURL.toExternalForm().lastIndexOf(\"!/\"));\n\n            JarURLConnection jarConn = (JarURLConnection) packageFolderURL.openConnection();\n            String rootEntryName = jarConn.getEntryName();\n\n            if (rootEntryName != null) {\n                // null\n                int rootEnd = rootEntryName.length() + 1;\n\n                Enumeration<JarEntry> entryEnum = jarConn.getJarFile().entries();\n                while (entryEnum.hasMoreElements()) {\n                    JarEntry jarEntry = entryEnum.nextElement();\n                    String name = jarEntry.getName();\n                    if (name.startsWith(rootEntryName) && name.indexOf('/', rootEnd) == -1 && name.endsWith(CLASS_FILE_EXTENSION)) {\n                        URI uri = URI.create(jarUri + \"!/\" + name);\n                        String binaryName = name.replaceAll(\"/\", \".\");\n                        binaryName = binaryName.replaceAll(CLASS_FILE_EXTENSION + \"$\", \"\");\n\n                        result.add(new CustomJavaFileObject(binaryName, uri));\n                    }\n                }\n            }\n        } catch (Exception e) {\n            throw new RuntimeException(\"Wasn't able to open \" + packageFolderURL + \" as a jar file\", e);\n        }\n        return result;\n    }",
+        "position": {
+            "line": 94,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "substring",
+                "position": {
+                    "line": 97,
+                    "column": 63
+                }
+            },
+            {
+                "name": "toExternalForm",
+                "position": {
+                    "line": 97,
+                    "column": 46
+                }
+            },
+            {
+                "name": "lastIndexOf",
+                "position": {
+                    "line": 97,
+                    "column": 110
+                }
+            },
+            {
+                "name": "toExternalForm",
+                "position": {
+                    "line": 97,
+                    "column": 93
+                }
+            },
+            {
+                "name": "openConnection",
+                "position": {
+                    "line": 99,
+                    "column": 76
+                }
+            },
+            {
+                "name": "getEntryName",
+                "position": {
+                    "line": 100,
+                    "column": 44
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 104,
+                    "column": 45
+                }
+            },
+            {
+                "name": "entries",
+                "position": {
+                    "line": 106,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getJarFile",
+                "position": {
+                    "line": 106,
+                    "column": 59
+                }
+            },
+            {
+                "name": "hasMoreElements",
+                "position": {
+                    "line": 107,
+                    "column": 34
+                }
+            },
+            {
+                "name": "nextElement",
+                "position": {
+                    "line": 108,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 109,
+                    "column": 44
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 110,
+                    "column": 30
+                }
+            },
+            {
+                "name": "indexOf",
+                "position": {
+                    "line": 110,
+                    "column": 64
+                }
+            },
+            {
+                "name": "endsWith",
+                "position": {
+                    "line": 110,
+                    "column": 100
+                }
+            },
+            {
+                "name": "create",
+                "position": {
+                    "line": 111,
+                    "column": 39
+                }
+            },
+            {
+                "name": "replaceAll",
+                "position": {
+                    "line": 112,
+                    "column": 50
+                }
+            },
+            {
+                "name": "replaceAll",
+                "position": {
+                    "line": 113,
+                    "column": 49
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 115,
+                    "column": 32
+                }
+            },
+            {
+                "name": "ArrayList<JavaFileObject>",
+                "position": {
+                    "line": 95,
+                    "column": 43
+                }
+            },
+            {
+                "name": "CustomJavaFileObject",
+                "position": {
+                    "line": 115,
+                    "column": 40
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 120,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "processDir",
+        "category": "method_declaration",
+        "class": "PackageInternalsFinder",
+        "signature": "processDir(String packageName, File directory)",
+        "class_signature": "PackageInternalsFinder.processDir(String packageName, File directory)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "packageName"
+            ],
+            [
+                "File",
+                "directory"
+            ]
+        ],
+        "methodBody": "{\n        File[] files = directory.listFiles(item ->\n                item.isFile() && getKind(item.getName()) == JavaFileObject.Kind.CLASS);\n        if (files != null) {\n            return Arrays.stream(files).map(item -> {\n                String className = packageName + \".\" + item.getName()\n                        .replaceAll(CLASS_FILE_EXTENSION + \"$\", \"\");\n                return new CustomJavaFileObject(className, item.toURI());\n            }).collect(Collectors.toList());\n        }\n        return Collections.emptyList();\n    }",
+        "position": {
+            "line": 125,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "listFiles",
+                "position": {
+                    "line": 126,
+                    "column": 34
+                }
+            },
+            {
+                "name": "isFile",
+                "position": {
+                    "line": 127,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getKind",
+                "position": {
+                    "line": 127,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 127,
+                    "column": 47
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 133,
+                    "column": 16
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 129,
+                    "column": 41
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 129,
+                    "column": 27
+                }
+            },
+            {
+                "name": "replaceAll",
+                "position": {
+                    "line": 131,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 130,
+                    "column": 61
+                }
+            },
+            {
+                "name": "toURI",
+                "position": {
+                    "line": 132,
+                    "column": 65
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 133,
+                    "column": 35
+                }
+            },
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 135,
+                    "column": 28
+                }
+            },
+            {
+                "name": "CustomJavaFileObject",
+                "position": {
+                    "line": 132,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "PackageInternalsFinder.getKind(String name)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "decode",
+        "category": "method_declaration",
+        "class": "PackageInternalsFinder",
+        "signature": "decode(String filePath)",
+        "class_signature": "PackageInternalsFinder.decode(String filePath)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "filePath"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            return URLDecoder.decode(filePath, \"utf-8\");\n        } catch (Exception e) {\n            // ignore, return original string\n        }\n\n        return filePath;\n    }",
+        "position": {
+            "line": 138,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "decode",
+                "position": {
+                    "line": 140,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "getKind",
+        "category": "method_declaration",
+        "class": "PackageInternalsFinder",
+        "signature": "getKind(String name)",
+        "class_signature": "PackageInternalsFinder.getKind(String name)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ]
+        ],
+        "methodBody": "{\n        if (name.endsWith(JavaFileObject.Kind.CLASS.extension))\n            return JavaFileObject.Kind.CLASS;\n        else if (name.endsWith(JavaFileObject.Kind.SOURCE.extension))\n            return JavaFileObject.Kind.SOURCE;\n        else if (name.endsWith(JavaFileObject.Kind.HTML.extension))\n            return JavaFileObject.Kind.HTML;\n        else\n            return JavaFileObject.Kind.OTHER;\n    }",
+        "position": {
+            "line": 148,
+            "column": 39
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "endsWith",
+                "position": {
+                    "line": 149,
+                    "column": 18
+                }
+            },
+            {
+                "name": "endsWith",
+                "position": {
+                    "line": 151,
+                    "column": 23
+                }
+            },
+            {
+                "name": "endsWith",
+                "position": {
+                    "line": 153,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "JarFileIndex",
+        "category": "constructor_declaration",
+        "class": "JarFileIndex",
+        "signature": "JarFileIndex(String jarUri, URI uri)",
+        "class_signature": "JarFileIndex.JarFileIndex(String jarUri, URI uri)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "jarUri"
+            ],
+            [
+                "URI",
+                "uri"
+            ]
+        ],
+        "methodBody": "{\n            this.jarUri = jarUri;\n            this.uri = uri;\n            loadIndex();\n        }",
+        "position": {
+            "line": 165,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadIndex",
+                "position": {
+                    "line": 168,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "JarFileIndex.loadIndex()"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "loadIndex",
+        "category": "method_declaration",
+        "class": "JarFileIndex",
+        "signature": "loadIndex()",
+        "class_signature": "JarFileIndex.loadIndex()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            JarURLConnection jarConn = (JarURLConnection) uri.toURL().openConnection();\n            String rootEntryName = jarConn.getEntryName() == null ? \"\" : jarConn.getEntryName();\n            Enumeration<JarEntry> entryEnum = jarConn.getJarFile().entries();\n            while (entryEnum.hasMoreElements()) {\n                JarEntry jarEntry = entryEnum.nextElement();\n                String entryName = jarEntry.getName();\n                if (entryName.startsWith(rootEntryName) && entryName.endsWith(CLASS_FILE_EXTENSION)) {\n                    String className = entryName\n                            .substring(0, entryName.length() - CLASS_FILE_EXTENSION.length())\n                            .replace(rootEntryName, \"\")\n                            .replace(\"/\", \".\");\n                    if (className.startsWith(\".\")) className = className.substring(1);\n                    if (className.equals(\"package-info\")\n                            || className.equals(\"module-info\")\n                            || className.lastIndexOf(\".\") == -1) {\n                        continue;\n                    }\n                    String packageName = className.substring(0, className.lastIndexOf(\".\"));\n                    List<ClassUriWrapper> classes = packages.get(packageName);\n                    if (classes == null) {\n                        classes = new ArrayList<>();\n                        packages.put(packageName, classes);\n                    }\n                    classes.add(new ClassUriWrapper(className, URI.create(jarUri + \"!/\" + entryName)));\n                }\n            }\n        }",
+        "position": {
+            "line": 171,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "openConnection",
+                "position": {
+                    "line": 172,
+                    "column": 71
+                }
+            },
+            {
+                "name": "toURL",
+                "position": {
+                    "line": 172,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getEntryName",
+                "position": {
+                    "line": 173,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getEntryName",
+                "position": {
+                    "line": 173,
+                    "column": 82
+                }
+            },
+            {
+                "name": "entries",
+                "position": {
+                    "line": 174,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getJarFile",
+                "position": {
+                    "line": 174,
+                    "column": 55
+                }
+            },
+            {
+                "name": "hasMoreElements",
+                "position": {
+                    "line": 175,
+                    "column": 30
+                }
+            },
+            {
+                "name": "nextElement",
+                "position": {
+                    "line": 176,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 177,
+                    "column": 45
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 178,
+                    "column": 31
+                }
+            },
+            {
+                "name": "endsWith",
+                "position": {
+                    "line": 178,
+                    "column": 70
+                }
+            },
+            {
+                "name": "replace",
+                "position": {
+                    "line": 182,
+                    "column": 30
+                }
+            },
+            {
+                "name": "replace",
+                "position": {
+                    "line": 181,
+                    "column": 30
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 180,
+                    "column": 30
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 180,
+                    "column": 53
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 180,
+                    "column": 85
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 183,
+                    "column": 35
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 183,
+                    "column": 74
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 184,
+                    "column": 35
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 185,
+                    "column": 42
+                }
+            },
+            {
+                "name": "lastIndexOf",
+                "position": {
+                    "line": 186,
+                    "column": 42
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 189,
+                    "column": 52
+                }
+            },
+            {
+                "name": "lastIndexOf",
+                "position": {
+                    "line": 189,
+                    "column": 75
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 190,
+                    "column": 62
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 193,
+                    "column": 34
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 195,
+                    "column": 29
+                }
+            },
+            {
+                "name": "create",
+                "position": {
+                    "line": 195,
+                    "column": 68
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 192,
+                    "column": 39
+                }
+            },
+            {
+                "name": "ClassUriWrapper",
+                "position": {
+                    "line": 195,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "search",
+        "category": "method_declaration",
+        "class": "JarFileIndex",
+        "signature": "search(String packageName)",
+        "class_signature": "JarFileIndex.search(String packageName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "packageName"
+            ]
+        ],
+        "methodBody": "{\n            if (this.packages.isEmpty()) {\n                return null;\n            }\n            if (this.packages.containsKey(packageName)) {\n                return packages.get(packageName).stream().map(item -> {\n                    return new CustomJavaFileObject(item.getClassName(), item.getUri());\n                }).collect(Collectors.toList());\n            }\n            return Collections.emptyList();\n        }",
+        "position": {
+            "line": 200,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 201,
+                    "column": 31
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 204,
+                    "column": 31
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 207,
+                    "column": 20
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 205,
+                    "column": 59
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 205,
+                    "column": 50
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 205,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getClassName",
+                "position": {
+                    "line": 206,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getUri",
+                "position": {
+                    "line": 206,
+                    "column": 79
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 207,
+                    "column": 39
+                }
+            },
+            {
+                "name": "emptyList",
+                "position": {
+                    "line": 209,
+                    "column": 32
+                }
+            },
+            {
+                "name": "CustomJavaFileObject",
+                "position": {
+                    "line": 206,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    }
+]

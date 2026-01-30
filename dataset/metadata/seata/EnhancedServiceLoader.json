@@ -1,0 +1,2709 @@
+[
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "load(Class<S> service, ClassLoader loader)",
+        "class_signature": "EnhancedServiceLoader.load(Class<S> service, ClassLoader loader)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ]
+        ],
+        "methodBody": "{\n        return InnerEnhancedServiceLoader.getServiceLoader(service).load(loader, true);\n    }",
+        "position": {
+            "line": 62,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 63,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getServiceLoader",
+                "position": {
+                    "line": 63,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.load(ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "load(Class<S> service)",
+        "class_signature": "EnhancedServiceLoader.load(Class<S> service)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ]
+        ],
+        "methodBody": "{\n        return load(service, true);\n    }",
+        "position": {
+            "line": 74,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 75,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "EnhancedServiceLoader.load(Class<S> service, boolean includeCompatible)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "load(Class<S> service, boolean includeCompatible)",
+        "class_signature": "EnhancedServiceLoader.load(Class<S> service, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n        return InnerEnhancedServiceLoader.getServiceLoader(service).load(findClassLoader(), includeCompatible);\n    }",
+        "position": {
+            "line": 87,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 88,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getServiceLoader",
+                "position": {
+                    "line": 88,
+                    "column": 43
+                }
+            },
+            {
+                "name": "findClassLoader",
+                "position": {
+                    "line": 88,
+                    "column": 74
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.load(ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)",
+            "EnhancedServiceLoader.findClassLoader()"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "load(Class<S> service, String activateName)",
+        "class_signature": "EnhancedServiceLoader.load(Class<S> service, String activateName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ],
+            [
+                "String",
+                "activateName"
+            ]
+        ],
+        "methodBody": "{\n        return load(service, activateName, true);\n    }",
+        "position": {
+            "line": 100,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 101,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "EnhancedServiceLoader.load(Class<S> service, String activateName, boolean includeCompatible)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "load(Class<S> service, String activateName, boolean includeCompatible)",
+        "class_signature": "EnhancedServiceLoader.load(Class<S> service, String activateName, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ],
+            [
+                "String",
+                "activateName"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n        return InnerEnhancedServiceLoader.getServiceLoader(service).load(activateName, findClassLoader(), includeCompatible);\n    }",
+        "position": {
+            "line": 114,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 116,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getServiceLoader",
+                "position": {
+                    "line": 116,
+                    "column": 43
+                }
+            },
+            {
+                "name": "findClassLoader",
+                "position": {
+                    "line": 116,
+                    "column": 88
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.load(String activateName, ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)",
+            "EnhancedServiceLoader.findClassLoader()"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "load(Class<S> service, String activateName, ClassLoader loader)",
+        "class_signature": "EnhancedServiceLoader.load(Class<S> service, String activateName, ClassLoader loader)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ],
+            [
+                "String",
+                "activateName"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ]
+        ],
+        "methodBody": "{\n        return InnerEnhancedServiceLoader.getServiceLoader(service).load(activateName, loader, true);\n    }",
+        "position": {
+            "line": 129,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 131,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getServiceLoader",
+                "position": {
+                    "line": 131,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.load(String activateName, ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "load(Class<S> service, String activateName, Object[] args)",
+        "class_signature": "EnhancedServiceLoader.load(Class<S> service, String activateName, Object[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ],
+            [
+                "String",
+                "activateName"
+            ],
+            [
+                "Object[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        return InnerEnhancedServiceLoader.getServiceLoader(service).load(activateName, args, findClassLoader(), true);\n    }",
+        "position": {
+            "line": 144,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 146,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getServiceLoader",
+                "position": {
+                    "line": 146,
+                    "column": 43
+                }
+            },
+            {
+                "name": "findClassLoader",
+                "position": {
+                    "line": 146,
+                    "column": 94
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.load(String activateName, Object[] args, ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)",
+            "EnhancedServiceLoader.findClassLoader()"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "load(Class<S> service, String activateName, Class<?>[] argsType, Object[] args)",
+        "class_signature": "EnhancedServiceLoader.load(Class<S> service, String activateName, Class<?>[] argsType, Object[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ],
+            [
+                "String",
+                "activateName"
+            ],
+            [
+                "Class<?>[]",
+                "argsType"
+            ],
+            [
+                "Object[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        return InnerEnhancedServiceLoader.getServiceLoader(service).load(activateName, argsType, args, findClassLoader(), true);\n    }",
+        "position": {
+            "line": 160,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "load",
+                "position": {
+                    "line": 162,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getServiceLoader",
+                "position": {
+                    "line": 162,
+                    "column": 43
+                }
+            },
+            {
+                "name": "findClassLoader",
+                "position": {
+                    "line": 162,
+                    "column": 104
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.load(String activateName, Class<?>[] argsType, Object[] args, ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)",
+            "EnhancedServiceLoader.findClassLoader()"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "loadAll",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "loadAll(Class<S> service)",
+        "class_signature": "EnhancedServiceLoader.loadAll(Class<S> service)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ]
+        ],
+        "methodBody": "{\n        return InnerEnhancedServiceLoader.getServiceLoader(service).loadAll(findClassLoader());\n    }",
+        "position": {
+            "line": 172,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadAll",
+                "position": {
+                    "line": 173,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getServiceLoader",
+                "position": {
+                    "line": 173,
+                    "column": 43
+                }
+            },
+            {
+                "name": "findClassLoader",
+                "position": {
+                    "line": 173,
+                    "column": 77
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.loadAll(ClassLoader loader)",
+            "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)",
+            "EnhancedServiceLoader.findClassLoader()"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "loadAll",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "loadAll(Class<S> service, Class<?>[] argsType, Object[] args)",
+        "class_signature": "EnhancedServiceLoader.loadAll(Class<S> service, Class<?>[] argsType, Object[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ],
+            [
+                "Class<?>[]",
+                "argsType"
+            ],
+            [
+                "Object[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        return InnerEnhancedServiceLoader.getServiceLoader(service).loadAll(argsType, args, findClassLoader(), true);\n    }",
+        "position": {
+            "line": 185,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadAll",
+                "position": {
+                    "line": 186,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getServiceLoader",
+                "position": {
+                    "line": 186,
+                    "column": 43
+                }
+            },
+            {
+                "name": "findClassLoader",
+                "position": {
+                    "line": 186,
+                    "column": 93
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.loadAll(Class<?>[] argsType, Object[] args, ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)",
+            "EnhancedServiceLoader.findClassLoader()"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "unloadAll",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "unloadAll()",
+        "class_signature": "EnhancedServiceLoader.unloadAll()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        InnerEnhancedServiceLoader.removeAllServiceLoader();\n    }",
+        "position": {
+            "line": 192,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "removeAllServiceLoader",
+                "position": {
+                    "line": 193,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.removeAllServiceLoader()"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "unload",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "unload(Class<S> service)",
+        "class_signature": "EnhancedServiceLoader.unload(Class<S> service)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ]
+        ],
+        "methodBody": "{\n        InnerEnhancedServiceLoader.removeServiceLoader(service);\n    }",
+        "position": {
+            "line": 202,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "removeServiceLoader",
+                "position": {
+                    "line": 203,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.removeServiceLoader(Class<S> type)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "unload",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "unload(Class<S> service, String activateName)",
+        "class_signature": "EnhancedServiceLoader.unload(Class<S> service, String activateName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ],
+            [
+                "String",
+                "activateName"
+            ]
+        ],
+        "methodBody": "{\n        if (activateName == null) {\n            throw new IllegalArgumentException(\"activateName is null\");\n        }\n\n        InnerEnhancedServiceLoader<S> serviceLoader = InnerEnhancedServiceLoader.getServiceLoader(service);\n        doUnload(serviceLoader, activateName);\n    }",
+        "position": {
+            "line": 213,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceLoader",
+                "position": {
+                    "line": 218,
+                    "column": 82
+                }
+            },
+            {
+                "name": "doUnload",
+                "position": {
+                    "line": 219,
+                    "column": 9
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 215,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)",
+            "EnhancedServiceLoader.doUnload(InnerEnhancedServiceLoader<S> serviceLoader, String activateName)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "doUnload",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "doUnload(InnerEnhancedServiceLoader<S> serviceLoader, String activateName)",
+        "class_signature": "EnhancedServiceLoader.doUnload(InnerEnhancedServiceLoader<S> serviceLoader, String activateName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InnerEnhancedServiceLoader<S>",
+                "serviceLoader"
+            ],
+            [
+                "String",
+                "activateName"
+            ]
+        ],
+        "methodBody": "{\n        ConcurrentMap<Class<?>, ExtensionDefinition<S>> classToDefinitionMap = serviceLoader.classToDefinitionMap;\n        List<ExtensionDefinition<S>> extensionDefinitions = new ArrayList<>();\n        for (Map.Entry<Class<?>, ExtensionDefinition<S>> entry : classToDefinitionMap.entrySet()) {\n            String name = entry.getValue().getName();\n            if (null == name) {\n                continue;\n            }\n            if (name.equals(activateName)) {\n                extensionDefinitions.add(entry.getValue());\n                classToDefinitionMap.remove(entry.getKey());\n            }\n        }\n        serviceLoader.nameToDefinitionsMap.remove(activateName.toLowerCase());\n        if (CollectionUtils.isNotEmpty(extensionDefinitions)) {\n            for (ExtensionDefinition<S> definition : extensionDefinitions) {\n                serviceLoader.definitionToInstanceMap.remove(definition);\n\n            }\n        }\n    }",
+        "position": {
+            "line": 222,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 225,
+                    "column": 87
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 226,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 226,
+                    "column": 33
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 230,
+                    "column": 22
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 231,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 231,
+                    "column": 48
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 232,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 232,
+                    "column": 51
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 235,
+                    "column": 44
+                }
+            },
+            {
+                "name": "toLowerCase",
+                "position": {
+                    "line": 235,
+                    "column": 64
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 236,
+                    "column": 29
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 238,
+                    "column": 55
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 224,
+                    "column": 65
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "getAllExtensionClass",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "getAllExtensionClass(Class<S> service)",
+        "class_signature": "EnhancedServiceLoader.getAllExtensionClass(Class<S> service)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ]
+        ],
+        "methodBody": "{\n        return InnerEnhancedServiceLoader.getServiceLoader(service).getAllExtensionClass(findClassLoader(), true);\n    }",
+        "position": {
+            "line": 252,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllExtensionClass",
+                "position": {
+                    "line": 253,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getServiceLoader",
+                "position": {
+                    "line": 253,
+                    "column": 43
+                }
+            },
+            {
+                "name": "findClassLoader",
+                "position": {
+                    "line": 253,
+                    "column": 90
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.getAllExtensionClass(ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)",
+            "EnhancedServiceLoader.findClassLoader()"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "getAllExtensionClass",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "getAllExtensionClass(Class<S> service, ClassLoader loader)",
+        "class_signature": "EnhancedServiceLoader.getAllExtensionClass(Class<S> service, ClassLoader loader)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "service"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ]
+        ],
+        "methodBody": "{\n        return InnerEnhancedServiceLoader.getServiceLoader(service).getAllExtensionClass(loader, true);\n    }",
+        "position": {
+            "line": 264,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllExtensionClass",
+                "position": {
+                    "line": 265,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getServiceLoader",
+                "position": {
+                    "line": 265,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.getAllExtensionClass(ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "findClassLoader",
+        "category": "method_declaration",
+        "class": "EnhancedServiceLoader",
+        "signature": "findClassLoader()",
+        "class_signature": "EnhancedServiceLoader.findClassLoader()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return EnhancedServiceLoader.class.getClassLoader();\n    }",
+        "position": {
+            "line": 273,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 274,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 24
+    },
+    {
+        "name": "InnerEnhancedServiceLoader",
+        "category": "constructor_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "InnerEnhancedServiceLoader(Class<S> type)",
+        "class_signature": "InnerEnhancedServiceLoader.InnerEnhancedServiceLoader(Class<S> type)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "type"
+            ]
+        ],
+        "methodBody": "{\n            this.type = type;\n        }",
+        "position": {
+            "line": 293,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 28
+    },
+    {
+        "name": "getServiceLoader",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "getServiceLoader(Class<S> type)",
+        "class_signature": "InnerEnhancedServiceLoader.getServiceLoader(Class<S> type)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "type"
+            ]
+        ],
+        "methodBody": "{\n            if (type == null) {\n                throw new IllegalArgumentException(\"Enhanced Service type is null\");\n            }\n            return (InnerEnhancedServiceLoader<S>)CollectionUtils.computeIfAbsent(SERVICE_LOADERS, type,\n                key -> new InnerEnhancedServiceLoader<>(type));\n        }",
+        "position": {
+            "line": 306,
+            "column": 58
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 310,
+                    "column": 67
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 308,
+                    "column": 27
+                }
+            },
+            {
+                "name": "InnerEnhancedServiceLoader<>",
+                "position": {
+                    "line": 311,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.InnerEnhancedServiceLoader(Class<S> type)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "removeServiceLoader",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "removeServiceLoader(Class<S> type)",
+        "class_signature": "InnerEnhancedServiceLoader.removeServiceLoader(Class<S> type)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "type"
+            ]
+        ],
+        "methodBody": "{\n            if (type == null) {\n                throw new IllegalArgumentException(\"Enhanced Service type is null\");\n            }\n            return (InnerEnhancedServiceLoader<S>) SERVICE_LOADERS.remove(type);\n        }",
+        "position": {
+            "line": 315,
+            "column": 58
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "remove",
+                "position": {
+                    "line": 319,
+                    "column": 68
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 317,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 19
+    },
+    {
+        "name": "removeAllServiceLoader",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "removeAllServiceLoader()",
+        "class_signature": "InnerEnhancedServiceLoader.removeAllServiceLoader()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            SERVICE_LOADERS.clear();\n        }",
+        "position": {
+            "line": 322,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "clear",
+                "position": {
+                    "line": 323,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "load(ClassLoader loader, boolean includeCompatible)",
+        "class_signature": "InnerEnhancedServiceLoader.load(ClassLoader loader, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n            return loadExtension(loader, null, null, includeCompatible);\n        }",
+        "position": {
+            "line": 333,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadExtension",
+                "position": {
+                    "line": 334,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.loadExtension(ClassLoader loader, Class<?>[] argTypes, Object[] args, boolean includeCompatible)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "load(String activateName, ClassLoader loader, boolean includeCompatible)",
+        "class_signature": "InnerEnhancedServiceLoader.load(String activateName, ClassLoader loader, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "activateName"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n            return loadExtension(activateName, loader, null, null, includeCompatible);\n        }",
+        "position": {
+            "line": 345,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadExtension",
+                "position": {
+                    "line": 347,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.loadExtension(String activateName, ClassLoader loader, Class[] argTypes, Object[] args, boolean includeCompatible)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "load(String activateName, Object[] args, ClassLoader loader, boolean includeCompatible)",
+        "class_signature": "InnerEnhancedServiceLoader.load(String activateName, Object[] args, ClassLoader loader, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "activateName"
+            ],
+            [
+                "Object[]",
+                "args"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n            Class<?>[] argsType = null;\n            if (args != null && args.length > 0) {\n                argsType = new Class[args.length];\n                for (int i = 0; i < args.length; i++) {\n                    argsType[i] = args[i].getClass();\n                }\n            }\n            return loadExtension(activateName, loader, argsType, args, includeCompatible);\n        }",
+        "position": {
+            "line": 359,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 365,
+                    "column": 43
+                }
+            },
+            {
+                "name": "loadExtension",
+                "position": {
+                    "line": 368,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.loadExtension(String activateName, ClassLoader loader, Class[] argTypes, Object[] args, boolean includeCompatible)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "load(String activateName, Class<?>[] argsType, Object[] args, ClassLoader loader, boolean includeCompatible)",
+        "class_signature": "InnerEnhancedServiceLoader.load(String activateName, Class<?>[] argsType, Object[] args, ClassLoader loader, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "activateName"
+            ],
+            [
+                "Class<?>[]",
+                "argsType"
+            ],
+            [
+                "Object[]",
+                "args"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n            return loadExtension(activateName, loader, argsType, args, includeCompatible);\n        }",
+        "position": {
+            "line": 381,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadExtension",
+                "position": {
+                    "line": 383,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.loadExtension(String activateName, ClassLoader loader, Class[] argTypes, Object[] args, boolean includeCompatible)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "loadAll",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "loadAll(ClassLoader loader)",
+        "class_signature": "InnerEnhancedServiceLoader.loadAll(ClassLoader loader)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ClassLoader",
+                "loader"
+            ]
+        ],
+        "methodBody": "{\n            return loadAll(null, null, loader, true);\n        }",
+        "position": {
+            "line": 392,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadAll",
+                "position": {
+                    "line": 393,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.loadAll(Class<?>[] argsType, Object[] args, ClassLoader loader, boolean includeCompatible)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "loadAll",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "loadAll(Class<?>[] argsType, Object[] args, ClassLoader loader, boolean includeCompatible)",
+        "class_signature": "InnerEnhancedServiceLoader.loadAll(Class<?>[] argsType, Object[] args, ClassLoader loader, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>[]",
+                "argsType"
+            ],
+            [
+                "Object[]",
+                "args"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n            List<S> allInstances = new ArrayList<>();\n            List<Class<S>> allClazzs = getAllExtensionClass(loader, includeCompatible);\n            if (CollectionUtils.isEmpty(allClazzs)) {\n                return allInstances;\n            }\n            try {\n                for (Class<S> clazz : allClazzs) {\n                    ExtensionDefinition<S> definition = classToDefinitionMap.get(clazz);\n                    allInstances.add(getExtensionInstance(definition, loader, argsType, args));\n                }\n            } catch (Throwable t) {\n                throw new EnhancedServiceNotFoundException(t);\n            }\n            return allInstances;\n        }",
+        "position": {
+            "line": 403,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAllExtensionClass",
+                "position": {
+                    "line": 405,
+                    "column": 40
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 406,
+                    "column": 33
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 411,
+                    "column": 78
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 412,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getExtensionInstance",
+                "position": {
+                    "line": 412,
+                    "column": 38
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 404,
+                    "column": 40
+                }
+            },
+            {
+                "name": "EnhancedServiceNotFoundException",
+                "position": {
+                    "line": 415,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.getAllExtensionClass(ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getExtensionInstance(ExtensionDefinition<S> definition, ClassLoader loader, Class<?>[] argTypes, Object[] args)"
+        ],
+        "priority": 25
+    },
+    {
+        "name": "getAllExtensionClass",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "getAllExtensionClass(ClassLoader loader, boolean includeCompatible)",
+        "class_signature": "InnerEnhancedServiceLoader.getAllExtensionClass(ClassLoader loader, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n            return loadAllExtensionClass(loader, includeCompatible);\n        }",
+        "position": {
+            "line": 426,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadAllExtensionClass",
+                "position": {
+                    "line": 427,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.loadAllExtensionClass(ClassLoader loader, boolean includeCompatible)"
+        ],
+        "priority": 29
+    },
+    {
+        "name": "loadExtension",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "loadExtension(ClassLoader loader, Class<?>[] argTypes, Object[] args, boolean includeCompatible)",
+        "class_signature": "InnerEnhancedServiceLoader.loadExtension(ClassLoader loader, Class<?>[] argTypes, Object[] args, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "Class<?>[]",
+                "argTypes"
+            ],
+            [
+                "Object[]",
+                "args"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n            try {\n                loadAllExtensionClass(loader, includeCompatible);\n                ExtensionDefinition<S> defaultExtensionDefinition = getDefaultExtensionDefinition();\n                return getExtensionInstance(defaultExtensionDefinition, loader, argTypes, args);\n            } catch (EnhancedServiceNotFoundException e) {\n                throw e;\n            } catch (Throwable e) {\n                throw new EnhancedServiceNotFoundException(\n                    \"not found service provider for : \" + type.getName()\n                        + \" caused by \" + ExceptionUtils.getFullStackTrace(e));\n            }\n        }",
+        "position": {
+            "line": 430,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadAllExtensionClass",
+                "position": {
+                    "line": 432,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getDefaultExtensionDefinition",
+                "position": {
+                    "line": 433,
+                    "column": 69
+                }
+            },
+            {
+                "name": "getExtensionInstance",
+                "position": {
+                    "line": 434,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 439,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getFullStackTrace",
+                "position": {
+                    "line": 440,
+                    "column": 58
+                }
+            },
+            {
+                "name": "EnhancedServiceNotFoundException",
+                "position": {
+                    "line": 438,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.loadAllExtensionClass(ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getDefaultExtensionDefinition()",
+            "InnerEnhancedServiceLoader.getExtensionInstance(ExtensionDefinition<S> definition, ClassLoader loader, Class<?>[] argTypes, Object[] args)"
+        ],
+        "priority": 26
+    },
+    {
+        "name": "loadExtension",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "loadExtension(String activateName, ClassLoader loader, Class[] argTypes, Object[] args, boolean includeCompatible)",
+        "class_signature": "InnerEnhancedServiceLoader.loadExtension(String activateName, ClassLoader loader, Class[] argTypes, Object[] args, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "activateName"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "Class[]",
+                "argTypes"
+            ],
+            [
+                "Object[]",
+                "args"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n            if (StringUtils.isEmpty(activateName)) {\n                throw new IllegalArgumentException(\"the name of service provider for [\" + type.getName() + \"] name is null\");\n            }\n            try {\n                loadAllExtensionClass(loader, includeCompatible);\n                ExtensionDefinition<S> cachedExtensionDefinition = getCachedExtensionDefinition(activateName);\n                return getExtensionInstance(cachedExtensionDefinition, loader, argTypes, args);\n            } catch (Throwable e) {\n                if (e instanceof EnhancedServiceNotFoundException) {\n                    throw (EnhancedServiceNotFoundException)e;\n                } else {\n                    throw new EnhancedServiceNotFoundException(\n                            \"not found service provider for : \" + type.getName() + \" caused by \" + ExceptionUtils\n                                    .getFullStackTrace(e));\n                }\n            }\n        }",
+        "position": {
+            "line": 445,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 447,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 448,
+                    "column": 96
+                }
+            },
+            {
+                "name": "loadAllExtensionClass",
+                "position": {
+                    "line": 451,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getCachedExtensionDefinition",
+                "position": {
+                    "line": 452,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getExtensionInstance",
+                "position": {
+                    "line": 453,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 459,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getFullStackTrace",
+                "position": {
+                    "line": 460,
+                    "column": 38
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 448,
+                    "column": 27
+                }
+            },
+            {
+                "name": "EnhancedServiceNotFoundException",
+                "position": {
+                    "line": 458,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.loadAllExtensionClass(ClassLoader loader, boolean includeCompatible)",
+            "InnerEnhancedServiceLoader.getCachedExtensionDefinition(String activateName)",
+            "InnerEnhancedServiceLoader.getExtensionInstance(ExtensionDefinition<S> definition, ClassLoader loader, Class<?>[] argTypes, Object[] args)"
+        ],
+        "priority": 27
+    },
+    {
+        "name": "getExtensionInstance",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "getExtensionInstance(ExtensionDefinition<S> definition, ClassLoader loader, Class<?>[] argTypes, Object[] args)",
+        "class_signature": "InnerEnhancedServiceLoader.getExtensionInstance(ExtensionDefinition<S> definition, ClassLoader loader, Class<?>[] argTypes, Object[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ExtensionDefinition<S>",
+                "definition"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "Class<?>[]",
+                "argTypes"
+            ],
+            [
+                "Object[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n            if (definition == null) {\n                throw new EnhancedServiceNotFoundException(\"not found service provider for : \" + type.getName());\n            }\n            if (Scope.SINGLETON.equals(definition.getScope())) {\n                Holder<Object> holder = CollectionUtils.computeIfAbsent(definitionToInstanceMap, definition,\n                    key -> new Holder<>());\n                Object instance = holder.get();\n                if (instance == null) {\n                    synchronized (holder) {\n                        instance = holder.get();\n                        if (instance == null) {\n                            instance = createNewExtension(definition, loader, argTypes, args);\n                            holder.set(instance);\n                        }\n                    }\n                }\n                return (S)instance;\n            } else {\n                return createNewExtension(definition, loader, argTypes, args);\n            }\n        }",
+        "position": {
+            "line": 465,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getName",
+                "position": {
+                    "line": 468,
+                    "column": 103
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 470,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getScope",
+                "position": {
+                    "line": 470,
+                    "column": 51
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 471,
+                    "column": 57
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 473,
+                    "column": 42
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 476,
+                    "column": 43
+                }
+            },
+            {
+                "name": "createNewExtension",
+                "position": {
+                    "line": 478,
+                    "column": 40
+                }
+            },
+            {
+                "name": "set",
+                "position": {
+                    "line": 479,
+                    "column": 36
+                }
+            },
+            {
+                "name": "createNewExtension",
+                "position": {
+                    "line": 485,
+                    "column": 24
+                }
+            },
+            {
+                "name": "EnhancedServiceNotFoundException",
+                "position": {
+                    "line": 468,
+                    "column": 27
+                }
+            },
+            {
+                "name": "Holder<>",
+                "position": {
+                    "line": 472,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "Holder.get()",
+            "Holder.get()",
+            "InnerEnhancedServiceLoader.createNewExtension(ExtensionDefinition<S> definition, ClassLoader loader, Class<?>[] argTypes, Object[] args)",
+            "Holder.set(T value)",
+            "InnerEnhancedServiceLoader.createNewExtension(ExtensionDefinition<S> definition, ClassLoader loader, Class<?>[] argTypes, Object[] args)"
+        ],
+        "priority": 32
+    },
+    {
+        "name": "createNewExtension",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "createNewExtension(ExtensionDefinition<S> definition, ClassLoader loader, Class<?>[] argTypes, Object[] args)",
+        "class_signature": "InnerEnhancedServiceLoader.createNewExtension(ExtensionDefinition<S> definition, ClassLoader loader, Class<?>[] argTypes, Object[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ExtensionDefinition<S>",
+                "definition"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "Class<?>[]",
+                "argTypes"
+            ],
+            [
+                "Object[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n            Class<S> clazz = definition.getServiceClass();\n            try {\n                return initInstance(clazz, argTypes, args);\n            } catch (Throwable t) {\n                throw new IllegalStateException(\"Extension instance(definition: \" + definition + \", class: \" +\n                        type + \")  could not be instantiated: \" + t.getMessage(), t);\n            }\n        }",
+        "position": {
+            "line": 489,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceClass",
+                "position": {
+                    "line": 490,
+                    "column": 41
+                }
+            },
+            {
+                "name": "initInstance",
+                "position": {
+                    "line": 492,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 495,
+                    "column": 69
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 494,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.initInstance(Class<S> implClazz, Class<?>[] argTypes, Object[] args)"
+        ],
+        "priority": 34
+    },
+    {
+        "name": "loadAllExtensionClass",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "loadAllExtensionClass(ClassLoader loader, boolean includeCompatible)",
+        "class_signature": "InnerEnhancedServiceLoader.loadAllExtensionClass(ClassLoader loader, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n            List<ExtensionDefinition<S>> definitions = definitionsHolder.get();\n            if (definitions == null) {\n                synchronized (definitionsHolder) {\n                    definitions = definitionsHolder.get();\n                    if (definitions == null) {\n                        definitions = findAllExtensionDefinition(loader, includeCompatible);\n                        definitionsHolder.set(definitions);\n                    }\n                }\n            }\n            return definitions.stream().map(ExtensionDefinition::getServiceClass).collect(Collectors.toList());\n        }",
+        "position": {
+            "line": 499,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 500,
+                    "column": 74
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 503,
+                    "column": 53
+                }
+            },
+            {
+                "name": "findAllExtensionDefinition",
+                "position": {
+                    "line": 505,
+                    "column": 39
+                }
+            },
+            {
+                "name": "set",
+                "position": {
+                    "line": 506,
+                    "column": 43
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 510,
+                    "column": 83
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 510,
+                    "column": 41
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 510,
+                    "column": 32
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 510,
+                    "column": 102
+                }
+            }
+        ],
+        "calledMethods": [
+            "Holder.get()",
+            "Holder.get()",
+            "InnerEnhancedServiceLoader.findAllExtensionDefinition(ClassLoader loader, boolean includeCompatible)",
+            "Holder.set(T value)"
+        ],
+        "priority": 33
+    },
+    {
+        "name": "findAllExtensionDefinition",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "findAllExtensionDefinition(ClassLoader loader, boolean includeCompatible)",
+        "class_signature": "InnerEnhancedServiceLoader.findAllExtensionDefinition(ClassLoader loader, boolean includeCompatible)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "boolean",
+                "includeCompatible"
+            ]
+        ],
+        "methodBody": "{\n            List<ExtensionDefinition<S>> extensionDefinitions = new ArrayList<>();\n            try {\n                loadFile(SERVICES_DIRECTORY, type, loader, extensionDefinitions);\n                loadFile(SEATA_DIRECTORY, type, loader, extensionDefinitions);\n\n                if (includeCompatible) {\n                    @SuppressWarnings(\"rawtypes\")\n                    Class compatibleService = getCompatibleService(type);\n                    if (compatibleService != null) {\n                        if (type.isAssignableFrom(compatibleService)) {\n                            LOGGER.info(\"Load compatible class {}\", compatibleService.getName());\n                            loadFile(SERVICES_DIRECTORY, compatibleService, loader, extensionDefinitions);\n                            loadFile(SEATA_DIRECTORY, compatibleService, loader, extensionDefinitions);\n                        } else {\n                            LOGGER.info(\"Ignore load compatible class {}, because is not assignable from origin type {}\", compatibleService.getName(), type.getName());\n                        }\n                    }\n                }\n\n            } catch (IOException e) {\n                throw new EnhancedServiceNotFoundException(e);\n            }\n\n            //After loaded all the extensions,sort the caches by order\n            if (!nameToDefinitionsMap.isEmpty()) {\n                for (List<ExtensionDefinition<S>> definitions : nameToDefinitionsMap.values()) {\n                    definitions.sort((def1, def2) -> {\n                        int o1 = def1.getOrder();\n                        int o2 = def2.getOrder();\n                        return Integer.compare(o1, o2);\n                    });\n                }\n            }\n\n            if (!extensionDefinitions.isEmpty()) {\n                extensionDefinitions.sort((def1, def2) -> {\n                    int o1 = def1.getOrder();\n                    int o2 = def2.getOrder();\n                    return Integer.compare(o1, o2);\n                });\n            }\n\n            return extensionDefinitions;\n        }",
+        "position": {
+            "line": 513,
+            "column": 46
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadFile",
+                "position": {
+                    "line": 516,
+                    "column": 17
+                }
+            },
+            {
+                "name": "loadFile",
+                "position": {
+                    "line": 517,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getCompatibleService",
+                "position": {
+                    "line": 521,
+                    "column": 47
+                }
+            },
+            {
+                "name": "isAssignableFrom",
+                "position": {
+                    "line": 523,
+                    "column": 34
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 524,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 524,
+                    "column": 87
+                }
+            },
+            {
+                "name": "loadFile",
+                "position": {
+                    "line": 525,
+                    "column": 29
+                }
+            },
+            {
+                "name": "loadFile",
+                "position": {
+                    "line": 526,
+                    "column": 29
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 528,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 528,
+                    "column": 141
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 528,
+                    "column": 157
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 538,
+                    "column": 39
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 539,
+                    "column": 86
+                }
+            },
+            {
+                "name": "sort",
+                "position": {
+                    "line": 540,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getOrder",
+                "position": {
+                    "line": 541,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getOrder",
+                "position": {
+                    "line": 542,
+                    "column": 39
+                }
+            },
+            {
+                "name": "compare",
+                "position": {
+                    "line": 543,
+                    "column": 40
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 548,
+                    "column": 39
+                }
+            },
+            {
+                "name": "sort",
+                "position": {
+                    "line": 549,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getOrder",
+                "position": {
+                    "line": 550,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getOrder",
+                "position": {
+                    "line": 551,
+                    "column": 35
+                }
+            },
+            {
+                "name": "compare",
+                "position": {
+                    "line": 552,
+                    "column": 36
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 514,
+                    "column": 69
+                }
+            },
+            {
+                "name": "EnhancedServiceNotFoundException",
+                "position": {
+                    "line": 534,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.loadFile(String dir, Class type, ClassLoader loader, List<ExtensionDefinition<S>> extensions)",
+            "InnerEnhancedServiceLoader.loadFile(String dir, Class type, ClassLoader loader, List<ExtensionDefinition<S>> extensions)",
+            "InnerEnhancedServiceLoader.getCompatibleService(Class originType)",
+            "InnerEnhancedServiceLoader.loadFile(String dir, Class type, ClassLoader loader, List<ExtensionDefinition<S>> extensions)",
+            "InnerEnhancedServiceLoader.loadFile(String dir, Class type, ClassLoader loader, List<ExtensionDefinition<S>> extensions)"
+        ],
+        "priority": 36
+    },
+    {
+        "name": "getCompatibleService",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "getCompatibleService(Class originType)",
+        "class_signature": "InnerEnhancedServiceLoader.getCompatibleService(Class originType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class",
+                "originType"
+            ]
+        ],
+        "methodBody": "{\n            String ioSeataType = originType.getName().replace(APACHE_SEATA_PACKAGE_NAME, IO_SEATA_PACKAGE_NAME);\n            try {\n                return Class.forName(ioSeataType);\n            } catch (ClassNotFoundException e) {\n                return null;\n            }\n        }",
+        "position": {
+            "line": 559,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "replace",
+                "position": {
+                    "line": 560,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 560,
+                    "column": 45
+                }
+            },
+            {
+                "name": "forName",
+                "position": {
+                    "line": 562,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 40
+    },
+    {
+        "name": "loadFile",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "loadFile(String dir, Class type, ClassLoader loader, List<ExtensionDefinition<S>> extensions)",
+        "class_signature": "InnerEnhancedServiceLoader.loadFile(String dir, Class type, ClassLoader loader, List<ExtensionDefinition<S>> extensions)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "dir"
+            ],
+            [
+                "Class",
+                "type"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ],
+            [
+                "List<ExtensionDefinition<S>>",
+                "extensions"
+            ]
+        ],
+        "methodBody": "{\n            String fileName = dir + type.getName();\n            Enumeration<java.net.URL> urls;\n            if (loader != null) {\n                urls = loader.getResources(fileName);\n            } else {\n                urls = ClassLoader.getSystemResources(fileName);\n            }\n            if (urls != null) {\n                boolean hasServiceFile = false;\n                boolean hasClasses = false;\n                while (urls.hasMoreElements()) {\n                    hasServiceFile = true;\n                    java.net.URL url = urls.nextElement();\n                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), Constants.DEFAULT_CHARSET))) {\n                        String line;\n                        while ((line = reader.readLine()) != null) {\n                            final int ci = line.indexOf('#');\n                            if (ci >= 0) {\n                                line = line.substring(0, ci);\n                            }\n                            line = line.trim();\n                            if (line.length() > 0) {\n                                hasClasses = true;\n                                try {\n                                    ExtensionDefinition<S> extensionDefinition = getUnloadedExtensionDefinition(line, loader);\n                                    if (extensionDefinition == null) {\n                                        if (LOGGER.isDebugEnabled()) {\n                                            LOGGER.debug(\"The same extension {} has already been loaded, skipped\", line);\n                                        }\n                                        continue;\n                                    }\n                                    extensions.add(extensionDefinition);\n                                } catch (LinkageError | ClassNotFoundException e) {\n                                    LOGGER.warn(\"Load [{}] class fail: {}\", line, e.getMessage());\n                                } catch (ClassCastException e) {\n                                    LOGGER.error(\"Load [{}] class fail, please make sure the extension\" +\n                                            \" config in {} implements {}.\", line, fileName, type.getName());\n                                }\n                            }\n                        }\n                    } catch (Throwable e) {\n                        LOGGER.warn(\"load class instance error:\", e);\n                    }\n                }\n\n                if (LOGGER.isDebugEnabled()) {\n                    if (!hasServiceFile) {\n                        LOGGER.warn(\"Load [{}] class fail: no service files found in '{}'.\", type.getName(), dir);\n                    } else if (!hasClasses) {\n                        LOGGER.warn(\"Load [{}] class fail: the service files in '{}' is all empty.\", type.getName(), dir);\n                    }\n                }\n            } else {\n                if (LOGGER.isDebugEnabled()) {\n                    LOGGER.warn(\"Load [{}] class fail: no urls found in '{}'.\", type.getName(), dir);\n                }\n            }\n        }",
+        "position": {
+            "line": 569,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getName",
+                "position": {
+                    "line": 571,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getResources",
+                "position": {
+                    "line": 574,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getSystemResources",
+                "position": {
+                    "line": 576,
+                    "column": 36
+                }
+            },
+            {
+                "name": "hasMoreElements",
+                "position": {
+                    "line": 581,
+                    "column": 29
+                }
+            },
+            {
+                "name": "nextElement",
+                "position": {
+                    "line": 583,
+                    "column": 45
+                }
+            },
+            {
+                "name": "openStream",
+                "position": {
+                    "line": 584,
+                    "column": 95
+                }
+            },
+            {
+                "name": "readLine",
+                "position": {
+                    "line": 586,
+                    "column": 47
+                }
+            },
+            {
+                "name": "indexOf",
+                "position": {
+                    "line": 587,
+                    "column": 49
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 589,
+                    "column": 45
+                }
+            },
+            {
+                "name": "trim",
+                "position": {
+                    "line": 591,
+                    "column": 41
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 592,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getUnloadedExtensionDefinition",
+                "position": {
+                    "line": 595,
+                    "column": 82
+                }
+            },
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 597,
+                    "column": 52
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 598,
+                    "column": 52
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 602,
+                    "column": 48
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 604,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 604,
+                    "column": 85
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 606,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 607,
+                    "column": 98
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 612,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 616,
+                    "column": 28
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 618,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 618,
+                    "column": 99
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 620,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 620,
+                    "column": 107
+                }
+            },
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 624,
+                    "column": 28
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 625,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 625,
+                    "column": 86
+                }
+            },
+            {
+                "name": "BufferedReader",
+                "position": {
+                    "line": 584,
+                    "column": 54
+                }
+            },
+            {
+                "name": "InputStreamReader",
+                "position": {
+                    "line": 584,
+                    "column": 73
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.getUnloadedExtensionDefinition(String className, ClassLoader loader)"
+        ],
+        "priority": 39
+    },
+    {
+        "name": "getUnloadedExtensionDefinition",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "getUnloadedExtensionDefinition(String className, ClassLoader loader)",
+        "class_signature": "InnerEnhancedServiceLoader.getUnloadedExtensionDefinition(String className, ClassLoader loader)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "className"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ]
+        ],
+        "methodBody": "{\n            //Check whether the definition has been loaded\n            if (!isDefinitionContainsClazz(className, loader)) {\n                Class<?> clazz = Class.forName(className, true, loader);\n                if (!type.isAssignableFrom(clazz)) {\n                    LOGGER.error(\"can't cast {} to {}\", clazz.getName(), type.getName());\n                    throw new ClassCastException();\n                }\n                Class<S> enhancedServiceClass = (Class<S>) clazz;\n                String serviceName = null;\n                int priority = 0;\n                Scope scope = Scope.SINGLETON;\n                LoadLevel loadLevel = clazz.getAnnotation(LoadLevel.class);\n                if (loadLevel != null) {\n                    serviceName = loadLevel.name();\n                    priority = loadLevel.order();\n                    scope = loadLevel.scope();\n                }\n                ExtensionDefinition<S> result = new ExtensionDefinition<>(serviceName, priority, scope, enhancedServiceClass);\n                classToDefinitionMap.put(clazz, result);\n                if (serviceName != null) {\n                    CollectionUtils.computeIfAbsent(nameToDefinitionsMap, serviceName.toLowerCase(), e -> new ArrayList<>())\n                            .add(result);\n                }\n                return result;\n            }\n            return null;\n        }",
+        "position": {
+            "line": 631,
+            "column": 40
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isDefinitionContainsClazz",
+                "position": {
+                    "line": 634,
+                    "column": 18
+                }
+            },
+            {
+                "name": "forName",
+                "position": {
+                    "line": 635,
+                    "column": 40
+                }
+            },
+            {
+                "name": "isAssignableFrom",
+                "position": {
+                    "line": 636,
+                    "column": 27
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 637,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 637,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 637,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getAnnotation",
+                "position": {
+                    "line": 644,
+                    "column": 45
+                }
+            },
+            {
+                "name": "name",
+                "position": {
+                    "line": 646,
+                    "column": 45
+                }
+            },
+            {
+                "name": "order",
+                "position": {
+                    "line": 647,
+                    "column": 42
+                }
+            },
+            {
+                "name": "scope",
+                "position": {
+                    "line": 648,
+                    "column": 39
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 651,
+                    "column": 38
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 654,
+                    "column": 30
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 653,
+                    "column": 37
+                }
+            },
+            {
+                "name": "toLowerCase",
+                "position": {
+                    "line": 653,
+                    "column": 87
+                }
+            },
+            {
+                "name": "ClassCastException",
+                "position": {
+                    "line": 638,
+                    "column": 31
+                }
+            },
+            {
+                "name": "ExtensionDefinition<>",
+                "position": {
+                    "line": 650,
+                    "column": 53
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 653,
+                    "column": 111
+                }
+            }
+        ],
+        "calledMethods": [
+            "InnerEnhancedServiceLoader.isDefinitionContainsClazz(String className, ClassLoader loader)"
+        ],
+        "priority": 41
+    },
+    {
+        "name": "isDefinitionContainsClazz",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "isDefinitionContainsClazz(String className, ClassLoader loader)",
+        "class_signature": "InnerEnhancedServiceLoader.isDefinitionContainsClazz(String className, ClassLoader loader)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "className"
+            ],
+            [
+                "ClassLoader",
+                "loader"
+            ]
+        ],
+        "methodBody": "{\n            for (Map.Entry<Class<?>, ExtensionDefinition<S>> entry : classToDefinitionMap.entrySet()) {\n                if (!entry.getKey().getName().equals(className)) {\n                    continue;\n                }\n                if (Objects.equals(entry.getValue().getServiceClass().getClassLoader(), loader)) {\n                    return true;\n                }\n            }\n            return false;\n        }",
+        "position": {
+            "line": 661,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 662,
+                    "column": 91
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 663,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 663,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 663,
+                    "column": 28
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 666,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 666,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getServiceClass",
+                "position": {
+                    "line": 666,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 666,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 42
+    },
+    {
+        "name": "getDefaultExtensionDefinition",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "getDefaultExtensionDefinition()",
+        "class_signature": "InnerEnhancedServiceLoader.getDefaultExtensionDefinition()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            List<ExtensionDefinition<S>> currentDefinitions = definitionsHolder.get();\n            return CollectionUtils.getLast(currentDefinitions);\n        }",
+        "position": {
+            "line": 673,
+            "column": 40
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 674,
+                    "column": 81
+                }
+            },
+            {
+                "name": "getLast",
+                "position": {
+                    "line": 675,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "Holder.get()"
+        ],
+        "priority": 30
+    },
+    {
+        "name": "getCachedExtensionDefinition",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "getCachedExtensionDefinition(String activateName)",
+        "class_signature": "InnerEnhancedServiceLoader.getCachedExtensionDefinition(String activateName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "activateName"
+            ]
+        ],
+        "methodBody": "{\n            List<ExtensionDefinition<S>> definitions = nameToDefinitionsMap.get(activateName.toLowerCase());\n            return CollectionUtils.getLast(definitions);\n        }",
+        "position": {
+            "line": 678,
+            "column": 40
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 679,
+                    "column": 77
+                }
+            },
+            {
+                "name": "toLowerCase",
+                "position": {
+                    "line": 679,
+                    "column": 94
+                }
+            },
+            {
+                "name": "getLast",
+                "position": {
+                    "line": 680,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 31
+    },
+    {
+        "name": "initInstance",
+        "category": "method_declaration",
+        "class": "InnerEnhancedServiceLoader",
+        "signature": "initInstance(Class<S> implClazz, Class<?>[] argTypes, Object[] args)",
+        "class_signature": "InnerEnhancedServiceLoader.initInstance(Class<S> implClazz, Class<?>[] argTypes, Object[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<S>",
+                "implClazz"
+            ],
+            [
+                "Class<?>[]",
+                "argTypes"
+            ],
+            [
+                "Object[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n            S s = null;\n            if (argTypes != null && args != null) {\n                // Constructor with arguments\n                Constructor<S> constructor = implClazz.getDeclaredConstructor(argTypes);\n                s = type.cast(constructor.newInstance(args));\n            } else {\n                // default Constructor\n                s = type.cast(implClazz.newInstance());\n            }\n            if (s instanceof Initialize) {\n                ((Initialize)s).init();\n            }\n            return s;\n        }",
+        "position": {
+            "line": 695,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDeclaredConstructor",
+                "position": {
+                    "line": 700,
+                    "column": 56
+                }
+            },
+            {
+                "name": "cast",
+                "position": {
+                    "line": 701,
+                    "column": 26
+                }
+            },
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 701,
+                    "column": 43
+                }
+            },
+            {
+                "name": "cast",
+                "position": {
+                    "line": 704,
+                    "column": 26
+                }
+            },
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 704,
+                    "column": 41
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 707,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 38
+    },
+    {
+        "name": "set",
+        "category": "method_declaration",
+        "class": "Holder",
+        "signature": "set(T value)",
+        "class_signature": "Holder.set(T value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "T",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n                this.value = value;\n            }",
+        "position": {
+            "line": 719,
+            "column": 26
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 37
+    },
+    {
+        "name": "get",
+        "category": "method_declaration",
+        "class": "Holder",
+        "signature": "get()",
+        "class_signature": "Holder.get()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n                return value;\n            }",
+        "position": {
+            "line": 723,
+            "column": 23
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 35
+    }
+]

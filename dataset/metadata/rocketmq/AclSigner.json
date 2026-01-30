@@ -1,0 +1,463 @@
+[
+    {
+        "name": "calSignature",
+        "category": "method_declaration",
+        "class": "AclSigner",
+        "signature": "calSignature(String data, String key)",
+        "class_signature": "AclSigner.calSignature(String data, String key)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "data"
+            ],
+            [
+                "String",
+                "key"
+            ]
+        ],
+        "methodBody": "{\n        return calSignature(data, key, DEFAULT_ALGORITHM, DEFAULT_CHARSET);\n    }",
+        "position": {
+            "line": 36,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "calSignature",
+                "position": {
+                    "line": 37,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AclSigner.calSignature(String data, String key, SigningAlgorithm algorithm, Charset charset)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "calSignature",
+        "category": "method_declaration",
+        "class": "AclSigner",
+        "signature": "calSignature(String data, String key, SigningAlgorithm algorithm, Charset charset)",
+        "class_signature": "AclSigner.calSignature(String data, String key, SigningAlgorithm algorithm, Charset charset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "data"
+            ],
+            [
+                "String",
+                "key"
+            ],
+            [
+                "SigningAlgorithm",
+                "algorithm"
+            ],
+            [
+                "Charset",
+                "charset"
+            ]
+        ],
+        "methodBody": "{\n        return signAndBase64Encode(data, key, algorithm, charset);\n    }",
+        "position": {
+            "line": 40,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "signAndBase64Encode",
+                "position": {
+                    "line": 42,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AclSigner.signAndBase64Encode(String data, String key, SigningAlgorithm algorithm, Charset charset)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "signAndBase64Encode",
+        "category": "method_declaration",
+        "class": "AclSigner",
+        "signature": "signAndBase64Encode(String data, String key, SigningAlgorithm algorithm, Charset charset)",
+        "class_signature": "AclSigner.signAndBase64Encode(String data, String key, SigningAlgorithm algorithm, Charset charset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "data"
+            ],
+            [
+                "String",
+                "key"
+            ],
+            [
+                "SigningAlgorithm",
+                "algorithm"
+            ],
+            [
+                "Charset",
+                "charset"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            byte[] signature = sign(data.getBytes(charset), key.getBytes(charset), algorithm);\n            return new String(Base64.encodeBase64(signature), DEFAULT_CHARSET);\n        } catch (Exception e) {\n            String message = String.format(CAL_SIGNATURE_FAILED_MSG, CAL_SIGNATURE_FAILED, e.getMessage());\n            log.error(message, e);\n            throw new AclException(\"CAL_SIGNATURE_FAILED\", CAL_SIGNATURE_FAILED, message, e);\n        }\n    }",
+        "position": {
+            "line": 45,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "sign",
+                "position": {
+                    "line": 48,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 48,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 48,
+                    "column": 65
+                }
+            },
+            {
+                "name": "encodeBase64",
+                "position": {
+                    "line": 49,
+                    "column": 38
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 51,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 51,
+                    "column": 94
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 52,
+                    "column": 17
+                }
+            },
+            {
+                "name": "String",
+                "position": {
+                    "line": 49,
+                    "column": 24
+                }
+            },
+            {
+                "name": "AclException",
+                "position": {
+                    "line": 53,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "AclSigner.sign(byte[] data, byte[] key, SigningAlgorithm algorithm)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "sign",
+        "category": "method_declaration",
+        "class": "AclSigner",
+        "signature": "sign(byte[] data, byte[] key, SigningAlgorithm algorithm)",
+        "class_signature": "AclSigner.sign(byte[] data, byte[] key, SigningAlgorithm algorithm)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "byte[]",
+                "data"
+            ],
+            [
+                "byte[]",
+                "key"
+            ],
+            [
+                "SigningAlgorithm",
+                "algorithm"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            Mac mac = Mac.getInstance(algorithm.toString());\n            mac.init(new SecretKeySpec(key, algorithm.toString()));\n            return mac.doFinal(data);\n        } catch (Exception e) {\n            String message = String.format(CAL_SIGNATURE_FAILED_MSG, CAL_SIGNATURE_FAILED, e.getMessage());\n            log.error(message, e);\n            throw new AclException(\"CAL_SIGNATURE_FAILED\", CAL_SIGNATURE_FAILED, message, e);\n        }\n    }",
+        "position": {
+            "line": 57,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 59,
+                    "column": 27
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 59,
+                    "column": 49
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 60,
+                    "column": 17
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 60,
+                    "column": 55
+                }
+            },
+            {
+                "name": "doFinal",
+                "position": {
+                    "line": 61,
+                    "column": 24
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 63,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 63,
+                    "column": 94
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 64,
+                    "column": 17
+                }
+            },
+            {
+                "name": "SecretKeySpec",
+                "position": {
+                    "line": 60,
+                    "column": 26
+                }
+            },
+            {
+                "name": "AclException",
+                "position": {
+                    "line": 65,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "calSignature",
+        "category": "method_declaration",
+        "class": "AclSigner",
+        "signature": "calSignature(byte[] data, String key)",
+        "class_signature": "AclSigner.calSignature(byte[] data, String key)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "byte[]",
+                "data"
+            ],
+            [
+                "String",
+                "key"
+            ]
+        ],
+        "methodBody": "{\n        return calSignature(data, key, DEFAULT_ALGORITHM, DEFAULT_CHARSET);\n    }",
+        "position": {
+            "line": 69,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "calSignature",
+                "position": {
+                    "line": 70,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AclSigner.calSignature(byte[] data, String key, SigningAlgorithm algorithm, Charset charset)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "calSignature",
+        "category": "method_declaration",
+        "class": "AclSigner",
+        "signature": "calSignature(byte[] data, String key, SigningAlgorithm algorithm, Charset charset)",
+        "class_signature": "AclSigner.calSignature(byte[] data, String key, SigningAlgorithm algorithm, Charset charset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "byte[]",
+                "data"
+            ],
+            [
+                "String",
+                "key"
+            ],
+            [
+                "SigningAlgorithm",
+                "algorithm"
+            ],
+            [
+                "Charset",
+                "charset"
+            ]
+        ],
+        "methodBody": "{\n        return signAndBase64Encode(data, key, algorithm, charset);\n    }",
+        "position": {
+            "line": 73,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "signAndBase64Encode",
+                "position": {
+                    "line": 75,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "AclSigner.signAndBase64Encode(byte[] data, String key, SigningAlgorithm algorithm, Charset charset)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "signAndBase64Encode",
+        "category": "method_declaration",
+        "class": "AclSigner",
+        "signature": "signAndBase64Encode(byte[] data, String key, SigningAlgorithm algorithm, Charset charset)",
+        "class_signature": "AclSigner.signAndBase64Encode(byte[] data, String key, SigningAlgorithm algorithm, Charset charset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "byte[]",
+                "data"
+            ],
+            [
+                "String",
+                "key"
+            ],
+            [
+                "SigningAlgorithm",
+                "algorithm"
+            ],
+            [
+                "Charset",
+                "charset"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            byte[] signature = sign(data, key.getBytes(charset), algorithm);\n            return new String(Base64.encodeBase64(signature), DEFAULT_CHARSET);\n        } catch (Exception e) {\n            String message = String.format(CAL_SIGNATURE_FAILED_MSG, CAL_SIGNATURE_FAILED, e.getMessage());\n            log.error(message, e);\n            throw new AclException(\"CAL_SIGNATURE_FAILED\", CAL_SIGNATURE_FAILED, message, e);\n        }\n    }",
+        "position": {
+            "line": 78,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "sign",
+                "position": {
+                    "line": 81,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 81,
+                    "column": 47
+                }
+            },
+            {
+                "name": "encodeBase64",
+                "position": {
+                    "line": 82,
+                    "column": 38
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 84,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 84,
+                    "column": 94
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 85,
+                    "column": 17
+                }
+            },
+            {
+                "name": "String",
+                "position": {
+                    "line": 82,
+                    "column": 24
+                }
+            },
+            {
+                "name": "AclException",
+                "position": {
+                    "line": 86,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "AclSigner.sign(byte[] data, byte[] key, SigningAlgorithm algorithm)"
+        ],
+        "priority": 5
+    }
+]

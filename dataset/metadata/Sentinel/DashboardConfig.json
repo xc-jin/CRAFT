@@ -1,0 +1,378 @@
+[
+    {
+        "name": "getConfig",
+        "category": "method_declaration",
+        "class": "DashboardConfig",
+        "signature": "getConfig(String name)",
+        "class_signature": "DashboardConfig.getConfig(String name)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ]
+        ],
+        "methodBody": "{\n        // env\n        String val = System.getenv(name);\n        if (StringUtils.isNotEmpty(val)) {\n            return val;\n        }\n        // properties\n        val = System.getProperty(name);\n        if (StringUtils.isNotEmpty(val)) {\n            return val;\n        }\n        return \"\";\n    }",
+        "position": {
+            "line": 70,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getenv",
+                "position": {
+                    "line": 72,
+                    "column": 29
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 73,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 77,
+                    "column": 22
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 78,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "getConfigStr",
+        "category": "method_declaration",
+        "class": "DashboardConfig",
+        "signature": "getConfigStr(String name)",
+        "class_signature": "DashboardConfig.getConfigStr(String name)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ]
+        ],
+        "methodBody": "{\n        if (cacheMap.containsKey(name)) {\n            return (String) cacheMap.get(name);\n        }\n\n        String val = getConfig(name);\n\n        if (StringUtils.isBlank(val)) {\n            return null;\n        }\n\n        cacheMap.put(name, val);\n        return val;\n    }",
+        "position": {
+            "line": 84,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 85,
+                    "column": 22
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 86,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 89,
+                    "column": 22
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 91,
+                    "column": 25
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 95,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "DashboardConfig.getConfig(String name)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "getConfigInt",
+        "category": "method_declaration",
+        "class": "DashboardConfig",
+        "signature": "getConfigInt(String name, int defaultVal, int minVal)",
+        "class_signature": "DashboardConfig.getConfigInt(String name, int defaultVal, int minVal)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "int",
+                "defaultVal"
+            ],
+            [
+                "int",
+                "minVal"
+            ]
+        ],
+        "methodBody": "{\n        if (cacheMap.containsKey(name)) {\n            return (int)cacheMap.get(name);\n        }\n        int val = NumberUtils.toInt(getConfig(name));\n        if (val == 0) {\n            val = defaultVal;\n        } else if (val < minVal) {\n            val = minVal;\n        }\n        cacheMap.put(name, val);\n        return val;\n    }",
+        "position": {
+            "line": 99,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 100,
+                    "column": 22
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 101,
+                    "column": 34
+                }
+            },
+            {
+                "name": "toInt",
+                "position": {
+                    "line": 103,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 103,
+                    "column": 37
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 109,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "DashboardConfig.getConfig(String name)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "getAuthUsername",
+        "category": "method_declaration",
+        "class": "DashboardConfig",
+        "signature": "getAuthUsername()",
+        "class_signature": "DashboardConfig.getAuthUsername()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return getConfigStr(CONFIG_AUTH_USERNAME);\n    }",
+        "position": {
+            "line": 113,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfigStr",
+                "position": {
+                    "line": 114,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "DashboardConfig.getConfigStr(String name)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "getAuthPassword",
+        "category": "method_declaration",
+        "class": "DashboardConfig",
+        "signature": "getAuthPassword()",
+        "class_signature": "DashboardConfig.getAuthPassword()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return getConfigStr(CONFIG_AUTH_PASSWORD);\n    }",
+        "position": {
+            "line": 117,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfigStr",
+                "position": {
+                    "line": 118,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "DashboardConfig.getConfigStr(String name)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "getHideAppNoMachineMillis",
+        "category": "method_declaration",
+        "class": "DashboardConfig",
+        "signature": "getHideAppNoMachineMillis()",
+        "class_signature": "DashboardConfig.getHideAppNoMachineMillis()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return getConfigInt(CONFIG_HIDE_APP_NO_MACHINE_MILLIS, 0, 60000);\n    }",
+        "position": {
+            "line": 121,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfigInt",
+                "position": {
+                    "line": 122,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "DashboardConfig.getConfigInt(String name, int defaultVal, int minVal)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "getRemoveAppNoMachineMillis",
+        "category": "method_declaration",
+        "class": "DashboardConfig",
+        "signature": "getRemoveAppNoMachineMillis()",
+        "class_signature": "DashboardConfig.getRemoveAppNoMachineMillis()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return getConfigInt(CONFIG_REMOVE_APP_NO_MACHINE_MILLIS, 0, 120000);\n    }",
+        "position": {
+            "line": 125,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfigInt",
+                "position": {
+                    "line": 126,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "DashboardConfig.getConfigInt(String name, int defaultVal, int minVal)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "getAutoRemoveMachineMillis",
+        "category": "method_declaration",
+        "class": "DashboardConfig",
+        "signature": "getAutoRemoveMachineMillis()",
+        "class_signature": "DashboardConfig.getAutoRemoveMachineMillis()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return getConfigInt(CONFIG_AUTO_REMOVE_MACHINE_MILLIS, 0, 300000);\n    }",
+        "position": {
+            "line": 129,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfigInt",
+                "position": {
+                    "line": 130,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "DashboardConfig.getConfigInt(String name, int defaultVal, int minVal)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "getUnhealthyMachineMillis",
+        "category": "method_declaration",
+        "class": "DashboardConfig",
+        "signature": "getUnhealthyMachineMillis()",
+        "class_signature": "DashboardConfig.getUnhealthyMachineMillis()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return getConfigInt(CONFIG_UNHEALTHY_MACHINE_MILLIS, DEFAULT_MACHINE_HEALTHY_TIMEOUT_MS, 30000);\n    }",
+        "position": {
+            "line": 133,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfigInt",
+                "position": {
+                    "line": 134,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "DashboardConfig.getConfigInt(String name, int defaultVal, int minVal)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "clearCache",
+        "category": "method_declaration",
+        "class": "DashboardConfig",
+        "signature": "clearCache()",
+        "class_signature": "DashboardConfig.clearCache()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        cacheMap.clear();\n    }",
+        "position": {
+            "line": 137,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "clear",
+                "position": {
+                    "line": 138,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    }
+]

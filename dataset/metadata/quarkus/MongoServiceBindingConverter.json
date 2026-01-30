@@ -1,0 +1,546 @@
+[
+    {
+        "name": "convert",
+        "category": "method_declaration",
+        "class": "MongoServiceBindingConverter",
+        "signature": "convert(List<ServiceBinding> serviceBindings)",
+        "class_signature": "MongoServiceBindingConverter.convert(List<ServiceBinding> serviceBindings)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<ServiceBinding>",
+                "serviceBindings"
+            ]
+        ],
+        "methodBody": "{\n        Optional<ServiceBinding> matchingByType = ServiceBinding.singleMatchingByType(BINDING_TYPE, serviceBindings);\n        if (matchingByType.isEmpty()) {\n            return Optional.empty();\n        }\n\n        ServiceBinding binding = matchingByType.get();\n        Map<String, String> properties = new HashMap<>();\n\n        setConnectionString(binding, properties);\n        setUsername(binding, properties);\n        setPassword(binding, properties);\n\n        return Optional.of(new ServiceBindingConfigSource(BINDING_CONFIG_SOURCE_NAME, properties));\n    }",
+        "position": {
+            "line": 70,
+            "column": 49
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "singleMatchingByType",
+                "position": {
+                    "line": 71,
+                    "column": 66
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 72,
+                    "column": 28
+                }
+            },
+            {
+                "name": "empty",
+                "position": {
+                    "line": 73,
+                    "column": 29
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 76,
+                    "column": 49
+                }
+            },
+            {
+                "name": "setConnectionString",
+                "position": {
+                    "line": 79,
+                    "column": 9
+                }
+            },
+            {
+                "name": "setUsername",
+                "position": {
+                    "line": 80,
+                    "column": 9
+                }
+            },
+            {
+                "name": "setPassword",
+                "position": {
+                    "line": 81,
+                    "column": 9
+                }
+            },
+            {
+                "name": "of",
+                "position": {
+                    "line": 83,
+                    "column": 25
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 77,
+                    "column": 46
+                }
+            },
+            {
+                "name": "ServiceBindingConfigSource",
+                "position": {
+                    "line": 83,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoServiceBindingConverter.setConnectionString(ServiceBinding binding, Map<String, String> properties)",
+            "MongoServiceBindingConverter.setUsername(ServiceBinding binding, Map<String, String> properties)",
+            "MongoServiceBindingConverter.setPassword(ServiceBinding binding, Map<String, String> properties)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "setConnectionString",
+        "category": "method_declaration",
+        "class": "MongoServiceBindingConverter",
+        "signature": "setConnectionString(ServiceBinding binding, Map<String, String> properties)",
+        "class_signature": "MongoServiceBindingConverter.setConnectionString(ServiceBinding binding, Map<String, String> properties)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ServiceBinding",
+                "binding"
+            ],
+            [
+                "Map<String, String>",
+                "properties"
+            ]
+        ],
+        "methodBody": "{\n        String hostPort = getHost(binding);\n        String prefix = isSrv(binding) ? DB_PREFIX_SRV : DB_PREFIX_STANDARD;\n        String database = getDbProperty(binding, DB_DATABASE);\n        String options = getDbProperty(binding, DB_OPTIONS);\n        boolean isOptionsNotBlank = isNotBlank(options);\n        String connectionString;\n\n        if (isBlank(database)) {\n            connectionString = format(CONNECTION_STRING_WITH_ONLY_HOST, prefix, hostPort);\n\n            if (isOptionsNotBlank) {\n                // We need a trailing slash before options otherwise Mongo throws \"contains options without trailing slash\" error\n                // If the database value is not present, then we haven't yet added the trailing slash (and hence add it here)\n                connectionString += \"/\";\n            }\n        } else {\n            connectionString = format(CONNECTION_STRING_WITH_HOST_N_DB, prefix, hostPort, database);\n        }\n\n        if (isOptionsNotBlank) {\n            connectionString += \"?\" + options;\n        }\n\n        LOGGER.debug(format(\"MongoDB connection string: [%s]\", connectionString));\n\n        properties.put(MONGO_DB_CONNECTION_STRING, connectionString);\n    }",
+        "position": {
+            "line": 86,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getHost",
+                "position": {
+                    "line": 87,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isSrv",
+                "position": {
+                    "line": 88,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getDbProperty",
+                "position": {
+                    "line": 89,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getDbProperty",
+                "position": {
+                    "line": 90,
+                    "column": 26
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 91,
+                    "column": 37
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 94,
+                    "column": 13
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 95,
+                    "column": 32
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 103,
+                    "column": 32
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 110,
+                    "column": 16
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 110,
+                    "column": 22
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 112,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoServiceBindingConverter.getHost(ServiceBinding binding)",
+            "MongoServiceBindingConverter.isSrv(ServiceBinding binding)",
+            "MongoServiceBindingConverter.getDbProperty(ServiceBinding binding, String dbPropertyKey)",
+            "MongoServiceBindingConverter.getDbProperty(ServiceBinding binding, String dbPropertyKey)",
+            "MongoServiceBindingConverter.isNotBlank(String value)",
+            "MongoServiceBindingConverter.isBlank(String value)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "setUsername",
+        "category": "method_declaration",
+        "class": "MongoServiceBindingConverter",
+        "signature": "setUsername(ServiceBinding binding, Map<String, String> properties)",
+        "class_signature": "MongoServiceBindingConverter.setUsername(ServiceBinding binding, Map<String, String> properties)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ServiceBinding",
+                "binding"
+            ],
+            [
+                "Map<String, String>",
+                "properties"
+            ]
+        ],
+        "methodBody": "{\n        String username = getDbProperty(binding, DB_USER);\n        LOGGER.debug(format(\"MongoDB username=%s\", username));\n\n        properties.put(MONGO_DB_USERNAME, username);\n    }",
+        "position": {
+            "line": 115,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDbProperty",
+                "position": {
+                    "line": 116,
+                    "column": 27
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 117,
+                    "column": 16
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 117,
+                    "column": 22
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 119,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoServiceBindingConverter.getDbProperty(ServiceBinding binding, String dbPropertyKey)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "setPassword",
+        "category": "method_declaration",
+        "class": "MongoServiceBindingConverter",
+        "signature": "setPassword(ServiceBinding binding, Map<String, String> properties)",
+        "class_signature": "MongoServiceBindingConverter.setPassword(ServiceBinding binding, Map<String, String> properties)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ServiceBinding",
+                "binding"
+            ],
+            [
+                "Map<String, String>",
+                "properties"
+            ]
+        ],
+        "methodBody": "{\n        properties.put(MONGO_DB_PASSWORD, getDbProperty(binding, DB_PASSWORD));\n    }",
+        "position": {
+            "line": 122,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "put",
+                "position": {
+                    "line": 123,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getDbProperty",
+                "position": {
+                    "line": 123,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoServiceBindingConverter.getDbProperty(ServiceBinding binding, String dbPropertyKey)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "getDbProperty",
+        "category": "method_declaration",
+        "class": "MongoServiceBindingConverter",
+        "signature": "getDbProperty(ServiceBinding binding, String dbPropertyKey)",
+        "class_signature": "MongoServiceBindingConverter.getDbProperty(ServiceBinding binding, String dbPropertyKey)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ServiceBinding",
+                "binding"
+            ],
+            [
+                "String",
+                "dbPropertyKey"
+            ]
+        ],
+        "methodBody": "{\n        String dbPropertyValue = binding.getProperties().get(dbPropertyKey);\n        if (isBlank(dbPropertyValue)) {\n            LOGGER.debug(format(\"Property '%s' not found\", dbPropertyKey));\n        }\n\n        return dbPropertyValue;\n    }",
+        "position": {
+            "line": 126,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 127,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getProperties",
+                "position": {
+                    "line": 127,
+                    "column": 42
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 128,
+                    "column": 13
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 129,
+                    "column": 20
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 129,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoServiceBindingConverter.isBlank(String value)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "getHost",
+        "category": "method_declaration",
+        "class": "MongoServiceBindingConverter",
+        "signature": "getHost(ServiceBinding binding)",
+        "class_signature": "MongoServiceBindingConverter.getHost(ServiceBinding binding)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ServiceBinding",
+                "binding"
+            ]
+        ],
+        "methodBody": "{\n        String host = getDbProperty(binding, DB_HOST);\n\n        if (isBlank(host)) {\n            LOGGER.warn(\"Unable to get the host property. Connection string won't be correct\");\n        }\n\n        return host;\n    }",
+        "position": {
+            "line": 135,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDbProperty",
+                "position": {
+                    "line": 136,
+                    "column": 23
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 138,
+                    "column": 13
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 139,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoServiceBindingConverter.getDbProperty(ServiceBinding binding, String dbPropertyKey)",
+            "MongoServiceBindingConverter.isBlank(String value)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "isSrv",
+        "category": "method_declaration",
+        "class": "MongoServiceBindingConverter",
+        "signature": "isSrv(ServiceBinding binding)",
+        "class_signature": "MongoServiceBindingConverter.isSrv(ServiceBinding binding)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ServiceBinding",
+                "binding"
+            ]
+        ],
+        "methodBody": "{\n        String srv = getDbProperty(binding, DB_SRV);\n\n        return isNotBlank(srv) && parseBoolean(srv);\n    }",
+        "position": {
+            "line": 145,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDbProperty",
+                "position": {
+                    "line": 146,
+                    "column": 22
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 148,
+                    "column": 16
+                }
+            },
+            {
+                "name": "parseBoolean",
+                "position": {
+                    "line": 148,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoServiceBindingConverter.getDbProperty(ServiceBinding binding, String dbPropertyKey)",
+            "MongoServiceBindingConverter.isNotBlank(String value)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "isBlank",
+        "category": "method_declaration",
+        "class": "MongoServiceBindingConverter",
+        "signature": "isBlank(String value)",
+        "class_signature": "MongoServiceBindingConverter.isBlank(String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        return value == null || value.trim().length() == 0;\n    }",
+        "position": {
+            "line": 151,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 152,
+                    "column": 46
+                }
+            },
+            {
+                "name": "trim",
+                "position": {
+                    "line": 152,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "isNotBlank",
+        "category": "method_declaration",
+        "class": "MongoServiceBindingConverter",
+        "signature": "isNotBlank(String value)",
+        "class_signature": "MongoServiceBindingConverter.isNotBlank(String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        return !isBlank(value);\n    }",
+        "position": {
+            "line": 155,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 156,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "MongoServiceBindingConverter.isBlank(String value)"
+        ],
+        "priority": 7
+    }
+]

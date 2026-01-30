@@ -1,0 +1,3151 @@
+[
+    {
+        "name": "DubboProtocol",
+        "category": "constructor_declaration",
+        "class": "DubboProtocol",
+        "signature": "DubboProtocol(FrameworkModel frameworkModel)",
+        "class_signature": "DubboProtocol.DubboProtocol(FrameworkModel frameworkModel)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FrameworkModel",
+                "frameworkModel"
+            ]
+        ],
+        "methodBody": "{\n        requestHandler = new ExchangeHandlerAdapter(frameworkModel) {\n\n            @Override\n            public CompletableFuture<Object> reply(ExchangeChannel channel, Object message) throws RemotingException {\n\n                if (!(message instanceof Invocation)) {\n                    throw new RemotingException(\n                            channel,\n                            \"Unsupported request: \"\n                                    + (message == null\n                                            ? null\n                                            : (message.getClass().getName() + \": \" + message))\n                                    + \", channel: consumer: \" + channel.getRemoteAddress() + \" --> provider: \"\n                                    + channel.getLocalAddress());\n                }\n\n                Invocation inv = (Invocation) message;\n                Invoker<?> invoker = inv.getInvoker() == null ? getInvoker(channel, inv) : inv.getInvoker();\n                // switch TCCL\n                if (invoker.getUrl().getServiceModel() != null) {\n                    Thread.currentThread()\n                            .setContextClassLoader(\n                                    invoker.getUrl().getServiceModel().getClassLoader());\n                }\n                // need to consider backward-compatibility if it's a callback\n                if (Boolean.TRUE.toString().equals(inv.getObjectAttachmentWithoutConvert(IS_CALLBACK_SERVICE_INVOKE))) {\n                    String methodsStr = invoker.getUrl().getParameters().get(\"methods\");\n                    boolean hasMethod = false;\n                    if (methodsStr == null || !methodsStr.contains(\",\")) {\n                        hasMethod = inv.getMethodName().equals(methodsStr);\n                    } else {\n                        String[] methods = methodsStr.split(\",\");\n                        for (String method : methods) {\n                            if (inv.getMethodName().equals(method)) {\n                                hasMethod = true;\n                                break;\n                            }\n                        }\n                    }\n                    if (!hasMethod) {\n                        logger.warn(\n                                PROTOCOL_FAILED_REFER_INVOKER,\n                                \"\",\n                                \"\",\n                                new IllegalStateException(\"The methodName \" + inv.getMethodName()\n                                                + \" not found in callback service interface ,invoke will be ignored.\"\n                                                + \" please update the api interface. url is:\"\n                                                + invoker.getUrl())\n                                        + \" ,invocation is :\" + inv);\n                        return null;\n                    }\n                }\n                RpcContext.getServiceContext().setRemoteAddress(channel.getRemoteAddress());\n                Result result = invoker.invoke(inv);\n                return result.thenApply(Function.identity());\n            }\n\n            @Override\n            public void received(Channel channel, Object message) throws RemotingException {\n                if (message instanceof Invocation) {\n                    reply((ExchangeChannel) channel, message);\n\n                } else {\n                    super.received(channel, message);\n                }\n            }\n\n            @Override\n            public void connected(Channel channel) throws RemotingException {\n                invoke(channel, ON_CONNECT_KEY);\n            }\n\n            @Override\n            public void disconnected(Channel channel) throws RemotingException {\n                if (logger.isDebugEnabled()) {\n                    logger.debug(\"disconnected from \" + channel.getRemoteAddress() + \",url:\" + channel.getUrl());\n                }\n                invoke(channel, ON_DISCONNECT_KEY);\n            }\n\n            private void invoke(Channel channel, String methodKey) {\n                Invocation invocation = createInvocation(channel, channel.getUrl(), methodKey);\n                if (invocation != null) {\n                    try {\n                        if (Boolean.TRUE.toString().equals(invocation.getAttachment(STUB_EVENT_KEY))) {\n                            tryToGetStubService(channel, invocation);\n                        }\n                        received(channel, invocation);\n                    } catch (Throwable t) {\n                        logger.warn(\n                                PROTOCOL_FAILED_REFER_INVOKER,\n                                \"\",\n                                \"\",\n                                \"Failed to invoke event method \" + invocation.getMethodName() + \"(), cause: \"\n                                        + t.getMessage(),\n                                t);\n                    }\n                }\n            }\n\n            private void tryToGetStubService(Channel channel, Invocation invocation) throws RemotingException {\n                try {\n                    Invoker<?> invoker = getInvoker(channel, invocation);\n                } catch (RemotingException e) {\n                    String serviceKey = serviceKey(\n                            0,\n                            (String) invocation.getObjectAttachmentWithoutConvert(PATH_KEY),\n                            (String) invocation.getObjectAttachmentWithoutConvert(VERSION_KEY),\n                            (String) invocation.getObjectAttachmentWithoutConvert(GROUP_KEY));\n                    throw new RemotingException(\n                            channel, \"The stub service[\" + serviceKey + \"] is not found, it may not be exported yet\");\n                }\n            }\n\n            /**\n             * FIXME channel.getUrl() always binds to a fixed service, and this service is random.\n             * we can choose to use a common service to carry onConnect event if there's no easy way to get the specific\n             * service this connection is binding to.\n             * @param channel\n             * @param url\n             * @param methodKey\n             * @return\n             */\n            private Invocation createInvocation(Channel channel, URL url, String methodKey) {\n                String method = url.getParameter(methodKey);\n                if (method == null || method.length() == 0) {\n                    return null;\n                }\n\n                RpcInvocation invocation = new RpcInvocation(\n                        url.getServiceModel(),\n                        method,\n                        url.getParameter(INTERFACE_KEY),\n                        \"\",\n                        new Class<?>[0],\n                        new Object[0]);\n                invocation.setAttachment(PATH_KEY, url.getPath());\n                invocation.setAttachment(GROUP_KEY, url.getGroup());\n                invocation.setAttachment(INTERFACE_KEY, url.getParameter(INTERFACE_KEY));\n                invocation.setAttachment(VERSION_KEY, url.getVersion());\n                if (url.getParameter(STUB_EVENT_KEY, false)) {\n                    invocation.setAttachment(STUB_EVENT_KEY, Boolean.TRUE.toString());\n                }\n\n                return invocation;\n            }\n        };\n        this.frameworkModel = frameworkModel;\n        this.frameworkModel.getBeanFactory().registerBean(new DubboGracefulShutdown(this));\n    }",
+        "position": {
+            "line": 113,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getName",
+                "position": {
+                    "line": 125,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 125,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getRemoteAddress",
+                "position": {
+                    "line": 126,
+                    "column": 73
+                }
+            },
+            {
+                "name": "getLocalAddress",
+                "position": {
+                    "line": 127,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getInvoker",
+                "position": {
+                    "line": 131,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getInvoker",
+                "position": {
+                    "line": 131,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getInvoker",
+                "position": {
+                    "line": 131,
+                    "column": 96
+                }
+            },
+            {
+                "name": "getServiceModel",
+                "position": {
+                    "line": 133,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 133,
+                    "column": 29
+                }
+            },
+            {
+                "name": "setContextClassLoader",
+                "position": {
+                    "line": 135,
+                    "column": 30
+                }
+            },
+            {
+                "name": "currentThread",
+                "position": {
+                    "line": 134,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 136,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getServiceModel",
+                "position": {
+                    "line": 136,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 136,
+                    "column": 45
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 139,
+                    "column": 45
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 139,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 139,
+                    "column": 56
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 140,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getParameters",
+                "position": {
+                    "line": 140,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 140,
+                    "column": 49
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 142,
+                    "column": 59
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 143,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getMethodName",
+                "position": {
+                    "line": 143,
+                    "column": 41
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 145,
+                    "column": 55
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 147,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getMethodName",
+                "position": {
+                    "line": 147,
+                    "column": 37
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 154,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getMethodName",
+                "position": {
+                    "line": 158,
+                    "column": 83
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 161,
+                    "column": 59
+                }
+            },
+            {
+                "name": "setRemoteAddress",
+                "position": {
+                    "line": 166,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getServiceContext",
+                "position": {
+                    "line": 166,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getRemoteAddress",
+                "position": {
+                    "line": 166,
+                    "column": 73
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 167,
+                    "column": 41
+                }
+            },
+            {
+                "name": "thenApply",
+                "position": {
+                    "line": 168,
+                    "column": 31
+                }
+            },
+            {
+                "name": "identity",
+                "position": {
+                    "line": 168,
+                    "column": 50
+                }
+            },
+            {
+                "name": "reply",
+                "position": {
+                    "line": 174,
+                    "column": 21
+                }
+            },
+            {
+                "name": "received",
+                "position": {
+                    "line": 177,
+                    "column": 27
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 183,
+                    "column": 17
+                }
+            },
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 188,
+                    "column": 28
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 189,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getRemoteAddress",
+                "position": {
+                    "line": 189,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 189,
+                    "column": 104
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 191,
+                    "column": 17
+                }
+            },
+            {
+                "name": "createInvocation",
+                "position": {
+                    "line": 195,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 195,
+                    "column": 75
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 198,
+                    "column": 53
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 198,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getAttachment",
+                "position": {
+                    "line": 198,
+                    "column": 71
+                }
+            },
+            {
+                "name": "tryToGetStubService",
+                "position": {
+                    "line": 199,
+                    "column": 29
+                }
+            },
+            {
+                "name": "received",
+                "position": {
+                    "line": 201,
+                    "column": 25
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 203,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getMethodName",
+                "position": {
+                    "line": 207,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 208,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getInvoker",
+                "position": {
+                    "line": 216,
+                    "column": 42
+                }
+            },
+            {
+                "name": "serviceKey",
+                "position": {
+                    "line": 218,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 220,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 221,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 222,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 238,
+                    "column": 37
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 239,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getServiceModel",
+                "position": {
+                    "line": 244,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 246,
+                    "column": 29
+                }
+            },
+            {
+                "name": "setAttachment",
+                "position": {
+                    "line": 250,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getPath",
+                "position": {
+                    "line": 250,
+                    "column": 56
+                }
+            },
+            {
+                "name": "setAttachment",
+                "position": {
+                    "line": 251,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 251,
+                    "column": 57
+                }
+            },
+            {
+                "name": "setAttachment",
+                "position": {
+                    "line": 252,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 252,
+                    "column": 61
+                }
+            },
+            {
+                "name": "setAttachment",
+                "position": {
+                    "line": 253,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getVersion",
+                "position": {
+                    "line": 253,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 254,
+                    "column": 25
+                }
+            },
+            {
+                "name": "setAttachment",
+                "position": {
+                    "line": 255,
+                    "column": 32
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 255,
+                    "column": 75
+                }
+            },
+            {
+                "name": "registerBean",
+                "position": {
+                    "line": 262,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getBeanFactory",
+                "position": {
+                    "line": 262,
+                    "column": 29
+                }
+            },
+            {
+                "name": "ExchangeHandlerAdapter",
+                "position": {
+                    "line": 114,
+                    "column": 30
+                }
+            },
+            {
+                "name": "RemotingException",
+                "position": {
+                    "line": 120,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 158,
+                    "column": 37
+                }
+            },
+            {
+                "name": "RemotingException",
+                "position": {
+                    "line": 223,
+                    "column": 31
+                }
+            },
+            {
+                "name": "RpcInvocation",
+                "position": {
+                    "line": 243,
+                    "column": 48
+                }
+            },
+            {
+                "name": "DubboGracefulShutdown",
+                "position": {
+                    "line": 262,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.getInvoker(Channel channel, Invocation inv)",
+            "DubboProtocol.reply(ExchangeChannel channel, Object message)",
+            "DubboProtocol.invoke(Channel channel, String methodKey)",
+            "DubboProtocol.invoke(Channel channel, String methodKey)",
+            "DubboProtocol.createInvocation(Channel channel, URL url, String methodKey)",
+            "DubboProtocol.tryToGetStubService(Channel channel, Invocation invocation)",
+            "DubboProtocol.received(Channel channel, Object message)",
+            "DubboProtocol.getInvoker(Channel channel, Invocation inv)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "reply",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "reply(ExchangeChannel channel, Object message)",
+        "class_signature": "DubboProtocol.reply(ExchangeChannel channel, Object message)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ExchangeChannel",
+                "channel"
+            ],
+            [
+                "Object",
+                "message"
+            ]
+        ],
+        "methodBody": "{\n\n                if (!(message instanceof Invocation)) {\n                    throw new RemotingException(\n                            channel,\n                            \"Unsupported request: \"\n                                    + (message == null\n                                            ? null\n                                            : (message.getClass().getName() + \": \" + message))\n                                    + \", channel: consumer: \" + channel.getRemoteAddress() + \" --> provider: \"\n                                    + channel.getLocalAddress());\n                }\n\n                Invocation inv = (Invocation) message;\n                Invoker<?> invoker = inv.getInvoker() == null ? getInvoker(channel, inv) : inv.getInvoker();\n                // switch TCCL\n                if (invoker.getUrl().getServiceModel() != null) {\n                    Thread.currentThread()\n                            .setContextClassLoader(\n                                    invoker.getUrl().getServiceModel().getClassLoader());\n                }\n                // need to consider backward-compatibility if it's a callback\n                if (Boolean.TRUE.toString().equals(inv.getObjectAttachmentWithoutConvert(IS_CALLBACK_SERVICE_INVOKE))) {\n                    String methodsStr = invoker.getUrl().getParameters().get(\"methods\");\n                    boolean hasMethod = false;\n                    if (methodsStr == null || !methodsStr.contains(\",\")) {\n                        hasMethod = inv.getMethodName().equals(methodsStr);\n                    } else {\n                        String[] methods = methodsStr.split(\",\");\n                        for (String method : methods) {\n                            if (inv.getMethodName().equals(method)) {\n                                hasMethod = true;\n                                break;\n                            }\n                        }\n                    }\n                    if (!hasMethod) {\n                        logger.warn(\n                                PROTOCOL_FAILED_REFER_INVOKER,\n                                \"\",\n                                \"\",\n                                new IllegalStateException(\"The methodName \" + inv.getMethodName()\n                                                + \" not found in callback service interface ,invoke will be ignored.\"\n                                                + \" please update the api interface. url is:\"\n                                                + invoker.getUrl())\n                                        + \" ,invocation is :\" + inv);\n                        return null;\n                    }\n                }\n                RpcContext.getServiceContext().setRemoteAddress(channel.getRemoteAddress());\n                Result result = invoker.invoke(inv);\n                return result.thenApply(Function.identity());\n            }",
+        "position": {
+            "line": 117,
+            "column": 46
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getName",
+                "position": {
+                    "line": 125,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 125,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getRemoteAddress",
+                "position": {
+                    "line": 126,
+                    "column": 73
+                }
+            },
+            {
+                "name": "getLocalAddress",
+                "position": {
+                    "line": 127,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getInvoker",
+                "position": {
+                    "line": 131,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getInvoker",
+                "position": {
+                    "line": 131,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getInvoker",
+                "position": {
+                    "line": 131,
+                    "column": 96
+                }
+            },
+            {
+                "name": "getServiceModel",
+                "position": {
+                    "line": 133,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 133,
+                    "column": 29
+                }
+            },
+            {
+                "name": "setContextClassLoader",
+                "position": {
+                    "line": 135,
+                    "column": 30
+                }
+            },
+            {
+                "name": "currentThread",
+                "position": {
+                    "line": 134,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 136,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getServiceModel",
+                "position": {
+                    "line": 136,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 136,
+                    "column": 45
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 139,
+                    "column": 45
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 139,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 139,
+                    "column": 56
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 140,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getParameters",
+                "position": {
+                    "line": 140,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 140,
+                    "column": 49
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 142,
+                    "column": 59
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 143,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getMethodName",
+                "position": {
+                    "line": 143,
+                    "column": 41
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 145,
+                    "column": 55
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 147,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getMethodName",
+                "position": {
+                    "line": 147,
+                    "column": 37
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 154,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getMethodName",
+                "position": {
+                    "line": 158,
+                    "column": 83
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 161,
+                    "column": 59
+                }
+            },
+            {
+                "name": "setRemoteAddress",
+                "position": {
+                    "line": 166,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getServiceContext",
+                "position": {
+                    "line": 166,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getRemoteAddress",
+                "position": {
+                    "line": 166,
+                    "column": 73
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 167,
+                    "column": 41
+                }
+            },
+            {
+                "name": "thenApply",
+                "position": {
+                    "line": 168,
+                    "column": 31
+                }
+            },
+            {
+                "name": "identity",
+                "position": {
+                    "line": 168,
+                    "column": 50
+                }
+            },
+            {
+                "name": "RemotingException",
+                "position": {
+                    "line": 120,
+                    "column": 31
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 158,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.getInvoker(Channel channel, Invocation inv)"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "received",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "received(Channel channel, Object message)",
+        "class_signature": "DubboProtocol.received(Channel channel, Object message)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Channel",
+                "channel"
+            ],
+            [
+                "Object",
+                "message"
+            ]
+        ],
+        "methodBody": "{\n                if (message instanceof Invocation) {\n                    reply((ExchangeChannel) channel, message);\n\n                } else {\n                    super.received(channel, message);\n                }\n            }",
+        "position": {
+            "line": 172,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "reply",
+                "position": {
+                    "line": 174,
+                    "column": 21
+                }
+            },
+            {
+                "name": "received",
+                "position": {
+                    "line": 177,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.reply(ExchangeChannel channel, Object message)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "connected",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "connected(Channel channel)",
+        "class_signature": "DubboProtocol.connected(Channel channel)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Channel",
+                "channel"
+            ]
+        ],
+        "methodBody": "{\n                invoke(channel, ON_CONNECT_KEY);\n            }",
+        "position": {
+            "line": 182,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 183,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.invoke(Channel channel, String methodKey)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "disconnected",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "disconnected(Channel channel)",
+        "class_signature": "DubboProtocol.disconnected(Channel channel)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Channel",
+                "channel"
+            ]
+        ],
+        "methodBody": "{\n                if (logger.isDebugEnabled()) {\n                    logger.debug(\"disconnected from \" + channel.getRemoteAddress() + \",url:\" + channel.getUrl());\n                }\n                invoke(channel, ON_DISCONNECT_KEY);\n            }",
+        "position": {
+            "line": 187,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 188,
+                    "column": 28
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 189,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getRemoteAddress",
+                "position": {
+                    "line": 189,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 189,
+                    "column": 104
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 191,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.invoke(Channel channel, String methodKey)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "invoke",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "invoke(Channel channel, String methodKey)",
+        "class_signature": "DubboProtocol.invoke(Channel channel, String methodKey)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Channel",
+                "channel"
+            ],
+            [
+                "String",
+                "methodKey"
+            ]
+        ],
+        "methodBody": "{\n                Invocation invocation = createInvocation(channel, channel.getUrl(), methodKey);\n                if (invocation != null) {\n                    try {\n                        if (Boolean.TRUE.toString().equals(invocation.getAttachment(STUB_EVENT_KEY))) {\n                            tryToGetStubService(channel, invocation);\n                        }\n                        received(channel, invocation);\n                    } catch (Throwable t) {\n                        logger.warn(\n                                PROTOCOL_FAILED_REFER_INVOKER,\n                                \"\",\n                                \"\",\n                                \"Failed to invoke event method \" + invocation.getMethodName() + \"(), cause: \"\n                                        + t.getMessage(),\n                                t);\n                    }\n                }\n            }",
+        "position": {
+            "line": 194,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "createInvocation",
+                "position": {
+                    "line": 195,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 195,
+                    "column": 75
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 198,
+                    "column": 53
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 198,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getAttachment",
+                "position": {
+                    "line": 198,
+                    "column": 71
+                }
+            },
+            {
+                "name": "tryToGetStubService",
+                "position": {
+                    "line": 199,
+                    "column": 29
+                }
+            },
+            {
+                "name": "received",
+                "position": {
+                    "line": 201,
+                    "column": 25
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 203,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getMethodName",
+                "position": {
+                    "line": 207,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 208,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.createInvocation(Channel channel, URL url, String methodKey)",
+            "DubboProtocol.tryToGetStubService(Channel channel, Invocation invocation)",
+            "DubboProtocol.received(Channel channel, Object message)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "tryToGetStubService",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "tryToGetStubService(Channel channel, Invocation invocation)",
+        "class_signature": "DubboProtocol.tryToGetStubService(Channel channel, Invocation invocation)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Channel",
+                "channel"
+            ],
+            [
+                "Invocation",
+                "invocation"
+            ]
+        ],
+        "methodBody": "{\n                try {\n                    Invoker<?> invoker = getInvoker(channel, invocation);\n                } catch (RemotingException e) {\n                    String serviceKey = serviceKey(\n                            0,\n                            (String) invocation.getObjectAttachmentWithoutConvert(PATH_KEY),\n                            (String) invocation.getObjectAttachmentWithoutConvert(VERSION_KEY),\n                            (String) invocation.getObjectAttachmentWithoutConvert(GROUP_KEY));\n                    throw new RemotingException(\n                            channel, \"The stub service[\" + serviceKey + \"] is not found, it may not be exported yet\");\n                }\n            }",
+        "position": {
+            "line": 214,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getInvoker",
+                "position": {
+                    "line": 216,
+                    "column": 42
+                }
+            },
+            {
+                "name": "serviceKey",
+                "position": {
+                    "line": 218,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 220,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 221,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 222,
+                    "column": 49
+                }
+            },
+            {
+                "name": "RemotingException",
+                "position": {
+                    "line": 223,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.getInvoker(Channel channel, Invocation inv)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "createInvocation",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "createInvocation(Channel channel, URL url, String methodKey)",
+        "class_signature": "DubboProtocol.createInvocation(Channel channel, URL url, String methodKey)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Channel",
+                "channel"
+            ],
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "String",
+                "methodKey"
+            ]
+        ],
+        "methodBody": "{\n                String method = url.getParameter(methodKey);\n                if (method == null || method.length() == 0) {\n                    return null;\n                }\n\n                RpcInvocation invocation = new RpcInvocation(\n                        url.getServiceModel(),\n                        method,\n                        url.getParameter(INTERFACE_KEY),\n                        \"\",\n                        new Class<?>[0],\n                        new Object[0]);\n                invocation.setAttachment(PATH_KEY, url.getPath());\n                invocation.setAttachment(GROUP_KEY, url.getGroup());\n                invocation.setAttachment(INTERFACE_KEY, url.getParameter(INTERFACE_KEY));\n                invocation.setAttachment(VERSION_KEY, url.getVersion());\n                if (url.getParameter(STUB_EVENT_KEY, false)) {\n                    invocation.setAttachment(STUB_EVENT_KEY, Boolean.TRUE.toString());\n                }\n\n                return invocation;\n            }",
+        "position": {
+            "line": 237,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 238,
+                    "column": 37
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 239,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getServiceModel",
+                "position": {
+                    "line": 244,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 246,
+                    "column": 29
+                }
+            },
+            {
+                "name": "setAttachment",
+                "position": {
+                    "line": 250,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getPath",
+                "position": {
+                    "line": 250,
+                    "column": 56
+                }
+            },
+            {
+                "name": "setAttachment",
+                "position": {
+                    "line": 251,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 251,
+                    "column": 57
+                }
+            },
+            {
+                "name": "setAttachment",
+                "position": {
+                    "line": 252,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 252,
+                    "column": 61
+                }
+            },
+            {
+                "name": "setAttachment",
+                "position": {
+                    "line": 253,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getVersion",
+                "position": {
+                    "line": 253,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 254,
+                    "column": 25
+                }
+            },
+            {
+                "name": "setAttachment",
+                "position": {
+                    "line": 255,
+                    "column": 32
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 255,
+                    "column": 75
+                }
+            },
+            {
+                "name": "RpcInvocation",
+                "position": {
+                    "line": 243,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "getDubboProtocol",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "getDubboProtocol()",
+        "class_signature": "DubboProtocol.getDubboProtocol()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return (DubboProtocol) FrameworkModel.defaultModel()\n                .getExtensionLoader(Protocol.class)\n                .getExtension(DubboProtocol.NAME, false);\n    }",
+        "position": {
+            "line": 269,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getExtension",
+                "position": {
+                    "line": 272,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getExtensionLoader",
+                "position": {
+                    "line": 271,
+                    "column": 18
+                }
+            },
+            {
+                "name": "defaultModel",
+                "position": {
+                    "line": 270,
+                    "column": 47
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "getDubboProtocol",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "getDubboProtocol(ScopeModel scopeModel)",
+        "class_signature": "DubboProtocol.getDubboProtocol(ScopeModel scopeModel)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ScopeModel",
+                "scopeModel"
+            ]
+        ],
+        "methodBody": "{\n        return (DubboProtocol) scopeModel.getExtensionLoader(Protocol.class).getExtension(DubboProtocol.NAME, false);\n    }",
+        "position": {
+            "line": 275,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getExtension",
+                "position": {
+                    "line": 276,
+                    "column": 78
+                }
+            },
+            {
+                "name": "getExtensionLoader",
+                "position": {
+                    "line": 276,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "isClientSide",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "isClientSide(Channel channel)",
+        "class_signature": "DubboProtocol.isClientSide(Channel channel)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Channel",
+                "channel"
+            ]
+        ],
+        "methodBody": "{\n        InetSocketAddress address = channel.getRemoteAddress();\n        URL url = channel.getUrl();\n        return url.getPort() == address.getPort()\n                && NetUtils.filterLocalHost(channel.getUrl().getIp())\n                        .equals(NetUtils.filterLocalHost(address.getAddress().getHostAddress()));\n    }",
+        "position": {
+            "line": 279,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getRemoteAddress",
+                "position": {
+                    "line": 280,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 281,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 282,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 282,
+                    "column": 41
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 284,
+                    "column": 26
+                }
+            },
+            {
+                "name": "filterLocalHost",
+                "position": {
+                    "line": 283,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 283,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 283,
+                    "column": 53
+                }
+            },
+            {
+                "name": "filterLocalHost",
+                "position": {
+                    "line": 284,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getHostAddress",
+                "position": {
+                    "line": 284,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getAddress",
+                "position": {
+                    "line": 284,
+                    "column": 66
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 24
+    },
+    {
+        "name": "getInvoker",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "getInvoker(Channel channel, Invocation inv)",
+        "class_signature": "DubboProtocol.getInvoker(Channel channel, Invocation inv)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Channel",
+                "channel"
+            ],
+            [
+                "Invocation",
+                "inv"
+            ]
+        ],
+        "methodBody": "{\n        boolean isCallBackServiceInvoke;\n        boolean isStubServiceInvoke;\n        int port = channel.getLocalAddress().getPort();\n        String path = (String) inv.getObjectAttachmentWithoutConvert(PATH_KEY);\n\n        // if it's stub service on client side(after enable stubevent, usually is set up onconnect or ondisconnect\n        // method)\n        isStubServiceInvoke = Boolean.TRUE.toString().equals(inv.getObjectAttachmentWithoutConvert(STUB_EVENT_KEY));\n        if (isStubServiceInvoke) {\n            // when a stub service export to local, it usually can't be exposed to port\n            port = 0;\n        }\n\n        // if it's callback service on client side\n        isCallBackServiceInvoke = isClientSide(channel) && !isStubServiceInvoke;\n        if (isCallBackServiceInvoke) {\n            path += \".\" + inv.getObjectAttachmentWithoutConvert(CALLBACK_SERVICE_KEY);\n            inv.setObjectAttachment(IS_CALLBACK_SERVICE_INVOKE, Boolean.TRUE.toString());\n        }\n\n        String serviceKey = serviceKey(port, path, (String) inv.getObjectAttachmentWithoutConvert(VERSION_KEY), (String)\n                inv.getObjectAttachmentWithoutConvert(GROUP_KEY));\n        DubboExporter<?> exporter = (DubboExporter<?>) exporterMap.get(serviceKey);\n\n        if (exporter == null) {\n            throw new RemotingException(\n                    channel,\n                    \"Not found exported service: \" + serviceKey + \" in \" + exporterMap.keySet()\n                            + \", may be version or group mismatch \" + \", channel: consumer: \"\n                            + channel.getRemoteAddress() + \" --> provider: \" + channel.getLocalAddress() + \", message:\"\n                            + getInvocationWithoutData(inv));\n        }\n\n        Invoker<?> invoker = exporter.getInvoker();\n        inv.setServiceModel(invoker.getUrl().getServiceModel());\n        return invoker;\n    }",
+        "position": {
+            "line": 287,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 290,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getLocalAddress",
+                "position": {
+                    "line": 290,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 291,
+                    "column": 36
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 295,
+                    "column": 55
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 295,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 295,
+                    "column": 66
+                }
+            },
+            {
+                "name": "isClientSide",
+                "position": {
+                    "line": 302,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 304,
+                    "column": 31
+                }
+            },
+            {
+                "name": "setObjectAttachment",
+                "position": {
+                    "line": 305,
+                    "column": 17
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 305,
+                    "column": 78
+                }
+            },
+            {
+                "name": "serviceKey",
+                "position": {
+                    "line": 308,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 308,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getObjectAttachmentWithoutConvert",
+                "position": {
+                    "line": 309,
+                    "column": 21
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 310,
+                    "column": 68
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 315,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getRemoteAddress",
+                "position": {
+                    "line": 317,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getLocalAddress",
+                "position": {
+                    "line": 317,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getInvocationWithoutData",
+                "position": {
+                    "line": 318,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getInvoker",
+                "position": {
+                    "line": 321,
+                    "column": 39
+                }
+            },
+            {
+                "name": "setServiceModel",
+                "position": {
+                    "line": 322,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getServiceModel",
+                "position": {
+                    "line": 322,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 322,
+                    "column": 37
+                }
+            },
+            {
+                "name": "RemotingException",
+                "position": {
+                    "line": 313,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.isClientSide(Channel channel)",
+            "DubboProtocol.getInvocationWithoutData(Invocation invocation)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "getInvokers",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "getInvokers()",
+        "class_signature": "DubboProtocol.getInvokers()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return Collections.unmodifiableCollection(invokers);\n    }",
+        "position": {
+            "line": 326,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "unmodifiableCollection",
+                "position": {
+                    "line": 327,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "getDefaultPort",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "getDefaultPort()",
+        "class_signature": "DubboProtocol.getDefaultPort()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return DEFAULT_PORT;\n    }",
+        "position": {
+            "line": 331,
+            "column": 16
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "export",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "export(Invoker<T> invoker)",
+        "class_signature": "DubboProtocol.export(Invoker<T> invoker)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Invoker<T>",
+                "invoker"
+            ]
+        ],
+        "methodBody": "{\n        checkDestroyed();\n        URL url = invoker.getUrl();\n\n        // export service.\n        String key = serviceKey(url);\n        DubboExporter<T> exporter = new DubboExporter<>(invoker, key, exporterMap);\n\n        // export a stub service for dispatching event\n        boolean isStubSupportEvent = url.getParameter(STUB_EVENT_KEY, DEFAULT_STUB_EVENT);\n        boolean isCallbackService = url.getParameter(IS_CALLBACK_SERVICE, false);\n        if (isStubSupportEvent && !isCallbackService) {\n            String stubServiceMethods = url.getParameter(STUB_EVENT_METHODS_KEY);\n            if (stubServiceMethods == null || stubServiceMethods.length() == 0) {\n                if (logger.isWarnEnabled()) {\n                    logger.warn(\n                            PROTOCOL_UNSUPPORTED,\n                            \"\",\n                            \"\",\n                            \"consumer [\" + url.getParameter(INTERFACE_KEY)\n                                    + \"], has set stub proxy support event ,but no stub methods founded.\");\n                }\n            }\n        }\n\n        openServer(url);\n        optimizeSerialization(url);\n\n        return exporter;\n    }",
+        "position": {
+            "line": 336,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkDestroyed",
+                "position": {
+                    "line": 337,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 338,
+                    "column": 27
+                }
+            },
+            {
+                "name": "serviceKey",
+                "position": {
+                    "line": 341,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 345,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 346,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 348,
+                    "column": 45
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 349,
+                    "column": 66
+                }
+            },
+            {
+                "name": "isWarnEnabled",
+                "position": {
+                    "line": 350,
+                    "column": 28
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 351,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 355,
+                    "column": 48
+                }
+            },
+            {
+                "name": "openServer",
+                "position": {
+                    "line": 361,
+                    "column": 9
+                }
+            },
+            {
+                "name": "optimizeSerialization",
+                "position": {
+                    "line": 362,
+                    "column": 9
+                }
+            },
+            {
+                "name": "DubboExporter<>",
+                "position": {
+                    "line": 342,
+                    "column": 41
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.checkDestroyed()",
+            "DubboProtocol.openServer(URL url)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "openServer",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "openServer(URL url)",
+        "class_signature": "DubboProtocol.openServer(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        checkDestroyed();\n        // find server.\n        String key = url.getAddress();\n        // client can export a service which only for server to invoke\n        boolean isServer = url.getParameter(IS_SERVER_KEY, true);\n\n        if (isServer) {\n            ProtocolServer server = serverMap.get(key);\n            if (server == null) {\n                synchronized (this) {\n                    server = serverMap.get(key);\n                    if (server == null) {\n                        serverMap.put(key, createServer(url));\n                        return;\n                    }\n                }\n            }\n\n            // server supports reset, use together with override\n            server.reset(url);\n        }\n    }",
+        "position": {
+            "line": 367,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkDestroyed",
+                "position": {
+                    "line": 368,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getAddress",
+                "position": {
+                    "line": 370,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 372,
+                    "column": 32
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 375,
+                    "column": 47
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 378,
+                    "column": 40
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 380,
+                    "column": 35
+                }
+            },
+            {
+                "name": "createServer",
+                "position": {
+                    "line": 380,
+                    "column": 44
+                }
+            },
+            {
+                "name": "reset",
+                "position": {
+                    "line": 387,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.checkDestroyed()",
+            "DubboProtocol.createServer(URL url)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "checkDestroyed",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "checkDestroyed()",
+        "class_signature": "DubboProtocol.checkDestroyed()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (destroyed.get()) {\n            throw new IllegalStateException(getClass().getSimpleName() + \" is destroyed\");\n        }\n    }",
+        "position": {
+            "line": 391,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 392,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 393,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 393,
+                    "column": 45
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 393,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    },
+    {
+        "name": "createServer",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "createServer(URL url)",
+        "class_signature": "DubboProtocol.createServer(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        url = URLBuilder.from(url)\n                // send readonly event when server closes, it's enabled by default\n                .addParameterIfAbsent(CHANNEL_READONLYEVENT_SENT_KEY, Boolean.TRUE.toString())\n                // enable heartbeat by default\n                .addParameterIfAbsent(HEARTBEAT_KEY, String.valueOf(DEFAULT_HEARTBEAT))\n                .addParameter(CODEC_KEY, DubboCodec.NAME)\n                .build();\n\n        String transporter = url.getParameter(SERVER_KEY, DEFAULT_REMOTING_SERVER);\n        if (StringUtils.isNotEmpty(transporter)\n                && !url.getOrDefaultFrameworkModel()\n                        .getExtensionLoader(Transporter.class)\n                        .hasExtension(transporter)) {\n            throw new RpcException(\"Unsupported server type: \" + transporter + \", url: \" + url);\n        }\n\n        ExchangeServer server;\n        try {\n            server = Exchangers.bind(url, requestHandler);\n        } catch (RemotingException e) {\n            throw new RpcException(\"Fail to start server(url: \" + url + \") \" + e.getMessage(), e);\n        }\n\n        transporter = url.getParameter(CLIENT_KEY);\n        if (StringUtils.isNotEmpty(transporter)\n                && !url.getOrDefaultFrameworkModel()\n                        .getExtensionLoader(Transporter.class)\n                        .hasExtension(transporter)) {\n            throw new RpcException(\"Unsupported client type: \" + transporter);\n        }\n\n        DubboProtocolServer protocolServer = new DubboProtocolServer(server);\n        loadServerProperties(protocolServer);\n        return protocolServer;\n    }",
+        "position": {
+            "line": 397,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "build",
+                "position": {
+                    "line": 404,
+                    "column": 18
+                }
+            },
+            {
+                "name": "addParameter",
+                "position": {
+                    "line": 403,
+                    "column": 18
+                }
+            },
+            {
+                "name": "addParameterIfAbsent",
+                "position": {
+                    "line": 402,
+                    "column": 18
+                }
+            },
+            {
+                "name": "addParameterIfAbsent",
+                "position": {
+                    "line": 400,
+                    "column": 18
+                }
+            },
+            {
+                "name": "from",
+                "position": {
+                    "line": 398,
+                    "column": 26
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 400,
+                    "column": 84
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 402,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 406,
+                    "column": 34
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 407,
+                    "column": 25
+                }
+            },
+            {
+                "name": "hasExtension",
+                "position": {
+                    "line": 410,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getExtensionLoader",
+                "position": {
+                    "line": 409,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getOrDefaultFrameworkModel",
+                "position": {
+                    "line": 408,
+                    "column": 25
+                }
+            },
+            {
+                "name": "bind",
+                "position": {
+                    "line": 416,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 418,
+                    "column": 82
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 421,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 422,
+                    "column": 25
+                }
+            },
+            {
+                "name": "hasExtension",
+                "position": {
+                    "line": 425,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getExtensionLoader",
+                "position": {
+                    "line": 424,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getOrDefaultFrameworkModel",
+                "position": {
+                    "line": 423,
+                    "column": 25
+                }
+            },
+            {
+                "name": "loadServerProperties",
+                "position": {
+                    "line": 430,
+                    "column": 9
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 411,
+                    "column": 23
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 418,
+                    "column": 23
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 426,
+                    "column": 23
+                }
+            },
+            {
+                "name": "DubboProtocolServer",
+                "position": {
+                    "line": 429,
+                    "column": 50
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 17
+    },
+    {
+        "name": "refer",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "refer(Class<T> type, URL url)",
+        "class_signature": "DubboProtocol.refer(Class<T> type, URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<T>",
+                "type"
+            ],
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        checkDestroyed();\n        return protocolBindingRefer(type, url);\n    }",
+        "position": {
+            "line": 435,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkDestroyed",
+                "position": {
+                    "line": 436,
+                    "column": 9
+                }
+            },
+            {
+                "name": "protocolBindingRefer",
+                "position": {
+                    "line": 437,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.checkDestroyed()",
+            "DubboProtocol.protocolBindingRefer(Class<T> serviceType, URL url)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "protocolBindingRefer",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "protocolBindingRefer(Class<T> serviceType, URL url)",
+        "class_signature": "DubboProtocol.protocolBindingRefer(Class<T> serviceType, URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<T>",
+                "serviceType"
+            ],
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        checkDestroyed();\n        optimizeSerialization(url);\n\n        // create rpc invoker.\n        DubboInvoker<T> invoker = new DubboInvoker<>(serviceType, url, getClients(url), invokers);\n        invokers.add(invoker);\n\n        return invoker;\n    }",
+        "position": {
+            "line": 441,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkDestroyed",
+                "position": {
+                    "line": 442,
+                    "column": 9
+                }
+            },
+            {
+                "name": "optimizeSerialization",
+                "position": {
+                    "line": 443,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getClients",
+                "position": {
+                    "line": 446,
+                    "column": 72
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 447,
+                    "column": 18
+                }
+            },
+            {
+                "name": "DubboInvoker<>",
+                "position": {
+                    "line": 446,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.checkDestroyed()",
+            "DubboProtocol.getClients(URL url)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "getClients",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "getClients(URL url)",
+        "class_signature": "DubboProtocol.getClients(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        int connections = url.getParameter(CONNECTIONS_KEY, 0);\n        // whether to share connection\n        // if not configured, connection is shared, otherwise, one connection for one service\n        if (connections == 0) {\n            /*\n             * The xml configuration should have a higher priority than properties.\n             */\n            String shareConnectionsStr = StringUtils.isBlank(url.getParameter(SHARE_CONNECTIONS_KEY, (String) null))\n                    ? ConfigurationUtils.getProperty(\n                            url.getOrDefaultApplicationModel(), SHARE_CONNECTIONS_KEY, DEFAULT_SHARE_CONNECTIONS)\n                    : url.getParameter(SHARE_CONNECTIONS_KEY, (String) null);\n            connections = Integer.parseInt(shareConnectionsStr);\n\n            return getSharedClient(url, connections);\n        }\n\n        List<ExchangeClient> clients =\n                IntStream.range(0, connections).mapToObj((i) -> initClient(url)).collect(Collectors.toList());\n        return new ExclusiveClientsProvider(clients);\n    }",
+        "position": {
+            "line": 452,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 453,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 460,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 460,
+                    "column": 66
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 461,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getOrDefaultApplicationModel",
+                "position": {
+                    "line": 462,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 463,
+                    "column": 27
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 464,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getSharedClient",
+                "position": {
+                    "line": 466,
+                    "column": 20
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 470,
+                    "column": 82
+                }
+            },
+            {
+                "name": "mapToObj",
+                "position": {
+                    "line": 470,
+                    "column": 49
+                }
+            },
+            {
+                "name": "range",
+                "position": {
+                    "line": 470,
+                    "column": 27
+                }
+            },
+            {
+                "name": "initClient",
+                "position": {
+                    "line": 470,
+                    "column": 65
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 470,
+                    "column": 101
+                }
+            },
+            {
+                "name": "ExclusiveClientsProvider",
+                "position": {
+                    "line": 471,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.getSharedClient(URL url, int connectNum)",
+            "DubboProtocol.initClient(URL url)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "getSharedClient",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "getSharedClient(URL url, int connectNum)",
+        "class_signature": "DubboProtocol.getSharedClient(URL url, int connectNum)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "int",
+                "connectNum"
+            ]
+        ],
+        "methodBody": "{\n        String key = url.getAddress();\n\n        // connectNum must be greater than or equal to 1\n        int expectedConnectNum = Math.max(connectNum, 1);\n        return referenceClientMap.compute(key, (originKey, originValue) -> {\n            if (originValue != null && originValue.increaseCount()) {\n                return originValue;\n            } else {\n                return new SharedClientsProvider(\n                        this, originKey, buildReferenceCountExchangeClientList(url, expectedConnectNum));\n            }\n        });\n    }",
+        "position": {
+            "line": 481,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getAddress",
+                "position": {
+                    "line": 482,
+                    "column": 26
+                }
+            },
+            {
+                "name": "max",
+                "position": {
+                    "line": 485,
+                    "column": 39
+                }
+            },
+            {
+                "name": "compute",
+                "position": {
+                    "line": 486,
+                    "column": 35
+                }
+            },
+            {
+                "name": "increaseCount",
+                "position": {
+                    "line": 487,
+                    "column": 52
+                }
+            },
+            {
+                "name": "buildReferenceCountExchangeClientList",
+                "position": {
+                    "line": 491,
+                    "column": 42
+                }
+            },
+            {
+                "name": "SharedClientsProvider",
+                "position": {
+                    "line": 490,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.buildReferenceCountExchangeClientList(URL url, int connectNum)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "scheduleRemoveSharedClient",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "scheduleRemoveSharedClient(String key, SharedClientsProvider sharedClient)",
+        "class_signature": "DubboProtocol.scheduleRemoveSharedClient(String key, SharedClientsProvider sharedClient)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "key"
+            ],
+            [
+                "SharedClientsProvider",
+                "sharedClient"
+            ]
+        ],
+        "methodBody": "{\n        this.frameworkModel\n                .getBeanFactory()\n                .getBean(FrameworkExecutorRepository.class)\n                .getSharedExecutor()\n                .submit(() -> referenceClientMap.remove(key, sharedClient));\n    }",
+        "position": {
+            "line": 496,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "submit",
+                "position": {
+                    "line": 501,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getSharedExecutor",
+                "position": {
+                    "line": 500,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getBean",
+                "position": {
+                    "line": 499,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getBeanFactory",
+                "position": {
+                    "line": 498,
+                    "column": 18
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 501,
+                    "column": 50
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "buildReferenceCountExchangeClientList",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "buildReferenceCountExchangeClientList(URL url, int connectNum)",
+        "class_signature": "DubboProtocol.buildReferenceCountExchangeClientList(URL url, int connectNum)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "int",
+                "connectNum"
+            ]
+        ],
+        "methodBody": "{\n        List<ReferenceCountExchangeClient> clients = new ArrayList<>();\n\n        for (int i = 0; i < connectNum; i++) {\n            clients.add(buildReferenceCountExchangeClient(url));\n        }\n\n        return clients;\n    }",
+        "position": {
+            "line": 511,
+            "column": 48
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "add",
+                "position": {
+                    "line": 515,
+                    "column": 21
+                }
+            },
+            {
+                "name": "buildReferenceCountExchangeClient",
+                "position": {
+                    "line": 515,
+                    "column": 25
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 512,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.buildReferenceCountExchangeClient(URL url)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "buildReferenceCountExchangeClient",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "buildReferenceCountExchangeClient(URL url)",
+        "class_signature": "DubboProtocol.buildReferenceCountExchangeClient(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        ExchangeClient exchangeClient = initClient(url);\n        ReferenceCountExchangeClient client = new ReferenceCountExchangeClient(exchangeClient, DubboCodec.NAME);\n        // read configs\n        int shutdownTimeout = ConfigurationUtils.getServerShutdownTimeout(url.getScopeModel());\n        client.setShutdownWaitTime(shutdownTimeout);\n        return client;\n    }",
+        "position": {
+            "line": 527,
+            "column": 42
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "initClient",
+                "position": {
+                    "line": 528,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getServerShutdownTimeout",
+                "position": {
+                    "line": 531,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getScopeModel",
+                "position": {
+                    "line": 531,
+                    "column": 79
+                }
+            },
+            {
+                "name": "setShutdownWaitTime",
+                "position": {
+                    "line": 532,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ReferenceCountExchangeClient",
+                "position": {
+                    "line": 529,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [
+            "DubboProtocol.initClient(URL url)"
+        ],
+        "priority": 26
+    },
+    {
+        "name": "initClient",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "initClient(URL url)",
+        "class_signature": "DubboProtocol.initClient(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        /*\n         * Instance of url is InstanceAddressURL, so addParameter actually adds parameters into ServiceInstance,\n         * which means params are shared among different services. Since client is shared among services this is currently not a problem.\n         */\n        String str = url.getParameter(CLIENT_KEY, url.getParameter(SERVER_KEY, DEFAULT_REMOTING_CLIENT));\n\n        // BIO is not allowed since it has severe performance issue.\n        if (StringUtils.isNotEmpty(str)\n                && !url.getOrDefaultFrameworkModel()\n                        .getExtensionLoader(Transporter.class)\n                        .hasExtension(str)) {\n            throw new RpcException(\"Unsupported client type: \" + str + \",\" + \" supported client type is \"\n                    + StringUtils.join(\n                            url.getOrDefaultFrameworkModel()\n                                    .getExtensionLoader(Transporter.class)\n                                    .getSupportedExtensions(),\n                            \" \"));\n        }\n\n        try {\n            ScopeModel scopeModel = url.getScopeModel();\n            int heartbeat = UrlUtils.getHeartbeat(url);\n            // Replace InstanceAddressURL with ServiceConfigURL.\n            url = new ServiceConfigURL(\n                    DubboCodec.NAME,\n                    url.getUsername(),\n                    url.getPassword(),\n                    url.getHost(),\n                    url.getPort(),\n                    url.getPath(),\n                    url.getAllParameters());\n            url = url.addParameter(CODEC_KEY, DubboCodec.NAME);\n            // enable heartbeat by default\n            url = url.addParameterIfAbsent(HEARTBEAT_KEY, Integer.toString(heartbeat));\n            url = url.setScopeModel(scopeModel);\n\n            // connection should be lazy\n            return url.getParameter(LAZY_CONNECT_KEY, false)\n                    ? new LazyConnectExchangeClient(url, requestHandler)\n                    : Exchangers.connect(url, requestHandler);\n        } catch (RemotingException e) {\n            throw new RpcException(\"Fail to create remoting client for service(\" + url + \"): \" + e.getMessage(), e);\n        }\n    }",
+        "position": {
+            "line": 541,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 546,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 546,
+                    "column": 55
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 549,
+                    "column": 25
+                }
+            },
+            {
+                "name": "hasExtension",
+                "position": {
+                    "line": 552,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getExtensionLoader",
+                "position": {
+                    "line": 551,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getOrDefaultFrameworkModel",
+                "position": {
+                    "line": 550,
+                    "column": 25
+                }
+            },
+            {
+                "name": "join",
+                "position": {
+                    "line": 554,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getSupportedExtensions",
+                "position": {
+                    "line": 557,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getExtensionLoader",
+                "position": {
+                    "line": 556,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getOrDefaultFrameworkModel",
+                "position": {
+                    "line": 555,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getScopeModel",
+                "position": {
+                    "line": 562,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getHeartbeat",
+                "position": {
+                    "line": 563,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getUsername",
+                "position": {
+                    "line": 567,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getPassword",
+                "position": {
+                    "line": 568,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getHost",
+                "position": {
+                    "line": 569,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 570,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getPath",
+                "position": {
+                    "line": 571,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getAllParameters",
+                "position": {
+                    "line": 572,
+                    "column": 25
+                }
+            },
+            {
+                "name": "addParameter",
+                "position": {
+                    "line": 573,
+                    "column": 23
+                }
+            },
+            {
+                "name": "addParameterIfAbsent",
+                "position": {
+                    "line": 575,
+                    "column": 23
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 575,
+                    "column": 67
+                }
+            },
+            {
+                "name": "setScopeModel",
+                "position": {
+                    "line": 576,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 579,
+                    "column": 24
+                }
+            },
+            {
+                "name": "connect",
+                "position": {
+                    "line": 581,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 583,
+                    "column": 100
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 553,
+                    "column": 23
+                }
+            },
+            {
+                "name": "ServiceConfigURL",
+                "position": {
+                    "line": 565,
+                    "column": 23
+                }
+            },
+            {
+                "name": "LazyConnectExchangeClient",
+                "position": {
+                    "line": 580,
+                    "column": 27
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 583,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 27
+    },
+    {
+        "name": "destroy",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "destroy()",
+        "class_signature": "DubboProtocol.destroy()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (!destroyed.compareAndSet(false, true)) {\n            return;\n        }\n        if (logger.isInfoEnabled()) {\n            logger.info(\"Destroying protocol [\" + this.getClass().getSimpleName() + \"] ...\");\n        }\n        for (String key : new ArrayList<>(serverMap.keySet())) {\n            ProtocolServer protocolServer = serverMap.remove(key);\n\n            if (protocolServer == null) {\n                continue;\n            }\n\n            RemotingServer server = protocolServer.getRemotingServer();\n\n            try {\n                if (logger.isInfoEnabled()) {\n                    logger.info(\"Closing dubbo server: \" + server.getLocalAddress());\n                }\n\n                server.close(ConfigurationUtils.reCalShutdownTime(getServerShutdownTimeout(protocolServer)));\n\n            } catch (Throwable t) {\n                logger.warn(\n                        PROTOCOL_ERROR_CLOSE_SERVER,\n                        \"\",\n                        \"\",\n                        \"Close dubbo server [\" + server.getLocalAddress() + \"] failed: \" + t.getMessage(),\n                        t);\n            }\n        }\n        serverMap.clear();\n\n        for (String key : new ArrayList<>(referenceClientMap.keySet())) {\n            SharedClientsProvider clients = referenceClientMap.remove(key);\n            clients.forceClose();\n        }\n\n        PortUnificationExchanger.close();\n        referenceClientMap.clear();\n\n        super.destroy();\n    }",
+        "position": {
+            "line": 589,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "compareAndSet",
+                "position": {
+                    "line": 590,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isInfoEnabled",
+                "position": {
+                    "line": 593,
+                    "column": 20
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 594,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getSimpleName",
+                "position": {
+                    "line": 594,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 594,
+                    "column": 56
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 596,
+                    "column": 53
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 597,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getRemotingServer",
+                "position": {
+                    "line": 603,
+                    "column": 52
+                }
+            },
+            {
+                "name": "isInfoEnabled",
+                "position": {
+                    "line": 606,
+                    "column": 28
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 607,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getLocalAddress",
+                "position": {
+                    "line": 607,
+                    "column": 67
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 610,
+                    "column": 24
+                }
+            },
+            {
+                "name": "reCalShutdownTime",
+                "position": {
+                    "line": 610,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getServerShutdownTimeout",
+                "position": {
+                    "line": 610,
+                    "column": 67
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 613,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getLocalAddress",
+                "position": {
+                    "line": 617,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 617,
+                    "column": 94
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 621,
+                    "column": 19
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 623,
+                    "column": 62
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 624,
+                    "column": 64
+                }
+            },
+            {
+                "name": "forceClose",
+                "position": {
+                    "line": 625,
+                    "column": 21
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 628,
+                    "column": 34
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 629,
+                    "column": 28
+                }
+            },
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 631,
+                    "column": 15
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 596,
+                    "column": 31
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 623,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "getInvocationWithoutData",
+        "category": "method_declaration",
+        "class": "DubboProtocol",
+        "signature": "getInvocationWithoutData(Invocation invocation)",
+        "class_signature": "DubboProtocol.getInvocationWithoutData(Invocation invocation)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Invocation",
+                "invocation"
+            ]
+        ],
+        "methodBody": "{\n        if (logger.isDebugEnabled()) {\n            return invocation;\n        }\n        if (invocation instanceof RpcInvocation) {\n            RpcInvocation rpcInvocation = (RpcInvocation) invocation;\n            rpcInvocation.setArguments(null);\n            return rpcInvocation;\n        }\n        return invocation;\n    }",
+        "position": {
+            "line": 640,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isDebugEnabled",
+                "position": {
+                    "line": 641,
+                    "column": 20
+                }
+            },
+            {
+                "name": "setArguments",
+                "position": {
+                    "line": 646,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 25
+    }
+]

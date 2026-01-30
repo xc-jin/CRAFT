@@ -1,0 +1,343 @@
+[
+    {
+        "name": "extractProperties",
+        "category": "method_declaration",
+        "class": "EnvironmentUtils",
+        "signature": "extractProperties(ConfigurableEnvironment environment)",
+        "class_signature": "EnvironmentUtils.extractProperties(ConfigurableEnvironment environment)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConfigurableEnvironment",
+                "environment"
+            ]
+        ],
+        "methodBody": "{\n        return Collections.unmodifiableMap(doExtraProperties(environment));\n    }",
+        "position": {
+            "line": 57,
+            "column": 39
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "unmodifiableMap",
+                "position": {
+                    "line": 58,
+                    "column": 28
+                }
+            },
+            {
+                "name": "doExtraProperties",
+                "position": {
+                    "line": 58,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [
+            "EnvironmentUtils.doExtraProperties(ConfigurableEnvironment environment)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "doExtraProperties",
+        "category": "method_declaration",
+        "class": "EnvironmentUtils",
+        "signature": "doExtraProperties(ConfigurableEnvironment environment)",
+        "class_signature": "EnvironmentUtils.doExtraProperties(ConfigurableEnvironment environment)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConfigurableEnvironment",
+                "environment"
+            ]
+        ],
+        "methodBody": "{\n\n        Map<String, Object> properties = new LinkedHashMap<>(); // orderly\n\n        Map<String, PropertySource<?>> map = doGetPropertySources(environment);\n\n        for (PropertySource<?> source : map.values()) {\n\n            if (source instanceof EnumerablePropertySource) {\n\n                EnumerablePropertySource propertySource = (EnumerablePropertySource) source;\n\n                String[] propertyNames = propertySource.getPropertyNames();\n\n                if (ObjectUtils.isEmpty(propertyNames)) {\n                    continue;\n                }\n\n                for (String propertyName : propertyNames) {\n\n                    if (!properties.containsKey(propertyName)) { // put If absent\n                        properties.put(propertyName, propertySource.getProperty(propertyName));\n                    }\n                }\n            }\n        }\n\n        return properties;\n    }",
+        "position": {
+            "line": 61,
+            "column": 40
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "doGetPropertySources",
+                "position": {
+                    "line": 65,
+                    "column": 46
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 67,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getPropertyNames",
+                "position": {
+                    "line": 73,
+                    "column": 57
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 75,
+                    "column": 33
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 81,
+                    "column": 37
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 82,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 82,
+                    "column": 69
+                }
+            },
+            {
+                "name": "LinkedHashMap<>",
+                "position": {
+                    "line": 63,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "EnvironmentUtils.doGetPropertySources(ConfigurableEnvironment environment)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "doGetPropertySources",
+        "category": "method_declaration",
+        "class": "EnvironmentUtils",
+        "signature": "doGetPropertySources(ConfigurableEnvironment environment)",
+        "class_signature": "EnvironmentUtils.doGetPropertySources(ConfigurableEnvironment environment)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConfigurableEnvironment",
+                "environment"
+            ]
+        ],
+        "methodBody": "{\n        Map<String, PropertySource<?>> map = new LinkedHashMap<>();\n        MutablePropertySources sources = environment.getPropertySources();\n        for (PropertySource<?> source : sources) {\n            extract(\"\", map, source);\n        }\n        return map;\n    }",
+        "position": {
+            "line": 91,
+            "column": 51
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getPropertySources",
+                "position": {
+                    "line": 93,
+                    "column": 54
+                }
+            },
+            {
+                "name": "extract",
+                "position": {
+                    "line": 95,
+                    "column": 13
+                }
+            },
+            {
+                "name": "LinkedHashMap<>",
+                "position": {
+                    "line": 92,
+                    "column": 50
+                }
+            }
+        ],
+        "calledMethods": [
+            "EnvironmentUtils.extract(String root, Map<String, PropertySource<?>> map, PropertySource<?> source)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "extract",
+        "category": "method_declaration",
+        "class": "EnvironmentUtils",
+        "signature": "extract(String root, Map<String, PropertySource<?>> map, PropertySource<?> source)",
+        "class_signature": "EnvironmentUtils.extract(String root, Map<String, PropertySource<?>> map, PropertySource<?> source)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "root"
+            ],
+            [
+                "Map<String, PropertySource<?>>",
+                "map"
+            ],
+            [
+                "PropertySource<?>",
+                "source"
+            ]
+        ],
+        "methodBody": "{\n        if (source instanceof CompositePropertySource) {\n            for (PropertySource<?> nest : ((CompositePropertySource) source).getPropertySources()) {\n                extract(source.getName() + \":\", map, nest);\n            }\n        } else {\n            map.put(root + source.getName(), source);\n        }\n    }",
+        "position": {
+            "line": 100,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getPropertySources",
+                "position": {
+                    "line": 102,
+                    "column": 78
+                }
+            },
+            {
+                "name": "extract",
+                "position": {
+                    "line": 103,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 103,
+                    "column": 32
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 106,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 106,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "EnvironmentUtils.extract(String root, Map<String, PropertySource<?>> map, PropertySource<?> source)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "filterDubboProperties",
+        "category": "method_declaration",
+        "class": "EnvironmentUtils",
+        "signature": "filterDubboProperties(ConfigurableEnvironment environment)",
+        "class_signature": "EnvironmentUtils.filterDubboProperties(ConfigurableEnvironment environment)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConfigurableEnvironment",
+                "environment"
+            ]
+        ],
+        "methodBody": "{\n\n        SortedMap<String, String> dubboProperties = new TreeMap<>();\n\n        Map<String, Object> properties = extractProperties(environment);\n\n        for (Map.Entry<String, Object> entry : properties.entrySet()) {\n            String propertyName = entry.getKey();\n\n            if (propertyName.startsWith(DUBBO_PREFIX + PROPERTY_NAME_SEPARATOR) && entry.getValue() != null) {\n                dubboProperties.put(\n                        propertyName,\n                        environment.resolvePlaceholders(entry.getValue().toString()));\n            }\n        }\n\n        return Collections.unmodifiableSortedMap(dubboProperties);\n    }",
+        "position": {
+            "line": 116,
+            "column": 45
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "extractProperties",
+                "position": {
+                    "line": 120,
+                    "column": 42
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 122,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 123,
+                    "column": 41
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 125,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 125,
+                    "column": 90
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 126,
+                    "column": 33
+                }
+            },
+            {
+                "name": "resolvePlaceholders",
+                "position": {
+                    "line": 128,
+                    "column": 37
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 128,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 128,
+                    "column": 63
+                }
+            },
+            {
+                "name": "unmodifiableSortedMap",
+                "position": {
+                    "line": 132,
+                    "column": 28
+                }
+            },
+            {
+                "name": "TreeMap<>",
+                "position": {
+                    "line": 118,
+                    "column": 57
+                }
+            }
+        ],
+        "calledMethods": [
+            "EnvironmentUtils.extractProperties(ConfigurableEnvironment environment)"
+        ],
+        "priority": 0
+    }
+]

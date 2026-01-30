@@ -1,0 +1,729 @@
+[
+    {
+        "name": "readLatestReleaseVersion",
+        "category": "method_declaration",
+        "class": "DownloadUtils",
+        "signature": "readLatestReleaseVersion()",
+        "class_signature": "DownloadUtils.readLatestReleaseVersion()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        InputStream inputStream = null;\n        try {\n            URLConnection connection = openURLConnection(ARTHAS_LATEST_VERSIONS_URL);\n            inputStream = connection.getInputStream();\n            return IOUtils.toString(inputStream).trim();\n        } catch (Throwable t) {\n            AnsiLog.error(\"Can not read arthas version from: \" + ARTHAS_LATEST_VERSIONS_URL);\n            AnsiLog.debug(t);\n        } finally {\n            IOUtils.close(inputStream);\n        }\n        return null;\n    }",
+        "position": {
+            "line": 32,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "openURLConnection",
+                "position": {
+                    "line": 35,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getInputStream",
+                "position": {
+                    "line": 36,
+                    "column": 38
+                }
+            },
+            {
+                "name": "trim",
+                "position": {
+                    "line": 37,
+                    "column": 50
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 37,
+                    "column": 28
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 39,
+                    "column": 21
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 40,
+                    "column": 21
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 42,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "DownloadUtils.openURLConnection(String url)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "readRemoteVersions",
+        "category": "method_declaration",
+        "class": "DownloadUtils",
+        "signature": "readRemoteVersions()",
+        "class_signature": "DownloadUtils.readRemoteVersions()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        InputStream inputStream = null;\n        try {\n            URLConnection connection = openURLConnection(ARTHAS_VERSIONS_URL);\n            inputStream = connection.getInputStream();\n            String versionsStr = IOUtils.toString(inputStream);\n            String[] versions = versionsStr.split(\"\\r\\n\");\n\n            ArrayList<String> result = new ArrayList<String>();\n            for (String version : versions) {\n                result.add(version.trim());\n            }\n            return result;\n\n        } catch (Throwable t) {\n            AnsiLog.error(\"Can not read arthas versions from: \" + ARTHAS_VERSIONS_URL);\n            AnsiLog.debug(t);\n        } finally {\n            IOUtils.close(inputStream);\n        }\n        return null;\n    }",
+        "position": {
+            "line": 47,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "openURLConnection",
+                "position": {
+                    "line": 50,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getInputStream",
+                "position": {
+                    "line": 51,
+                    "column": 38
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 52,
+                    "column": 42
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 53,
+                    "column": 45
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 57,
+                    "column": 24
+                }
+            },
+            {
+                "name": "trim",
+                "position": {
+                    "line": 57,
+                    "column": 36
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 62,
+                    "column": 21
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 63,
+                    "column": 21
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 65,
+                    "column": 21
+                }
+            },
+            {
+                "name": "ArrayList<String>",
+                "position": {
+                    "line": 55,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [
+            "DownloadUtils.openURLConnection(String url)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "getRepoUrl",
+        "category": "method_declaration",
+        "class": "DownloadUtils",
+        "signature": "getRepoUrl(String repoUrl, boolean http)",
+        "class_signature": "DownloadUtils.getRepoUrl(String repoUrl, boolean http)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "repoUrl"
+            ],
+            [
+                "boolean",
+                "http"
+            ]
+        ],
+        "methodBody": "{\n        if (repoUrl.endsWith(\"/\")) {\n            repoUrl = repoUrl.substring(0, repoUrl.length() - 1);\n        }\n\n        if (http && repoUrl.startsWith(\"https\")) {\n            repoUrl = \"http\" + repoUrl.substring(\"https\".length());\n        }\n        return repoUrl;\n    }",
+        "position": {
+            "line": 70,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "endsWith",
+                "position": {
+                    "line": 71,
+                    "column": 21
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 72,
+                    "column": 31
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 72,
+                    "column": 52
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 75,
+                    "column": 29
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 76,
+                    "column": 40
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 76,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "downArthasPackaging",
+        "category": "method_declaration",
+        "class": "DownloadUtils",
+        "signature": "downArthasPackaging(String repoMirror, boolean http, String arthasVersion, String savePath)",
+        "class_signature": "DownloadUtils.downArthasPackaging(String repoMirror, boolean http, String arthasVersion, String savePath)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "repoMirror"
+            ],
+            [
+                "boolean",
+                "http"
+            ],
+            [
+                "String",
+                "arthasVersion"
+            ],
+            [
+                "String",
+                "savePath"
+            ]
+        ],
+        "methodBody": "{\n        String repoUrl = getRepoUrl(ARTHAS_DOWNLOAD_URL, http);\n\n        File unzipDir = new File(savePath, arthasVersion + File.separator + \"arthas\");\n\n        File tempFile = File.createTempFile(\"arthas\", \"arthas\");\n\n        AnsiLog.debug(\"Arthas download temp file: \" + tempFile.getAbsolutePath());\n\n        String remoteDownloadUrl = repoUrl.replace(\"${REPO}\", repoMirror).replace(\"${VERSION}\", arthasVersion);\n        AnsiLog.info(\"Start download arthas from remote server: \" + remoteDownloadUrl);\n        saveUrl(tempFile.getAbsolutePath(), remoteDownloadUrl, true);\n        AnsiLog.info(\"Download arthas success.\");\n        IOUtils.unzip(tempFile.getAbsolutePath(), unzipDir.getAbsolutePath());\n    }",
+        "position": {
+            "line": 81,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getRepoUrl",
+                "position": {
+                    "line": 83,
+                    "column": 26
+                }
+            },
+            {
+                "name": "createTempFile",
+                "position": {
+                    "line": 87,
+                    "column": 30
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 89,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getAbsolutePath",
+                "position": {
+                    "line": 89,
+                    "column": 64
+                }
+            },
+            {
+                "name": "replace",
+                "position": {
+                    "line": 91,
+                    "column": 75
+                }
+            },
+            {
+                "name": "replace",
+                "position": {
+                    "line": 91,
+                    "column": 44
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 92,
+                    "column": 17
+                }
+            },
+            {
+                "name": "saveUrl",
+                "position": {
+                    "line": 93,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getAbsolutePath",
+                "position": {
+                    "line": 93,
+                    "column": 26
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 94,
+                    "column": 17
+                }
+            },
+            {
+                "name": "unzip",
+                "position": {
+                    "line": 95,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getAbsolutePath",
+                "position": {
+                    "line": 95,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getAbsolutePath",
+                "position": {
+                    "line": 95,
+                    "column": 60
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 85,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "DownloadUtils.getRepoUrl(String repoUrl, boolean http)",
+            "DownloadUtils.saveUrl(String filename, String urlString, boolean printProgress)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "saveUrl",
+        "category": "method_declaration",
+        "class": "DownloadUtils",
+        "signature": "saveUrl(String filename, String urlString, boolean printProgress)",
+        "class_signature": "DownloadUtils.saveUrl(String filename, String urlString, boolean printProgress)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "filename"
+            ],
+            [
+                "String",
+                "urlString"
+            ],
+            [
+                "boolean",
+                "printProgress"
+            ]
+        ],
+        "methodBody": "{\n        BufferedInputStream in = null;\n        FileOutputStream fout = null;\n        try {\n            URLConnection connection = openURLConnection(urlString);\n            in = new BufferedInputStream(connection.getInputStream());\n            List<String> values = connection.getHeaderFields().get(\"Content-Length\");\n            int fileSize = 0;\n            if (values != null && !values.isEmpty()) {\n                String contentLength = values.get(0);\n                if (contentLength != null) {\n                    // parse the length into an integer...\n                    fileSize = Integer.parseInt(contentLength);\n                }\n            }\n\n            fout = new FileOutputStream(filename);\n\n            final byte[] data = new byte[1024 * 1024];\n            int totalCount = 0;\n            int count;\n            long lastPrintTime = System.currentTimeMillis();\n            while ((count = in.read(data, 0, data.length)) != -1) {\n                totalCount += count;\n                if (printProgress) {\n                    long now = System.currentTimeMillis();\n                    if (now - lastPrintTime > 1000) {\n                        AnsiLog.info(\"File size: {}, downloaded size: {}, downloading ...\", formatFileSize(fileSize),\n                                formatFileSize(totalCount));\n                        lastPrintTime = now;\n                    }\n                }\n                fout.write(data, 0, count);\n            }\n        } catch (javax.net.ssl.SSLException e) {\n            AnsiLog.error(\"TLS connect error, please try to add --use-http argument.\");\n            AnsiLog.error(\"URL: \" + urlString);\n            AnsiLog.error(e);\n        } finally {\n            IOUtils.close(in);\n            IOUtils.close(fout);\n        }\n    }",
+        "position": {
+            "line": 98,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "openURLConnection",
+                "position": {
+                    "line": 103,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getInputStream",
+                "position": {
+                    "line": 104,
+                    "column": 53
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 105,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getHeaderFields",
+                "position": {
+                    "line": 105,
+                    "column": 46
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 107,
+                    "column": 43
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 108,
+                    "column": 47
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 111,
+                    "column": 40
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 120,
+                    "column": 41
+                }
+            },
+            {
+                "name": "read",
+                "position": {
+                    "line": 121,
+                    "column": 32
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 124,
+                    "column": 39
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 126,
+                    "column": 33
+                }
+            },
+            {
+                "name": "formatFileSize",
+                "position": {
+                    "line": 126,
+                    "column": 93
+                }
+            },
+            {
+                "name": "formatFileSize",
+                "position": {
+                    "line": 127,
+                    "column": 33
+                }
+            },
+            {
+                "name": "write",
+                "position": {
+                    "line": 131,
+                    "column": 22
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 134,
+                    "column": 21
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 135,
+                    "column": 21
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 136,
+                    "column": 21
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 138,
+                    "column": 21
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 139,
+                    "column": 21
+                }
+            },
+            {
+                "name": "BufferedInputStream",
+                "position": {
+                    "line": 104,
+                    "column": 22
+                }
+            },
+            {
+                "name": "FileOutputStream",
+                "position": {
+                    "line": 115,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "DownloadUtils.openURLConnection(String url)",
+            "DownloadUtils.formatFileSize(long size)",
+            "DownloadUtils.formatFileSize(long size)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "openURLConnection",
+        "category": "method_declaration",
+        "class": "DownloadUtils",
+        "signature": "openURLConnection(String url)",
+        "class_signature": "DownloadUtils.openURLConnection(String url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        URLConnection connection = new URL(url).openConnection();\n        if (connection instanceof HttpURLConnection) {\n            connection.setConnectTimeout(CONNECTION_TIMEOUT);\n            // normally, 3xx is redirect\n            int status = ((HttpURLConnection) connection).getResponseCode();\n            if (status != HttpURLConnection.HTTP_OK) {\n                if (status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM\n                        || status == HttpURLConnection.HTTP_SEE_OTHER) {\n                    String newUrl = connection.getHeaderField(\"Location\");\n                    AnsiLog.debug(\"Try to open url: {}, redirect to: {}\", url, newUrl);\n                    return openURLConnection(newUrl);\n                }\n            }\n        }\n        return connection;\n    }",
+        "position": {
+            "line": 151,
+            "column": 34
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "openConnection",
+                "position": {
+                    "line": 152,
+                    "column": 49
+                }
+            },
+            {
+                "name": "setConnectTimeout",
+                "position": {
+                    "line": 154,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getResponseCode",
+                "position": {
+                    "line": 156,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getHeaderField",
+                "position": {
+                    "line": 160,
+                    "column": 48
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 161,
+                    "column": 29
+                }
+            },
+            {
+                "name": "openURLConnection",
+                "position": {
+                    "line": 162,
+                    "column": 28
+                }
+            },
+            {
+                "name": "URL",
+                "position": {
+                    "line": 152,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [
+            "DownloadUtils.openURLConnection(String url)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "formatFileSize",
+        "category": "method_declaration",
+        "class": "DownloadUtils",
+        "signature": "formatFileSize(long size)",
+        "class_signature": "DownloadUtils.formatFileSize(long size)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "size"
+            ]
+        ],
+        "methodBody": "{\n        String hrSize;\n\n        double b = size;\n        double k = size / 1024.0;\n        double m = ((size / 1024.0) / 1024.0);\n        double g = (((size / 1024.0) / 1024.0) / 1024.0);\n        double t = ((((size / 1024.0) / 1024.0) / 1024.0) / 1024.0);\n\n        DecimalFormat dec = new DecimalFormat(\"0.00\");\n\n        if (t > 1) {\n            hrSize = dec.format(t).concat(\" TB\");\n        } else if (g > 1) {\n            hrSize = dec.format(g).concat(\" GB\");\n        } else if (m > 1) {\n            hrSize = dec.format(m).concat(\" MB\");\n        } else if (k > 1) {\n            hrSize = dec.format(k).concat(\" KB\");\n        } else {\n            hrSize = dec.format(b).concat(\" Bytes\");\n        }\n\n        return hrSize;\n    }",
+        "position": {
+            "line": 169,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "concat",
+                "position": {
+                    "line": 181,
+                    "column": 36
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 181,
+                    "column": 26
+                }
+            },
+            {
+                "name": "concat",
+                "position": {
+                    "line": 183,
+                    "column": 36
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 183,
+                    "column": 26
+                }
+            },
+            {
+                "name": "concat",
+                "position": {
+                    "line": 185,
+                    "column": 36
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 185,
+                    "column": 26
+                }
+            },
+            {
+                "name": "concat",
+                "position": {
+                    "line": 187,
+                    "column": 36
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 187,
+                    "column": 26
+                }
+            },
+            {
+                "name": "concat",
+                "position": {
+                    "line": 189,
+                    "column": 36
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 189,
+                    "column": 26
+                }
+            },
+            {
+                "name": "DecimalFormat",
+                "position": {
+                    "line": 178,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    }
+]

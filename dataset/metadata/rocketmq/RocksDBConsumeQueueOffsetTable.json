@@ -1,0 +1,3210 @@
+[
+    {
+        "name": "RocksDBConsumeQueueOffsetTable",
+        "category": "constructor_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "RocksDBConsumeQueueOffsetTable(RocksDBConsumeQueueTable rocksDBConsumeQueueTable, ConsumeQueueRocksDBStorage rocksDBStorage, DefaultMessageStore messageStore)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.RocksDBConsumeQueueOffsetTable(RocksDBConsumeQueueTable rocksDBConsumeQueueTable, ConsumeQueueRocksDBStorage rocksDBStorage, DefaultMessageStore messageStore)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "RocksDBConsumeQueueTable",
+                "rocksDBConsumeQueueTable"
+            ],
+            [
+                "ConsumeQueueRocksDBStorage",
+                "rocksDBStorage"
+            ],
+            [
+                "DefaultMessageStore",
+                "messageStore"
+            ]
+        ],
+        "methodBody": "{\n        this.rocksDBConsumeQueueTable = rocksDBConsumeQueueTable;\n        this.rocksDBStorage = rocksDBStorage;\n        this.messageStore = messageStore;\n        this.topicQueueMinOffset = new ConcurrentHashMap<>(1024);\n        this.topicQueueMaxCqOffset = new ConcurrentHashMap<>(1024);\n\n        this.maxPhyOffsetBB = ByteBuffer.allocateDirect(8);\n    }",
+        "position": {
+            "line": 109,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "allocateDirect",
+                "position": {
+                    "line": 117,
+                    "column": 42
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 114,
+                    "column": 40
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 115,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "load",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "load()",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.load()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        this.offsetCFH = this.rocksDBStorage.getOffsetCFHandle();\n        loadMaxConsumeQueueOffsets();\n    }",
+        "position": {
+            "line": 120,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getOffsetCFHandle",
+                "position": {
+                    "line": 121,
+                    "column": 46
+                }
+            },
+            {
+                "name": "loadMaxConsumeQueueOffsets",
+                "position": {
+                    "line": 122,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.loadMaxConsumeQueueOffsets()"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "scanAllQueueIdInTopic",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "scanAllQueueIdInTopic(String topic)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.scanAllQueueIdInTopic(String topic)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ]
+        ],
+        "methodBody": "{\n        Set<Integer> queueIdSet = new HashSet<>();\n        byte[] topicBytes = topic.getBytes(StandardCharsets.UTF_8);\n        ByteBuffer byteBuffer = ByteBuffer.allocate(OFFSET_KEY_LENGTH_WITHOUT_TOPIC_QUEUE_ID_BYTES + topicBytes.length);\n        byteBuffer.putInt(topicBytes.length).put(CTRL_1).put(topicBytes).put(CTRL_1).put(MAX_BYTES).put(CTRL_1);\n        byteBuffer.flip();\n        byte[] prefix = byteBuffer.array();\n        rocksDBStorage.iterate(offsetCFH, prefix, (keyBytes, unused) -> {\n            ByteBuffer keyBuffer = ByteBuffer.wrap(keyBytes);\n            keyBuffer.position(prefix.length);\n            int queueId = keyBuffer.getInt();\n            queueIdSet.add(queueId);\n        });\n        return queueIdSet;\n    }",
+        "position": {
+            "line": 125,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 127,
+                    "column": 35
+                }
+            },
+            {
+                "name": "allocate",
+                "position": {
+                    "line": 128,
+                    "column": 44
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 129,
+                    "column": 101
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 129,
+                    "column": 86
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 129,
+                    "column": 74
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 129,
+                    "column": 58
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 129,
+                    "column": 46
+                }
+            },
+            {
+                "name": "putInt",
+                "position": {
+                    "line": 129,
+                    "column": 20
+                }
+            },
+            {
+                "name": "flip",
+                "position": {
+                    "line": 130,
+                    "column": 20
+                }
+            },
+            {
+                "name": "array",
+                "position": {
+                    "line": 131,
+                    "column": 36
+                }
+            },
+            {
+                "name": "iterate",
+                "position": {
+                    "line": 132,
+                    "column": 24
+                }
+            },
+            {
+                "name": "wrap",
+                "position": {
+                    "line": 133,
+                    "column": 47
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 134,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 135,
+                    "column": 37
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 136,
+                    "column": 24
+                }
+            },
+            {
+                "name": "HashSet<>",
+                "position": {
+                    "line": 126,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "loadMaxConsumeQueueOffsets",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "loadMaxConsumeQueueOffsets()",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.loadMaxConsumeQueueOffsets()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        Function<OffsetEntry, Boolean> predicate = entry -> entry.type == OffsetEntryType.MAXIMUM;\n        Consumer<OffsetEntry> fn = entry -> {\n            topicQueueMaxCqOffset.putIfAbsent(entry.topic + \"-\" + entry.queueId, entry.offset);\n            log.info(\"LoadMaxConsumeQueueOffsets Max {}:{} --> {}|{}\", entry.topic, entry.queueId, entry.offset, entry.commitLogOffset);\n        };\n        try {\n            forEach(predicate, fn);\n        } catch (RocksDBException e) {\n            log.error(\"Failed to maximum consume queue offset\", e);\n        }\n    }",
+        "position": {
+            "line": 141,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 144,
+                    "column": 35
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 145,
+                    "column": 17
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 148,
+                    "column": 13
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 150,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.forEach(Function<OffsetEntry, Boolean> predicate, Consumer<OffsetEntry> fn)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "forEach",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "forEach(Function<OffsetEntry, Boolean> predicate, Consumer<OffsetEntry> fn)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.forEach(Function<OffsetEntry, Boolean> predicate, Consumer<OffsetEntry> fn)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Function<OffsetEntry, Boolean>",
+                "predicate"
+            ],
+            [
+                "Consumer<OffsetEntry>",
+                "fn"
+            ]
+        ],
+        "methodBody": "{\n        try (RocksIterator iterator = this.rocksDBStorage.seekOffsetCF()) {\n            if (null == iterator) {\n                return;\n            }\n\n            int keyBufferCapacity = 256;\n            iterator.seekToFirst();\n            ByteBuffer keyBuffer = ByteBuffer.allocateDirect(keyBufferCapacity);\n            ByteBuffer valueBuffer = ByteBuffer.allocateDirect(16);\n            while (iterator.isValid()) {\n                // parse key buffer according to key layout\n                keyBuffer.clear(); // clear position and limit before reuse\n                int total = iterator.key(keyBuffer);\n                if (total > keyBufferCapacity) {\n                    keyBufferCapacity = total;\n                    PlatformDependent.freeDirectBuffer(keyBuffer);\n                    keyBuffer = ByteBuffer.allocateDirect(keyBufferCapacity);\n                    continue;\n                }\n\n                if (keyBuffer.remaining() <= OFFSET_KEY_LENGTH_WITHOUT_TOPIC_BYTES) {\n                    iterator.next();\n                    ROCKSDB_LOG.warn(\"Malformed Key/Value pair\");\n                    continue;\n                }\n\n                int topicLength = keyBuffer.getInt();\n                byte ctrl1 = keyBuffer.get();\n                assert ctrl1 == CTRL_1;\n\n                byte[] topicBytes = new byte[topicLength];\n                keyBuffer.get(topicBytes);\n                ctrl1 = keyBuffer.get();\n                assert ctrl1 == CTRL_1;\n                String topic = new String(topicBytes, StandardCharsets.UTF_8);\n\n                byte[] minMax = new byte[3];\n                keyBuffer.get(minMax);\n                OffsetEntryType entryType;\n                if (Arrays.equals(minMax, MAX_BYTES)) {\n                    entryType = OffsetEntryType.MAXIMUM;\n                } else {\n                    entryType = OffsetEntryType.MINIMUM;\n                }\n                ctrl1 = keyBuffer.get();\n                assert ctrl1 == CTRL_1;\n\n                assert keyBuffer.remaining() == Integer.BYTES;\n                int queueId = keyBuffer.getInt();\n\n                // Read and parse value buffer according to value layout\n                valueBuffer.clear(); // clear position and limit before reuse\n                total = iterator.value(valueBuffer);\n                if (total != Long.BYTES + Long.BYTES) {\n                    // Skip system checkpoint topic as its value is only 8 bytes\n                    iterator.next();\n                    continue;\n                }\n                long commitLogOffset = valueBuffer.getLong();\n                long consumeOffset = valueBuffer.getLong();\n\n                OffsetEntry entry = new OffsetEntry();\n                entry.topic = topic;\n                entry.queueId = queueId;\n                entry.type = entryType;\n                entry.offset = consumeOffset;\n                entry.commitLogOffset = commitLogOffset;\n                if (predicate.apply(entry)) {\n                    fn.accept(entry);\n                }\n                iterator.next();\n            }\n            // clean up direct buffers\n            PlatformDependent.freeDirectBuffer(keyBuffer);\n            PlatformDependent.freeDirectBuffer(valueBuffer);\n        }\n    }",
+        "position": {
+            "line": 154,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "seekOffsetCF",
+                "position": {
+                    "line": 155,
+                    "column": 59
+                }
+            },
+            {
+                "name": "seekToFirst",
+                "position": {
+                    "line": 161,
+                    "column": 22
+                }
+            },
+            {
+                "name": "allocateDirect",
+                "position": {
+                    "line": 162,
+                    "column": 47
+                }
+            },
+            {
+                "name": "allocateDirect",
+                "position": {
+                    "line": 163,
+                    "column": 49
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 164,
+                    "column": 29
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 166,
+                    "column": 27
+                }
+            },
+            {
+                "name": "key",
+                "position": {
+                    "line": 167,
+                    "column": 38
+                }
+            },
+            {
+                "name": "freeDirectBuffer",
+                "position": {
+                    "line": 170,
+                    "column": 39
+                }
+            },
+            {
+                "name": "allocateDirect",
+                "position": {
+                    "line": 171,
+                    "column": 44
+                }
+            },
+            {
+                "name": "remaining",
+                "position": {
+                    "line": 175,
+                    "column": 31
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 176,
+                    "column": 30
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 177,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 181,
+                    "column": 45
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 182,
+                    "column": 40
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 186,
+                    "column": 27
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 187,
+                    "column": 35
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 192,
+                    "column": 27
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 194,
+                    "column": 28
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 199,
+                    "column": 35
+                }
+            },
+            {
+                "name": "remaining",
+                "position": {
+                    "line": 202,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 203,
+                    "column": 41
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 206,
+                    "column": 29
+                }
+            },
+            {
+                "name": "value",
+                "position": {
+                    "line": 207,
+                    "column": 34
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 210,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 213,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 214,
+                    "column": 50
+                }
+            },
+            {
+                "name": "apply",
+                "position": {
+                    "line": 222,
+                    "column": 31
+                }
+            },
+            {
+                "name": "accept",
+                "position": {
+                    "line": 223,
+                    "column": 24
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 225,
+                    "column": 26
+                }
+            },
+            {
+                "name": "freeDirectBuffer",
+                "position": {
+                    "line": 228,
+                    "column": 31
+                }
+            },
+            {
+                "name": "freeDirectBuffer",
+                "position": {
+                    "line": 229,
+                    "column": 31
+                }
+            },
+            {
+                "name": "String",
+                "position": {
+                    "line": 189,
+                    "column": 36
+                }
+            },
+            {
+                "name": "OffsetEntry",
+                "position": {
+                    "line": 216,
+                    "column": 41
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "putMaxPhyAndCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "putMaxPhyAndCqOffset(Map<ByteBuffer, Pair<ByteBuffer, DispatchEntry>> tempTopicQueueMaxOffsetMap, WriteBatch writeBatch, long maxPhyOffset)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.putMaxPhyAndCqOffset(Map<ByteBuffer, Pair<ByteBuffer, DispatchEntry>> tempTopicQueueMaxOffsetMap, WriteBatch writeBatch, long maxPhyOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Map<ByteBuffer, Pair<ByteBuffer, DispatchEntry>>",
+                "tempTopicQueueMaxOffsetMap"
+            ],
+            [
+                "WriteBatch",
+                "writeBatch"
+            ],
+            [
+                "long",
+                "maxPhyOffset"
+            ]
+        ],
+        "methodBody": "{\n        for (Map.Entry<ByteBuffer, Pair<ByteBuffer, DispatchEntry>> entry : tempTopicQueueMaxOffsetMap.entrySet()) {\n            writeBatch.put(this.offsetCFH, entry.getKey(), entry.getValue().getObject1());\n        }\n\n        appendMaxPhyOffset(writeBatch, maxPhyOffset);\n    }",
+        "position": {
+            "line": 233,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 235,
+                    "column": 104
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 236,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 236,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getObject1",
+                "position": {
+                    "line": 236,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 236,
+                    "column": 66
+                }
+            },
+            {
+                "name": "appendMaxPhyOffset",
+                "position": {
+                    "line": 239,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.appendMaxPhyOffset(WriteBatch writeBatch, long maxPhyOffset)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "putHeapMaxCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "putHeapMaxCqOffset(Map<ByteBuffer, Pair<ByteBuffer, DispatchEntry>> tempTopicQueueMaxOffsetMap)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.putHeapMaxCqOffset(Map<ByteBuffer, Pair<ByteBuffer, DispatchEntry>> tempTopicQueueMaxOffsetMap)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Map<ByteBuffer, Pair<ByteBuffer, DispatchEntry>>",
+                "tempTopicQueueMaxOffsetMap"
+            ]
+        ],
+        "methodBody": "{\n        for (Map.Entry<ByteBuffer, Pair<ByteBuffer, DispatchEntry>> entry : tempTopicQueueMaxOffsetMap.entrySet()) {\n            DispatchEntry dispatchEntry = entry.getValue().getObject2();\n            String topic = new String(dispatchEntry.topic, StandardCharsets.UTF_8);\n            putHeapMaxCqOffset(topic, dispatchEntry.queueId, dispatchEntry.queueOffset);\n        }\n    }",
+        "position": {
+            "line": 242,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 243,
+                    "column": 104
+                }
+            },
+            {
+                "name": "getObject2",
+                "position": {
+                    "line": 244,
+                    "column": 60
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 244,
+                    "column": 49
+                }
+            },
+            {
+                "name": "putHeapMaxCqOffset",
+                "position": {
+                    "line": 246,
+                    "column": 13
+                }
+            },
+            {
+                "name": "String",
+                "position": {
+                    "line": 245,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.putHeapMaxCqOffset(String topic, int queueId, long maxOffset)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "destroyOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "destroyOffset(String topic, int queueId, WriteBatch writeBatch)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.destroyOffset(String topic, int queueId, WriteBatch writeBatch)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "WriteBatch",
+                "writeBatch"
+            ]
+        ],
+        "methodBody": "{\n        final byte[] topicBytes = topic.getBytes(StandardCharsets.UTF_8);\n        final ByteBuffer minOffsetKey = buildOffsetKeyByteBuffer(topicBytes, queueId, false);\n        byte[] minOffsetBytes = this.rocksDBStorage.getOffset(minOffsetKey.array());\n        Long startCQOffset = (minOffsetBytes != null) ? ByteBuffer.wrap(minOffsetBytes).getLong(OFFSET_CQ_OFFSET) : null;\n\n        final ByteBuffer maxOffsetKey = buildOffsetKeyByteBuffer(topicBytes, queueId, true);\n        byte[] maxOffsetBytes = this.rocksDBStorage.getOffset(maxOffsetKey.array());\n        Long endCQOffset = (maxOffsetBytes != null) ? ByteBuffer.wrap(maxOffsetBytes).getLong(OFFSET_CQ_OFFSET) : null;\n\n        writeBatch.delete(this.offsetCFH, minOffsetKey.array());\n        writeBatch.delete(this.offsetCFH, maxOffsetKey.array());\n\n        String topicQueueId = buildTopicQueueId(topic, queueId);\n        removeHeapMinCqOffset(topicQueueId);\n        removeHeapMaxCqOffset(topicQueueId);\n\n        log.info(\"RocksDB offset table delete topic: {}, queueId: {}, minOffset: {}, maxOffset: {}\", topic, queueId,\n            startCQOffset, endCQOffset);\n    }",
+        "position": {
+            "line": 257,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 258,
+                    "column": 41
+                }
+            },
+            {
+                "name": "buildOffsetKeyByteBuffer",
+                "position": {
+                    "line": 259,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getOffset",
+                "position": {
+                    "line": 260,
+                    "column": 53
+                }
+            },
+            {
+                "name": "array",
+                "position": {
+                    "line": 260,
+                    "column": 76
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 261,
+                    "column": 89
+                }
+            },
+            {
+                "name": "wrap",
+                "position": {
+                    "line": 261,
+                    "column": 68
+                }
+            },
+            {
+                "name": "buildOffsetKeyByteBuffer",
+                "position": {
+                    "line": 263,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getOffset",
+                "position": {
+                    "line": 264,
+                    "column": 53
+                }
+            },
+            {
+                "name": "array",
+                "position": {
+                    "line": 264,
+                    "column": 76
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 265,
+                    "column": 87
+                }
+            },
+            {
+                "name": "wrap",
+                "position": {
+                    "line": 265,
+                    "column": 66
+                }
+            },
+            {
+                "name": "delete",
+                "position": {
+                    "line": 267,
+                    "column": 20
+                }
+            },
+            {
+                "name": "array",
+                "position": {
+                    "line": 267,
+                    "column": 56
+                }
+            },
+            {
+                "name": "delete",
+                "position": {
+                    "line": 268,
+                    "column": 20
+                }
+            },
+            {
+                "name": "array",
+                "position": {
+                    "line": 268,
+                    "column": 56
+                }
+            },
+            {
+                "name": "buildTopicQueueId",
+                "position": {
+                    "line": 270,
+                    "column": 31
+                }
+            },
+            {
+                "name": "removeHeapMinCqOffset",
+                "position": {
+                    "line": 271,
+                    "column": 9
+                }
+            },
+            {
+                "name": "removeHeapMaxCqOffset",
+                "position": {
+                    "line": 272,
+                    "column": 9
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 274,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildOffsetKeyByteBuffer(final byte[] topicBytes, int queueId, boolean max)",
+            "RocksDBConsumeQueueOffsetTable.buildOffsetKeyByteBuffer(final byte[] topicBytes, int queueId, boolean max)",
+            "RocksDBConsumeQueueOffsetTable.buildTopicQueueId(String topic, int queueId)",
+            "RocksDBConsumeQueueOffsetTable.removeHeapMinCqOffset(String topicQueueId)",
+            "RocksDBConsumeQueueOffsetTable.removeHeapMaxCqOffset(String topicQueueId)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "appendMaxPhyOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "appendMaxPhyOffset(WriteBatch writeBatch, long maxPhyOffset)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.appendMaxPhyOffset(WriteBatch writeBatch, long maxPhyOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "WriteBatch",
+                "writeBatch"
+            ],
+            [
+                "long",
+                "maxPhyOffset"
+            ]
+        ],
+        "methodBody": "{\n        final ByteBuffer maxPhyOffsetBB = this.maxPhyOffsetBB;\n        maxPhyOffsetBB.position(0).limit(8);\n        maxPhyOffsetBB.putLong(maxPhyOffset);\n        maxPhyOffsetBB.flip();\n\n        INNER_CHECKPOINT_TOPIC.position(0).limit(INNER_CHECKPOINT_TOPIC_LEN);\n        writeBatch.put(this.offsetCFH, INNER_CHECKPOINT_TOPIC, maxPhyOffsetBB);\n    }",
+        "position": {
+            "line": 278,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "limit",
+                "position": {
+                    "line": 280,
+                    "column": 36
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 280,
+                    "column": 24
+                }
+            },
+            {
+                "name": "putLong",
+                "position": {
+                    "line": 281,
+                    "column": 24
+                }
+            },
+            {
+                "name": "flip",
+                "position": {
+                    "line": 282,
+                    "column": 24
+                }
+            },
+            {
+                "name": "limit",
+                "position": {
+                    "line": 284,
+                    "column": 44
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 284,
+                    "column": 32
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 285,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 21
+    },
+    {
+        "name": "getMaxPhyOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "getMaxPhyOffset()",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.getMaxPhyOffset()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        byte[] valueBytes = this.rocksDBStorage.getOffset(MAX_PHYSICAL_OFFSET_CHECKPOINT_KEY);\n        if (valueBytes == null) {\n            return 0;\n        }\n        ByteBuffer valueBB = ByteBuffer.wrap(valueBytes);\n        return valueBB.getLong(0);\n    }",
+        "position": {
+            "line": 288,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getOffset",
+                "position": {
+                    "line": 289,
+                    "column": 49
+                }
+            },
+            {
+                "name": "wrap",
+                "position": {
+                    "line": 293,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 294,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 22
+    },
+    {
+        "name": "iterateOffsetTable2FindDirty",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "iterateOffsetTable2FindDirty(Set<String> existTopicSet)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.iterateOffsetTable2FindDirty(Set<String> existTopicSet)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Set<String>",
+                "existTopicSet"
+            ]
+        ],
+        "methodBody": "{\n        Map<String/* topic */, Set<Integer/* queueId */>> topicQueueIdToBeDeletedMap = new HashMap<>();\n\n        try (RocksIterator iterator = rocksDBStorage.seekOffsetCF()) {\n            if (iterator == null) {\n                return topicQueueIdToBeDeletedMap;\n            }\n            for (iterator.seekToFirst(); iterator.isValid(); iterator.next()) {\n                byte[] key = iterator.key();\n                byte[] value = iterator.value();\n                if (key == null || key.length <= OFFSET_KEY_LENGTH_WITHOUT_TOPIC_BYTES\n                    || value == null || value.length != OFFSET_VALUE_LENGTH) {\n                    continue;\n                }\n                ByteBuffer keyBB = ByteBuffer.wrap(key);\n                int topicLen = keyBB.getInt(0);\n                byte[] topicBytes = new byte[topicLen];\n                /*\n                 * \"Topic Bytes Array Size\" + \"CTRL_1\" = 4 + 1\n                 */\n                keyBB.position(4 + 1);\n                keyBB.get(topicBytes);\n                String topic = new String(topicBytes, StandardCharsets.UTF_8);\n                if (TopicValidator.isSystemTopic(topic)) {\n                    continue;\n                }\n\n                // LMQ topic offsets should NOT be removed\n                if (MixAll.isLmq(topic)) {\n                    continue;\n                }\n\n                /*\n                 * \"Topic Bytes Array Size\" + \"CTRL_1\" + \"Topic Bytes Array\" + \"CTRL_1\"  + \"Max(min)\" + \"CTRL_1\"\n                 *  = 4 + 1 + topicLen + 1 + 3 + 1\n                 */\n                int queueId = keyBB.getInt(4 + 1 + topicLen + 1 + 3 + 1);\n\n                if (!existTopicSet.contains(topic)) {\n                    ByteBuffer valueBB = ByteBuffer.wrap(value);\n                    long cqOffset = valueBB.getLong(OFFSET_CQ_OFFSET);\n\n                    Set<Integer> topicQueueIdSet = topicQueueIdToBeDeletedMap.get(topic);\n                    if (topicQueueIdSet == null) {\n                        Set<Integer> newSet = new HashSet<>();\n                        newSet.add(queueId);\n                        topicQueueIdToBeDeletedMap.put(topic, newSet);\n                    } else {\n                        topicQueueIdSet.add(queueId);\n                    }\n                    ERROR_LOG.info(\"RocksDBConsumeQueueOffsetTable has dirty cqOffset. topic: {}, queueId: {}, cqOffset: {}\",\n                        topic, queueId, cqOffset);\n                }\n            }\n        } catch (Exception e) {\n            ERROR_LOG.error(\"iterateOffsetTable2MarkDirtyCQ Failed.\", e);\n        }\n        return topicQueueIdToBeDeletedMap;\n    }",
+        "position": {
+            "line": 303,
+            "column": 38
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "seekOffsetCF",
+                "position": {
+                    "line": 306,
+                    "column": 54
+                }
+            },
+            {
+                "name": "seekToFirst",
+                "position": {
+                    "line": 310,
+                    "column": 27
+                }
+            },
+            {
+                "name": "isValid",
+                "position": {
+                    "line": 310,
+                    "column": 51
+                }
+            },
+            {
+                "name": "next",
+                "position": {
+                    "line": 310,
+                    "column": 71
+                }
+            },
+            {
+                "name": "key",
+                "position": {
+                    "line": 311,
+                    "column": 39
+                }
+            },
+            {
+                "name": "value",
+                "position": {
+                    "line": 312,
+                    "column": 41
+                }
+            },
+            {
+                "name": "wrap",
+                "position": {
+                    "line": 317,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 318,
+                    "column": 38
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 323,
+                    "column": 23
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 324,
+                    "column": 23
+                }
+            },
+            {
+                "name": "isSystemTopic",
+                "position": {
+                    "line": 326,
+                    "column": 36
+                }
+            },
+            {
+                "name": "isLmq",
+                "position": {
+                    "line": 331,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getInt",
+                "position": {
+                    "line": 339,
+                    "column": 37
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 341,
+                    "column": 36
+                }
+            },
+            {
+                "name": "wrap",
+                "position": {
+                    "line": 342,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 343,
+                    "column": 45
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 345,
+                    "column": 79
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 348,
+                    "column": 32
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 349,
+                    "column": 52
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 351,
+                    "column": 41
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 353,
+                    "column": 31
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 358,
+                    "column": 23
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 304,
+                    "column": 92
+                }
+            },
+            {
+                "name": "String",
+                "position": {
+                    "line": 325,
+                    "column": 36
+                }
+            },
+            {
+                "name": "HashSet<>",
+                "position": {
+                    "line": 347,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "getMaxCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "getMaxCqOffset(String topic, int queueId)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.getMaxCqOffset(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        Long maxCqOffset = getHeapMaxCqOffset(topic, queueId);\n\n        if (maxCqOffset == null) {\n            final ByteBuffer byteBuffer = getMaxPhyAndCqOffsetInKV(topic, queueId);\n            maxCqOffset = (byteBuffer != null) ? byteBuffer.getLong(OFFSET_CQ_OFFSET) : null;\n            String topicQueueId = buildTopicQueueId(topic, queueId);\n            long offset = maxCqOffset != null ? maxCqOffset : -1L;\n            Long prev = this.topicQueueMaxCqOffset.putIfAbsent(topicQueueId, offset);\n            if (null == prev) {\n                ROCKSDB_LOG.info(\"Max offset of {} is initialized to {} according to RocksDB\", topicQueueId, offset);\n            }\n            if (messageStore.getMessageStoreConfig().isEnableRocksDBLog()) {\n                ROCKSDB_LOG.warn(\"updateMaxOffsetInQueue. {}, {}\", topicQueueId, offset);\n            }\n        }\n\n        return maxCqOffset;\n    }",
+        "position": {
+            "line": 363,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getHeapMaxCqOffset",
+                "position": {
+                    "line": 364,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getMaxPhyAndCqOffsetInKV",
+                "position": {
+                    "line": 367,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 368,
+                    "column": 61
+                }
+            },
+            {
+                "name": "buildTopicQueueId",
+                "position": {
+                    "line": 369,
+                    "column": 35
+                }
+            },
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 371,
+                    "column": 52
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 373,
+                    "column": 29
+                }
+            },
+            {
+                "name": "isEnableRocksDBLog",
+                "position": {
+                    "line": 375,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 375,
+                    "column": 30
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 376,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.getHeapMaxCqOffset(String topic, int queueId)",
+            "RocksDBConsumeQueueOffsetTable.getMaxPhyAndCqOffsetInKV(String topic, int queueId)",
+            "RocksDBConsumeQueueOffsetTable.buildTopicQueueId(String topic, int queueId)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "truncateDirty",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "truncateDirty(long offsetToTruncate)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.truncateDirty(long offsetToTruncate)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "offsetToTruncate"
+            ]
+        ],
+        "methodBody": "{\n        correctMaxPyhOffset(offsetToTruncate);\n\n        Function<OffsetEntry, Boolean> predicate = entry -> {\n            if (entry.type == OffsetEntryType.MINIMUM) {\n                return false;\n            }\n            // Normal entry offset MUST have the following inequality\n            // entry commit-log offset + message-size-in-bytes <= offsetToTruncate;\n            // otherwise, the consume queue contains dirty records to truncate;\n            //\n            // If the broker node is configured to use async-flush, it's possible consume queues contain\n            //  pointers to message records that is not flushed and lost during restart.\n            return entry.commitLogOffset >= offsetToTruncate;\n        };\n\n        Consumer<OffsetEntry> fn = entry -> {\n            try {\n                truncateDirtyOffset(entry.topic, entry.queueId);\n            } catch (RocksDBException e) {\n                log.error(\"Failed to truncate maximum offset of consume queue[topic={}, queue-id={}]\",\n                    entry.topic, entry.queueId, e);\n            }\n        };\n\n        forEach(predicate, fn);\n    }",
+        "position": {
+            "line": 389,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "correctMaxPyhOffset",
+                "position": {
+                    "line": 390,
+                    "column": 9
+                }
+            },
+            {
+                "name": "truncateDirtyOffset",
+                "position": {
+                    "line": 407,
+                    "column": 17
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 409,
+                    "column": 21
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 414,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.correctMaxPyhOffset(long maxPhyOffset)",
+            "RocksDBConsumeQueueOffsetTable.truncateDirtyOffset(String topic, int queueId)",
+            "RocksDBConsumeQueueOffsetTable.forEach(Function<OffsetEntry, Boolean> predicate, Consumer<OffsetEntry> fn)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "isMinOffsetOk",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "isMinOffsetOk(String topic, int queueId, long minPhyOffset)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.isMinOffsetOk(String topic, int queueId, long minPhyOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "long",
+                "minPhyOffset"
+            ]
+        ],
+        "methodBody": "{\n        PhyAndCQOffset phyAndCQOffset = getHeapMinOffset(topic, queueId);\n        if (phyAndCQOffset != null) {\n            final long phyOffset = phyAndCQOffset.getPhyOffset();\n            final long cqOffset = phyAndCQOffset.getCqOffset();\n\n            return (phyOffset >= minPhyOffset) ? new Pair<>(true, cqOffset) : new Pair<>(false, cqOffset);\n        }\n        ByteBuffer byteBuffer = getMinPhyAndCqOffsetInKV(topic, queueId);\n        if (byteBuffer == null) {\n            return new Pair<>(false, 0L);\n        }\n        final long phyOffset = byteBuffer.getLong(OFFSET_PHY_OFFSET);\n        final long cqOffset = byteBuffer.getLong(OFFSET_CQ_OFFSET);\n        if (phyOffset >= minPhyOffset) {\n            String topicQueueId = buildTopicQueueId(topic, queueId);\n            PhyAndCQOffset newPhyAndCQOffset = new PhyAndCQOffset(phyOffset, cqOffset);\n            this.topicQueueMinOffset.putIfAbsent(topicQueueId, newPhyAndCQOffset);\n            if (messageStore.getMessageStoreConfig().isEnableRocksDBLog()) {\n                ROCKSDB_LOG.warn(\"updateMinOffsetInQueue. {}, {}\", topicQueueId, newPhyAndCQOffset);\n            }\n            return new Pair<>(true, cqOffset);\n        }\n        return new Pair<>(false, cqOffset);\n    }",
+        "position": {
+            "line": 417,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getHeapMinOffset",
+                "position": {
+                    "line": 419,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getPhyOffset",
+                "position": {
+                    "line": 421,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getCqOffset",
+                "position": {
+                    "line": 422,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getMinPhyAndCqOffsetInKV",
+                "position": {
+                    "line": 426,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 430,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 431,
+                    "column": 42
+                }
+            },
+            {
+                "name": "buildTopicQueueId",
+                "position": {
+                    "line": 433,
+                    "column": 35
+                }
+            },
+            {
+                "name": "putIfAbsent",
+                "position": {
+                    "line": 435,
+                    "column": 38
+                }
+            },
+            {
+                "name": "isEnableRocksDBLog",
+                "position": {
+                    "line": 436,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 436,
+                    "column": 30
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 437,
+                    "column": 29
+                }
+            },
+            {
+                "name": "Pair<>",
+                "position": {
+                    "line": 424,
+                    "column": 54
+                }
+            },
+            {
+                "name": "Pair<>",
+                "position": {
+                    "line": 424,
+                    "column": 83
+                }
+            },
+            {
+                "name": "Pair<>",
+                "position": {
+                    "line": 428,
+                    "column": 24
+                }
+            },
+            {
+                "name": "PhyAndCQOffset",
+                "position": {
+                    "line": 434,
+                    "column": 52
+                }
+            },
+            {
+                "name": "Pair<>",
+                "position": {
+                    "line": 439,
+                    "column": 24
+                }
+            },
+            {
+                "name": "Pair<>",
+                "position": {
+                    "line": 441,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.getHeapMinOffset(String topic, int queueId)",
+            "PhyAndCQOffset.getPhyOffset()",
+            "PhyAndCQOffset.getCqOffset()",
+            "RocksDBConsumeQueueOffsetTable.getMinPhyAndCqOffsetInKV(String topic, int queueId)",
+            "RocksDBConsumeQueueOffsetTable.buildTopicQueueId(String topic, int queueId)",
+            "PhyAndCQOffset.PhyAndCQOffset(long phyOffset, long cqOffset)"
+        ],
+        "priority": 26
+    },
+    {
+        "name": "truncateDirtyOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "truncateDirtyOffset(String topic, int queueId)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.truncateDirtyOffset(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        final ByteBuffer byteBuffer = getMaxPhyAndCqOffsetInKV(topic, queueId);\n        if (byteBuffer == null) {\n            return;\n        }\n\n        long maxPhyOffset = byteBuffer.getLong(OFFSET_PHY_OFFSET);\n        long maxCqOffset = byteBuffer.getLong(OFFSET_CQ_OFFSET);\n        long maxPhyOffsetInCQ = getMaxPhyOffset();\n\n        if (maxPhyOffset >= maxPhyOffsetInCQ) {\n            correctMaxCqOffset(topic, queueId, maxCqOffset, maxPhyOffsetInCQ);\n            Long newMaxCqOffset = getHeapMaxCqOffset(topic, queueId);\n            ROCKSDB_LOG.warn(\"truncateDirtyLogicFile topic: {}, queueId: {} from {} to {}\", topic, queueId,\n                maxPhyOffset, newMaxCqOffset);\n        }\n    }",
+        "position": {
+            "line": 444,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMaxPhyAndCqOffsetInKV",
+                "position": {
+                    "line": 445,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 450,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 451,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getMaxPhyOffset",
+                "position": {
+                    "line": 452,
+                    "column": 33
+                }
+            },
+            {
+                "name": "correctMaxCqOffset",
+                "position": {
+                    "line": 455,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getHeapMaxCqOffset",
+                "position": {
+                    "line": 456,
+                    "column": 35
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 457,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.getMaxPhyAndCqOffsetInKV(String topic, int queueId)",
+            "RocksDBConsumeQueueOffsetTable.getMaxPhyOffset()",
+            "RocksDBConsumeQueueOffsetTable.correctMaxCqOffset(String topic, int queueId, long maxCQOffset, long maxPhyOffsetInCQ)",
+            "RocksDBConsumeQueueOffsetTable.getHeapMaxCqOffset(String topic, int queueId)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "correctMaxPyhOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "correctMaxPyhOffset(long maxPhyOffset)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.correctMaxPyhOffset(long maxPhyOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "maxPhyOffset"
+            ]
+        ],
+        "methodBody": "{\n        if (!this.rocksDBStorage.hold()) {\n            return;\n        }\n        try (WriteBatch writeBatch = new WriteBatch()) {\n            long oldMaxPhyOffset = getMaxPhyOffset();\n            if (oldMaxPhyOffset <= maxPhyOffset) {\n                return;\n            }\n            log.info(\"correctMaxPyhOffset, oldMaxPhyOffset={}, newMaxPhyOffset={}\", oldMaxPhyOffset, maxPhyOffset);\n            appendMaxPhyOffset(writeBatch, maxPhyOffset);\n            this.rocksDBStorage.batchPut(writeBatch);\n        } catch (RocksDBException e) {\n            ERROR_LOG.error(\"correctMaxPyhOffset Failed.\", e);\n            throw e;\n        } finally {\n            this.rocksDBStorage.release();\n        }\n    }",
+        "position": {
+            "line": 462,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "hold",
+                "position": {
+                    "line": 463,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getMaxPhyOffset",
+                "position": {
+                    "line": 467,
+                    "column": 36
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 471,
+                    "column": 17
+                }
+            },
+            {
+                "name": "appendMaxPhyOffset",
+                "position": {
+                    "line": 472,
+                    "column": 13
+                }
+            },
+            {
+                "name": "batchPut",
+                "position": {
+                    "line": 473,
+                    "column": 33
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 475,
+                    "column": 23
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 478,
+                    "column": 33
+                }
+            },
+            {
+                "name": "WriteBatch",
+                "position": {
+                    "line": 466,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.getMaxPhyOffset()",
+            "RocksDBConsumeQueueOffsetTable.appendMaxPhyOffset(WriteBatch writeBatch, long maxPhyOffset)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "getMinCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "getMinCqOffset(String topic, int queueId)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.getMinCqOffset(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        final long minPhyOffset = this.messageStore.getMinPhyOffset();\n        Pair<Boolean, Long> pair = isMinOffsetOk(topic, queueId, minPhyOffset);\n        final long cqOffset = pair.getObject2();\n        if (!pair.getObject1() && correctMinCqOffset(topic, queueId, cqOffset, minPhyOffset)) {\n            PhyAndCQOffset phyAndCQOffset = getHeapMinOffset(topic, queueId);\n            if (phyAndCQOffset != null) {\n                if (this.messageStore.getMessageStoreConfig().isEnableRocksDBLog()) {\n                    ROCKSDB_LOG.warn(\"getMinOffsetInQueue miss heap. topic: {}, queueId: {}, old: {}, new: {}\",\n                        topic, queueId, cqOffset, phyAndCQOffset);\n                }\n                return phyAndCQOffset.getCqOffset();\n            }\n        }\n        return cqOffset;\n    }",
+        "position": {
+            "line": 482,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMinPhyOffset",
+                "position": {
+                    "line": 483,
+                    "column": 53
+                }
+            },
+            {
+                "name": "isMinOffsetOk",
+                "position": {
+                    "line": 484,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getObject2",
+                "position": {
+                    "line": 485,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getObject1",
+                "position": {
+                    "line": 486,
+                    "column": 19
+                }
+            },
+            {
+                "name": "correctMinCqOffset",
+                "position": {
+                    "line": 486,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getHeapMinOffset",
+                "position": {
+                    "line": 487,
+                    "column": 45
+                }
+            },
+            {
+                "name": "isEnableRocksDBLog",
+                "position": {
+                    "line": 489,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 489,
+                    "column": 39
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 490,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getCqOffset",
+                "position": {
+                    "line": 493,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.isMinOffsetOk(String topic, int queueId, long minPhyOffset)",
+            "RocksDBConsumeQueueOffsetTable.correctMinCqOffset(String topic, int queueId, long minCQOffset, long minPhyOffset)",
+            "RocksDBConsumeQueueOffsetTable.getHeapMinOffset(String topic, int queueId)",
+            "PhyAndCQOffset.getCqOffset()"
+        ],
+        "priority": 25
+    },
+    {
+        "name": "getMaxPhyOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "getMaxPhyOffset(String topic, int queueId)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.getMaxPhyOffset(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            ByteBuffer byteBuffer = getMaxPhyAndCqOffsetInKV(topic, queueId);\n            if (byteBuffer != null) {\n                return byteBuffer.getLong(OFFSET_PHY_OFFSET);\n            }\n        } catch (Exception e) {\n            ERROR_LOG.info(\"getMaxPhyOffset error. topic: {}, queueId: {}\", topic, queueId);\n        }\n        return null;\n    }",
+        "position": {
+            "line": 499,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMaxPhyAndCqOffsetInKV",
+                "position": {
+                    "line": 501,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 503,
+                    "column": 35
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 506,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.getMaxPhyAndCqOffsetInKV(String topic, int queueId)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "getMinPhyAndCqOffsetInKV",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "getMinPhyAndCqOffsetInKV(String topic, int queueId)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.getMinPhyAndCqOffsetInKV(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        return getPhyAndCqOffsetInKV(topic, queueId, false);\n    }",
+        "position": {
+            "line": 511,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getPhyAndCqOffsetInKV",
+                "position": {
+                    "line": 512,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.getPhyAndCqOffsetInKV(String topic, int queueId, boolean max)"
+        ],
+        "priority": 29
+    },
+    {
+        "name": "getMaxPhyAndCqOffsetInKV",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "getMaxPhyAndCqOffsetInKV(String topic, int queueId)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.getMaxPhyAndCqOffsetInKV(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        return getPhyAndCqOffsetInKV(topic, queueId, true);\n    }",
+        "position": {
+            "line": 515,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getPhyAndCqOffsetInKV",
+                "position": {
+                    "line": 516,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.getPhyAndCqOffsetInKV(String topic, int queueId, boolean max)"
+        ],
+        "priority": 30
+    },
+    {
+        "name": "getPhyAndCqOffsetInKV",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "getPhyAndCqOffsetInKV(String topic, int queueId, boolean max)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.getPhyAndCqOffsetInKV(String topic, int queueId, boolean max)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "boolean",
+                "max"
+            ]
+        ],
+        "methodBody": "{\n        final byte[] topicBytes = topic.getBytes(StandardCharsets.UTF_8);\n        final ByteBuffer keyBB = buildOffsetKeyByteBuffer(topicBytes, queueId, max);\n\n        byte[] value = this.rocksDBStorage.getOffset(keyBB.array());\n        return (value != null) ? ByteBuffer.wrap(value) : null;\n    }",
+        "position": {
+            "line": 519,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 520,
+                    "column": 41
+                }
+            },
+            {
+                "name": "buildOffsetKeyByteBuffer",
+                "position": {
+                    "line": 521,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getOffset",
+                "position": {
+                    "line": 523,
+                    "column": 44
+                }
+            },
+            {
+                "name": "array",
+                "position": {
+                    "line": 523,
+                    "column": 60
+                }
+            },
+            {
+                "name": "wrap",
+                "position": {
+                    "line": 524,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildOffsetKeyByteBuffer(final byte[] topicBytes, int queueId, boolean max)"
+        ],
+        "priority": 34
+    },
+    {
+        "name": "buildTopicQueueId",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "buildTopicQueueId(String topic, int queueId)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.buildTopicQueueId(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        return topic + \"-\" + queueId;\n    }",
+        "position": {
+            "line": 527,
+            "column": 20
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 40
+    },
+    {
+        "name": "putHeapMinCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "putHeapMinCqOffset(String topic, int queueId, long minPhyOffset, long minCQOffset)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.putHeapMinCqOffset(String topic, int queueId, long minPhyOffset, long minCQOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "long",
+                "minPhyOffset"
+            ],
+            [
+                "long",
+                "minCQOffset"
+            ]
+        ],
+        "methodBody": "{\n        String topicQueueId = buildTopicQueueId(topic, queueId);\n        PhyAndCQOffset phyAndCQOffset = new PhyAndCQOffset(minPhyOffset, minCQOffset);\n        this.topicQueueMinOffset.put(topicQueueId, phyAndCQOffset);\n    }",
+        "position": {
+            "line": 531,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "buildTopicQueueId",
+                "position": {
+                    "line": 533,
+                    "column": 31
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 535,
+                    "column": 34
+                }
+            },
+            {
+                "name": "PhyAndCQOffset",
+                "position": {
+                    "line": 534,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildTopicQueueId(String topic, int queueId)",
+            "PhyAndCQOffset.PhyAndCQOffset(long phyOffset, long cqOffset)"
+        ],
+        "priority": 37
+    },
+    {
+        "name": "putHeapMaxCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "putHeapMaxCqOffset(String topic, int queueId, long maxOffset)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.putHeapMaxCqOffset(String topic, int queueId, long maxOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "long",
+                "maxOffset"
+            ]
+        ],
+        "methodBody": "{\n        String topicQueueId = buildTopicQueueId(topic, queueId);\n        Long prev = this.topicQueueMaxCqOffset.put(topicQueueId, maxOffset);\n        if (prev != null && prev > maxOffset) {\n            ERROR_LOG.error(\"Max offset of consume-queue[topic={}, queue-id={}] regressed. prev-max={}, current-max={}\",\n                topic, queueId, prev, maxOffset);\n        }\n    }",
+        "position": {
+            "line": 538,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "buildTopicQueueId",
+                "position": {
+                    "line": 539,
+                    "column": 31
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 540,
+                    "column": 48
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 542,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildTopicQueueId(String topic, int queueId)"
+        ],
+        "priority": 36
+    },
+    {
+        "name": "getHeapMinOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "getHeapMinOffset(String topic, int queueId)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.getHeapMinOffset(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        return this.topicQueueMinOffset.get(buildTopicQueueId(topic, queueId));\n    }",
+        "position": {
+            "line": 547,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 548,
+                    "column": 41
+                }
+            },
+            {
+                "name": "buildTopicQueueId",
+                "position": {
+                    "line": 548,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildTopicQueueId(String topic, int queueId)"
+        ],
+        "priority": 28
+    },
+    {
+        "name": "getHeapMaxCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "getHeapMaxCqOffset(String topic, int queueId)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.getHeapMaxCqOffset(String topic, int queueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ]
+        ],
+        "methodBody": "{\n        String topicQueueId = buildTopicQueueId(topic, queueId);\n        return this.topicQueueMaxCqOffset.get(topicQueueId);\n    }",
+        "position": {
+            "line": 551,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "buildTopicQueueId",
+                "position": {
+                    "line": 552,
+                    "column": 31
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 553,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildTopicQueueId(String topic, int queueId)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "removeHeapMinCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "removeHeapMinCqOffset(String topicQueueId)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.removeHeapMinCqOffset(String topicQueueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topicQueueId"
+            ]
+        ],
+        "methodBody": "{\n        return this.topicQueueMinOffset.remove(topicQueueId);\n    }",
+        "position": {
+            "line": 556,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "remove",
+                "position": {
+                    "line": 557,
+                    "column": 41
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "removeHeapMaxCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "removeHeapMaxCqOffset(String topicQueueId)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.removeHeapMaxCqOffset(String topicQueueId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topicQueueId"
+            ]
+        ],
+        "methodBody": "{\n        return this.topicQueueMaxCqOffset.remove(topicQueueId);\n    }",
+        "position": {
+            "line": 560,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "remove",
+                "position": {
+                    "line": 561,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "updateCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "updateCqOffset(String topic, int queueId, long phyOffset, long cqOffset, boolean max)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.updateCqOffset(String topic, int queueId, long phyOffset, long cqOffset, boolean max)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "long",
+                "phyOffset"
+            ],
+            [
+                "long",
+                "cqOffset"
+            ],
+            [
+                "boolean",
+                "max"
+            ]
+        ],
+        "methodBody": "{\n        if (!this.rocksDBStorage.hold()) {\n            return;\n        }\n        try (WriteBatch writeBatch = new WriteBatch()) {\n            final byte[] topicBytes = topic.getBytes(StandardCharsets.UTF_8);\n            final ByteBuffer offsetKey = buildOffsetKeyByteBuffer(topicBytes, queueId, max);\n\n            final ByteBuffer offsetValue = buildOffsetValueByteBuffer(phyOffset, cqOffset);\n            writeBatch.put(this.offsetCFH, offsetKey.array(), offsetValue.array());\n            this.rocksDBStorage.batchPut(writeBatch);\n\n            if (max) {\n                putHeapMaxCqOffset(topic, queueId, cqOffset);\n            } else {\n                putHeapMinCqOffset(topic, queueId, phyOffset, cqOffset);\n            }\n        } catch (RocksDBException e) {\n            ERROR_LOG.error(\"updateCqOffset({}) failed.\", max ? \"max\" : \"min\", e);\n            throw e;\n        } finally {\n            this.rocksDBStorage.release();\n            if (messageStore.getMessageStoreConfig().isEnableRocksDBLog()) {\n                ROCKSDB_LOG.warn(\"updateCqOffset({}). topic: {}, queueId: {}, phyOffset: {}, cqOffset: {}\",\n                    max ? \"max\" : \"min\", topic, queueId, phyOffset, cqOffset);\n            }\n        }\n    }",
+        "position": {
+            "line": 564,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "hold",
+                "position": {
+                    "line": 566,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 570,
+                    "column": 45
+                }
+            },
+            {
+                "name": "buildOffsetKeyByteBuffer",
+                "position": {
+                    "line": 571,
+                    "column": 42
+                }
+            },
+            {
+                "name": "buildOffsetValueByteBuffer",
+                "position": {
+                    "line": 573,
+                    "column": 44
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 574,
+                    "column": 24
+                }
+            },
+            {
+                "name": "array",
+                "position": {
+                    "line": 574,
+                    "column": 54
+                }
+            },
+            {
+                "name": "array",
+                "position": {
+                    "line": 574,
+                    "column": 75
+                }
+            },
+            {
+                "name": "batchPut",
+                "position": {
+                    "line": 575,
+                    "column": 33
+                }
+            },
+            {
+                "name": "putHeapMaxCqOffset",
+                "position": {
+                    "line": 578,
+                    "column": 17
+                }
+            },
+            {
+                "name": "putHeapMinCqOffset",
+                "position": {
+                    "line": 580,
+                    "column": 17
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 583,
+                    "column": 23
+                }
+            },
+            {
+                "name": "release",
+                "position": {
+                    "line": 586,
+                    "column": 33
+                }
+            },
+            {
+                "name": "isEnableRocksDBLog",
+                "position": {
+                    "line": 587,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 587,
+                    "column": 30
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 588,
+                    "column": 29
+                }
+            },
+            {
+                "name": "WriteBatch",
+                "position": {
+                    "line": 569,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildOffsetKeyByteBuffer(final byte[] topicBytes, int queueId, boolean max)",
+            "RocksDBConsumeQueueOffsetTable.buildOffsetValueByteBuffer(long phyOffset, long cqOffset)",
+            "RocksDBConsumeQueueOffsetTable.putHeapMaxCqOffset(String topic, int queueId, long maxOffset)",
+            "RocksDBConsumeQueueOffsetTable.putHeapMinCqOffset(String topic, int queueId, long minPhyOffset, long minCQOffset)"
+        ],
+        "priority": 31
+    },
+    {
+        "name": "correctMaxCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "correctMaxCqOffset(String topic, int queueId, long maxCQOffset, long maxPhyOffsetInCQ)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.correctMaxCqOffset(String topic, int queueId, long maxCQOffset, long maxPhyOffsetInCQ)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "long",
+                "maxCQOffset"
+            ],
+            [
+                "long",
+                "maxPhyOffsetInCQ"
+            ]
+        ],
+        "methodBody": "{\n        // 'getMinOffsetInQueue' may correct minCqOffset and put it into heap\n        long minCQOffset = getMinCqOffset(topic, queueId);\n        PhyAndCQOffset minPhyAndCQOffset = getHeapMinOffset(topic, queueId);\n        if (minPhyAndCQOffset == null\n            || minPhyAndCQOffset.getCqOffset() != minCQOffset\n            || minPhyAndCQOffset.getPhyOffset() > maxPhyOffsetInCQ) {\n            ROCKSDB_LOG.info(\"[BUG] correctMaxCqOffset error! topic: {}, queueId: {}, maxPhyOffsetInCQ: {}, \"\n                    + \"minCqOffset: {}, phyAndCQOffset: {}\",\n                topic, queueId, maxPhyOffsetInCQ, minCQOffset, minPhyAndCQOffset);\n            throw new RocksDBException(\"correctMaxCqOffset error\");\n        }\n\n        PhyAndCQOffset targetPhyAndCQOffset = this.rocksDBConsumeQueueTable.binarySearchInCQ(topic, queueId, maxCQOffset,\n            minCQOffset, maxPhyOffsetInCQ, false);\n\n        long targetCQOffset = targetPhyAndCQOffset.getCqOffset();\n        long targetPhyOffset = targetPhyAndCQOffset.getPhyOffset();\n\n        if (targetCQOffset == -1) {\n            if (maxCQOffset != minCQOffset) {\n                updateCqOffset(topic, queueId, minPhyAndCQOffset.getPhyOffset(), minCQOffset, true);\n            }\n            if (messageStore.getMessageStoreConfig().isEnableRocksDBLog()) {\n                ROCKSDB_LOG.warn(\"correct error. {}, {}, {}, {}, {}\", topic, queueId, minCQOffset, maxCQOffset, minPhyAndCQOffset.getPhyOffset());\n            }\n            return false;\n        } else {\n            updateCqOffset(topic, queueId, targetPhyOffset, targetCQOffset, true);\n            return true;\n        }\n    }",
+        "position": {
+            "line": 594,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMinCqOffset",
+                "position": {
+                    "line": 597,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getHeapMinOffset",
+                "position": {
+                    "line": 598,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getCqOffset",
+                "position": {
+                    "line": 600,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getPhyOffset",
+                "position": {
+                    "line": 601,
+                    "column": 34
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 602,
+                    "column": 25
+                }
+            },
+            {
+                "name": "binarySearchInCQ",
+                "position": {
+                    "line": 608,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getCqOffset",
+                "position": {
+                    "line": 611,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getPhyOffset",
+                "position": {
+                    "line": 612,
+                    "column": 53
+                }
+            },
+            {
+                "name": "updateCqOffset",
+                "position": {
+                    "line": 616,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getPhyOffset",
+                "position": {
+                    "line": 616,
+                    "column": 66
+                }
+            },
+            {
+                "name": "isEnableRocksDBLog",
+                "position": {
+                    "line": 618,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 618,
+                    "column": 30
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 619,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getPhyOffset",
+                "position": {
+                    "line": 619,
+                    "column": 131
+                }
+            },
+            {
+                "name": "updateCqOffset",
+                "position": {
+                    "line": 623,
+                    "column": 13
+                }
+            },
+            {
+                "name": "RocksDBException",
+                "position": {
+                    "line": 605,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.getMinCqOffset(String topic, int queueId)",
+            "RocksDBConsumeQueueOffsetTable.getHeapMinOffset(String topic, int queueId)",
+            "PhyAndCQOffset.getCqOffset()",
+            "PhyAndCQOffset.getPhyOffset()",
+            "PhyAndCQOffset.getCqOffset()",
+            "PhyAndCQOffset.getPhyOffset()",
+            "RocksDBConsumeQueueOffsetTable.updateCqOffset(String topic, int queueId, long phyOffset, long cqOffset, boolean max)",
+            "PhyAndCQOffset.getPhyOffset()",
+            "PhyAndCQOffset.getPhyOffset()",
+            "RocksDBConsumeQueueOffsetTable.updateCqOffset(String topic, int queueId, long phyOffset, long cqOffset, boolean max)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "correctMinCqOffset",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "correctMinCqOffset(String topic, int queueId, long minCQOffset, long minPhyOffset)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.correctMinCqOffset(String topic, int queueId, long minCQOffset, long minPhyOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "long",
+                "minCQOffset"
+            ],
+            [
+                "long",
+                "minPhyOffset"
+            ]
+        ],
+        "methodBody": "{\n        final ByteBuffer maxBB = getMaxPhyAndCqOffsetInKV(topic, queueId);\n        if (maxBB == null) {\n            updateCqOffset(topic, queueId, minPhyOffset, 0L, false);\n            return true;\n        }\n        final long maxPhyOffset = maxBB.getLong(OFFSET_PHY_OFFSET);\n        final long maxCQOffset = maxBB.getLong(OFFSET_CQ_OFFSET);\n\n        if (maxPhyOffset < minPhyOffset) {\n            updateCqOffset(topic, queueId, minPhyOffset, maxCQOffset + 1, false);\n            return true;\n        }\n\n        PhyAndCQOffset phyAndCQOffset = this.rocksDBConsumeQueueTable.binarySearchInCQ(topic, queueId, maxCQOffset,\n            minCQOffset, minPhyOffset, true);\n        long targetCQOffset = phyAndCQOffset.getCqOffset();\n        long targetPhyOffset = phyAndCQOffset.getPhyOffset();\n\n        if (targetCQOffset == -1) {\n            if (maxCQOffset != minCQOffset) {\n                updateCqOffset(topic, queueId, maxPhyOffset, maxCQOffset, false);\n            }\n            if (messageStore.getMessageStoreConfig().isEnableRocksDBLog()) {\n                ROCKSDB_LOG.warn(\"correct error. {}, {}, {}, {}, {}\", topic, queueId, minCQOffset, maxCQOffset, minPhyOffset);\n            }\n            return false;\n        } else {\n            updateCqOffset(topic, queueId, targetPhyOffset, targetCQOffset, false);\n            return true;\n        }\n    }",
+        "position": {
+            "line": 628,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMaxPhyAndCqOffsetInKV",
+                "position": {
+                    "line": 630,
+                    "column": 34
+                }
+            },
+            {
+                "name": "updateCqOffset",
+                "position": {
+                    "line": 632,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 635,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getLong",
+                "position": {
+                    "line": 636,
+                    "column": 40
+                }
+            },
+            {
+                "name": "updateCqOffset",
+                "position": {
+                    "line": 639,
+                    "column": 13
+                }
+            },
+            {
+                "name": "binarySearchInCQ",
+                "position": {
+                    "line": 643,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getCqOffset",
+                "position": {
+                    "line": 645,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getPhyOffset",
+                "position": {
+                    "line": 646,
+                    "column": 47
+                }
+            },
+            {
+                "name": "updateCqOffset",
+                "position": {
+                    "line": 650,
+                    "column": 17
+                }
+            },
+            {
+                "name": "isEnableRocksDBLog",
+                "position": {
+                    "line": 652,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getMessageStoreConfig",
+                "position": {
+                    "line": 652,
+                    "column": 30
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 653,
+                    "column": 29
+                }
+            },
+            {
+                "name": "updateCqOffset",
+                "position": {
+                    "line": 657,
+                    "column": 13
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.getMaxPhyAndCqOffsetInKV(String topic, int queueId)",
+            "RocksDBConsumeQueueOffsetTable.updateCqOffset(String topic, int queueId, long phyOffset, long cqOffset, boolean max)",
+            "RocksDBConsumeQueueOffsetTable.updateCqOffset(String topic, int queueId, long phyOffset, long cqOffset, boolean max)",
+            "PhyAndCQOffset.getCqOffset()",
+            "PhyAndCQOffset.getPhyOffset()",
+            "RocksDBConsumeQueueOffsetTable.updateCqOffset(String topic, int queueId, long phyOffset, long cqOffset, boolean max)",
+            "RocksDBConsumeQueueOffsetTable.updateCqOffset(String topic, int queueId, long phyOffset, long cqOffset, boolean max)"
+        ],
+        "priority": 27
+    },
+    {
+        "name": "getOffsetByteBufferPair",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "getOffsetByteBufferPair()",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.getOffsetByteBufferPair()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        ByteBuffer offsetKey = ByteBuffer.allocateDirect(RocksDBConsumeQueueStore.MAX_KEY_LEN);\n        ByteBuffer offsetValue = ByteBuffer.allocateDirect(OFFSET_VALUE_LENGTH);\n        return new Pair<>(offsetKey, offsetValue);\n    }",
+        "position": {
+            "line": 662,
+            "column": 48
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "allocateDirect",
+                "position": {
+                    "line": 663,
+                    "column": 43
+                }
+            },
+            {
+                "name": "allocateDirect",
+                "position": {
+                    "line": 664,
+                    "column": 45
+                }
+            },
+            {
+                "name": "Pair<>",
+                "position": {
+                    "line": 665,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "buildOffsetKeyAndValueByteBuffer",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "buildOffsetKeyAndValueByteBuffer(Pair<ByteBuffer, ByteBuffer> offsetBBPair, DispatchEntry entry)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.buildOffsetKeyAndValueByteBuffer(Pair<ByteBuffer, ByteBuffer> offsetBBPair, DispatchEntry entry)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Pair<ByteBuffer, ByteBuffer>",
+                "offsetBBPair"
+            ],
+            [
+                "DispatchEntry",
+                "entry"
+            ]
+        ],
+        "methodBody": "{\n        final ByteBuffer offsetKey = offsetBBPair.getObject1();\n        buildOffsetKeyByteBuffer(offsetKey, entry.topic, entry.queueId, true);\n\n        final ByteBuffer offsetValue = offsetBBPair.getObject2();\n        buildOffsetValueByteBuffer(offsetValue, entry.commitLogOffset, entry.queueOffset);\n    }",
+        "position": {
+            "line": 668,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getObject1",
+                "position": {
+                    "line": 670,
+                    "column": 51
+                }
+            },
+            {
+                "name": "buildOffsetKeyByteBuffer",
+                "position": {
+                    "line": 671,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getObject2",
+                "position": {
+                    "line": 673,
+                    "column": 53
+                }
+            },
+            {
+                "name": "buildOffsetValueByteBuffer",
+                "position": {
+                    "line": 674,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildOffsetKeyByteBuffer(ByteBuffer byteBuffer, final byte[] topicBytes, int queueId, boolean max)",
+            "RocksDBConsumeQueueOffsetTable.buildOffsetValueByteBuffer(ByteBuffer byteBuffer, long phyOffset, long cqOffset)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "buildOffsetKeyByteBuffer",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "buildOffsetKeyByteBuffer(final byte[] topicBytes, int queueId, boolean max)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.buildOffsetKeyByteBuffer(final byte[] topicBytes, int queueId, boolean max)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "final byte[]",
+                "topicBytes"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "boolean",
+                "max"
+            ]
+        ],
+        "methodBody": "{\n        ByteBuffer byteBuffer = ByteBuffer.allocate(OFFSET_KEY_LENGTH_WITHOUT_TOPIC_BYTES + topicBytes.length);\n        buildOffsetKeyByteBuffer0(byteBuffer, topicBytes, queueId, max);\n        return byteBuffer;\n    }",
+        "position": {
+            "line": 677,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "allocate",
+                "position": {
+                    "line": 678,
+                    "column": 44
+                }
+            },
+            {
+                "name": "buildOffsetKeyByteBuffer0",
+                "position": {
+                    "line": 679,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildOffsetKeyByteBuffer0(ByteBuffer byteBuffer, final byte[] topicBytes, int queueId, boolean max)"
+        ],
+        "priority": 38
+    },
+    {
+        "name": "buildOffsetKeyByteBuffer",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "buildOffsetKeyByteBuffer(ByteBuffer byteBuffer, final byte[] topicBytes, int queueId, boolean max)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.buildOffsetKeyByteBuffer(ByteBuffer byteBuffer, final byte[] topicBytes, int queueId, boolean max)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ByteBuffer",
+                "byteBuffer"
+            ],
+            [
+                "final byte[]",
+                "topicBytes"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "boolean",
+                "max"
+            ]
+        ],
+        "methodBody": "{\n        byteBuffer.position(0).limit(OFFSET_KEY_LENGTH_WITHOUT_TOPIC_BYTES + topicBytes.length);\n        buildOffsetKeyByteBuffer0(byteBuffer, topicBytes, queueId, max);\n    }",
+        "position": {
+            "line": 683,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "limit",
+                "position": {
+                    "line": 685,
+                    "column": 32
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 685,
+                    "column": 20
+                }
+            },
+            {
+                "name": "buildOffsetKeyByteBuffer0",
+                "position": {
+                    "line": 686,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildOffsetKeyByteBuffer0(ByteBuffer byteBuffer, final byte[] topicBytes, int queueId, boolean max)"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "buildOffsetKeyByteBuffer0",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "buildOffsetKeyByteBuffer0(ByteBuffer byteBuffer, final byte[] topicBytes, int queueId, boolean max)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.buildOffsetKeyByteBuffer0(ByteBuffer byteBuffer, final byte[] topicBytes, int queueId, boolean max)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ByteBuffer",
+                "byteBuffer"
+            ],
+            [
+                "final byte[]",
+                "topicBytes"
+            ],
+            [
+                "int",
+                "queueId"
+            ],
+            [
+                "boolean",
+                "max"
+            ]
+        ],
+        "methodBody": "{\n        byteBuffer.putInt(topicBytes.length).put(CTRL_1).put(topicBytes).put(CTRL_1);\n        if (max) {\n            byteBuffer.put(MAX_BYTES);\n        } else {\n            byteBuffer.put(MIN_BYTES);\n        }\n        byteBuffer.put(CTRL_1).putInt(queueId);\n        byteBuffer.flip();\n    }",
+        "position": {
+            "line": 689,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "put",
+                "position": {
+                    "line": 691,
+                    "column": 74
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 691,
+                    "column": 58
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 691,
+                    "column": 46
+                }
+            },
+            {
+                "name": "putInt",
+                "position": {
+                    "line": 691,
+                    "column": 20
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 693,
+                    "column": 24
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 695,
+                    "column": 24
+                }
+            },
+            {
+                "name": "putInt",
+                "position": {
+                    "line": 697,
+                    "column": 32
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 697,
+                    "column": 20
+                }
+            },
+            {
+                "name": "flip",
+                "position": {
+                    "line": 698,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 42
+    },
+    {
+        "name": "buildOffsetValueByteBuffer",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "buildOffsetValueByteBuffer(ByteBuffer byteBuffer, long phyOffset, long cqOffset)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.buildOffsetValueByteBuffer(ByteBuffer byteBuffer, long phyOffset, long cqOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ByteBuffer",
+                "byteBuffer"
+            ],
+            [
+                "long",
+                "phyOffset"
+            ],
+            [
+                "long",
+                "cqOffset"
+            ]
+        ],
+        "methodBody": "{\n        byteBuffer.position(0).limit(OFFSET_VALUE_LENGTH);\n        buildOffsetValueByteBuffer0(byteBuffer, phyOffset, cqOffset);\n    }",
+        "position": {
+            "line": 701,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "limit",
+                "position": {
+                    "line": 703,
+                    "column": 32
+                }
+            },
+            {
+                "name": "position",
+                "position": {
+                    "line": 703,
+                    "column": 20
+                }
+            },
+            {
+                "name": "buildOffsetValueByteBuffer0",
+                "position": {
+                    "line": 704,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildOffsetValueByteBuffer0(ByteBuffer byteBuffer, long phyOffset, long cqOffset)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "buildOffsetValueByteBuffer",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "buildOffsetValueByteBuffer(long phyOffset, long cqOffset)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.buildOffsetValueByteBuffer(long phyOffset, long cqOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "phyOffset"
+            ],
+            [
+                "long",
+                "cqOffset"
+            ]
+        ],
+        "methodBody": "{\n        final ByteBuffer byteBuffer = ByteBuffer.allocate(OFFSET_VALUE_LENGTH);\n        buildOffsetValueByteBuffer0(byteBuffer, phyOffset, cqOffset);\n        return byteBuffer;\n    }",
+        "position": {
+            "line": 707,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "allocate",
+                "position": {
+                    "line": 708,
+                    "column": 50
+                }
+            },
+            {
+                "name": "buildOffsetValueByteBuffer0",
+                "position": {
+                    "line": 709,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "RocksDBConsumeQueueOffsetTable.buildOffsetValueByteBuffer0(ByteBuffer byteBuffer, long phyOffset, long cqOffset)"
+        ],
+        "priority": 35
+    },
+    {
+        "name": "buildOffsetValueByteBuffer0",
+        "category": "method_declaration",
+        "class": "RocksDBConsumeQueueOffsetTable",
+        "signature": "buildOffsetValueByteBuffer0(ByteBuffer byteBuffer, long phyOffset, long cqOffset)",
+        "class_signature": "RocksDBConsumeQueueOffsetTable.buildOffsetValueByteBuffer0(ByteBuffer byteBuffer, long phyOffset, long cqOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ByteBuffer",
+                "byteBuffer"
+            ],
+            [
+                "long",
+                "phyOffset"
+            ],
+            [
+                "long",
+                "cqOffset"
+            ]
+        ],
+        "methodBody": "{\n        byteBuffer.putLong(phyOffset).putLong(cqOffset);\n        byteBuffer.flip();\n    }",
+        "position": {
+            "line": 713,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "putLong",
+                "position": {
+                    "line": 715,
+                    "column": 39
+                }
+            },
+            {
+                "name": "putLong",
+                "position": {
+                    "line": 715,
+                    "column": 20
+                }
+            },
+            {
+                "name": "flip",
+                "position": {
+                    "line": 716,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 39
+    },
+    {
+        "name": "PhyAndCQOffset",
+        "category": "constructor_declaration",
+        "class": "PhyAndCQOffset",
+        "signature": "PhyAndCQOffset(long phyOffset, long cqOffset)",
+        "class_signature": "PhyAndCQOffset.PhyAndCQOffset(long phyOffset, long cqOffset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "phyOffset"
+            ],
+            [
+                "long",
+                "cqOffset"
+            ]
+        ],
+        "methodBody": "{\n            this.phyOffset = phyOffset;\n            this.cqOffset = cqOffset;\n        }",
+        "position": {
+            "line": 723,
+            "column": 16
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 41
+    },
+    {
+        "name": "getPhyOffset",
+        "category": "method_declaration",
+        "class": "PhyAndCQOffset",
+        "signature": "getPhyOffset()",
+        "class_signature": "PhyAndCQOffset.getPhyOffset()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            return this.phyOffset;\n        }",
+        "position": {
+            "line": 728,
+            "column": 21
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 33
+    },
+    {
+        "name": "getCqOffset",
+        "category": "method_declaration",
+        "class": "PhyAndCQOffset",
+        "signature": "getCqOffset()",
+        "class_signature": "PhyAndCQOffset.getCqOffset()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            return this.cqOffset;\n        }",
+        "position": {
+            "line": 732,
+            "column": 21
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 32
+    },
+    {
+        "name": "toString",
+        "category": "method_declaration",
+        "class": "PhyAndCQOffset",
+        "signature": "toString()",
+        "class_signature": "PhyAndCQOffset.toString()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            return \"[cqOffset=\" + cqOffset + \", phyOffset=\" + phyOffset + \"]\";\n        }",
+        "position": {
+            "line": 737,
+            "column": 23
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 12
+    }
+]

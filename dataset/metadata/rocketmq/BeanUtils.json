@@ -1,0 +1,538 @@
+[
+    {
+        "name": "populate",
+        "category": "method_declaration",
+        "class": "BeanUtils",
+        "signature": "populate(Properties properties, Class<T> clazz)",
+        "class_signature": "BeanUtils.populate(Properties properties, Class<T> clazz)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Properties",
+                "properties"
+            ],
+            [
+                "Class<T>",
+                "clazz"
+            ]
+        ],
+        "methodBody": "{\n        T obj = null;\n        try {\n            obj = clazz.getDeclaredConstructor().newInstance();\n            return populate(properties, obj);\n        } catch (Throwable e) {\n            log.warn(\"Error occurs !\", e);\n        }\n        return obj;\n    }",
+        "position": {
+            "line": 87,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 90,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getDeclaredConstructor",
+                "position": {
+                    "line": 90,
+                    "column": 25
+                }
+            },
+            {
+                "name": "populate",
+                "position": {
+                    "line": 91,
+                    "column": 20
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 93,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "BeanUtils.populate(Properties properties, T obj)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "populate",
+        "category": "method_declaration",
+        "class": "BeanUtils",
+        "signature": "populate(KeyValue properties, Class<T> clazz)",
+        "class_signature": "BeanUtils.populate(KeyValue properties, Class<T> clazz)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "KeyValue",
+                "properties"
+            ],
+            [
+                "Class<T>",
+                "clazz"
+            ]
+        ],
+        "methodBody": "{\n        T obj = null;\n        try {\n            obj = clazz.getDeclaredConstructor().newInstance();\n            return populate(properties, obj);\n        } catch (Throwable e) {\n            log.warn(\"Error occurs !\", e);\n        }\n        return obj;\n    }",
+        "position": {
+            "line": 98,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "newInstance",
+                "position": {
+                    "line": 101,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getDeclaredConstructor",
+                "position": {
+                    "line": 101,
+                    "column": 25
+                }
+            },
+            {
+                "name": "populate",
+                "position": {
+                    "line": 102,
+                    "column": 20
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 104,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "BeanUtils.populate(KeyValue properties, T obj)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "getMethodClass",
+        "category": "method_declaration",
+        "class": "BeanUtils",
+        "signature": "getMethodClass(Class<?> clazz, String methodName)",
+        "class_signature": "BeanUtils.getMethodClass(Class<?> clazz, String methodName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "String",
+                "methodName"
+            ]
+        ],
+        "methodBody": "{\n        Method[] methods = clazz.getMethods();\n        for (Method method : methods) {\n            if (method.getName().equalsIgnoreCase(methodName)) {\n                return method.getParameterTypes()[0];\n            }\n        }\n        return null;\n    }",
+        "position": {
+            "line": 109,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMethods",
+                "position": {
+                    "line": 110,
+                    "column": 34
+                }
+            },
+            {
+                "name": "equalsIgnoreCase",
+                "position": {
+                    "line": 112,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 112,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getParameterTypes",
+                "position": {
+                    "line": 113,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "setProperties",
+        "category": "method_declaration",
+        "class": "BeanUtils",
+        "signature": "setProperties(Class<?> clazz, Object obj, String methodName, Object value)",
+        "class_signature": "BeanUtils.setProperties(Class<?> clazz, Object obj, String methodName, Object value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Class<?>",
+                "clazz"
+            ],
+            [
+                "Object",
+                "obj"
+            ],
+            [
+                "String",
+                "methodName"
+            ],
+            [
+                "Object",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        Class<?> parameterClass = getMethodClass(clazz, methodName);\n        Method setterMethod = clazz.getMethod(methodName, parameterClass);\n        if (parameterClass == Boolean.TYPE) {\n            setterMethod.invoke(obj, Boolean.valueOf(value.toString()));\n        } else if (parameterClass == Integer.TYPE) {\n            setterMethod.invoke(obj, Integer.valueOf(value.toString()));\n        } else if (parameterClass == Double.TYPE) {\n            setterMethod.invoke(obj, Double.valueOf(value.toString()));\n        } else if (parameterClass == Float.TYPE) {\n            setterMethod.invoke(obj, Float.valueOf(value.toString()));\n        } else if (parameterClass == Long.TYPE) {\n            setterMethod.invoke(obj, Long.valueOf(value.toString()));\n        } else\n            setterMethod.invoke(obj, value);\n    }",
+        "position": {
+            "line": 119,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getMethodClass",
+                "position": {
+                    "line": 121,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getMethod",
+                "position": {
+                    "line": 122,
+                    "column": 37
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 124,
+                    "column": 26
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 124,
+                    "column": 46
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 124,
+                    "column": 60
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 126,
+                    "column": 26
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 126,
+                    "column": 46
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 126,
+                    "column": 60
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 128,
+                    "column": 26
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 128,
+                    "column": 45
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 128,
+                    "column": 59
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 130,
+                    "column": 26
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 130,
+                    "column": 44
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 130,
+                    "column": 58
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 132,
+                    "column": 26
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 132,
+                    "column": 43
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 132,
+                    "column": 57
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 134,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [
+            "BeanUtils.getMethodClass(Class<?> clazz, String methodName)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "populate",
+        "category": "method_declaration",
+        "class": "BeanUtils",
+        "signature": "populate(Properties properties, T obj)",
+        "class_signature": "BeanUtils.populate(Properties properties, T obj)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Properties",
+                "properties"
+            ],
+            [
+                "T",
+                "obj"
+            ]
+        ],
+        "methodBody": "{\n        Class<?> clazz = obj.getClass();\n        try {\n\n            Set<Map.Entry<Object, Object>> entries = properties.entrySet();\n            for (Map.Entry<Object, Object> entry : entries) {\n                String entryKey = entry.getKey().toString();\n                String[] keyGroup = entryKey.split(\"\\\\.\");\n                for (int i = 0; i < keyGroup.length; i++) {\n                    keyGroup[i] = keyGroup[i].toLowerCase();\n                    keyGroup[i] = StringUtils.capitalize(keyGroup[i]);\n                }\n                String beanFieldNameWithCapitalization = StringUtils.join(keyGroup);\n                try {\n                    setProperties(clazz, obj, \"set\" + beanFieldNameWithCapitalization, entry.getValue());\n                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {\n                    //ignored...\n                }\n            }\n        } catch (RuntimeException e) {\n            log.warn(\"Error occurs !\", e);\n        }\n        return obj;\n    }",
+        "position": {
+            "line": 137,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 138,
+                    "column": 30
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 141,
+                    "column": 65
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 143,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 143,
+                    "column": 41
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 144,
+                    "column": 46
+                }
+            },
+            {
+                "name": "toLowerCase",
+                "position": {
+                    "line": 146,
+                    "column": 47
+                }
+            },
+            {
+                "name": "capitalize",
+                "position": {
+                    "line": 147,
+                    "column": 47
+                }
+            },
+            {
+                "name": "join",
+                "position": {
+                    "line": 149,
+                    "column": 70
+                }
+            },
+            {
+                "name": "setProperties",
+                "position": {
+                    "line": 151,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 151,
+                    "column": 94
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 157,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "BeanUtils.setProperties(Class<?> clazz, Object obj, String methodName, Object value)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "populate",
+        "category": "method_declaration",
+        "class": "BeanUtils",
+        "signature": "populate(KeyValue properties, T obj)",
+        "class_signature": "BeanUtils.populate(KeyValue properties, T obj)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "KeyValue",
+                "properties"
+            ],
+            [
+                "T",
+                "obj"
+            ]
+        ],
+        "methodBody": "{\n        Class<?> clazz = obj.getClass();\n        try {\n\n            final Set<String> keySet = properties.keySet();\n            for (String key : keySet) {\n                String[] keyGroup = key.split(\"[\\\\._]\");\n                for (int i = 0; i < keyGroup.length; i++) {\n                    keyGroup[i] = keyGroup[i].toLowerCase();\n                    keyGroup[i] = StringUtils.capitalize(keyGroup[i]);\n                }\n                String beanFieldNameWithCapitalization = StringUtils.join(keyGroup);\n                try {\n                    setProperties(clazz, obj, \"set\" + beanFieldNameWithCapitalization, properties.getString(key));\n                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {\n                    //ignored...\n                }\n            }\n        } catch (RuntimeException e) {\n            log.warn(\"Error occurs !\", e);\n        }\n        return obj;\n    }",
+        "position": {
+            "line": 162,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 163,
+                    "column": 30
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 166,
+                    "column": 51
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 168,
+                    "column": 41
+                }
+            },
+            {
+                "name": "toLowerCase",
+                "position": {
+                    "line": 170,
+                    "column": 47
+                }
+            },
+            {
+                "name": "capitalize",
+                "position": {
+                    "line": 171,
+                    "column": 47
+                }
+            },
+            {
+                "name": "join",
+                "position": {
+                    "line": 173,
+                    "column": 70
+                }
+            },
+            {
+                "name": "setProperties",
+                "position": {
+                    "line": 175,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getString",
+                "position": {
+                    "line": 175,
+                    "column": 99
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 181,
+                    "column": 17
+                }
+            }
+        ],
+        "calledMethods": [
+            "BeanUtils.setProperties(Class<?> clazz, Object obj, String methodName, Object value)"
+        ],
+        "priority": 3
+    }
+]

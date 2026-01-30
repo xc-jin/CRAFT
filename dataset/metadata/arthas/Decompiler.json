@@ -1,0 +1,691 @@
+[
+    {
+        "name": "decompile",
+        "category": "method_declaration",
+        "class": "Decompiler",
+        "signature": "decompile(String classFilePath, String methodName)",
+        "class_signature": "Decompiler.decompile(String classFilePath, String methodName)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "classFilePath"
+            ],
+            [
+                "String",
+                "methodName"
+            ]
+        ],
+        "methodBody": "{\n        return decompile(classFilePath, methodName, false);\n    }",
+        "position": {
+            "line": 26,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "decompile",
+                "position": {
+                    "line": 27,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Decompiler.decompile(String classFilePath, String methodName, boolean hideUnicode)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "decompile",
+        "category": "method_declaration",
+        "class": "Decompiler",
+        "signature": "decompile(String classFilePath, String methodName, boolean hideUnicode)",
+        "class_signature": "Decompiler.decompile(String classFilePath, String methodName, boolean hideUnicode)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "classFilePath"
+            ],
+            [
+                "String",
+                "methodName"
+            ],
+            [
+                "boolean",
+                "hideUnicode"
+            ]
+        ],
+        "methodBody": "{\n        return decompile(classFilePath, methodName, hideUnicode, true);\n    }",
+        "position": {
+            "line": 30,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "decompile",
+                "position": {
+                    "line": 31,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Decompiler.decompile(String classFilePath, String methodName, boolean hideUnicode, boolean printLineNumber)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "decompileWithMappings",
+        "category": "method_declaration",
+        "class": "Decompiler",
+        "signature": "decompileWithMappings(String classFilePath, String methodName, boolean hideUnicode, boolean printLineNumber)",
+        "class_signature": "Decompiler.decompileWithMappings(String classFilePath, String methodName, boolean hideUnicode, boolean printLineNumber)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "classFilePath"
+            ],
+            [
+                "String",
+                "methodName"
+            ],
+            [
+                "boolean",
+                "hideUnicode"
+            ],
+            [
+                "boolean",
+                "printLineNumber"
+            ]
+        ],
+        "methodBody": "{\n        final StringBuilder sb = new StringBuilder(8192);\n\n        final NavigableMap<Integer, Integer> lineMapping = new TreeMap<Integer, Integer>();\n\n        OutputSinkFactory mySink = new OutputSinkFactory() {\n            @Override\n            public List<SinkClass> getSupportedSinks(SinkType sinkType, Collection<SinkClass> collection) {\n                return Arrays.asList(SinkClass.STRING, SinkClass.DECOMPILED, SinkClass.DECOMPILED_MULTIVER,\n                        SinkClass.EXCEPTION_MESSAGE, SinkClass.LINE_NUMBER_MAPPING);\n            }\n\n            @Override\n            public <T> Sink<T> getSink(final SinkType sinkType, final SinkClass sinkClass) {\n                return new Sink<T>() {\n                    @Override\n                    public void write(T sinkable) {\n                        // skip message like: Analysing type demo.MathGame\n                        if (sinkType == SinkType.PROGRESS) {\n                            return;\n                        }\n                        if (sinkType == SinkType.LINENUMBER) {\n                            LineNumberMapping mapping = (LineNumberMapping) sinkable;\n                            NavigableMap<Integer, Integer> classFileMappings = mapping.getClassFileMappings();\n                            NavigableMap<Integer, Integer> mappings = mapping.getMappings();\n                            if (classFileMappings != null && mappings != null) {\n                                for (Entry<Integer, Integer> entry : mappings.entrySet()) {\n                                    Integer srcLineNumber = classFileMappings.get(entry.getKey());\n                                    lineMapping.put(entry.getValue(), srcLineNumber);\n                                }\n                            }\n                            return;\n                        }\n                        sb.append(sinkable);\n                    }\n                };\n            }\n        };\n\n        HashMap<String, String> options = new HashMap<String, String>();\n        /**\n         * @see org.benf.cfr.reader.util.MiscConstants.Version.getVersion() Currently,\n         *      the cfr version is wrong. so disable show cfr version.\n         */\n        options.put(\"showversion\", \"false\");\n        options.put(\"hideutf\", String.valueOf(hideUnicode));\n        options.put(\"trackbytecodeloc\", \"true\");\n        if (!StringUtils.isBlank(methodName)) {\n            options.put(\"methodname\", methodName);\n        }\n\n        CfrDriver driver = new CfrDriver.Builder().withOptions(options).withOutputSink(mySink).build();\n        List<String> toAnalyse = new ArrayList<String>();\n        toAnalyse.add(classFilePath);\n        driver.analyse(toAnalyse);\n\n        String resultCode = sb.toString();\n        if (printLineNumber && !lineMapping.isEmpty()) {\n            resultCode = addLineNumber(resultCode, lineMapping);\n        }\n\n        return Pair.make(resultCode, lineMapping);\n    }",
+        "position": {
+            "line": 34,
+            "column": 64
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "asList",
+                "position": {
+                    "line": 43,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getClassFileMappings",
+                "position": {
+                    "line": 58,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getMappings",
+                "position": {
+                    "line": 59,
+                    "column": 79
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 61,
+                    "column": 79
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 62,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 62,
+                    "column": 89
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 63,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 63,
+                    "column": 59
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 68,
+                    "column": 28
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 79,
+                    "column": 17
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 80,
+                    "column": 17
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 80,
+                    "column": 39
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 81,
+                    "column": 17
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 82,
+                    "column": 26
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 83,
+                    "column": 21
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 86,
+                    "column": 96
+                }
+            },
+            {
+                "name": "withOutputSink",
+                "position": {
+                    "line": 86,
+                    "column": 73
+                }
+            },
+            {
+                "name": "withOptions",
+                "position": {
+                    "line": 86,
+                    "column": 52
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 88,
+                    "column": 19
+                }
+            },
+            {
+                "name": "analyse",
+                "position": {
+                    "line": 89,
+                    "column": 16
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 91,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 92,
+                    "column": 45
+                }
+            },
+            {
+                "name": "addLineNumber",
+                "position": {
+                    "line": 93,
+                    "column": 26
+                }
+            },
+            {
+                "name": "make",
+                "position": {
+                    "line": 96,
+                    "column": 21
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 36,
+                    "column": 38
+                }
+            },
+            {
+                "name": "TreeMap<Integer, Integer>",
+                "position": {
+                    "line": 38,
+                    "column": 64
+                }
+            },
+            {
+                "name": "OutputSinkFactory",
+                "position": {
+                    "line": 40,
+                    "column": 40
+                }
+            },
+            {
+                "name": "Sink<T>",
+                "position": {
+                    "line": 49,
+                    "column": 28
+                }
+            },
+            {
+                "name": "HashMap<String, String>",
+                "position": {
+                    "line": 74,
+                    "column": 47
+                }
+            },
+            {
+                "name": "CfrDriver.Builder",
+                "position": {
+                    "line": 86,
+                    "column": 32
+                }
+            },
+            {
+                "name": "ArrayList<String>",
+                "position": {
+                    "line": 87,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [
+            "Decompiler.addLineNumber(String src, Map<Integer, Integer> lineMapping)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "getSupportedSinks",
+        "category": "method_declaration",
+        "class": "Decompiler",
+        "signature": "getSupportedSinks(SinkType sinkType, Collection<SinkClass> collection)",
+        "class_signature": "Decompiler.getSupportedSinks(SinkType sinkType, Collection<SinkClass> collection)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "SinkType",
+                "sinkType"
+            ],
+            [
+                "Collection<SinkClass>",
+                "collection"
+            ]
+        ],
+        "methodBody": "{\n                return Arrays.asList(SinkClass.STRING, SinkClass.DECOMPILED, SinkClass.DECOMPILED_MULTIVER,\n                        SinkClass.EXCEPTION_MESSAGE, SinkClass.LINE_NUMBER_MAPPING);\n            }",
+        "position": {
+            "line": 42,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "asList",
+                "position": {
+                    "line": 43,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "getSink",
+        "category": "method_declaration",
+        "class": "Decompiler",
+        "signature": "getSink(SinkType sinkType, SinkClass sinkClass)",
+        "class_signature": "Decompiler.getSink(SinkType sinkType, SinkClass sinkClass)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "SinkType",
+                "sinkType"
+            ],
+            [
+                "SinkClass",
+                "sinkClass"
+            ]
+        ],
+        "methodBody": "{\n                return new Sink<T>() {\n                    @Override\n                    public void write(T sinkable) {\n                        // skip message like: Analysing type demo.MathGame\n                        if (sinkType == SinkType.PROGRESS) {\n                            return;\n                        }\n                        if (sinkType == SinkType.LINENUMBER) {\n                            LineNumberMapping mapping = (LineNumberMapping) sinkable;\n                            NavigableMap<Integer, Integer> classFileMappings = mapping.getClassFileMappings();\n                            NavigableMap<Integer, Integer> mappings = mapping.getMappings();\n                            if (classFileMappings != null && mappings != null) {\n                                for (Entry<Integer, Integer> entry : mappings.entrySet()) {\n                                    Integer srcLineNumber = classFileMappings.get(entry.getKey());\n                                    lineMapping.put(entry.getValue(), srcLineNumber);\n                                }\n                            }\n                            return;\n                        }\n                        sb.append(sinkable);\n                    }\n                };\n            }",
+        "position": {
+            "line": 48,
+            "column": 32
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassFileMappings",
+                "position": {
+                    "line": 58,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getMappings",
+                "position": {
+                    "line": 59,
+                    "column": 79
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 61,
+                    "column": 79
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 62,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 62,
+                    "column": 89
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 63,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 63,
+                    "column": 59
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 68,
+                    "column": 28
+                }
+            },
+            {
+                "name": "Sink<T>",
+                "position": {
+                    "line": 49,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "write",
+        "category": "method_declaration",
+        "class": "Decompiler",
+        "signature": "write(T sinkable)",
+        "class_signature": "Decompiler.write(T sinkable)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "T",
+                "sinkable"
+            ]
+        ],
+        "methodBody": "{\n                        // skip message like: Analysing type demo.MathGame\n                        if (sinkType == SinkType.PROGRESS) {\n                            return;\n                        }\n                        if (sinkType == SinkType.LINENUMBER) {\n                            LineNumberMapping mapping = (LineNumberMapping) sinkable;\n                            NavigableMap<Integer, Integer> classFileMappings = mapping.getClassFileMappings();\n                            NavigableMap<Integer, Integer> mappings = mapping.getMappings();\n                            if (classFileMappings != null && mappings != null) {\n                                for (Entry<Integer, Integer> entry : mappings.entrySet()) {\n                                    Integer srcLineNumber = classFileMappings.get(entry.getKey());\n                                    lineMapping.put(entry.getValue(), srcLineNumber);\n                                }\n                            }\n                            return;\n                        }\n                        sb.append(sinkable);\n                    }",
+        "position": {
+            "line": 51,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClassFileMappings",
+                "position": {
+                    "line": 58,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getMappings",
+                "position": {
+                    "line": 59,
+                    "column": 79
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 61,
+                    "column": 79
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 62,
+                    "column": 79
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 62,
+                    "column": 89
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 63,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 63,
+                    "column": 59
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 68,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "decompile",
+        "category": "method_declaration",
+        "class": "Decompiler",
+        "signature": "decompile(String classFilePath, String methodName, boolean hideUnicode, boolean printLineNumber)",
+        "class_signature": "Decompiler.decompile(String classFilePath, String methodName, boolean hideUnicode, boolean printLineNumber)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "classFilePath"
+            ],
+            [
+                "String",
+                "methodName"
+            ],
+            [
+                "boolean",
+                "hideUnicode"
+            ],
+            [
+                "boolean",
+                "printLineNumber"
+            ]
+        ],
+        "methodBody": "{\n        return decompileWithMappings(classFilePath, methodName, hideUnicode, printLineNumber).getFirst();\n    }",
+        "position": {
+            "line": 99,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getFirst",
+                "position": {
+                    "line": 101,
+                    "column": 95
+                }
+            },
+            {
+                "name": "decompileWithMappings",
+                "position": {
+                    "line": 101,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Decompiler.decompileWithMappings(String classFilePath, String methodName, boolean hideUnicode, boolean printLineNumber)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "addLineNumber",
+        "category": "method_declaration",
+        "class": "Decompiler",
+        "signature": "addLineNumber(String src, Map<Integer, Integer> lineMapping)",
+        "class_signature": "Decompiler.addLineNumber(String src, Map<Integer, Integer> lineMapping)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "src"
+            ],
+            [
+                "Map<Integer, Integer>",
+                "lineMapping"
+            ]
+        ],
+        "methodBody": "{\n        int maxLineNumber = 0;\n        for (Integer value : lineMapping.values()) {\n            if (value != null && value > maxLineNumber) {\n                maxLineNumber = value;\n            }\n        }\n\n        String formatStr = \"/*%2d*/ \";\n        String emptyStr = \"       \";\n\n        StringBuilder sb = new StringBuilder();\n\n        List<String> lines = StringUtils.toLines(src);\n\n        if (maxLineNumber >= 1000) {\n            formatStr = \"/*%4d*/ \";\n            emptyStr = \"         \";\n        } else if (maxLineNumber >= 100) {\n            formatStr = \"/*%3d*/ \";\n            emptyStr = \"        \";\n        }\n\n        int index = 0;\n        for (String line : lines) {\n            Integer srcLineNumber = lineMapping.get(index + 1);\n            if (srcLineNumber != null) {\n                sb.append(String.format(formatStr, srcLineNumber));\n            } else {\n                sb.append(emptyStr);\n            }\n            sb.append(line).append(\"\\n\");\n            index++;\n        }\n\n        return sb.toString();\n    }",
+        "position": {
+            "line": 104,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "values",
+                "position": {
+                    "line": 106,
+                    "column": 42
+                }
+            },
+            {
+                "name": "toLines",
+                "position": {
+                    "line": 117,
+                    "column": 42
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 129,
+                    "column": 49
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 131,
+                    "column": 20
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 131,
+                    "column": 34
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 133,
+                    "column": 20
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 135,
+                    "column": 29
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 135,
+                    "column": 16
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 139,
+                    "column": 19
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 115,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    }
+]

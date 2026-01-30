@@ -1,0 +1,1290 @@
+[
+    {
+        "name": "ConsulRegistryServiceImpl",
+        "category": "constructor_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "ConsulRegistryServiceImpl()",
+        "class_signature": "ConsulRegistryServiceImpl.ConsulRegistryServiceImpl()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        //initial the capacity with 8\n        clusterAddressMap = new ConcurrentHashMap<>(MAP_INITIAL_CAPACITY);\n        listenerMap = new ConcurrentHashMap<>(MAP_INITIAL_CAPACITY);\n        notifiers = new ConcurrentHashMap<>(MAP_INITIAL_CAPACITY);\n        notifierExecutor = new ThreadPoolExecutor(THREAD_POOL_NUM, THREAD_POOL_NUM,\n                Integer.MAX_VALUE, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(),\n                new NamedThreadFactory(\"services-consul-notifier\", THREAD_POOL_NUM));\n    }",
+        "position": {
+            "line": 96,
+            "column": 13
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 98,
+                    "column": 33
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 99,
+                    "column": 27
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 100,
+                    "column": 25
+                }
+            },
+            {
+                "name": "ThreadPoolExecutor",
+                "position": {
+                    "line": 101,
+                    "column": 32
+                }
+            },
+            {
+                "name": "LinkedBlockingQueue<>",
+                "position": {
+                    "line": 102,
+                    "column": 63
+                }
+            },
+            {
+                "name": "NamedThreadFactory",
+                "position": {
+                    "line": 103,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "getInstance",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "getInstance()",
+        "class_signature": "ConsulRegistryServiceImpl.getInstance()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (instance == null) {\n            synchronized (ConsulRegistryServiceImpl.class) {\n                if (instance == null) {\n                    instance = new ConsulRegistryServiceImpl();\n                }\n            }\n        }\n        return instance;\n    }",
+        "position": {
+            "line": 111,
+            "column": 38
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ConsulRegistryServiceImpl",
+                "position": {
+                    "line": 115,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.ConsulRegistryServiceImpl()"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "register",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "register(InetSocketAddress address)",
+        "class_signature": "ConsulRegistryServiceImpl.register(InetSocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetSocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        NetUtil.validAddress(address);\n        doRegister(address);\n        RegistryHeartBeats.addHeartBeat(REGISTRY_TYPE, address, this::doRegister);\n\n    }",
+        "position": {
+            "line": 123,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "validAddress",
+                "position": {
+                    "line": 124,
+                    "column": 17
+                }
+            },
+            {
+                "name": "doRegister",
+                "position": {
+                    "line": 125,
+                    "column": 9
+                }
+            },
+            {
+                "name": "addHeartBeat",
+                "position": {
+                    "line": 126,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.doRegister(InetSocketAddress address)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "doRegister",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "doRegister(InetSocketAddress address)",
+        "class_signature": "ConsulRegistryServiceImpl.doRegister(InetSocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetSocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        getConsulClient().agentServiceRegister(createService(address), getAclToken());\n    }",
+        "position": {
+            "line": 130,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "agentServiceRegister",
+                "position": {
+                    "line": 131,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getConsulClient",
+                "position": {
+                    "line": 131,
+                    "column": 9
+                }
+            },
+            {
+                "name": "createService",
+                "position": {
+                    "line": 131,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getAclToken",
+                "position": {
+                    "line": 131,
+                    "column": 72
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.getConsulClient()",
+            "ConsulRegistryServiceImpl.createService(InetSocketAddress address)",
+            "ConsulRegistryServiceImpl.getAclToken()"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "unregister",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "unregister(InetSocketAddress address)",
+        "class_signature": "ConsulRegistryServiceImpl.unregister(InetSocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetSocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        NetUtil.validAddress(address);\n        getConsulClient().agentServiceDeregister(createServiceId(address), getAclToken());\n    }",
+        "position": {
+            "line": 135,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "validAddress",
+                "position": {
+                    "line": 136,
+                    "column": 17
+                }
+            },
+            {
+                "name": "agentServiceDeregister",
+                "position": {
+                    "line": 137,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getConsulClient",
+                "position": {
+                    "line": 137,
+                    "column": 9
+                }
+            },
+            {
+                "name": "createServiceId",
+                "position": {
+                    "line": 137,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getAclToken",
+                "position": {
+                    "line": 137,
+                    "column": 76
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.getConsulClient()",
+            "ConsulRegistryServiceImpl.createServiceId(InetSocketAddress address)",
+            "ConsulRegistryServiceImpl.getAclToken()"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "subscribe",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "subscribe(String cluster, ConsulListener listener)",
+        "class_signature": "ConsulRegistryServiceImpl.subscribe(String cluster, ConsulListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "cluster"
+            ],
+            [
+                "ConsulListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        //1.add listener to subscribe list\n        listenerMap.computeIfAbsent(cluster, key -> new HashSet<>())\n                .add(listener);\n        //2.get healthy services\n        Response<List<HealthService>> response = getHealthyServices(cluster, -1, DEFAULT_WATCH_TIMEOUT);\n        //3.get current consul index.\n        Long index = response.getConsulIndex();\n        ConsulNotifier notifier = notifiers.computeIfAbsent(cluster, key -> new ConsulNotifier(cluster, index));\n        //4.run notifier\n        notifierExecutor.submit(notifier);\n    }",
+        "position": {
+            "line": 141,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "add",
+                "position": {
+                    "line": 144,
+                    "column": 18
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 143,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getHealthyServices",
+                "position": {
+                    "line": 146,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getConsulIndex",
+                "position": {
+                    "line": 148,
+                    "column": 31
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 149,
+                    "column": 45
+                }
+            },
+            {
+                "name": "submit",
+                "position": {
+                    "line": 151,
+                    "column": 26
+                }
+            },
+            {
+                "name": "HashSet<>",
+                "position": {
+                    "line": 143,
+                    "column": 57
+                }
+            },
+            {
+                "name": "ConsulNotifier",
+                "position": {
+                    "line": 149,
+                    "column": 81
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.getHealthyServices(String service, long index, long watchTimeout)",
+            "ConsulNotifier.ConsulNotifier(String cluster, long consulIndex)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "unsubscribe",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "unsubscribe(String cluster, ConsulListener listener)",
+        "class_signature": "ConsulRegistryServiceImpl.unsubscribe(String cluster, ConsulListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "cluster"
+            ],
+            [
+                "ConsulListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        //1.remove notifier for the cluster\n        ConsulNotifier notifier = notifiers.remove(cluster);\n        //2.stop the notifier\n        notifier.stop();\n    }",
+        "position": {
+            "line": 155,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "remove",
+                "position": {
+                    "line": 157,
+                    "column": 45
+                }
+            },
+            {
+                "name": "stop",
+                "position": {
+                    "line": 159,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulNotifier.stop()"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "lookup",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "lookup(String key)",
+        "class_signature": "ConsulRegistryServiceImpl.lookup(String key)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "key"
+            ]
+        ],
+        "methodBody": "{\n        final String cluster = getServiceGroup(key);\n        if (cluster == null) {\n            String missingDataId = PREFIX_SERVICE_ROOT + CONFIG_SPLIT_CHAR + PREFIX_SERVICE_MAPPING + key;\n            throw new ConfigNotFoundException(\"%s configuration item is required\", missingDataId);\n        }\n        return lookupByCluster(cluster);\n\n    }",
+        "position": {
+            "line": 163,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceGroup",
+                "position": {
+                    "line": 164,
+                    "column": 32
+                }
+            },
+            {
+                "name": "lookupByCluster",
+                "position": {
+                    "line": 169,
+                    "column": 16
+                }
+            },
+            {
+                "name": "ConfigNotFoundException",
+                "position": {
+                    "line": 167,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.lookupByCluster(String cluster)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "lookupByCluster",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "lookupByCluster(String cluster)",
+        "class_signature": "ConsulRegistryServiceImpl.lookupByCluster(String cluster)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "cluster"
+            ]
+        ],
+        "methodBody": "{\n        if (!listenerMap.containsKey(cluster)) {\n            //1.refresh cluster\n            refreshCluster(cluster);\n            //2. subscribe\n            subscribe(cluster, services -> refreshCluster(cluster, services));\n        }\n        return clusterAddressMap.get(cluster);\n    }",
+        "position": {
+            "line": 173,
+            "column": 37
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 174,
+                    "column": 26
+                }
+            },
+            {
+                "name": "refreshCluster",
+                "position": {
+                    "line": 176,
+                    "column": 13
+                }
+            },
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 178,
+                    "column": 13
+                }
+            },
+            {
+                "name": "refreshCluster",
+                "position": {
+                    "line": 178,
+                    "column": 44
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 180,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.refreshCluster(String cluster)",
+            "ConsulRegistryServiceImpl.subscribe(String cluster, ConsulListener listener)",
+            "ConsulRegistryServiceImpl.refreshCluster(String cluster, List<HealthService> services)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "getConsulClient",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "getConsulClient()",
+        "class_signature": "ConsulRegistryServiceImpl.getConsulClient()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (client == null) {\n            synchronized (ConsulRegistryServiceImpl.class) {\n                if (client == null) {\n                    String serverAddr = FILE_CONFIG.getConfig(FILE_CONFIG_KEY_PREFIX + SERVER_ADDR_KEY);\n                    InetSocketAddress inetSocketAddress = NetUtil.toInetSocketAddress(serverAddr);\n                    client = new ConsulClient(inetSocketAddress.getHostName(), inetSocketAddress.getPort());\n                }\n            }\n        }\n        return client;\n    }",
+        "position": {
+            "line": 188,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 192,
+                    "column": 53
+                }
+            },
+            {
+                "name": "toInetSocketAddress",
+                "position": {
+                    "line": 193,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getHostName",
+                "position": {
+                    "line": 194,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 194,
+                    "column": 98
+                }
+            },
+            {
+                "name": "ConsulClient",
+                "position": {
+                    "line": 194,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 21
+    },
+    {
+        "name": "getClusterName",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "getClusterName()",
+        "class_signature": "ConsulRegistryServiceImpl.getClusterName()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        String clusterConfigName = String.join(FILE_CONFIG_SPLIT_CHAR, FILE_ROOT_REGISTRY, REGISTRY_TYPE, REGISTRY_CLUSTER);\n        return FILE_CONFIG.getConfig(clusterConfigName, DEFAULT_CLUSTER_NAME);\n    }",
+        "position": {
+            "line": 206,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 207,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 208,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "createServiceId",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "createServiceId(InetSocketAddress address)",
+        "class_signature": "ConsulRegistryServiceImpl.createServiceId(InetSocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetSocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        return getClusterName() + \"-\" + NetUtil.toStringAddress(address);\n    }",
+        "position": {
+            "line": 217,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 218,
+                    "column": 16
+                }
+            },
+            {
+                "name": "toStringAddress",
+                "position": {
+                    "line": 218,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.getClusterName()"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "getAclToken",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "getAclToken()",
+        "class_signature": "ConsulRegistryServiceImpl.getAclToken()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        String fileConfigKey = String.join(ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR, ConfigurationKeys.FILE_ROOT_REGISTRY, REGISTRY_TYPE, ACL_TOKEN);\n        String aclToken = StringUtils.isNotBlank(System.getProperty(ACL_TOKEN)) ? System.getProperty(ACL_TOKEN)\n                : FILE_CONFIG.getConfig(fileConfigKey);\n        return StringUtils.isNotBlank(aclToken) ? aclToken : null;\n    }",
+        "position": {
+            "line": 226,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "join",
+                "position": {
+                    "line": 227,
+                    "column": 39
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 228,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 228,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 228,
+                    "column": 90
+                }
+            },
+            {
+                "name": "getConfig",
+                "position": {
+                    "line": 229,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isNotBlank",
+                "position": {
+                    "line": 230,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 22
+    },
+    {
+        "name": "createService",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "createService(InetSocketAddress address)",
+        "class_signature": "ConsulRegistryServiceImpl.createService(InetSocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetSocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        NewService newService = new NewService();\n        newService.setId(createServiceId(address));\n        newService.setName(getClusterName());\n        newService.setTags(Collections.singletonList(SERVICE_TAG));\n        newService.setPort(address.getPort());\n        newService.setAddress(NetUtil.toIpAddress(address));\n        newService.setCheck(createCheck(address));\n        return newService;\n    }",
+        "position": {
+            "line": 239,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setId",
+                "position": {
+                    "line": 241,
+                    "column": 20
+                }
+            },
+            {
+                "name": "createServiceId",
+                "position": {
+                    "line": 241,
+                    "column": 26
+                }
+            },
+            {
+                "name": "setName",
+                "position": {
+                    "line": 242,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getClusterName",
+                "position": {
+                    "line": 242,
+                    "column": 28
+                }
+            },
+            {
+                "name": "setTags",
+                "position": {
+                    "line": 243,
+                    "column": 20
+                }
+            },
+            {
+                "name": "singletonList",
+                "position": {
+                    "line": 243,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setPort",
+                "position": {
+                    "line": 244,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 244,
+                    "column": 36
+                }
+            },
+            {
+                "name": "setAddress",
+                "position": {
+                    "line": 245,
+                    "column": 20
+                }
+            },
+            {
+                "name": "toIpAddress",
+                "position": {
+                    "line": 245,
+                    "column": 39
+                }
+            },
+            {
+                "name": "setCheck",
+                "position": {
+                    "line": 246,
+                    "column": 20
+                }
+            },
+            {
+                "name": "createCheck",
+                "position": {
+                    "line": 246,
+                    "column": 29
+                }
+            },
+            {
+                "name": "NewService",
+                "position": {
+                    "line": 240,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.createServiceId(InetSocketAddress address)",
+            "ConsulRegistryServiceImpl.getClusterName()",
+            "ConsulRegistryServiceImpl.createCheck(InetSocketAddress address)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "createCheck",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "createCheck(InetSocketAddress address)",
+        "class_signature": "ConsulRegistryServiceImpl.createCheck(InetSocketAddress address)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "InetSocketAddress",
+                "address"
+            ]
+        ],
+        "methodBody": "{\n        NewService.Check check = new NewService.Check();\n        check.setTcp(NetUtil.toStringAddress(address));\n        check.setInterval(DEFAULT_CHECK_INTERVAL);\n        check.setTimeout(DEFAULT_CHECK_TIMEOUT);\n        check.setDeregisterCriticalServiceAfter(DEFAULT_DEREGISTER_TIME);\n        return check;\n    }",
+        "position": {
+            "line": 256,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setTcp",
+                "position": {
+                    "line": 258,
+                    "column": 15
+                }
+            },
+            {
+                "name": "toStringAddress",
+                "position": {
+                    "line": 258,
+                    "column": 30
+                }
+            },
+            {
+                "name": "setInterval",
+                "position": {
+                    "line": 259,
+                    "column": 15
+                }
+            },
+            {
+                "name": "setTimeout",
+                "position": {
+                    "line": 260,
+                    "column": 15
+                }
+            },
+            {
+                "name": "setDeregisterCriticalServiceAfter",
+                "position": {
+                    "line": 261,
+                    "column": 15
+                }
+            },
+            {
+                "name": "NewService.Check",
+                "position": {
+                    "line": 257,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "getHealthyServices",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "getHealthyServices(String service, long index, long watchTimeout)",
+        "class_signature": "ConsulRegistryServiceImpl.getHealthyServices(String service, long index, long watchTimeout)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "service"
+            ],
+            [
+                "long",
+                "index"
+            ],
+            [
+                "long",
+                "watchTimeout"
+            ]
+        ],
+        "methodBody": "{\n        return getConsulClient().getHealthServices(service, HealthServicesRequest.newBuilder()\n                .setTag(SERVICE_TAG)\n                .setQueryParams(new QueryParams(watchTimeout, index))\n                .setPassing(true)\n                .setToken(getAclToken())\n                .build());\n    }",
+        "position": {
+            "line": 271,
+            "column": 43
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getHealthServices",
+                "position": {
+                    "line": 272,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getConsulClient",
+                "position": {
+                    "line": 272,
+                    "column": 16
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 277,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setToken",
+                "position": {
+                    "line": 276,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setPassing",
+                "position": {
+                    "line": 275,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setQueryParams",
+                "position": {
+                    "line": 274,
+                    "column": 18
+                }
+            },
+            {
+                "name": "setTag",
+                "position": {
+                    "line": 273,
+                    "column": 18
+                }
+            },
+            {
+                "name": "newBuilder",
+                "position": {
+                    "line": 272,
+                    "column": 83
+                }
+            },
+            {
+                "name": "getAclToken",
+                "position": {
+                    "line": 276,
+                    "column": 27
+                }
+            },
+            {
+                "name": "QueryParams",
+                "position": {
+                    "line": 274,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.getConsulClient()",
+            "ConsulRegistryServiceImpl.getAclToken()"
+        ],
+        "priority": 18
+    },
+    {
+        "name": "refreshCluster",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "refreshCluster(String cluster)",
+        "class_signature": "ConsulRegistryServiceImpl.refreshCluster(String cluster)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "cluster"
+            ]
+        ],
+        "methodBody": "{\n        if (StringUtils.isBlank(cluster)) {\n            return;\n        }\n        Response<List<HealthService>> response = getHealthyServices(cluster, -1, -1);\n        if (response == null) {\n            return;\n        }\n        refreshCluster(cluster, response.getValue());\n    }",
+        "position": {
+            "line": 285,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 286,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getHealthyServices",
+                "position": {
+                    "line": 289,
+                    "column": 50
+                }
+            },
+            {
+                "name": "refreshCluster",
+                "position": {
+                    "line": 293,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 293,
+                    "column": 42
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.getHealthyServices(String service, long index, long watchTimeout)",
+            "ConsulRegistryServiceImpl.refreshCluster(String cluster, List<HealthService> services)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "refreshCluster",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "refreshCluster(String cluster, List<HealthService> services)",
+        "class_signature": "ConsulRegistryServiceImpl.refreshCluster(String cluster, List<HealthService> services)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "cluster"
+            ],
+            [
+                "List<HealthService>",
+                "services"
+            ]
+        ],
+        "methodBody": "{\n        if (cluster == null || services == null) {\n            return;\n        }\n\n        List<InetSocketAddress> addresses = services.stream()\n                .map(HealthService::getService)\n                .map(service -> new InetSocketAddress(service.getAddress(), service.getPort()))\n                .collect(Collectors.toList());\n\n        clusterAddressMap.put(cluster, addresses);\n\n        removeOfflineAddressesIfNecessary(cluster, addresses);\n    }",
+        "position": {
+            "line": 302,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "collect",
+                "position": {
+                    "line": 310,
+                    "column": 18
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 309,
+                    "column": 18
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 308,
+                    "column": 18
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 307,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getAddress",
+                "position": {
+                    "line": 309,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getPort",
+                "position": {
+                    "line": 309,
+                    "column": 85
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 310,
+                    "column": 37
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 312,
+                    "column": 27
+                }
+            },
+            {
+                "name": "removeOfflineAddressesIfNecessary",
+                "position": {
+                    "line": 314,
+                    "column": 9
+                }
+            },
+            {
+                "name": "InetSocketAddress",
+                "position": {
+                    "line": 309,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 17
+    },
+    {
+        "name": "ConsulNotifier",
+        "category": "constructor_declaration",
+        "class": "ConsulNotifier",
+        "signature": "ConsulNotifier(String cluster, long consulIndex)",
+        "class_signature": "ConsulNotifier.ConsulNotifier(String cluster, long consulIndex)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "cluster"
+            ],
+            [
+                "long",
+                "consulIndex"
+            ]
+        ],
+        "methodBody": "{\n            this.cluster = cluster;\n            this.consulIndex = consulIndex;\n            this.running = true;\n        }",
+        "position": {
+            "line": 327,
+            "column": 9
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 19
+    },
+    {
+        "name": "run",
+        "category": "method_declaration",
+        "class": "ConsulNotifier",
+        "signature": "run()",
+        "class_signature": "ConsulNotifier.run()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            while (this.running) {\n                try {\n                    processService();\n                } catch (Exception exception) {\n                    hasError = true;\n                    LOGGER.error(\"consul refresh services error:{}\", exception.getMessage());\n                }\n            }\n        }",
+        "position": {
+            "line": 334,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "processService",
+                "position": {
+                    "line": 337,
+                    "column": 21
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 340,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 340,
+                    "column": 80
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulNotifier.processService()"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "processService",
+        "category": "method_declaration",
+        "class": "ConsulNotifier",
+        "signature": "processService()",
+        "class_signature": "ConsulNotifier.processService()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            Response<List<HealthService>> response = getHealthyServices(cluster, consulIndex, DEFAULT_WATCH_TIMEOUT);\n            Long currentIndex = response.getConsulIndex();\n\n            if ((currentIndex != null && currentIndex > consulIndex) || hasError) {\n                hasError = false;\n                List<HealthService> services = response.getValue();\n                consulIndex = currentIndex;/*lgtm[java/dereferenced-value-may-be-null]*/\n                for (ConsulListener listener : listenerMap.get(cluster)) {\n                    listener.onEvent(services);\n                }\n            }\n        }",
+        "position": {
+            "line": 345,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getHealthyServices",
+                "position": {
+                    "line": 346,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getConsulIndex",
+                "position": {
+                    "line": 347,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 351,
+                    "column": 57
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 353,
+                    "column": 60
+                }
+            },
+            {
+                "name": "onEvent",
+                "position": {
+                    "line": 354,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConsulRegistryServiceImpl.getHealthyServices(String service, long index, long watchTimeout)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "stop",
+        "category": "method_declaration",
+        "class": "ConsulNotifier",
+        "signature": "stop()",
+        "class_signature": "ConsulNotifier.stop()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n            this.running = false;\n        }",
+        "position": {
+            "line": 359,
+            "column": 14
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "close",
+        "category": "method_declaration",
+        "class": "ConsulRegistryServiceImpl",
+        "signature": "close()",
+        "class_signature": "ConsulRegistryServiceImpl.close()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        client = null;\n    }",
+        "position": {
+            "line": 365,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 6
+    }
+]

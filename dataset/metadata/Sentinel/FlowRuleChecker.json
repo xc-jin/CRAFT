@@ -1,0 +1,808 @@
+[
+    {
+        "name": "checkFlow",
+        "category": "method_declaration",
+        "class": "FlowRuleChecker",
+        "signature": "checkFlow(Function<String, Collection<FlowRule>> ruleProvider, ResourceWrapper resource, Context context, DefaultNode node, int count, boolean prioritized)",
+        "class_signature": "FlowRuleChecker.checkFlow(Function<String, Collection<FlowRule>> ruleProvider, ResourceWrapper resource, Context context, DefaultNode node, int count, boolean prioritized)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Function<String, Collection<FlowRule>>",
+                "ruleProvider"
+            ],
+            [
+                "ResourceWrapper",
+                "resource"
+            ],
+            [
+                "Context",
+                "context"
+            ],
+            [
+                "DefaultNode",
+                "node"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ]
+        ],
+        "methodBody": "{\n        if (ruleProvider == null || resource == null) {\n            return;\n        }\n        Collection<FlowRule> rules = ruleProvider.apply(resource.getName());\n        if (rules != null) {\n            for (FlowRule rule : rules) {\n                if (!canPassCheck(rule, context, node, count, prioritized)) {\n                    throw new FlowException(rule.getLimitApp(), rule);\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 44,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "apply",
+                "position": {
+                    "line": 49,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 49,
+                    "column": 66
+                }
+            },
+            {
+                "name": "canPassCheck",
+                "position": {
+                    "line": 52,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getLimitApp",
+                "position": {
+                    "line": 53,
+                    "column": 50
+                }
+            },
+            {
+                "name": "FlowException",
+                "position": {
+                    "line": 53,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "FlowRuleChecker.canPassCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "canPassCheck",
+        "category": "method_declaration",
+        "class": "FlowRuleChecker",
+        "signature": "canPassCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount)",
+        "class_signature": "FlowRuleChecker.canPassCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FlowRule",
+                "rule"
+            ],
+            [
+                "Context",
+                "context"
+            ],
+            [
+                "DefaultNode",
+                "node"
+            ],
+            [
+                "int",
+                "acquireCount"
+            ]
+        ],
+        "methodBody": "{\n        return canPassCheck(rule, context, node, acquireCount, false);\n    }",
+        "position": {
+            "line": 59,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "canPassCheck",
+                "position": {
+                    "line": 61,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "FlowRuleChecker.canPassCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "canPassCheck",
+        "category": "method_declaration",
+        "class": "FlowRuleChecker",
+        "signature": "canPassCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+        "class_signature": "FlowRuleChecker.canPassCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FlowRule",
+                "rule"
+            ],
+            [
+                "Context",
+                "context"
+            ],
+            [
+                "DefaultNode",
+                "node"
+            ],
+            [
+                "int",
+                "acquireCount"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ]
+        ],
+        "methodBody": "{\n        String limitApp = rule.getLimitApp();\n        if (limitApp == null) {\n            return true;\n        }\n\n        if (rule.isClusterMode()) {\n            return passClusterCheck(rule, context, node, acquireCount, prioritized);\n        }\n\n        return passLocalCheck(rule, context, node, acquireCount, prioritized);\n    }",
+        "position": {
+            "line": 64,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLimitApp",
+                "position": {
+                    "line": 66,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isClusterMode",
+                "position": {
+                    "line": 71,
+                    "column": 18
+                }
+            },
+            {
+                "name": "passClusterCheck",
+                "position": {
+                    "line": 72,
+                    "column": 20
+                }
+            },
+            {
+                "name": "passLocalCheck",
+                "position": {
+                    "line": 75,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "FlowRuleChecker.passClusterCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+            "FlowRuleChecker.passLocalCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "passLocalCheck",
+        "category": "method_declaration",
+        "class": "FlowRuleChecker",
+        "signature": "passLocalCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+        "class_signature": "FlowRuleChecker.passLocalCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FlowRule",
+                "rule"
+            ],
+            [
+                "Context",
+                "context"
+            ],
+            [
+                "DefaultNode",
+                "node"
+            ],
+            [
+                "int",
+                "acquireCount"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ]
+        ],
+        "methodBody": "{\n        Node selectedNode = selectNodeByRequesterAndStrategy(rule, context, node);\n        if (selectedNode == null) {\n            return true;\n        }\n\n        return rule.getRater().canPass(selectedNode, acquireCount, prioritized);\n    }",
+        "position": {
+            "line": 78,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "selectNodeByRequesterAndStrategy",
+                "position": {
+                    "line": 80,
+                    "column": 29
+                }
+            },
+            {
+                "name": "canPass",
+                "position": {
+                    "line": 85,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getRater",
+                "position": {
+                    "line": 85,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "FlowRuleChecker.selectNodeByRequesterAndStrategy(FlowRule rule, Context context, DefaultNode node)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "selectReferenceNode",
+        "category": "method_declaration",
+        "class": "FlowRuleChecker",
+        "signature": "selectReferenceNode(FlowRule rule, Context context, DefaultNode node)",
+        "class_signature": "FlowRuleChecker.selectReferenceNode(FlowRule rule, Context context, DefaultNode node)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FlowRule",
+                "rule"
+            ],
+            [
+                "Context",
+                "context"
+            ],
+            [
+                "DefaultNode",
+                "node"
+            ]
+        ],
+        "methodBody": "{\n        String refResource = rule.getRefResource();\n        int strategy = rule.getStrategy();\n\n        if (StringUtil.isEmpty(refResource)) {\n            return null;\n        }\n\n        if (strategy == RuleConstant.STRATEGY_RELATE) {\n            return ClusterBuilderSlot.getClusterNode(refResource);\n        }\n\n        if (strategy == RuleConstant.STRATEGY_CHAIN) {\n            if (!refResource.equals(context.getName())) {\n                return null;\n            }\n            return node;\n        }\n        // No node.\n        return null;\n    }",
+        "position": {
+            "line": 88,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getRefResource",
+                "position": {
+                    "line": 89,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getStrategy",
+                "position": {
+                    "line": 90,
+                    "column": 29
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 92,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getClusterNode",
+                "position": {
+                    "line": 97,
+                    "column": 39
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 101,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 101,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "filterOrigin",
+        "category": "method_declaration",
+        "class": "FlowRuleChecker",
+        "signature": "filterOrigin(String origin)",
+        "class_signature": "FlowRuleChecker.filterOrigin(String origin)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "origin"
+            ]
+        ],
+        "methodBody": "{\n        // Origin cannot be `default` or `other`.\n        return !RuleConstant.LIMIT_APP_DEFAULT.equals(origin) && !RuleConstant.LIMIT_APP_OTHER.equals(origin);\n    }",
+        "position": {
+            "line": 110,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 112,
+                    "column": 48
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 112,
+                    "column": 96
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "selectNodeByRequesterAndStrategy",
+        "category": "method_declaration",
+        "class": "FlowRuleChecker",
+        "signature": "selectNodeByRequesterAndStrategy(FlowRule rule, Context context, DefaultNode node)",
+        "class_signature": "FlowRuleChecker.selectNodeByRequesterAndStrategy(FlowRule rule, Context context, DefaultNode node)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FlowRule",
+                "rule"
+            ],
+            [
+                "Context",
+                "context"
+            ],
+            [
+                "DefaultNode",
+                "node"
+            ]
+        ],
+        "methodBody": "{\n        // The limit app should not be empty.\n        String limitApp = rule.getLimitApp();\n        int strategy = rule.getStrategy();\n        String origin = context.getOrigin();\n\n        if (limitApp.equals(origin) && filterOrigin(origin)) {\n            if (strategy == RuleConstant.STRATEGY_DIRECT) {\n                // Matches limit origin, return origin statistic node.\n                return context.getOriginNode();\n            }\n\n            return selectReferenceNode(rule, context, node);\n        } else if (RuleConstant.LIMIT_APP_DEFAULT.equals(limitApp)) {\n            if (strategy == RuleConstant.STRATEGY_DIRECT) {\n                // Return the cluster node.\n                return node.getClusterNode();\n            }\n\n            return selectReferenceNode(rule, context, node);\n        } else if (RuleConstant.LIMIT_APP_OTHER.equals(limitApp)\n            && FlowRuleManager.isOtherOrigin(origin, rule.getResource())) {\n            if (strategy == RuleConstant.STRATEGY_DIRECT) {\n                return context.getOriginNode();\n            }\n\n            return selectReferenceNode(rule, context, node);\n        }\n\n        return null;\n    }",
+        "position": {
+            "line": 115,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLimitApp",
+                "position": {
+                    "line": 117,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getStrategy",
+                "position": {
+                    "line": 118,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getOrigin",
+                "position": {
+                    "line": 119,
+                    "column": 33
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 121,
+                    "column": 22
+                }
+            },
+            {
+                "name": "filterOrigin",
+                "position": {
+                    "line": 121,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getOriginNode",
+                "position": {
+                    "line": 124,
+                    "column": 32
+                }
+            },
+            {
+                "name": "selectReferenceNode",
+                "position": {
+                    "line": 127,
+                    "column": 20
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 128,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getClusterNode",
+                "position": {
+                    "line": 131,
+                    "column": 29
+                }
+            },
+            {
+                "name": "selectReferenceNode",
+                "position": {
+                    "line": 134,
+                    "column": 20
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 135,
+                    "column": 49
+                }
+            },
+            {
+                "name": "isOtherOrigin",
+                "position": {
+                    "line": 136,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getResource",
+                "position": {
+                    "line": 136,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getOriginNode",
+                "position": {
+                    "line": 138,
+                    "column": 32
+                }
+            },
+            {
+                "name": "selectReferenceNode",
+                "position": {
+                    "line": 141,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "FlowRuleChecker.filterOrigin(String origin)",
+            "FlowRuleChecker.selectReferenceNode(FlowRule rule, Context context, DefaultNode node)",
+            "FlowRuleChecker.selectReferenceNode(FlowRule rule, Context context, DefaultNode node)",
+            "FlowRuleChecker.selectReferenceNode(FlowRule rule, Context context, DefaultNode node)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "passClusterCheck",
+        "category": "method_declaration",
+        "class": "FlowRuleChecker",
+        "signature": "passClusterCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+        "class_signature": "FlowRuleChecker.passClusterCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FlowRule",
+                "rule"
+            ],
+            [
+                "Context",
+                "context"
+            ],
+            [
+                "DefaultNode",
+                "node"
+            ],
+            [
+                "int",
+                "acquireCount"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            TokenService clusterService = pickClusterService();\n            if (clusterService == null) {\n                return fallbackToLocalOrPass(rule, context, node, acquireCount, prioritized);\n            }\n            long flowId = rule.getClusterConfig().getFlowId();\n            TokenResult result = clusterService.requestToken(flowId, acquireCount, prioritized);\n            return applyTokenResult(result, rule, context, node, acquireCount, prioritized);\n            // If client is absent, then fallback to local mode.\n        } catch (Throwable ex) {\n            RecordLog.warn(\"[FlowRuleChecker] Request cluster token unexpected failed\", ex);\n        }\n        // Fallback to local flow control when token client or server for this rule is not available.\n        // If fallback is not enabled, then directly pass.\n        return fallbackToLocalOrPass(rule, context, node, acquireCount, prioritized);\n    }",
+        "position": {
+            "line": 147,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "pickClusterService",
+                "position": {
+                    "line": 150,
+                    "column": 43
+                }
+            },
+            {
+                "name": "fallbackToLocalOrPass",
+                "position": {
+                    "line": 152,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getFlowId",
+                "position": {
+                    "line": 154,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getClusterConfig",
+                "position": {
+                    "line": 154,
+                    "column": 32
+                }
+            },
+            {
+                "name": "requestToken",
+                "position": {
+                    "line": 155,
+                    "column": 49
+                }
+            },
+            {
+                "name": "applyTokenResult",
+                "position": {
+                    "line": 156,
+                    "column": 20
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 159,
+                    "column": 23
+                }
+            },
+            {
+                "name": "fallbackToLocalOrPass",
+                "position": {
+                    "line": 163,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "FlowRuleChecker.pickClusterService()",
+            "FlowRuleChecker.fallbackToLocalOrPass(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+            "FlowRuleChecker.applyTokenResult(TokenResult result, FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+            "FlowRuleChecker.fallbackToLocalOrPass(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "fallbackToLocalOrPass",
+        "category": "method_declaration",
+        "class": "FlowRuleChecker",
+        "signature": "fallbackToLocalOrPass(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+        "class_signature": "FlowRuleChecker.fallbackToLocalOrPass(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "FlowRule",
+                "rule"
+            ],
+            [
+                "Context",
+                "context"
+            ],
+            [
+                "DefaultNode",
+                "node"
+            ],
+            [
+                "int",
+                "acquireCount"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ]
+        ],
+        "methodBody": "{\n        if (rule.getClusterConfig().isFallbackToLocalWhenFail()) {\n            return passLocalCheck(rule, context, node, acquireCount, prioritized);\n        } else {\n            // The rule won't be activated, just pass.\n            return true;\n        }\n    }",
+        "position": {
+            "line": 166,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isFallbackToLocalWhenFail",
+                "position": {
+                    "line": 168,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getClusterConfig",
+                "position": {
+                    "line": 168,
+                    "column": 18
+                }
+            },
+            {
+                "name": "passLocalCheck",
+                "position": {
+                    "line": 169,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "FlowRuleChecker.passLocalCheck(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "pickClusterService",
+        "category": "method_declaration",
+        "class": "FlowRuleChecker",
+        "signature": "pickClusterService()",
+        "class_signature": "FlowRuleChecker.pickClusterService()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (ClusterStateManager.isClient()) {\n            return TokenClientProvider.getClient();\n        }\n        if (ClusterStateManager.isServer()) {\n            return EmbeddedClusterTokenServerProvider.getServer();\n        }\n        return null;\n    }",
+        "position": {
+            "line": 176,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isClient",
+                "position": {
+                    "line": 177,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getClient",
+                "position": {
+                    "line": 178,
+                    "column": 40
+                }
+            },
+            {
+                "name": "isServer",
+                "position": {
+                    "line": 180,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getServer",
+                "position": {
+                    "line": 181,
+                    "column": 55
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "applyTokenResult",
+        "category": "method_declaration",
+        "class": "FlowRuleChecker",
+        "signature": "applyTokenResult(TokenResult result, FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+        "class_signature": "FlowRuleChecker.applyTokenResult(TokenResult result, FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "TokenResult",
+                "result"
+            ],
+            [
+                "FlowRule",
+                "rule"
+            ],
+            [
+                "Context",
+                "context"
+            ],
+            [
+                "DefaultNode",
+                "node"
+            ],
+            [
+                "int",
+                "acquireCount"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ]
+        ],
+        "methodBody": "{\n        switch (result.getStatus()) {\n            case TokenResultStatus.OK:\n                return true;\n            case TokenResultStatus.SHOULD_WAIT:\n                // Wait for next tick.\n                try {\n                    Thread.sleep(result.getWaitInMs());\n                } catch (InterruptedException e) {\n                    e.printStackTrace();\n                }\n                return true;\n            case TokenResultStatus.NO_RULE_EXISTS:\n            case TokenResultStatus.BAD_REQUEST:\n            case TokenResultStatus.FAIL:\n            case TokenResultStatus.TOO_MANY_REQUEST:\n                return fallbackToLocalOrPass(rule, context, node, acquireCount, prioritized);\n            case TokenResultStatus.BLOCKED:\n            default:\n                return false;\n        }\n    }",
+        "position": {
+            "line": 186,
+            "column": 28
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getStatus",
+                "position": {
+                    "line": 189,
+                    "column": 24
+                }
+            },
+            {
+                "name": "sleep",
+                "position": {
+                    "line": 195,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getWaitInMs",
+                "position": {
+                    "line": 195,
+                    "column": 41
+                }
+            },
+            {
+                "name": "printStackTrace",
+                "position": {
+                    "line": 197,
+                    "column": 23
+                }
+            },
+            {
+                "name": "fallbackToLocalOrPass",
+                "position": {
+                    "line": 204,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "FlowRuleChecker.fallbackToLocalOrPass(FlowRule rule, Context context, DefaultNode node, int acquireCount, boolean prioritized)"
+        ],
+        "priority": 5
+    }
+]

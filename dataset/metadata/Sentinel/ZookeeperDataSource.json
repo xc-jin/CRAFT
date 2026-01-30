@@ -1,0 +1,924 @@
+[
+    {
+        "name": "ZookeeperDataSource",
+        "category": "constructor_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "ZookeeperDataSource(String serverAddr, String path, Converter<String, T> parser)",
+        "class_signature": "ZookeeperDataSource.ZookeeperDataSource(String serverAddr, String path, Converter<String, T> parser)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverAddr"
+            ],
+            [
+                "String",
+                "path"
+            ],
+            [
+                "Converter<String, T>",
+                "parser"
+            ]
+        ],
+        "methodBody": "{\n        super(parser);\n        if (StringUtil.isBlank(serverAddr) || StringUtil.isBlank(path)) {\n            throw new IllegalArgumentException(String.format(\"Bad argument: serverAddr=[%s], path=[%s]\", serverAddr, path));\n        }\n        this.path = path;\n\n        init(serverAddr, null);\n    }",
+        "position": {
+            "line": 49,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 51,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 51,
+                    "column": 58
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 52,
+                    "column": 55
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 56,
+                    "column": 9
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 52,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperDataSource.init(String serverAddr, List<AuthInfo> authInfos)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "ZookeeperDataSource",
+        "category": "constructor_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "ZookeeperDataSource(String serverAddr, String groupId, String dataId, Converter<String, T> parser)",
+        "class_signature": "ZookeeperDataSource.ZookeeperDataSource(String serverAddr, String groupId, String dataId, Converter<String, T> parser)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverAddr"
+            ],
+            [
+                "String",
+                "groupId"
+            ],
+            [
+                "String",
+                "dataId"
+            ],
+            [
+                "Converter<String, T>",
+                "parser"
+            ]
+        ],
+        "methodBody": "{\n        super(parser);\n        if (StringUtil.isBlank(serverAddr) || StringUtil.isBlank(groupId) || StringUtil.isBlank(dataId)) {\n            throw new IllegalArgumentException(String.format(\"Bad argument: serverAddr=[%s], groupId=[%s], dataId=[%s]\", serverAddr, groupId, dataId));\n        }\n        this.path = getPath(groupId, dataId);\n\n        init(serverAddr, null);\n    }",
+        "position": {
+            "line": 62,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 65,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 65,
+                    "column": 58
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 65,
+                    "column": 89
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 66,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getPath",
+                "position": {
+                    "line": 68,
+                    "column": 21
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 70,
+                    "column": 9
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 66,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperDataSource.getPath(String groupId, String dataId)",
+            "ZookeeperDataSource.init(String serverAddr, List<AuthInfo> authInfos)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "ZookeeperDataSource",
+        "category": "constructor_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "ZookeeperDataSource(String serverAddr, List<AuthInfo> authInfos, String groupId, String dataId, Converter<String, T> parser)",
+        "class_signature": "ZookeeperDataSource.ZookeeperDataSource(String serverAddr, List<AuthInfo> authInfos, String groupId, String dataId, Converter<String, T> parser)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverAddr"
+            ],
+            [
+                "List<AuthInfo>",
+                "authInfos"
+            ],
+            [
+                "String",
+                "groupId"
+            ],
+            [
+                "String",
+                "dataId"
+            ],
+            [
+                "Converter<String, T>",
+                "parser"
+            ]
+        ],
+        "methodBody": "{\n        super(parser);\n        if (StringUtil.isBlank(serverAddr) || StringUtil.isBlank(groupId) || StringUtil.isBlank(dataId)) {\n            throw new IllegalArgumentException(String.format(\"Bad argument: serverAddr=[%s], authInfos=[%s], groupId=[%s], dataId=[%s]\", serverAddr, authInfos, groupId, dataId));\n        }\n        this.path = getPath(groupId, dataId);\n\n        init(serverAddr, authInfos);\n    }",
+        "position": {
+            "line": 76,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 79,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 79,
+                    "column": 58
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 79,
+                    "column": 89
+                }
+            },
+            {
+                "name": "format",
+                "position": {
+                    "line": 80,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getPath",
+                "position": {
+                    "line": 82,
+                    "column": 21
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 84,
+                    "column": 9
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 80,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperDataSource.getPath(String groupId, String dataId)",
+            "ZookeeperDataSource.init(String serverAddr, List<AuthInfo> authInfos)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "init",
+        "category": "method_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "init(String serverAddr, List<AuthInfo> authInfos)",
+        "class_signature": "ZookeeperDataSource.init(String serverAddr, List<AuthInfo> authInfos)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverAddr"
+            ],
+            [
+                "List<AuthInfo>",
+                "authInfos"
+            ]
+        ],
+        "methodBody": "{\n        initZookeeperListener(serverAddr, authInfos);\n        loadInitialConfig();\n    }",
+        "position": {
+            "line": 87,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "initZookeeperListener",
+                "position": {
+                    "line": 88,
+                    "column": 9
+                }
+            },
+            {
+                "name": "loadInitialConfig",
+                "position": {
+                    "line": 89,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperDataSource.initZookeeperListener(String serverAddr, List<AuthInfo> authInfos)",
+            "ZookeeperDataSource.loadInitialConfig()"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "loadInitialConfig",
+        "category": "method_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "loadInitialConfig()",
+        "class_signature": "ZookeeperDataSource.loadInitialConfig()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        try {\n            T newValue = loadConfig();\n            if (newValue == null) {\n                RecordLog.warn(\"[ZookeeperDataSource] WARN: initial config is null, you may have to check your data source\");\n            }\n            getProperty().updateValue(newValue);\n        } catch (Exception ex) {\n            RecordLog.warn(\"[ZookeeperDataSource] Error when loading initial config\", ex);\n        }\n    }",
+        "position": {
+            "line": 92,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "loadConfig",
+                "position": {
+                    "line": 94,
+                    "column": 26
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 96,
+                    "column": 27
+                }
+            },
+            {
+                "name": "updateValue",
+                "position": {
+                    "line": 98,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 98,
+                    "column": 13
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 100,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "initZookeeperListener",
+        "category": "method_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "initZookeeperListener(String serverAddr, List<AuthInfo> authInfos)",
+        "class_signature": "ZookeeperDataSource.initZookeeperListener(String serverAddr, List<AuthInfo> authInfos)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverAddr"
+            ],
+            [
+                "List<AuthInfo>",
+                "authInfos"
+            ]
+        ],
+        "methodBody": "{\n        try {\n\n            this.listener = CuratorCacheListener.builder().forNodeCache(() -> {\n                try {\n                    T newValue = loadConfig();\n                    RecordLog.info(\"[ZookeeperDataSource] New property value received for ({}, {}): {}\",\n                            serverAddr, path, newValue);\n                    // Update the new value to the property.\n                    getProperty().updateValue(newValue);\n                } catch (Exception ex) {\n                    RecordLog.warn(\"[ZookeeperDataSource] loadConfig exception\", ex);\n                }\n            }).build();\n\n            String zkKey = getZkKey(serverAddr, authInfos);\n            if (zkClientMap.containsKey(zkKey)) {\n                this.zkClient = zkClientMap.get(zkKey);\n            } else {\n                synchronized (lock) {\n                    if (!zkClientMap.containsKey(zkKey)) {\n                        CuratorFramework zc = null;\n                        if (authInfos == null || authInfos.size() == 0) {\n                            zc = CuratorFrameworkFactory.newClient(serverAddr, new ExponentialBackoffRetry(SLEEP_TIME, RETRY_TIMES));\n                        } else {\n                            zc = CuratorFrameworkFactory.builder().\n                                    connectString(serverAddr).\n                                    retryPolicy(new ExponentialBackoffRetry(SLEEP_TIME, RETRY_TIMES)).\n                                    authorization(authInfos).\n                                    build();\n                        }\n                        this.zkClient = zc;\n                        this.zkClient.start();\n                        Map<String, CuratorFramework> newZkClientMap = new HashMap<>(zkClientMap.size());\n                        newZkClientMap.putAll(zkClientMap);\n                        newZkClientMap.put(zkKey, zc);\n                        zkClientMap = newZkClientMap;\n                    } else {\n                        this.zkClient = zkClientMap.get(zkKey);\n                    }\n                }\n            }\n\n            this.nodeCache = CuratorCache.build(this.zkClient, this.path);\n            this.nodeCache.listenable().addListener(this.listener, this.pool);\n            this.nodeCache.start();\n        } catch (Exception e) {\n            RecordLog.warn(\"[ZookeeperDataSource] Error occurred when initializing Zookeeper data source\", e);\n            e.printStackTrace();\n        }\n    }",
+        "position": {
+            "line": 104,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "build",
+                "position": {
+                    "line": 117,
+                    "column": 16
+                }
+            },
+            {
+                "name": "forNodeCache",
+                "position": {
+                    "line": 107,
+                    "column": 60
+                }
+            },
+            {
+                "name": "builder",
+                "position": {
+                    "line": 107,
+                    "column": 50
+                }
+            },
+            {
+                "name": "loadConfig",
+                "position": {
+                    "line": 109,
+                    "column": 34
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 110,
+                    "column": 31
+                }
+            },
+            {
+                "name": "updateValue",
+                "position": {
+                    "line": 113,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 113,
+                    "column": 21
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 115,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getZkKey",
+                "position": {
+                    "line": 119,
+                    "column": 28
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 120,
+                    "column": 29
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 121,
+                    "column": 45
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 124,
+                    "column": 38
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 126,
+                    "column": 60
+                }
+            },
+            {
+                "name": "newClient",
+                "position": {
+                    "line": 127,
+                    "column": 58
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 133,
+                    "column": 37
+                }
+            },
+            {
+                "name": "authorization",
+                "position": {
+                    "line": 132,
+                    "column": 37
+                }
+            },
+            {
+                "name": "retryPolicy",
+                "position": {
+                    "line": 131,
+                    "column": 37
+                }
+            },
+            {
+                "name": "connectString",
+                "position": {
+                    "line": 130,
+                    "column": 37
+                }
+            },
+            {
+                "name": "builder",
+                "position": {
+                    "line": 129,
+                    "column": 58
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 136,
+                    "column": 39
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 137,
+                    "column": 98
+                }
+            },
+            {
+                "name": "putAll",
+                "position": {
+                    "line": 138,
+                    "column": 40
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 139,
+                    "column": 40
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 142,
+                    "column": 53
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 147,
+                    "column": 43
+                }
+            },
+            {
+                "name": "addListener",
+                "position": {
+                    "line": 148,
+                    "column": 41
+                }
+            },
+            {
+                "name": "listenable",
+                "position": {
+                    "line": 148,
+                    "column": 28
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 149,
+                    "column": 28
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 151,
+                    "column": 23
+                }
+            },
+            {
+                "name": "printStackTrace",
+                "position": {
+                    "line": 152,
+                    "column": 15
+                }
+            },
+            {
+                "name": "ExponentialBackoffRetry",
+                "position": {
+                    "line": 127,
+                    "column": 84
+                }
+            },
+            {
+                "name": "ExponentialBackoffRetry",
+                "position": {
+                    "line": 131,
+                    "column": 53
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 137,
+                    "column": 76
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperDataSource.getZkKey(String serverAddr, List<AuthInfo> authInfos)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "readSource",
+        "category": "method_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "readSource()",
+        "class_signature": "ZookeeperDataSource.readSource()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (this.zkClient == null) {\n            throw new IllegalStateException(\"Zookeeper has not been initialized or error occurred\");\n        }\n        String configInfo = null;\n        ChildData childData = nodeCache.get(path).orElse(null);\n        if (null != childData && childData.getData() != null) {\n\n            configInfo = new String(childData.getData());\n        }\n        return configInfo;\n    }",
+        "position": {
+            "line": 157,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "orElse",
+                "position": {
+                    "line": 162,
+                    "column": 51
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 162,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getData",
+                "position": {
+                    "line": 163,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getData",
+                "position": {
+                    "line": 165,
+                    "column": 47
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 159,
+                    "column": 23
+                }
+            },
+            {
+                "name": "String",
+                "position": {
+                    "line": 165,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "close",
+        "category": "method_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "close()",
+        "class_signature": "ZookeeperDataSource.close()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (this.nodeCache != null) {\n            this.nodeCache.listenable().removeListener(listener);\n            this.nodeCache.close();\n        }\n        if (this.zkClient != null) {\n            this.zkClient.close();\n        }\n        pool.shutdown();\n    }",
+        "position": {
+            "line": 171,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "removeListener",
+                "position": {
+                    "line": 173,
+                    "column": 41
+                }
+            },
+            {
+                "name": "listenable",
+                "position": {
+                    "line": 173,
+                    "column": 28
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 174,
+                    "column": 28
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 177,
+                    "column": 27
+                }
+            },
+            {
+                "name": "shutdown",
+                "position": {
+                    "line": 179,
+                    "column": 14
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "getPath",
+        "category": "method_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "getPath(String groupId, String dataId)",
+        "class_signature": "ZookeeperDataSource.getPath(String groupId, String dataId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "groupId"
+            ],
+            [
+                "String",
+                "dataId"
+            ]
+        ],
+        "methodBody": "{\n        return String.format(\"/%s/%s\", groupId, dataId);\n    }",
+        "position": {
+            "line": 182,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "format",
+                "position": {
+                    "line": 183,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "getZkKey",
+        "category": "method_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "getZkKey(String serverAddr, List<AuthInfo> authInfos)",
+        "class_signature": "ZookeeperDataSource.getZkKey(String serverAddr, List<AuthInfo> authInfos)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "serverAddr"
+            ],
+            [
+                "List<AuthInfo>",
+                "authInfos"
+            ]
+        ],
+        "methodBody": "{\n        if (authInfos == null || authInfos.size() == 0) {\n            return serverAddr;\n        }\n        StringBuilder builder = new StringBuilder(64);\n        builder.append(serverAddr).append(getAuthInfosKey(authInfos));\n        return builder.toString();\n    }",
+        "position": {
+            "line": 186,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 187,
+                    "column": 44
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 191,
+                    "column": 36
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 191,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getAuthInfosKey",
+                "position": {
+                    "line": 191,
+                    "column": 43
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 192,
+                    "column": 24
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 190,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperDataSource.getAuthInfosKey(List<AuthInfo> authInfos)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "getAuthInfosKey",
+        "category": "method_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "getAuthInfosKey(List<AuthInfo> authInfos)",
+        "class_signature": "ZookeeperDataSource.getAuthInfosKey(List<AuthInfo> authInfos)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<AuthInfo>",
+                "authInfos"
+            ]
+        ],
+        "methodBody": "{\n        StringBuilder builder = new StringBuilder(32);\n        for (AuthInfo authInfo : authInfos) {\n            if (authInfo == null) {\n                builder.append(\"{}\");\n            } else {\n                builder.append(\"{\" + \"sc=\" + authInfo.getScheme() + \",au=\" + Arrays.toString(authInfo.getAuth()) + \"}\");\n            }\n        }\n        return builder.toString();\n    }",
+        "position": {
+            "line": 195,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "append",
+                "position": {
+                    "line": 199,
+                    "column": 25
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 201,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getScheme",
+                "position": {
+                    "line": 201,
+                    "column": 55
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 201,
+                    "column": 85
+                }
+            },
+            {
+                "name": "getAuth",
+                "position": {
+                    "line": 201,
+                    "column": 103
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 204,
+                    "column": 24
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 196,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "getZkClient",
+        "category": "method_declaration",
+        "class": "ZookeeperDataSource",
+        "signature": "getZkClient()",
+        "class_signature": "ZookeeperDataSource.getZkClient()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return this.zkClient;\n    }",
+        "position": {
+            "line": 207,
+            "column": 32
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 5
+    }
+]

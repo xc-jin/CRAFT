@@ -1,0 +1,2766 @@
+[
+    {
+        "name": "ArthasBootstrap",
+        "category": "constructor_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "ArthasBootstrap(Instrumentation instrumentation, Map<String, String> args)",
+        "class_signature": "ArthasBootstrap.ArthasBootstrap(Instrumentation instrumentation, Map<String, String> args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Instrumentation",
+                "instrumentation"
+            ],
+            [
+                "Map<String, String>",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        this.instrumentation = instrumentation;\n\n        initFastjson();\n\n        // 1. initSpy()\n        initSpy();\n        // 2. ArthasEnvironment\n        initArthasEnvironment(args);\n\n        String outputPathStr = configure.getOutputPath();\n        if (outputPathStr == null) {\n            outputPathStr = ArthasConstants.ARTHAS_OUTPUT;\n        }\n        outputPath = new File(outputPathStr);\n        outputPath.mkdirs();\n\n        // 3. init logger\n        loggerContext = LogUtil.initLogger(arthasEnvironment);\n\n        // 4. enhance ClassLoader\n        enhanceClassLoader();\n        // 5. init beans\n        initBeans();\n\n        // 6. start agent server\n        bind(configure);\n\n        executorService = Executors.newScheduledThreadPool(1, new ThreadFactory() {\n            @Override\n            public Thread newThread(Runnable r) {\n                final Thread t = new Thread(r, \"arthas-command-execute\");\n                t.setDaemon(true);\n                return t;\n            }\n        });\n\n        shutdown = new Thread(\"as-shutdown-hooker\") {\n\n            @Override\n            public void run() {\n                ArthasBootstrap.this.destroy();\n            }\n        };\n\n        transformerManager = new TransformerManager(instrumentation);\n        Runtime.getRuntime().addShutdownHook(shutdown);\n    }",
+        "position": {
+            "line": 131,
+            "column": 13
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "initFastjson",
+                "position": {
+                    "line": 134,
+                    "column": 9
+                }
+            },
+            {
+                "name": "initSpy",
+                "position": {
+                    "line": 137,
+                    "column": 9
+                }
+            },
+            {
+                "name": "initArthasEnvironment",
+                "position": {
+                    "line": 139,
+                    "column": 9
+                }
+            },
+            {
+                "name": "getOutputPath",
+                "position": {
+                    "line": 141,
+                    "column": 42
+                }
+            },
+            {
+                "name": "mkdirs",
+                "position": {
+                    "line": 146,
+                    "column": 20
+                }
+            },
+            {
+                "name": "initLogger",
+                "position": {
+                    "line": 149,
+                    "column": 33
+                }
+            },
+            {
+                "name": "enhanceClassLoader",
+                "position": {
+                    "line": 152,
+                    "column": 9
+                }
+            },
+            {
+                "name": "initBeans",
+                "position": {
+                    "line": 154,
+                    "column": 9
+                }
+            },
+            {
+                "name": "bind",
+                "position": {
+                    "line": 157,
+                    "column": 9
+                }
+            },
+            {
+                "name": "newScheduledThreadPool",
+                "position": {
+                    "line": 159,
+                    "column": 37
+                }
+            },
+            {
+                "name": "setDaemon",
+                "position": {
+                    "line": 163,
+                    "column": 19
+                }
+            },
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 172,
+                    "column": 38
+                }
+            },
+            {
+                "name": "addShutdownHook",
+                "position": {
+                    "line": 177,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getRuntime",
+                "position": {
+                    "line": 177,
+                    "column": 17
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 145,
+                    "column": 26
+                }
+            },
+            {
+                "name": "ThreadFactory",
+                "position": {
+                    "line": 159,
+                    "column": 67
+                }
+            },
+            {
+                "name": "Thread",
+                "position": {
+                    "line": 162,
+                    "column": 38
+                }
+            },
+            {
+                "name": "Thread",
+                "position": {
+                    "line": 168,
+                    "column": 24
+                }
+            },
+            {
+                "name": "TransformerManager",
+                "position": {
+                    "line": 176,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArthasBootstrap.initFastjson()",
+            "ArthasBootstrap.initSpy()",
+            "ArthasBootstrap.initArthasEnvironment(Map<String, String> argsMap)",
+            "ArthasBootstrap.enhanceClassLoader()",
+            "ArthasBootstrap.initBeans()",
+            "ArthasBootstrap.bind(Configure configure)",
+            "ArthasBootstrap.destroy()"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "newThread",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "newThread(Runnable r)",
+        "class_signature": "ArthasBootstrap.newThread(Runnable r)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Runnable",
+                "r"
+            ]
+        ],
+        "methodBody": "{\n                final Thread t = new Thread(r, \"arthas-command-execute\");\n                t.setDaemon(true);\n                return t;\n            }",
+        "position": {
+            "line": 161,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setDaemon",
+                "position": {
+                    "line": 163,
+                    "column": 19
+                }
+            },
+            {
+                "name": "Thread",
+                "position": {
+                    "line": 162,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "run",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "run()",
+        "class_signature": "ArthasBootstrap.run()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n                ArthasBootstrap.this.destroy();\n            }",
+        "position": {
+            "line": 171,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 172,
+                    "column": 38
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArthasBootstrap.destroy()"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "initFastjson",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "initFastjson()",
+        "class_signature": "ArthasBootstrap.initFastjson()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        // ignore getter error #1661\n        // #2081\n        JSON.config(JSONWriter.Feature.IgnoreErrorGetter, JSONWriter.Feature.WriteNonStringKeyAsString);\n    }",
+        "position": {
+            "line": 180,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "config",
+                "position": {
+                    "line": 183,
+                    "column": 14
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 21
+    },
+    {
+        "name": "initBeans",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "initBeans()",
+        "class_signature": "ArthasBootstrap.initBeans()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        this.resultViewResolver = new ResultViewResolver();\n        this.historyManager = new HistoryManagerImpl();\n    }",
+        "position": {
+            "line": 186,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ResultViewResolver",
+                "position": {
+                    "line": 187,
+                    "column": 39
+                }
+            },
+            {
+                "name": "HistoryManagerImpl",
+                "position": {
+                    "line": 188,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 25
+    },
+    {
+        "name": "initSpy",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "initSpy()",
+        "class_signature": "ArthasBootstrap.initSpy()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        // TODO init SpyImpl ?\n\n        ClassLoader parent = ClassLoader.getSystemClassLoader().getParent();\n        Class<?> spyClass = null;\n        if (parent != null) {\n            try {\n                spyClass =parent.loadClass(\"java.arthas.SpyAPI\");\n            } catch (Throwable e) {\n                // ignore\n            }\n        }\n        if (spyClass == null) {\n            CodeSource codeSource = ArthasBootstrap.class.getProtectionDomain().getCodeSource();\n            if (codeSource != null) {\n                File arthasCoreJarFile = new File(codeSource.getLocation().toURI().getSchemeSpecificPart());\n                File spyJarFile = new File(arthasCoreJarFile.getParentFile(), ARTHAS_SPY_JAR);\n                instrumentation.appendToBootstrapClassLoaderSearch(new JarFile(spyJarFile));\n            } else {\n                throw new IllegalStateException(\"can not find \" + ARTHAS_SPY_JAR);\n            }\n        }\n    }",
+        "position": {
+            "line": 191,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getParent",
+                "position": {
+                    "line": 194,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getSystemClassLoader",
+                "position": {
+                    "line": 194,
+                    "column": 42
+                }
+            },
+            {
+                "name": "loadClass",
+                "position": {
+                    "line": 198,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getCodeSource",
+                "position": {
+                    "line": 204,
+                    "column": 81
+                }
+            },
+            {
+                "name": "getProtectionDomain",
+                "position": {
+                    "line": 204,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getSchemeSpecificPart",
+                "position": {
+                    "line": 206,
+                    "column": 84
+                }
+            },
+            {
+                "name": "toURI",
+                "position": {
+                    "line": 206,
+                    "column": 76
+                }
+            },
+            {
+                "name": "getLocation",
+                "position": {
+                    "line": 206,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getParentFile",
+                "position": {
+                    "line": 207,
+                    "column": 62
+                }
+            },
+            {
+                "name": "appendToBootstrapClassLoaderSearch",
+                "position": {
+                    "line": 208,
+                    "column": 33
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 206,
+                    "column": 46
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 207,
+                    "column": 39
+                }
+            },
+            {
+                "name": "JarFile",
+                "position": {
+                    "line": 208,
+                    "column": 72
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 210,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 22
+    },
+    {
+        "name": "enhanceClassLoader",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "enhanceClassLoader()",
+        "class_signature": "ArthasBootstrap.enhanceClassLoader()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (configure.getEnhanceLoaders() == null) {\n            return;\n        }\n        Set<String> loaders = new HashSet<String>();\n        for (String s : configure.getEnhanceLoaders().split(\",\")) {\n            loaders.add(s.trim());\n        }\n\n        // https://github.com/alibaba/arthas/issues/1596\n        byte[] classBytes = IOUtils.getBytes(ArthasBootstrap.class.getClassLoader()\n                .getResourceAsStream(ClassLoader_Instrument.class.getName().replace('.', '/') + \".class\"));\n\n        SimpleClassMatcher matcher = new SimpleClassMatcher(loaders);\n        InstrumentConfig instrumentConfig = new InstrumentConfig(AsmUtils.toClassNode(classBytes), matcher);\n\n        InstrumentParseResult instrumentParseResult = new InstrumentParseResult();\n        instrumentParseResult.addInstrumentConfig(instrumentConfig);\n        classLoaderInstrumentTransformer = new InstrumentTransformer(instrumentParseResult);\n        instrumentation.addTransformer(classLoaderInstrumentTransformer, true);\n\n        if (loaders.size() == 1 && loaders.contains(ClassLoader.class.getName())) {\n            instrumentation.retransformClasses(ClassLoader.class);\n        } else {\n            InstrumentationUtils.trigerRetransformClasses(instrumentation, loaders);\n        }\n    }",
+        "position": {
+            "line": 215,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getEnhanceLoaders",
+                "position": {
+                    "line": 216,
+                    "column": 23
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 220,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getEnhanceLoaders",
+                "position": {
+                    "line": 220,
+                    "column": 35
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 221,
+                    "column": 21
+                }
+            },
+            {
+                "name": "trim",
+                "position": {
+                    "line": 221,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getBytes",
+                "position": {
+                    "line": 225,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getResourceAsStream",
+                "position": {
+                    "line": 226,
+                    "column": 18
+                }
+            },
+            {
+                "name": "getClassLoader",
+                "position": {
+                    "line": 225,
+                    "column": 68
+                }
+            },
+            {
+                "name": "replace",
+                "position": {
+                    "line": 226,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 226,
+                    "column": 67
+                }
+            },
+            {
+                "name": "toClassNode",
+                "position": {
+                    "line": 229,
+                    "column": 75
+                }
+            },
+            {
+                "name": "addInstrumentConfig",
+                "position": {
+                    "line": 232,
+                    "column": 31
+                }
+            },
+            {
+                "name": "addTransformer",
+                "position": {
+                    "line": 234,
+                    "column": 25
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 236,
+                    "column": 21
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 236,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 236,
+                    "column": 71
+                }
+            },
+            {
+                "name": "retransformClasses",
+                "position": {
+                    "line": 237,
+                    "column": 29
+                }
+            },
+            {
+                "name": "trigerRetransformClasses",
+                "position": {
+                    "line": 239,
+                    "column": 34
+                }
+            },
+            {
+                "name": "HashSet<String>",
+                "position": {
+                    "line": 219,
+                    "column": 35
+                }
+            },
+            {
+                "name": "SimpleClassMatcher",
+                "position": {
+                    "line": 228,
+                    "column": 42
+                }
+            },
+            {
+                "name": "InstrumentConfig",
+                "position": {
+                    "line": 229,
+                    "column": 49
+                }
+            },
+            {
+                "name": "InstrumentParseResult",
+                "position": {
+                    "line": 231,
+                    "column": 59
+                }
+            },
+            {
+                "name": "InstrumentTransformer",
+                "position": {
+                    "line": 233,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 24
+    },
+    {
+        "name": "initArthasEnvironment",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "initArthasEnvironment(Map<String, String> argsMap)",
+        "class_signature": "ArthasBootstrap.initArthasEnvironment(Map<String, String> argsMap)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Map<String, String>",
+                "argsMap"
+            ]
+        ],
+        "methodBody": "{\n        if (arthasEnvironment == null) {\n            arthasEnvironment = new ArthasEnvironment();\n        }\n\n        /**\n         * <pre>\n         * https://github.com/alibaba/arthas/issues/986\n         * </pre>\n         */\n        Map<String, Object> copyMap;\n        if (argsMap != null) {\n            copyMap = new HashMap<String, Object>(argsMap);\n            if (!copyMap.containsKey(ARTHAS_HOME_PROPERTY)) {\n                copyMap.put(ARTHAS_HOME_PROPERTY, arthasHome());\n            }\n        } else {\n            copyMap = new HashMap<String, Object>(1);\n            copyMap.put(ARTHAS_HOME_PROPERTY, arthasHome());\n        }\n\n        MapPropertySource mapPropertySource = new MapPropertySource(\"args\", copyMap);\n        arthasEnvironment.addFirst(mapPropertySource);\n\n        tryToLoadArthasProperties();\n\n        configure = new Configure();\n        BinderUtils.inject(arthasEnvironment, configure);\n    }",
+        "position": {
+            "line": 243,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 256,
+                    "column": 26
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 257,
+                    "column": 25
+                }
+            },
+            {
+                "name": "arthasHome",
+                "position": {
+                    "line": 257,
+                    "column": 51
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 261,
+                    "column": 21
+                }
+            },
+            {
+                "name": "arthasHome",
+                "position": {
+                    "line": 261,
+                    "column": 47
+                }
+            },
+            {
+                "name": "addFirst",
+                "position": {
+                    "line": 265,
+                    "column": 27
+                }
+            },
+            {
+                "name": "tryToLoadArthasProperties",
+                "position": {
+                    "line": 267,
+                    "column": 9
+                }
+            },
+            {
+                "name": "inject",
+                "position": {
+                    "line": 270,
+                    "column": 21
+                }
+            },
+            {
+                "name": "ArthasEnvironment",
+                "position": {
+                    "line": 245,
+                    "column": 37
+                }
+            },
+            {
+                "name": "HashMap<String, Object>",
+                "position": {
+                    "line": 255,
+                    "column": 27
+                }
+            },
+            {
+                "name": "HashMap<String, Object>",
+                "position": {
+                    "line": 260,
+                    "column": 27
+                }
+            },
+            {
+                "name": "MapPropertySource",
+                "position": {
+                    "line": 264,
+                    "column": 51
+                }
+            },
+            {
+                "name": "Configure",
+                "position": {
+                    "line": 269,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArthasBootstrap.arthasHome()",
+            "ArthasBootstrap.arthasHome()",
+            "ArthasBootstrap.tryToLoadArthasProperties()"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "arthasHome",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "arthasHome()",
+        "class_signature": "ArthasBootstrap.arthasHome()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (ARTHAS_HOME != null) {\n            return ARTHAS_HOME;\n        }\n        CodeSource codeSource = ArthasBootstrap.class.getProtectionDomain().getCodeSource();\n        if (codeSource != null) {\n            try {\n                ARTHAS_HOME = new File(codeSource.getLocation().toURI().getSchemeSpecificPart()).getParentFile().getAbsolutePath();\n            } catch (Throwable e) {\n                AnsiLog.error(\"try to find arthas.home from CodeSource error\", e);\n            }\n        }\n        if (ARTHAS_HOME == null) {\n            ARTHAS_HOME = new File(\"\").getAbsolutePath();\n        }\n        return ARTHAS_HOME;\n    }",
+        "position": {
+            "line": 273,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getCodeSource",
+                "position": {
+                    "line": 277,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getProtectionDomain",
+                "position": {
+                    "line": 277,
+                    "column": 55
+                }
+            },
+            {
+                "name": "getAbsolutePath",
+                "position": {
+                    "line": 280,
+                    "column": 114
+                }
+            },
+            {
+                "name": "getParentFile",
+                "position": {
+                    "line": 280,
+                    "column": 98
+                }
+            },
+            {
+                "name": "getSchemeSpecificPart",
+                "position": {
+                    "line": 280,
+                    "column": 73
+                }
+            },
+            {
+                "name": "toURI",
+                "position": {
+                    "line": 280,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getLocation",
+                "position": {
+                    "line": 280,
+                    "column": 51
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 282,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getAbsolutePath",
+                "position": {
+                    "line": 286,
+                    "column": 40
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 280,
+                    "column": 35
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 286,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 31
+    },
+    {
+        "name": "reslove",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "reslove(ArthasEnvironment arthasEnvironment, String key, String defaultValue)",
+        "class_signature": "ArthasBootstrap.reslove(ArthasEnvironment arthasEnvironment, String key, String defaultValue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ArthasEnvironment",
+                "arthasEnvironment"
+            ],
+            [
+                "String",
+                "key"
+            ],
+            [
+                "String",
+                "defaultValue"
+            ]
+        ],
+        "methodBody": "{\n        String value = arthasEnvironment.getProperty(key);\n        if (value == null) {\n            return defaultValue;\n        }\n        return arthasEnvironment.resolvePlaceholders(value);\n    }",
+        "position": {
+            "line": 291,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 292,
+                    "column": 42
+                }
+            },
+            {
+                "name": "resolvePlaceholders",
+                "position": {
+                    "line": 296,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 30
+    },
+    {
+        "name": "tryToLoadArthasProperties",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "tryToLoadArthasProperties()",
+        "class_signature": "ArthasBootstrap.tryToLoadArthasProperties()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        this.arthasEnvironment.resolvePlaceholders(CONFIG_LOCATION_PROPERTY);\n\n        String location = reslove(arthasEnvironment, CONFIG_LOCATION_PROPERTY, null);\n\n        if (location == null) {\n            location = arthasHome();\n        }\n\n        String configName = reslove(arthasEnvironment, CONFIG_NAME_PROPERTY, \"arthas\");\n\n        if (location != null) {\n            if (!location.endsWith(\".properties\")) {\n                location = new File(location, configName + \".properties\").getAbsolutePath();\n            }\n            if (new File(location).exists()) {\n                Properties properties = FileUtils.readProperties(location);\n\n                boolean overrideAll = false;\n                if (arthasEnvironment.containsProperty(CONFIG_OVERRIDE_ALL)) {\n                    overrideAll = arthasEnvironment.getRequiredProperty(CONFIG_OVERRIDE_ALL, boolean.class);\n                } else {\n                    overrideAll = Boolean.parseBoolean(properties.getProperty(CONFIG_OVERRIDE_ALL, \"false\"));\n                }\n\n                PropertySource<?> propertySource = new PropertiesPropertySource(location, properties);\n                if (overrideAll) {\n                    arthasEnvironment.addFirst(propertySource);\n                } else {\n                    arthasEnvironment.addLast(propertySource);\n                }\n            }\n        }\n\n    }",
+        "position": {
+            "line": 300,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "resolvePlaceholders",
+                "position": {
+                    "line": 301,
+                    "column": 32
+                }
+            },
+            {
+                "name": "reslove",
+                "position": {
+                    "line": 303,
+                    "column": 27
+                }
+            },
+            {
+                "name": "arthasHome",
+                "position": {
+                    "line": 306,
+                    "column": 24
+                }
+            },
+            {
+                "name": "reslove",
+                "position": {
+                    "line": 309,
+                    "column": 29
+                }
+            },
+            {
+                "name": "endsWith",
+                "position": {
+                    "line": 312,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getAbsolutePath",
+                "position": {
+                    "line": 313,
+                    "column": 75
+                }
+            },
+            {
+                "name": "exists",
+                "position": {
+                    "line": 315,
+                    "column": 36
+                }
+            },
+            {
+                "name": "readProperties",
+                "position": {
+                    "line": 316,
+                    "column": 51
+                }
+            },
+            {
+                "name": "containsProperty",
+                "position": {
+                    "line": 319,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getRequiredProperty",
+                "position": {
+                    "line": 320,
+                    "column": 53
+                }
+            },
+            {
+                "name": "parseBoolean",
+                "position": {
+                    "line": 322,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 322,
+                    "column": 67
+                }
+            },
+            {
+                "name": "addFirst",
+                "position": {
+                    "line": 327,
+                    "column": 39
+                }
+            },
+            {
+                "name": "addLast",
+                "position": {
+                    "line": 329,
+                    "column": 39
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 313,
+                    "column": 32
+                }
+            },
+            {
+                "name": "File",
+                "position": {
+                    "line": 315,
+                    "column": 21
+                }
+            },
+            {
+                "name": "PropertiesPropertySource",
+                "position": {
+                    "line": 325,
+                    "column": 56
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArthasBootstrap.reslove(ArthasEnvironment arthasEnvironment, String key, String defaultValue)",
+            "ArthasBootstrap.arthasHome()",
+            "ArthasBootstrap.reslove(ArthasEnvironment arthasEnvironment, String key, String defaultValue)"
+        ],
+        "priority": 27
+    },
+    {
+        "name": "bind",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "bind(Configure configure)",
+        "class_signature": "ArthasBootstrap.bind(Configure configure)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Configure",
+                "configure"
+            ]
+        ],
+        "methodBody": "{\n\n        long start = System.currentTimeMillis();\n\n        if (!isBindRef.compareAndSet(false, true)) {\n            throw new IllegalStateException(\"already bind\");\n        }\n\n        // init random port\n        if (configure.getTelnetPort() != null && configure.getTelnetPort() == 0) {\n            int newTelnetPort = SocketUtils.findAvailableTcpPort();\n            configure.setTelnetPort(newTelnetPort);\n            logger().info(\"generate random telnet port: \" + newTelnetPort);\n        }\n        if (configure.getHttpPort() != null && configure.getHttpPort() == 0) {\n            int newHttpPort = SocketUtils.findAvailableTcpPort();\n            configure.setHttpPort(newHttpPort);\n            logger().info(\"generate random http port: \" + newHttpPort);\n        }\n        // try to find appName\n        if (configure.getAppName() == null) {\n            configure.setAppName(System.getProperty(ArthasConstants.PROJECT_NAME,\n                    System.getProperty(ArthasConstants.SPRING_APPLICATION_NAME, null)));\n        }\n\n        try {\n            if (configure.getTunnelServer() != null) {\n                tunnelClient = new TunnelClient();\n                tunnelClient.setAppName(configure.getAppName());\n                tunnelClient.setId(configure.getAgentId());\n                tunnelClient.setTunnelServerUrl(configure.getTunnelServer());\n                tunnelClient.setVersion(ArthasBanner.version());\n                ChannelFuture channelFuture = tunnelClient.start();\n                channelFuture.await(10, TimeUnit.SECONDS);\n            }\n        } catch (Throwable t) {\n            logger().error(\"start tunnel client error\", t);\n        }\n\n        try {\n            ShellServerOptions options = new ShellServerOptions()\n                            .setInstrumentation(instrumentation)\n                            .setPid(PidUtils.currentLongPid())\n                            .setWelcomeMessage(ArthasBanner.welcome());\n            if (configure.getSessionTimeout() != null) {\n                options.setSessionTimeout(configure.getSessionTimeout() * 1000);\n            }\n\n            this.httpSessionManager = new HttpSessionManager();\n            if (IPUtils.isAllZeroIP(configure.getIp()) && StringUtils.isBlank(configure.getPassword())) {\n                String errorMsg = \"Listening on 0.0.0.0 is very dangerous! External users can connect to your machine! \"\n                        + \"No password is currently configured. \" + \"Therefore, a default password is generated, \"\n                        + \"and clients need to use the password to connect!\";\n                AnsiLog.error(errorMsg);\n                configure.setPassword(StringUtils.randomString(64));\n                AnsiLog.error(\"Generated arthas password: \" + configure.getPassword());\n\n                logger().error(errorMsg);\n                logger().info(\"Generated arthas password: \" + configure.getPassword());\n            }\n\n            this.securityAuthenticator = new SecurityAuthenticatorImpl(configure.getUsername(), configure.getPassword());\n\n            shellServer = new ShellServerImpl(options);\n\n            List<String> disabledCommands = new ArrayList<String>();\n            if (configure.getDisabledCommands() != null) {\n                String[] strings = StringUtils.tokenizeToStringArray(configure.getDisabledCommands(), \",\");\n                if (strings != null) {\n                    disabledCommands.addAll(Arrays.asList(strings));\n                }\n            }\n            BuiltinCommandPack builtinCommands = new BuiltinCommandPack(disabledCommands);\n            List<CommandResolver> resolvers = new ArrayList<CommandResolver>();\n            resolvers.add(builtinCommands);\n\n            //worker group\n            workerGroup = new NioEventLoopGroup(new DefaultThreadFactory(\"arthas-TermServer\", true));\n\n            // TODO: discover user provided command resolver\n            if (configure.getTelnetPort() != null && configure.getTelnetPort() > 0) {\n                logger().info(\"try to bind telnet server, host: {}, port: {}.\", configure.getIp(), configure.getTelnetPort());\n                shellServer.registerTermServer(new HttpTelnetTermServer(configure.getIp(), configure.getTelnetPort(),\n                        options.getConnectionTimeout(), workerGroup, httpSessionManager));\n            } else {\n                logger().info(\"telnet port is {}, skip bind telnet server.\", configure.getTelnetPort());\n            }\n            if (configure.getHttpPort() != null && configure.getHttpPort() > 0) {\n                logger().info(\"try to bind http server, host: {}, port: {}.\", configure.getIp(), configure.getHttpPort());\n                shellServer.registerTermServer(new HttpTermServer(configure.getIp(), configure.getHttpPort(),\n                        options.getConnectionTimeout(), workerGroup, httpSessionManager));\n            } else {\n                // listen local address in VM communication\n                if (configure.getTunnelServer() != null) {\n                    shellServer.registerTermServer(new HttpTermServer(configure.getIp(), configure.getHttpPort(),\n                            options.getConnectionTimeout(), workerGroup, httpSessionManager));\n                }\n                logger().info(\"http port is {}, skip bind http server.\", configure.getHttpPort());\n            }\n\n            for (CommandResolver resolver : resolvers) {\n                shellServer.registerCommandResolver(resolver);\n            }\n\n            shellServer.listen(new BindHandler(isBindRef));\n            if (!isBind()) {\n                throw new IllegalStateException(\"Arthas failed to bind telnet or http port! Telnet port: \"\n                        + String.valueOf(configure.getTelnetPort()) + \", http port: \"\n                        + String.valueOf(configure.getHttpPort()));\n            }\n\n            //http api session manager\n            sessionManager = new SessionManagerImpl(options, shellServer.getCommandManager(), shellServer.getJobController());\n            //http api handler\n            httpApiHandler = new HttpApiHandler(historyManager, sessionManager);\n\n            logger().info(\"as-server listening on network={};telnet={};http={};timeout={};\", configure.getIp(),\n                    configure.getTelnetPort(), configure.getHttpPort(), options.getConnectionTimeout());\n\n            if (configure.getStatUrl() != null) {\n                logger().info(\"arthas stat url: {}\", configure.getStatUrl());\n            }\n            UserStatUtil.setStatUrl(configure.getStatUrl());\n            UserStatUtil.setAgentId(configure.getAgentId());\n            UserStatUtil.arthasStart();\n\n            try {\n                SpyAPI.init();\n            } catch (Throwable e) {\n                // ignore\n            }\n\n            logger().info(\"as-server started in {} ms\", System.currentTimeMillis() - start);\n        } catch (Throwable e) {\n            logger().error(\"Error during start as-server\", e);\n            destroy();\n            throw e;\n        }\n    }",
+        "position": {
+            "line": 340,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 342,
+                    "column": 29
+                }
+            },
+            {
+                "name": "compareAndSet",
+                "position": {
+                    "line": 344,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getTelnetPort",
+                "position": {
+                    "line": 349,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getTelnetPort",
+                "position": {
+                    "line": 349,
+                    "column": 60
+                }
+            },
+            {
+                "name": "findAvailableTcpPort",
+                "position": {
+                    "line": 350,
+                    "column": 45
+                }
+            },
+            {
+                "name": "setTelnetPort",
+                "position": {
+                    "line": 351,
+                    "column": 23
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 352,
+                    "column": 22
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 352,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getHttpPort",
+                "position": {
+                    "line": 354,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getHttpPort",
+                "position": {
+                    "line": 354,
+                    "column": 58
+                }
+            },
+            {
+                "name": "findAvailableTcpPort",
+                "position": {
+                    "line": 355,
+                    "column": 43
+                }
+            },
+            {
+                "name": "setHttpPort",
+                "position": {
+                    "line": 356,
+                    "column": 23
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 357,
+                    "column": 22
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 357,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getAppName",
+                "position": {
+                    "line": 360,
+                    "column": 23
+                }
+            },
+            {
+                "name": "setAppName",
+                "position": {
+                    "line": 361,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 361,
+                    "column": 41
+                }
+            },
+            {
+                "name": "getProperty",
+                "position": {
+                    "line": 362,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getTunnelServer",
+                "position": {
+                    "line": 366,
+                    "column": 27
+                }
+            },
+            {
+                "name": "setAppName",
+                "position": {
+                    "line": 368,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getAppName",
+                "position": {
+                    "line": 368,
+                    "column": 51
+                }
+            },
+            {
+                "name": "setId",
+                "position": {
+                    "line": 369,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getAgentId",
+                "position": {
+                    "line": 369,
+                    "column": 46
+                }
+            },
+            {
+                "name": "setTunnelServerUrl",
+                "position": {
+                    "line": 370,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getTunnelServer",
+                "position": {
+                    "line": 370,
+                    "column": 59
+                }
+            },
+            {
+                "name": "setVersion",
+                "position": {
+                    "line": 371,
+                    "column": 30
+                }
+            },
+            {
+                "name": "version",
+                "position": {
+                    "line": 371,
+                    "column": 54
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 372,
+                    "column": 60
+                }
+            },
+            {
+                "name": "await",
+                "position": {
+                    "line": 373,
+                    "column": 31
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 376,
+                    "column": 22
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 376,
+                    "column": 13
+                }
+            },
+            {
+                "name": "setWelcomeMessage",
+                "position": {
+                    "line": 383,
+                    "column": 30
+                }
+            },
+            {
+                "name": "setPid",
+                "position": {
+                    "line": 382,
+                    "column": 30
+                }
+            },
+            {
+                "name": "setInstrumentation",
+                "position": {
+                    "line": 381,
+                    "column": 30
+                }
+            },
+            {
+                "name": "currentLongPid",
+                "position": {
+                    "line": 382,
+                    "column": 46
+                }
+            },
+            {
+                "name": "welcome",
+                "position": {
+                    "line": 383,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getSessionTimeout",
+                "position": {
+                    "line": 384,
+                    "column": 27
+                }
+            },
+            {
+                "name": "setSessionTimeout",
+                "position": {
+                    "line": 385,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getSessionTimeout",
+                "position": {
+                    "line": 385,
+                    "column": 53
+                }
+            },
+            {
+                "name": "isAllZeroIP",
+                "position": {
+                    "line": 389,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 389,
+                    "column": 47
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 389,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getPassword",
+                "position": {
+                    "line": 389,
+                    "column": 89
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 393,
+                    "column": 25
+                }
+            },
+            {
+                "name": "setPassword",
+                "position": {
+                    "line": 394,
+                    "column": 27
+                }
+            },
+            {
+                "name": "randomString",
+                "position": {
+                    "line": 394,
+                    "column": 51
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 395,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getPassword",
+                "position": {
+                    "line": 395,
+                    "column": 73
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 397,
+                    "column": 26
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 397,
+                    "column": 17
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 398,
+                    "column": 26
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 398,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getPassword",
+                "position": {
+                    "line": 398,
+                    "column": 73
+                }
+            },
+            {
+                "name": "getUsername",
+                "position": {
+                    "line": 401,
+                    "column": 82
+                }
+            },
+            {
+                "name": "getPassword",
+                "position": {
+                    "line": 401,
+                    "column": 107
+                }
+            },
+            {
+                "name": "getDisabledCommands",
+                "position": {
+                    "line": 406,
+                    "column": 27
+                }
+            },
+            {
+                "name": "tokenizeToStringArray",
+                "position": {
+                    "line": 407,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getDisabledCommands",
+                "position": {
+                    "line": 407,
+                    "column": 80
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 409,
+                    "column": 38
+                }
+            },
+            {
+                "name": "asList",
+                "position": {
+                    "line": 409,
+                    "column": 52
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 414,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getTelnetPort",
+                "position": {
+                    "line": 420,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getTelnetPort",
+                "position": {
+                    "line": 420,
+                    "column": 64
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 421,
+                    "column": 26
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 421,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 421,
+                    "column": 91
+                }
+            },
+            {
+                "name": "getTelnetPort",
+                "position": {
+                    "line": 421,
+                    "column": 110
+                }
+            },
+            {
+                "name": "registerTermServer",
+                "position": {
+                    "line": 422,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 422,
+                    "column": 83
+                }
+            },
+            {
+                "name": "getTelnetPort",
+                "position": {
+                    "line": 422,
+                    "column": 102
+                }
+            },
+            {
+                "name": "getConnectionTimeout",
+                "position": {
+                    "line": 423,
+                    "column": 33
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 425,
+                    "column": 26
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 425,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getTelnetPort",
+                "position": {
+                    "line": 425,
+                    "column": 88
+                }
+            },
+            {
+                "name": "getHttpPort",
+                "position": {
+                    "line": 427,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getHttpPort",
+                "position": {
+                    "line": 427,
+                    "column": 62
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 428,
+                    "column": 26
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 428,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 428,
+                    "column": 89
+                }
+            },
+            {
+                "name": "getHttpPort",
+                "position": {
+                    "line": 428,
+                    "column": 108
+                }
+            },
+            {
+                "name": "registerTermServer",
+                "position": {
+                    "line": 429,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 429,
+                    "column": 77
+                }
+            },
+            {
+                "name": "getHttpPort",
+                "position": {
+                    "line": 429,
+                    "column": 96
+                }
+            },
+            {
+                "name": "getConnectionTimeout",
+                "position": {
+                    "line": 430,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getTunnelServer",
+                "position": {
+                    "line": 433,
+                    "column": 31
+                }
+            },
+            {
+                "name": "registerTermServer",
+                "position": {
+                    "line": 434,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 434,
+                    "column": 81
+                }
+            },
+            {
+                "name": "getHttpPort",
+                "position": {
+                    "line": 434,
+                    "column": 100
+                }
+            },
+            {
+                "name": "getConnectionTimeout",
+                "position": {
+                    "line": 435,
+                    "column": 37
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 437,
+                    "column": 26
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 437,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getHttpPort",
+                "position": {
+                    "line": 437,
+                    "column": 84
+                }
+            },
+            {
+                "name": "registerCommandResolver",
+                "position": {
+                    "line": 441,
+                    "column": 29
+                }
+            },
+            {
+                "name": "listen",
+                "position": {
+                    "line": 444,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isBind",
+                "position": {
+                    "line": 445,
+                    "column": 18
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 447,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getTelnetPort",
+                "position": {
+                    "line": 447,
+                    "column": 52
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 448,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getHttpPort",
+                "position": {
+                    "line": 448,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getCommandManager",
+                "position": {
+                    "line": 452,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getJobController",
+                "position": {
+                    "line": 452,
+                    "column": 107
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 456,
+                    "column": 22
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 456,
+                    "column": 13
+                }
+            },
+            {
+                "name": "getIp",
+                "position": {
+                    "line": 456,
+                    "column": 104
+                }
+            },
+            {
+                "name": "getTelnetPort",
+                "position": {
+                    "line": 457,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getHttpPort",
+                "position": {
+                    "line": 457,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getConnectionTimeout",
+                "position": {
+                    "line": 457,
+                    "column": 81
+                }
+            },
+            {
+                "name": "getStatUrl",
+                "position": {
+                    "line": 459,
+                    "column": 27
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 460,
+                    "column": 26
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 460,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getStatUrl",
+                "position": {
+                    "line": 460,
+                    "column": 64
+                }
+            },
+            {
+                "name": "setStatUrl",
+                "position": {
+                    "line": 462,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getStatUrl",
+                "position": {
+                    "line": 462,
+                    "column": 47
+                }
+            },
+            {
+                "name": "setAgentId",
+                "position": {
+                    "line": 463,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getAgentId",
+                "position": {
+                    "line": 463,
+                    "column": 47
+                }
+            },
+            {
+                "name": "arthasStart",
+                "position": {
+                    "line": 464,
+                    "column": 26
+                }
+            },
+            {
+                "name": "init",
+                "position": {
+                    "line": 467,
+                    "column": 24
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 472,
+                    "column": 22
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 472,
+                    "column": 13
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 472,
+                    "column": 64
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 474,
+                    "column": 22
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 474,
+                    "column": 13
+                }
+            },
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 475,
+                    "column": 13
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 345,
+                    "column": 23
+                }
+            },
+            {
+                "name": "TunnelClient",
+                "position": {
+                    "line": 367,
+                    "column": 36
+                }
+            },
+            {
+                "name": "ShellServerOptions",
+                "position": {
+                    "line": 380,
+                    "column": 46
+                }
+            },
+            {
+                "name": "HttpSessionManager",
+                "position": {
+                    "line": 388,
+                    "column": 43
+                }
+            },
+            {
+                "name": "SecurityAuthenticatorImpl",
+                "position": {
+                    "line": 401,
+                    "column": 46
+                }
+            },
+            {
+                "name": "ShellServerImpl",
+                "position": {
+                    "line": 403,
+                    "column": 31
+                }
+            },
+            {
+                "name": "ArrayList<String>",
+                "position": {
+                    "line": 405,
+                    "column": 49
+                }
+            },
+            {
+                "name": "BuiltinCommandPack",
+                "position": {
+                    "line": 412,
+                    "column": 54
+                }
+            },
+            {
+                "name": "ArrayList<CommandResolver>",
+                "position": {
+                    "line": 413,
+                    "column": 51
+                }
+            },
+            {
+                "name": "NioEventLoopGroup",
+                "position": {
+                    "line": 417,
+                    "column": 31
+                }
+            },
+            {
+                "name": "DefaultThreadFactory",
+                "position": {
+                    "line": 417,
+                    "column": 53
+                }
+            },
+            {
+                "name": "HttpTelnetTermServer",
+                "position": {
+                    "line": 422,
+                    "column": 52
+                }
+            },
+            {
+                "name": "HttpTermServer",
+                "position": {
+                    "line": 429,
+                    "column": 52
+                }
+            },
+            {
+                "name": "HttpTermServer",
+                "position": {
+                    "line": 434,
+                    "column": 56
+                }
+            },
+            {
+                "name": "BindHandler",
+                "position": {
+                    "line": 444,
+                    "column": 36
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 446,
+                    "column": 27
+                }
+            },
+            {
+                "name": "SessionManagerImpl",
+                "position": {
+                    "line": 452,
+                    "column": 34
+                }
+            },
+            {
+                "name": "HttpApiHandler",
+                "position": {
+                    "line": 454,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.isBind()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.destroy()"
+        ],
+        "priority": 26
+    },
+    {
+        "name": "shutdownWorkGroup",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "shutdownWorkGroup()",
+        "class_signature": "ArthasBootstrap.shutdownWorkGroup()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (workerGroup != null) {\n            workerGroup.shutdownGracefully(200, 200, TimeUnit.MILLISECONDS);\n            workerGroup = null;\n        }\n    }",
+        "position": {
+            "line": 480,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "shutdownGracefully",
+                "position": {
+                    "line": 482,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 34
+    },
+    {
+        "name": "isBind",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "isBind()",
+        "class_signature": "ArthasBootstrap.isBind()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return isBindRef.get();\n    }",
+        "position": {
+            "line": 489,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 490,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 28
+    },
+    {
+        "name": "reset",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "reset()",
+        "class_signature": "ArthasBootstrap.reset()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return Enhancer.reset(this.instrumentation, new WildcardMatcher(\"*\"));\n    }",
+        "position": {
+            "line": 493,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "reset",
+                "position": {
+                    "line": 494,
+                    "column": 25
+                }
+            },
+            {
+                "name": "WildcardMatcher",
+                "position": {
+                    "line": 494,
+                    "column": 57
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "destroy",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "destroy()",
+        "class_signature": "ArthasBootstrap.destroy()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (shellServer != null) {\n            shellServer.close();\n            shellServer = null;\n        }\n        if (sessionManager != null) {\n            sessionManager.close();\n            sessionManager = null;\n        }\n        if (this.httpSessionManager != null) {\n            httpSessionManager.stop();\n        }\n        if (timer != null) {\n            timer.cancel();\n        }\n        if (this.tunnelClient != null) {\n            try {\n                tunnelClient.stop();\n            } catch (Throwable e) {\n                logger().error(\"stop tunnel client error\", e);\n            }\n        }\n        if (executorService != null) {\n            executorService.shutdownNow();\n        }\n        if (transformerManager != null) {\n            transformerManager.destroy();\n        }\n        if (classLoaderInstrumentTransformer != null) {\n            instrumentation.removeTransformer(classLoaderInstrumentTransformer);\n        }\n        // clear the reference in Spy class.\n        cleanUpSpyReference();\n        shutdownWorkGroup();\n        UserStatUtil.destroy();\n        if (shutdown != null) {\n            try {\n                Runtime.getRuntime().removeShutdownHook(shutdown);\n            } catch (Throwable t) {\n                // ignore\n            }\n        }\n        logger().info(\"as-server destroy completed.\");\n        if (loggerContext != null) {\n            loggerContext.stop();\n        }\n    }",
+        "position": {
+            "line": 500,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "close",
+                "position": {
+                    "line": 502,
+                    "column": 25
+                }
+            },
+            {
+                "name": "close",
+                "position": {
+                    "line": 506,
+                    "column": 28
+                }
+            },
+            {
+                "name": "stop",
+                "position": {
+                    "line": 510,
+                    "column": 32
+                }
+            },
+            {
+                "name": "cancel",
+                "position": {
+                    "line": 513,
+                    "column": 19
+                }
+            },
+            {
+                "name": "stop",
+                "position": {
+                    "line": 517,
+                    "column": 30
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 519,
+                    "column": 26
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 519,
+                    "column": 17
+                }
+            },
+            {
+                "name": "shutdownNow",
+                "position": {
+                    "line": 523,
+                    "column": 29
+                }
+            },
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 526,
+                    "column": 32
+                }
+            },
+            {
+                "name": "removeTransformer",
+                "position": {
+                    "line": 529,
+                    "column": 29
+                }
+            },
+            {
+                "name": "cleanUpSpyReference",
+                "position": {
+                    "line": 532,
+                    "column": 9
+                }
+            },
+            {
+                "name": "shutdownWorkGroup",
+                "position": {
+                    "line": 533,
+                    "column": 9
+                }
+            },
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 534,
+                    "column": 22
+                }
+            },
+            {
+                "name": "removeShutdownHook",
+                "position": {
+                    "line": 537,
+                    "column": 38
+                }
+            },
+            {
+                "name": "getRuntime",
+                "position": {
+                    "line": 537,
+                    "column": 25
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 542,
+                    "column": 18
+                }
+            },
+            {
+                "name": "logger",
+                "position": {
+                    "line": 542,
+                    "column": 9
+                }
+            },
+            {
+                "name": "stop",
+                "position": {
+                    "line": 544,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArthasBootstrap.logger()",
+            "ArthasBootstrap.cleanUpSpyReference()",
+            "ArthasBootstrap.shutdownWorkGroup()",
+            "ArthasBootstrap.logger()"
+        ],
+        "priority": 29
+    },
+    {
+        "name": "getInstance",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getInstance(Instrumentation instrumentation, String args)",
+        "class_signature": "ArthasBootstrap.getInstance(Instrumentation instrumentation, String args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Instrumentation",
+                "instrumentation"
+            ],
+            [
+                "String",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        if (arthasBootstrap != null) {\n            return arthasBootstrap;\n        }\n\n        Map<String, String> argsMap = FeatureCodec.DEFAULT_COMMANDLINE_CODEC.toMap(args);\n        Map<String, String> mapWithPrefix = new HashMap<String, String>(argsMap.size());\n        for (Entry<String, String> entry : argsMap.entrySet()) {\n            mapWithPrefix.put(\"arthas.\" + entry.getKey(), entry.getValue());\n        }\n        return getInstance(instrumentation, mapWithPrefix);\n    }",
+        "position": {
+            "line": 551,
+            "column": 48
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "toMap",
+                "position": {
+                    "line": 556,
+                    "column": 78
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 557,
+                    "column": 81
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 558,
+                    "column": 52
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 559,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 559,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 559,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getInstance",
+                "position": {
+                    "line": 561,
+                    "column": 16
+                }
+            },
+            {
+                "name": "HashMap<String, String>",
+                "position": {
+                    "line": 557,
+                    "column": 49
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArthasBootstrap.getInstance(Instrumentation instrumentation, Map<String, String> args)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "getInstance",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getInstance(Instrumentation instrumentation, Map<String, String> args)",
+        "class_signature": "ArthasBootstrap.getInstance(Instrumentation instrumentation, Map<String, String> args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Instrumentation",
+                "instrumentation"
+            ],
+            [
+                "Map<String, String>",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        if (arthasBootstrap == null) {\n            arthasBootstrap = new ArthasBootstrap(instrumentation, args);\n        }\n        return arthasBootstrap;\n    }",
+        "position": {
+            "line": 569,
+            "column": 48
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "ArthasBootstrap",
+                "position": {
+                    "line": 571,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "ArthasBootstrap.ArthasBootstrap(Instrumentation instrumentation, Map<String, String> args)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "getInstance",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getInstance()",
+        "class_signature": "ArthasBootstrap.getInstance()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (arthasBootstrap == null) {\n            throw new IllegalStateException(\"ArthasBootstrap must be initialized before!\");\n        }\n        return arthasBootstrap;\n    }",
+        "position": {
+            "line": 578,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 580,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "execute",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "execute(Runnable command)",
+        "class_signature": "ArthasBootstrap.execute(Runnable command)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Runnable",
+                "command"
+            ]
+        ],
+        "methodBody": "{\n        executorService.execute(command);\n    }",
+        "position": {
+            "line": 585,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "execute",
+                "position": {
+                    "line": 586,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    },
+    {
+        "name": "cleanUpSpyReference",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "cleanUpSpyReference()",
+        "class_signature": "ArthasBootstrap.cleanUpSpyReference()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        try {\n            SpyAPI.setNopSpy();\n            SpyAPI.destroy();\n        } catch (Throwable e) {\n            // ignore\n        }\n        // AgentBootstrap.resetArthasClassLoader();\n        try {\n            Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(\"com.taobao.arthas.agent334.AgentBootstrap\");\n            Method method = clazz.getDeclaredMethod(\"resetArthasClassLoader\");\n            method.invoke(null);\n        } catch (Throwable e) {\n            // ignore\n        }\n    }",
+        "position": {
+            "line": 591,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "setNopSpy",
+                "position": {
+                    "line": 593,
+                    "column": 20
+                }
+            },
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 594,
+                    "column": 20
+                }
+            },
+            {
+                "name": "loadClass",
+                "position": {
+                    "line": 600,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getSystemClassLoader",
+                "position": {
+                    "line": 600,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getDeclaredMethod",
+                "position": {
+                    "line": 601,
+                    "column": 35
+                }
+            },
+            {
+                "name": "invoke",
+                "position": {
+                    "line": 602,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 33
+    },
+    {
+        "name": "getTunnelClient",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getTunnelClient()",
+        "class_signature": "ArthasBootstrap.getTunnelClient()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return tunnelClient;\n    }",
+        "position": {
+            "line": 608,
+            "column": 25
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "getShellServer",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getShellServer()",
+        "class_signature": "ArthasBootstrap.getShellServer()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return shellServer;\n    }",
+        "position": {
+            "line": 612,
+            "column": 24
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "getSessionManager",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getSessionManager()",
+        "class_signature": "ArthasBootstrap.getSessionManager()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return sessionManager;\n    }",
+        "position": {
+            "line": 616,
+            "column": 27
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "getTimer",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getTimer()",
+        "class_signature": "ArthasBootstrap.getTimer()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return this.timer;\n    }",
+        "position": {
+            "line": 620,
+            "column": 18
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "getScheduledExecutorService",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getScheduledExecutorService()",
+        "class_signature": "ArthasBootstrap.getScheduledExecutorService()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return this.executorService;\n    }",
+        "position": {
+            "line": 624,
+            "column": 37
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "getInstrumentation",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getInstrumentation()",
+        "class_signature": "ArthasBootstrap.getInstrumentation()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return this.instrumentation;\n    }",
+        "position": {
+            "line": 628,
+            "column": 28
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "getTransformerManager",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getTransformerManager()",
+        "class_signature": "ArthasBootstrap.getTransformerManager()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return this.transformerManager;\n    }",
+        "position": {
+            "line": 632,
+            "column": 31
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 12
+    },
+    {
+        "name": "logger",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "logger()",
+        "class_signature": "ArthasBootstrap.logger()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return LoggerFactory.getLogger(this.getClass());\n    }",
+        "position": {
+            "line": 636,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getLogger",
+                "position": {
+                    "line": 637,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 637,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 32
+    },
+    {
+        "name": "getResultViewResolver",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getResultViewResolver()",
+        "class_signature": "ArthasBootstrap.getResultViewResolver()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return resultViewResolver;\n    }",
+        "position": {
+            "line": 640,
+            "column": 31
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 13
+    },
+    {
+        "name": "getHistoryManager",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getHistoryManager()",
+        "class_signature": "ArthasBootstrap.getHistoryManager()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return historyManager;\n    }",
+        "position": {
+            "line": 644,
+            "column": 27
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "getHttpApiHandler",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getHttpApiHandler()",
+        "class_signature": "ArthasBootstrap.getHttpApiHandler()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return httpApiHandler;\n    }",
+        "position": {
+            "line": 648,
+            "column": 27
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "getOutputPath",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getOutputPath()",
+        "class_signature": "ArthasBootstrap.getOutputPath()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return outputPath;\n    }",
+        "position": {
+            "line": 652,
+            "column": 17
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "getSecurityAuthenticator",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getSecurityAuthenticator()",
+        "class_signature": "ArthasBootstrap.getSecurityAuthenticator()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return securityAuthenticator;\n    }",
+        "position": {
+            "line": 656,
+            "column": 34
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 17
+    },
+    {
+        "name": "getConfigure",
+        "category": "method_declaration",
+        "class": "ArthasBootstrap",
+        "signature": "getConfigure()",
+        "class_signature": "ArthasBootstrap.getConfigure()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return configure;\n    }",
+        "position": {
+            "line": 660,
+            "column": 22
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 18
+    }
+]

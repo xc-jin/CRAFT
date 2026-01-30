@@ -1,0 +1,1470 @@
+[
+    {
+        "name": "encodeQueryString",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodeQueryString(String value)",
+        "class_signature": "Encode.encodeQueryString(String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        return encodeValue(value, queryStringEncoding);\n    }",
+        "position": {
+            "line": 155,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeValue",
+                "position": {
+                    "line": 156,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeValue(String segment, String[] encoding)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "encodePath",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodePath(String value)",
+        "class_signature": "Encode.encodePath(String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        return encodeValue(value, pathEncoding);\n    }",
+        "position": {
+            "line": 165,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeValue",
+                "position": {
+                    "line": 166,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeValue(String segment, String[] encoding)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "encodePathSegment",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodePathSegment(String value)",
+        "class_signature": "Encode.encodePathSegment(String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        return encodeValue(value, pathSegmentEncoding);\n    }",
+        "position": {
+            "line": 175,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeValue",
+                "position": {
+                    "line": 176,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeValue(String segment, String[] encoding)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "encodeFragment",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodeFragment(String value)",
+        "class_signature": "Encode.encodeFragment(String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        return encodeValue(value, queryStringEncoding);\n    }",
+        "position": {
+            "line": 185,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeValue",
+                "position": {
+                    "line": 186,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeValue(String segment, String[] encoding)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "encodeMatrixParam",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodeMatrixParam(String value)",
+        "class_signature": "Encode.encodeMatrixParam(String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        return encodeValue(value, matrixParameterEncoding);\n    }",
+        "position": {
+            "line": 195,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeValue",
+                "position": {
+                    "line": 196,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeValue(String segment, String[] encoding)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "encodeQueryParam",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodeQueryParam(String value)",
+        "class_signature": "Encode.encodeQueryParam(String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n        return encodeValue(value, queryNameValueEncoding);\n    }",
+        "position": {
+            "line": 205,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeValue",
+                "position": {
+                    "line": 206,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeValue(String segment, String[] encoding)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "decodePath",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "decodePath(String path)",
+        "class_signature": "Encode.decodePath(String path)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "path"
+            ]
+        ],
+        "methodBody": "{\n        // FIXME: this doesn't appear to pass the TCK, because it fails to decode what it throws at it\n        // also it doesn't decode slashes (it should) and it decodes + (it should not)\n        //        return URLUtils.decode(path, StandardCharsets.UTF_8, false, null);\n        // So let's use the Vertx decoder for now\n        return URIDecoder.decodeURIComponent(path, false);\n    }",
+        "position": {
+            "line": 214,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "decodeURIComponent",
+                "position": {
+                    "line": 219,
+                    "column": 27
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "decodeBytes",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "decodeBytes(String enc, CharsetDecoder decoder)",
+        "class_signature": "Encode.decodeBytes(String enc, CharsetDecoder decoder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "enc"
+            ],
+            [
+                "CharsetDecoder",
+                "decoder"
+            ]
+        ],
+        "methodBody": "{\n        Matcher matcher = encodedChars.matcher(enc);\n        ByteBuffer bytes = ByteBuffer.allocate(enc.length() / 3);\n        while (matcher.find()) {\n            int b = Integer.parseInt(matcher.group(1), 16);\n            bytes.put((byte) b);\n        }\n        bytes.flip();\n        try {\n            return decoder.decode(bytes).toString();\n        } catch (CharacterCodingException e) {\n            throw new RuntimeException(e);\n        }\n    }",
+        "position": {
+            "line": 222,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "matcher",
+                "position": {
+                    "line": 223,
+                    "column": 40
+                }
+            },
+            {
+                "name": "allocate",
+                "position": {
+                    "line": 224,
+                    "column": 39
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 224,
+                    "column": 52
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 225,
+                    "column": 24
+                }
+            },
+            {
+                "name": "parseInt",
+                "position": {
+                    "line": 226,
+                    "column": 29
+                }
+            },
+            {
+                "name": "group",
+                "position": {
+                    "line": 226,
+                    "column": 46
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 227,
+                    "column": 19
+                }
+            },
+            {
+                "name": "flip",
+                "position": {
+                    "line": 229,
+                    "column": 15
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 231,
+                    "column": 42
+                }
+            },
+            {
+                "name": "decode",
+                "position": {
+                    "line": 231,
+                    "column": 28
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 233,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "encodeNonCodes",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodeNonCodes(String string)",
+        "class_signature": "Encode.encodeNonCodes(String string)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "string"
+            ]
+        ],
+        "methodBody": "{\n        Matcher matcher = nonCodes.matcher(string);\n        StringBuilder builder = new StringBuilder();\n\n        // FYI: we do not use the no-arg matcher.find()\n        //      coupled with matcher.appendReplacement()\n        //      because the matched text may contain\n        //      a second % and we must make sure we\n        //      encode it (if necessary).\n        int idx = 0;\n        while (matcher.find(idx)) {\n            int start = matcher.start();\n            builder.append(string.substring(idx, start));\n            builder.append(\"%25\");\n            idx = start + 1;\n        }\n        builder.append(string.substring(idx));\n        return builder.toString();\n    }",
+        "position": {
+            "line": 243,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "matcher",
+                "position": {
+                    "line": 244,
+                    "column": 36
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 253,
+                    "column": 24
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 254,
+                    "column": 33
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 255,
+                    "column": 21
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 255,
+                    "column": 35
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 256,
+                    "column": 21
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 259,
+                    "column": 17
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 259,
+                    "column": 31
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 260,
+                    "column": 24
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 245,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 22
+    },
+    {
+        "name": "savePathParams",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "savePathParams(String segmentString, StringBuilder newSegment, List<String> params)",
+        "class_signature": "Encode.savePathParams(String segmentString, StringBuilder newSegment, List<String> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "segmentString"
+            ],
+            [
+                "StringBuilder",
+                "newSegment"
+            ],
+            [
+                "List<String>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        boolean foundParam = false;\n        // Regular expressions can have '{' and '}' characters.  Replace them to do match\n        CharSequence segment = PathHelper.replaceEnclosedCurlyBracesCS(segmentString);\n        Matcher matcher = PathHelper.URI_TEMPLATE_PATTERN.matcher(segment);\n        int start = 0;\n        while (matcher.find()) {\n            newSegment.append(segment, start, matcher.start());\n            foundParam = true;\n            String group = matcher.group();\n            // Regular expressions can have '{' and '}' characters.  Recover earlier replacement\n            params.add(PathHelper.recoverEnclosedCurlyBraces(group));\n            newSegment.append(\"_resteasy_uri_parameter\");\n            start = matcher.end();\n        }\n        newSegment.append(segment, start, segment.length());\n        return foundParam;\n    }",
+        "position": {
+            "line": 263,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "replaceEnclosedCurlyBracesCS",
+                "position": {
+                    "line": 266,
+                    "column": 43
+                }
+            },
+            {
+                "name": "matcher",
+                "position": {
+                    "line": 267,
+                    "column": 59
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 269,
+                    "column": 24
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 270,
+                    "column": 24
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 270,
+                    "column": 55
+                }
+            },
+            {
+                "name": "group",
+                "position": {
+                    "line": 272,
+                    "column": 36
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 274,
+                    "column": 20
+                }
+            },
+            {
+                "name": "recoverEnclosedCurlyBraces",
+                "position": {
+                    "line": 274,
+                    "column": 35
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 275,
+                    "column": 24
+                }
+            },
+            {
+                "name": "end",
+                "position": {
+                    "line": 276,
+                    "column": 29
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 278,
+                    "column": 20
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 278,
+                    "column": 51
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 20
+    },
+    {
+        "name": "encodeValue",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodeValue(String segment, String[] encoding)",
+        "class_signature": "Encode.encodeValue(String segment, String[] encoding)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "segment"
+            ],
+            [
+                "String[]",
+                "encoding"
+            ]
+        ],
+        "methodBody": "{\n        ArrayList<String> params = new ArrayList<String>();\n        boolean foundParam = false;\n        StringBuilder newSegment = new StringBuilder();\n        if (savePathParams(segment, newSegment, params)) {\n            foundParam = true;\n            segment = newSegment.toString();\n        }\n        String result = encodeFromArray(segment, encoding, false);\n        result = encodeNonCodes(result);\n        segment = result;\n        if (foundParam) {\n            segment = pathParamReplacement(segment, params);\n        }\n        return segment;\n    }",
+        "position": {
+            "line": 289,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "savePathParams",
+                "position": {
+                    "line": 293,
+                    "column": 13
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 295,
+                    "column": 34
+                }
+            },
+            {
+                "name": "encodeFromArray",
+                "position": {
+                    "line": 297,
+                    "column": 25
+                }
+            },
+            {
+                "name": "encodeNonCodes",
+                "position": {
+                    "line": 298,
+                    "column": 18
+                }
+            },
+            {
+                "name": "pathParamReplacement",
+                "position": {
+                    "line": 301,
+                    "column": 23
+                }
+            },
+            {
+                "name": "ArrayList<String>",
+                "position": {
+                    "line": 290,
+                    "column": 40
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 292,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.savePathParams(String segmentString, StringBuilder newSegment, List<String> params)",
+            "Encode.encodeFromArray(String segment, String[] encodingMap, boolean encodePercent)",
+            "Encode.encodeNonCodes(String string)",
+            "Encode.pathParamReplacement(String segment, List<String> params)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "encodePathAsIs",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodePathAsIs(String segment)",
+        "class_signature": "Encode.encodePathAsIs(String segment)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "segment"
+            ]
+        ],
+        "methodBody": "{\n        return encodeFromArray(segment, pathEncoding, true);\n    }",
+        "position": {
+            "line": 317,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeFromArray",
+                "position": {
+                    "line": 318,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeFromArray(String segment, String[] encodingMap, boolean encodePercent)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "encodePathSaveEncodings",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodePathSaveEncodings(String segment)",
+        "class_signature": "Encode.encodePathSaveEncodings(String segment)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "segment"
+            ]
+        ],
+        "methodBody": "{\n        String result = encodeFromArray(segment, pathEncoding, false);\n        result = encodeNonCodes(result);\n        return result;\n    }",
+        "position": {
+            "line": 327,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeFromArray",
+                "position": {
+                    "line": 328,
+                    "column": 25
+                }
+            },
+            {
+                "name": "encodeNonCodes",
+                "position": {
+                    "line": 329,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeFromArray(String segment, String[] encodingMap, boolean encodePercent)",
+            "Encode.encodeNonCodes(String string)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "encodePathSegmentAsIs",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodePathSegmentAsIs(String segment)",
+        "class_signature": "Encode.encodePathSegmentAsIs(String segment)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "segment"
+            ]
+        ],
+        "methodBody": "{\n        return encodeFromArray(segment, pathSegmentEncoding, true);\n    }",
+        "position": {
+            "line": 344,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeFromArray",
+                "position": {
+                    "line": 345,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeFromArray(String segment, String[] encodingMap, boolean encodePercent)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "encodePathSegmentSaveEncodings",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodePathSegmentSaveEncodings(String segment)",
+        "class_signature": "Encode.encodePathSegmentSaveEncodings(String segment)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "segment"
+            ]
+        ],
+        "methodBody": "{\n        String result = encodeFromArray(segment, pathSegmentEncoding, false);\n        result = encodeNonCodes(result);\n        return result;\n    }",
+        "position": {
+            "line": 354,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeFromArray",
+                "position": {
+                    "line": 355,
+                    "column": 25
+                }
+            },
+            {
+                "name": "encodeNonCodes",
+                "position": {
+                    "line": 356,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeFromArray(String segment, String[] encodingMap, boolean encodePercent)",
+            "Encode.encodeNonCodes(String string)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "encodeQueryParamAsIs",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodeQueryParamAsIs(String nameOrValue)",
+        "class_signature": "Encode.encodeQueryParamAsIs(String nameOrValue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "nameOrValue"
+            ]
+        ],
+        "methodBody": "{\n        return encodeFromArray(nameOrValue, queryNameValueEncoding, true);\n    }",
+        "position": {
+            "line": 366,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeFromArray",
+                "position": {
+                    "line": 367,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeFromArray(String segment, String[] encodingMap, boolean encodePercent)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "encodeQueryParamSaveEncodings",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodeQueryParamSaveEncodings(String segment)",
+        "class_signature": "Encode.encodeQueryParamSaveEncodings(String segment)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "segment"
+            ]
+        ],
+        "methodBody": "{\n        String result = encodeFromArray(segment, queryNameValueEncoding, false);\n        result = encodeNonCodes(result);\n        return result;\n    }",
+        "position": {
+            "line": 376,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeFromArray",
+                "position": {
+                    "line": 377,
+                    "column": 25
+                }
+            },
+            {
+                "name": "encodeNonCodes",
+                "position": {
+                    "line": 378,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeFromArray(String segment, String[] encodingMap, boolean encodePercent)",
+            "Encode.encodeNonCodes(String string)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "encodeFragmentAsIs",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodeFragmentAsIs(String nameOrValue)",
+        "class_signature": "Encode.encodeFragmentAsIs(String nameOrValue)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "nameOrValue"
+            ]
+        ],
+        "methodBody": "{\n        return encodeFromArray(nameOrValue, queryNameValueEncoding, true);\n    }",
+        "position": {
+            "line": 382,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeFromArray",
+                "position": {
+                    "line": 383,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeFromArray(String segment, String[] encodingMap, boolean encodePercent)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "encodeFromArray",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodeFromArray(String segment, String[] encodingMap, boolean encodePercent)",
+        "class_signature": "Encode.encodeFromArray(String segment, String[] encodingMap, boolean encodePercent)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "segment"
+            ],
+            [
+                "String[]",
+                "encodingMap"
+            ],
+            [
+                "boolean",
+                "encodePercent"
+            ]
+        ],
+        "methodBody": "{\n        StringBuilder result = new StringBuilder();\n        for (int i = 0; i < segment.length(); i++) {\n            char currentChar = segment.charAt(i);\n            if (!encodePercent && currentChar == '%') {\n                result.append(currentChar);\n                continue;\n            }\n            if (Character.isHighSurrogate(currentChar)) {\n                String part = segment.substring(i, i + 2);\n                result.append(URLEncoder.encode(part, StandardCharsets.UTF_8));\n                ++i;\n                continue;\n            }\n            String encoding = encode(currentChar, encodingMap);\n            if (encoding == null) {\n                result.append(currentChar);\n            } else {\n                result.append(encoding);\n            }\n        }\n        return result.toString();\n    }",
+        "position": {
+            "line": 386,
+            "column": 29
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 388,
+                    "column": 37
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 389,
+                    "column": 40
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 391,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isHighSurrogate",
+                "position": {
+                    "line": 394,
+                    "column": 27
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 395,
+                    "column": 39
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 396,
+                    "column": 24
+                }
+            },
+            {
+                "name": "encode",
+                "position": {
+                    "line": 396,
+                    "column": 42
+                }
+            },
+            {
+                "name": "encode",
+                "position": {
+                    "line": 400,
+                    "column": 31
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 402,
+                    "column": 24
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 404,
+                    "column": 24
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 407,
+                    "column": 23
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 387,
+                    "column": 36
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encode(int zhar, String[] encodingMap)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "encode",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encode(int zhar, String[] encodingMap)",
+        "class_signature": "Encode.encode(int zhar, String[] encodingMap)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "zhar"
+            ],
+            [
+                "String[]",
+                "encodingMap"
+            ]
+        ],
+        "methodBody": "{\n        String encoded;\n        if (zhar < encodingMap.length) {\n            encoded = encodingMap[zhar];\n        } else {\n            encoded = encodeString(Character.toString((char) zhar));\n        }\n        return encoded;\n    }",
+        "position": {
+            "line": 415,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encodeString",
+                "position": {
+                    "line": 420,
+                    "column": 23
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 420,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "Encode.encodeString(String s)"
+        ],
+        "priority": 24
+    },
+    {
+        "name": "encodeString",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encodeString(String s)",
+        "class_signature": "Encode.encodeString(String s)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "s"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            return URLEncoder.encode(s, UTF_8);\n        } catch (UnsupportedEncodingException e) {\n            throw new RuntimeException(e);\n        }\n    }",
+        "position": {
+            "line": 431,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "encode",
+                "position": {
+                    "line": 433,
+                    "column": 31
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 435,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 25
+    },
+    {
+        "name": "pathParamReplacement",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "pathParamReplacement(String segment, List<String> params)",
+        "class_signature": "Encode.pathParamReplacement(String segment, List<String> params)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "segment"
+            ],
+            [
+                "List<String>",
+                "params"
+            ]
+        ],
+        "methodBody": "{\n        StringBuilder newSegment = new StringBuilder();\n        Matcher matcher = PARAM_REPLACEMENT.matcher(segment);\n        int i = 0;\n        int start = 0;\n        while (matcher.find()) {\n            newSegment.append(segment, start, matcher.start());\n            String replacement = params.get(i++);\n            newSegment.append(replacement);\n            start = matcher.end();\n        }\n        newSegment.append(segment, start, segment.length());\n        segment = newSegment.toString();\n        return segment;\n    }",
+        "position": {
+            "line": 439,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "matcher",
+                "position": {
+                    "line": 441,
+                    "column": 45
+                }
+            },
+            {
+                "name": "find",
+                "position": {
+                    "line": 444,
+                    "column": 24
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 445,
+                    "column": 24
+                }
+            },
+            {
+                "name": "start",
+                "position": {
+                    "line": 445,
+                    "column": 55
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 446,
+                    "column": 41
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 447,
+                    "column": 24
+                }
+            },
+            {
+                "name": "end",
+                "position": {
+                    "line": 448,
+                    "column": 29
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 450,
+                    "column": 20
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 450,
+                    "column": 51
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 451,
+                    "column": 30
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 440,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 23
+    },
+    {
+        "name": "decode",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "decode(MultivaluedMap<String, String> map)",
+        "class_signature": "Encode.decode(MultivaluedMap<String, String> map)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MultivaluedMap<String, String>",
+                "map"
+            ]
+        ],
+        "methodBody": "{\n        MultivaluedMap<String, String> decoded = new QuarkusMultivaluedHashMap<String, String>();\n        for (Map.Entry<String, List<String>> entry : map.entrySet()) {\n            List<String> values = entry.getValue();\n            for (String value : values) {\n                try {\n                    decoded.add(URLDecoder.decode(entry.getKey(), UTF_8), URLDecoder.decode(value, UTF_8));\n                } catch (UnsupportedEncodingException e) {\n                    throw new RuntimeException(e);\n                }\n            }\n        }\n        return decoded;\n    }",
+        "position": {
+            "line": 461,
+            "column": 50
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 463,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 464,
+                    "column": 41
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 467,
+                    "column": 29
+                }
+            },
+            {
+                "name": "decode",
+                "position": {
+                    "line": 467,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 467,
+                    "column": 57
+                }
+            },
+            {
+                "name": "decode",
+                "position": {
+                    "line": 467,
+                    "column": 86
+                }
+            },
+            {
+                "name": "QuarkusMultivaluedHashMap<String, String>",
+                "position": {
+                    "line": 462,
+                    "column": 54
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 469,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 15
+    },
+    {
+        "name": "decode",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "decode(MultivaluedMap<String, String> map, String charset)",
+        "class_signature": "Encode.decode(MultivaluedMap<String, String> map, String charset)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MultivaluedMap<String, String>",
+                "map"
+            ],
+            [
+                "String",
+                "charset"
+            ]
+        ],
+        "methodBody": "{\n        if (charset == null) {\n            charset = UTF_8;\n        }\n        MultivaluedMap<String, String> decoded = new QuarkusMultivaluedHashMap<String, String>();\n        for (Map.Entry<String, List<String>> entry : map.entrySet()) {\n            List<String> values = entry.getValue();\n            for (String value : values) {\n                try {\n                    decoded.add(URLDecoder.decode(entry.getKey(), charset), URLDecoder.decode(value, charset));\n                } catch (UnsupportedEncodingException e) {\n                    throw new RuntimeException(e);\n                }\n            }\n        }\n        return decoded;\n    }",
+        "position": {
+            "line": 483,
+            "column": 50
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 488,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 489,
+                    "column": 41
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 492,
+                    "column": 29
+                }
+            },
+            {
+                "name": "decode",
+                "position": {
+                    "line": 492,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 492,
+                    "column": 57
+                }
+            },
+            {
+                "name": "decode",
+                "position": {
+                    "line": 492,
+                    "column": 88
+                }
+            },
+            {
+                "name": "QuarkusMultivaluedHashMap<String, String>",
+                "position": {
+                    "line": 487,
+                    "column": 54
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 494,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 16
+    },
+    {
+        "name": "encode",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "encode(MultivaluedMap<String, String> map)",
+        "class_signature": "Encode.encode(MultivaluedMap<String, String> map)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MultivaluedMap<String, String>",
+                "map"
+            ]
+        ],
+        "methodBody": "{\n        MultivaluedMap<String, String> decoded = new QuarkusMultivaluedHashMap<String, String>();\n        for (Map.Entry<String, List<String>> entry : map.entrySet()) {\n            List<String> values = entry.getValue();\n            for (String value : values) {\n                try {\n                    decoded.add(URLEncoder.encode(entry.getKey(), UTF_8), URLEncoder.encode(value, UTF_8));\n                } catch (UnsupportedEncodingException e) {\n                    throw new RuntimeException(e);\n                }\n            }\n        }\n        return decoded;\n    }",
+        "position": {
+            "line": 501,
+            "column": 50
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 503,
+                    "column": 58
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 504,
+                    "column": 41
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 507,
+                    "column": 29
+                }
+            },
+            {
+                "name": "encode",
+                "position": {
+                    "line": 507,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 507,
+                    "column": 57
+                }
+            },
+            {
+                "name": "encode",
+                "position": {
+                    "line": 507,
+                    "column": 86
+                }
+            },
+            {
+                "name": "QuarkusMultivaluedHashMap<String, String>",
+                "position": {
+                    "line": 502,
+                    "column": 54
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 509,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 17
+    },
+    {
+        "name": "decode",
+        "category": "method_declaration",
+        "class": "Encode",
+        "signature": "decode(String string)",
+        "class_signature": "Encode.decode(String string)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "string"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            return URLDecoder.decode(string, UTF_8);\n        } catch (UnsupportedEncodingException e) {\n            throw new RuntimeException(e);\n        }\n    }",
+        "position": {
+            "line": 516,
+            "column": 26
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "decode",
+                "position": {
+                    "line": 518,
+                    "column": 31
+                }
+            },
+            {
+                "name": "RuntimeException",
+                "position": {
+                    "line": 520,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 18
+    }
+]

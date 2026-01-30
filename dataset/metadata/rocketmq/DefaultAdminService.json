@@ -1,0 +1,454 @@
+[
+    {
+        "name": "DefaultAdminService",
+        "category": "constructor_declaration",
+        "class": "DefaultAdminService",
+        "signature": "DefaultAdminService(MQClientAPIFactory mqClientAPIFactory)",
+        "class_signature": "DefaultAdminService.DefaultAdminService(MQClientAPIFactory mqClientAPIFactory)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "MQClientAPIFactory",
+                "mqClientAPIFactory"
+            ]
+        ],
+        "methodBody": "{\n        this.mqClientAPIFactory = mqClientAPIFactory;\n    }",
+        "position": {
+            "line": 41,
+            "column": 12
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "topicExist",
+        "category": "method_declaration",
+        "class": "DefaultAdminService",
+        "signature": "topicExist(String topic)",
+        "class_signature": "DefaultAdminService.topicExist(String topic)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ]
+        ],
+        "methodBody": "{\n        boolean topicExist;\n        TopicRouteData topicRouteData;\n        try {\n            topicRouteData = this.getTopicRouteDataDirectlyFromNameServer(topic);\n            topicExist = topicRouteData != null;\n        } catch (Throwable e) {\n            topicExist = false;\n        }\n\n        return topicExist;\n    }",
+        "position": {
+            "line": 46,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTopicRouteDataDirectlyFromNameServer",
+                "position": {
+                    "line": 50,
+                    "column": 35
+                }
+            }
+        ],
+        "calledMethods": [
+            "DefaultAdminService.getTopicRouteDataDirectlyFromNameServer(String topic)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "createTopicOnTopicBrokerIfNotExist",
+        "category": "method_declaration",
+        "class": "DefaultAdminService",
+        "signature": "createTopicOnTopicBrokerIfNotExist(String createTopic, String sampleTopic, int wQueueNum, int rQueueNum, boolean examineTopic, int retryCheckCount)",
+        "class_signature": "DefaultAdminService.createTopicOnTopicBrokerIfNotExist(String createTopic, String sampleTopic, int wQueueNum, int rQueueNum, boolean examineTopic, int retryCheckCount)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "createTopic"
+            ],
+            [
+                "String",
+                "sampleTopic"
+            ],
+            [
+                "int",
+                "wQueueNum"
+            ],
+            [
+                "int",
+                "rQueueNum"
+            ],
+            [
+                "boolean",
+                "examineTopic"
+            ],
+            [
+                "int",
+                "retryCheckCount"
+            ]
+        ],
+        "methodBody": "{\n        TopicRouteData curTopicRouteData = new TopicRouteData();\n        try {\n            curTopicRouteData = this.getTopicRouteDataDirectlyFromNameServer(createTopic);\n        } catch (Exception e) {\n            if (!TopicRouteHelper.isTopicNotExistError(e)) {\n                log.error(\"get cur topic route {} failed.\", createTopic, e);\n                return false;\n            }\n        }\n\n        TopicRouteData sampleTopicRouteData = null;\n        try {\n            sampleTopicRouteData = this.getTopicRouteDataDirectlyFromNameServer(sampleTopic);\n        } catch (Exception e) {\n            log.error(\"create topic {} failed.\", createTopic, e);\n            return false;\n        }\n\n        if (sampleTopicRouteData == null || sampleTopicRouteData.getBrokerDatas().isEmpty()) {\n            return false;\n        }\n\n        try {\n            return this.createTopicOnBroker(createTopic, wQueueNum, rQueueNum, curTopicRouteData.getBrokerDatas(),\n                sampleTopicRouteData.getBrokerDatas(), examineTopic, retryCheckCount);\n        } catch (Exception e) {\n            log.error(\"create topic {} failed.\", createTopic, e);\n        }\n        return false;\n    }",
+        "position": {
+            "line": 60,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTopicRouteDataDirectlyFromNameServer",
+                "position": {
+                    "line": 64,
+                    "column": 38
+                }
+            },
+            {
+                "name": "isTopicNotExistError",
+                "position": {
+                    "line": 66,
+                    "column": 35
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 67,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getTopicRouteDataDirectlyFromNameServer",
+                "position": {
+                    "line": 74,
+                    "column": 41
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 76,
+                    "column": 17
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 80,
+                    "column": 83
+                }
+            },
+            {
+                "name": "getBrokerDatas",
+                "position": {
+                    "line": 80,
+                    "column": 66
+                }
+            },
+            {
+                "name": "createTopicOnBroker",
+                "position": {
+                    "line": 85,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getBrokerDatas",
+                "position": {
+                    "line": 85,
+                    "column": 98
+                }
+            },
+            {
+                "name": "getBrokerDatas",
+                "position": {
+                    "line": 86,
+                    "column": 38
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 88,
+                    "column": 17
+                }
+            },
+            {
+                "name": "TopicRouteData",
+                "position": {
+                    "line": 62,
+                    "column": 48
+                }
+            }
+        ],
+        "calledMethods": [
+            "DefaultAdminService.getTopicRouteDataDirectlyFromNameServer(String topic)",
+            "DefaultAdminService.getTopicRouteDataDirectlyFromNameServer(String topic)",
+            "DefaultAdminService.createTopicOnBroker(String topic, int wQueueNum, int rQueueNum, List<BrokerData> curBrokerDataList, List<BrokerData> sampleBrokerDataList, boolean examineTopic, int retryCheckCount)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "createTopicOnBroker",
+        "category": "method_declaration",
+        "class": "DefaultAdminService",
+        "signature": "createTopicOnBroker(String topic, int wQueueNum, int rQueueNum, List<BrokerData> curBrokerDataList, List<BrokerData> sampleBrokerDataList, boolean examineTopic, int retryCheckCount)",
+        "class_signature": "DefaultAdminService.createTopicOnBroker(String topic, int wQueueNum, int rQueueNum, List<BrokerData> curBrokerDataList, List<BrokerData> sampleBrokerDataList, boolean examineTopic, int retryCheckCount)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ],
+            [
+                "int",
+                "wQueueNum"
+            ],
+            [
+                "int",
+                "rQueueNum"
+            ],
+            [
+                "List<BrokerData>",
+                "curBrokerDataList"
+            ],
+            [
+                "List<BrokerData>",
+                "sampleBrokerDataList"
+            ],
+            [
+                "boolean",
+                "examineTopic"
+            ],
+            [
+                "int",
+                "retryCheckCount"
+            ]
+        ],
+        "methodBody": "{\n        Set<String> curBrokerAddr = new HashSet<>();\n        if (curBrokerDataList != null) {\n            for (BrokerData brokerData : curBrokerDataList) {\n                curBrokerAddr.add(brokerData.getBrokerAddrs().get(MixAll.MASTER_ID));\n            }\n        }\n\n        TopicConfig topicConfig = new TopicConfig();\n        topicConfig.setTopicName(topic);\n        topicConfig.setWriteQueueNums(wQueueNum);\n        topicConfig.setReadQueueNums(rQueueNum);\n        topicConfig.setPerm(PermName.PERM_READ | PermName.PERM_WRITE);\n\n        for (BrokerData brokerData : sampleBrokerDataList) {\n            String addr = brokerData.getBrokerAddrs() == null ? null : brokerData.getBrokerAddrs().get(MixAll.MASTER_ID);\n            if (addr == null) {\n                continue;\n            }\n            if (curBrokerAddr.contains(addr)) {\n                continue;\n            }\n\n            try {\n                this.getClient().createTopic(addr, TopicValidator.AUTO_CREATE_TOPIC_KEY_TOPIC, topicConfig, Duration.ofSeconds(3).toMillis());\n            } catch (Exception e) {\n                log.error(\"create topic on broker failed. topic:{}, broker:{}\", topicConfig, addr, e);\n            }\n        }\n\n        if (examineTopic) {\n            // examine topic exist.\n            int count = retryCheckCount;\n            while (count-- > 0) {\n                if (this.topicExist(topic)) {\n                    return true;\n                }\n            }\n        } else {\n            return true;\n        }\n        return false;\n    }",
+        "position": {
+            "line": 94,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "add",
+                "position": {
+                    "line": 99,
+                    "column": 31
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 99,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getBrokerAddrs",
+                "position": {
+                    "line": 99,
+                    "column": 46
+                }
+            },
+            {
+                "name": "setTopicName",
+                "position": {
+                    "line": 104,
+                    "column": 21
+                }
+            },
+            {
+                "name": "setWriteQueueNums",
+                "position": {
+                    "line": 105,
+                    "column": 21
+                }
+            },
+            {
+                "name": "setReadQueueNums",
+                "position": {
+                    "line": 106,
+                    "column": 21
+                }
+            },
+            {
+                "name": "setPerm",
+                "position": {
+                    "line": 107,
+                    "column": 21
+                }
+            },
+            {
+                "name": "getBrokerAddrs",
+                "position": {
+                    "line": 110,
+                    "column": 38
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 110,
+                    "column": 100
+                }
+            },
+            {
+                "name": "getBrokerAddrs",
+                "position": {
+                    "line": 110,
+                    "column": 83
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 114,
+                    "column": 31
+                }
+            },
+            {
+                "name": "createTopic",
+                "position": {
+                    "line": 119,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getClient",
+                "position": {
+                    "line": 119,
+                    "column": 22
+                }
+            },
+            {
+                "name": "toMillis",
+                "position": {
+                    "line": 119,
+                    "column": 131
+                }
+            },
+            {
+                "name": "ofSeconds",
+                "position": {
+                    "line": 119,
+                    "column": 118
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 121,
+                    "column": 21
+                }
+            },
+            {
+                "name": "topicExist",
+                "position": {
+                    "line": 129,
+                    "column": 26
+                }
+            },
+            {
+                "name": "HashSet<>",
+                "position": {
+                    "line": 96,
+                    "column": 41
+                }
+            },
+            {
+                "name": "TopicConfig",
+                "position": {
+                    "line": 103,
+                    "column": 39
+                }
+            }
+        ],
+        "calledMethods": [
+            "DefaultAdminService.getClient()",
+            "DefaultAdminService.topicExist(String topic)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "getTopicRouteDataDirectlyFromNameServer",
+        "category": "method_declaration",
+        "class": "DefaultAdminService",
+        "signature": "getTopicRouteDataDirectlyFromNameServer(String topic)",
+        "class_signature": "DefaultAdminService.getTopicRouteDataDirectlyFromNameServer(String topic)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "topic"
+            ]
+        ],
+        "methodBody": "{\n        return this.getClient().getTopicRouteInfoFromNameServer(topic, Duration.ofSeconds(3).toMillis());\n    }",
+        "position": {
+            "line": 139,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getTopicRouteInfoFromNameServer",
+                "position": {
+                    "line": 140,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getClient",
+                "position": {
+                    "line": 140,
+                    "column": 21
+                }
+            },
+            {
+                "name": "toMillis",
+                "position": {
+                    "line": 140,
+                    "column": 94
+                }
+            },
+            {
+                "name": "ofSeconds",
+                "position": {
+                    "line": 140,
+                    "column": 81
+                }
+            }
+        ],
+        "calledMethods": [
+            "DefaultAdminService.getClient()"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "getClient",
+        "category": "method_declaration",
+        "class": "DefaultAdminService",
+        "signature": "getClient()",
+        "class_signature": "DefaultAdminService.getClient()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return this.mqClientAPIFactory.getClient();\n    }",
+        "position": {
+            "line": 143,
+            "column": 30
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getClient",
+                "position": {
+                    "line": 144,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 5
+    }
+]

@@ -1,0 +1,1376 @@
+[
+    {
+        "name": "asyncEntryWithNoChain",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "asyncEntryWithNoChain(ResourceWrapper resourceWrapper, Context context)",
+        "class_signature": "CtSph.asyncEntryWithNoChain(ResourceWrapper resourceWrapper, Context context)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "Context",
+                "context"
+            ]
+        ],
+        "methodBody": "{\n        AsyncEntry entry = new AsyncEntry(resourceWrapper, null, context);\n        entry.initAsyncContext();\n        // The async entry will be removed from current context as soon as it has been created.\n        entry.cleanCurrentEntryInLocal();\n        return entry;\n    }",
+        "position": {
+            "line": 56,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "initAsyncContext",
+                "position": {
+                    "line": 58,
+                    "column": 15
+                }
+            },
+            {
+                "name": "cleanCurrentEntryInLocal",
+                "position": {
+                    "line": 60,
+                    "column": 15
+                }
+            },
+            {
+                "name": "AsyncEntry",
+                "position": {
+                    "line": 57,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 24
+    },
+    {
+        "name": "asyncEntryWithPriorityInternal",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "asyncEntryWithPriorityInternal(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)",
+        "class_signature": "CtSph.asyncEntryWithPriorityInternal(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ],
+            [
+                "Object...",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        Context context = ContextUtil.getContext();\n        if (context instanceof NullContext) {\n            // The {@link NullContext} indicates that the amount of context has exceeded the threshold,\n            // so here init the entry only. No rule checking will be done.\n            return asyncEntryWithNoChain(resourceWrapper, context);\n        }\n        if (context == null) {\n            // Using default context.\n            context = InternalContextUtil.internalEnter(Constants.CONTEXT_DEFAULT_NAME);\n        }\n\n        // Global switch is turned off, so no rule checking will be done.\n        if (!Constants.ON) {\n            return asyncEntryWithNoChain(resourceWrapper, context);\n        }\n\n        ProcessorSlot<Object> chain = lookProcessChain(resourceWrapper);\n\n        // Means processor cache size exceeds {@link Constants.MAX_SLOT_CHAIN_SIZE}, so no rule checking will be done.\n        if (chain == null) {\n            return asyncEntryWithNoChain(resourceWrapper, context);\n        }\n\n        AsyncEntry asyncEntry = new AsyncEntry(resourceWrapper, chain, context, count, args);\n        try {\n            chain.entry(context, resourceWrapper, null, count, prioritized, args);\n            // Initiate the async context only when the entry successfully passed the slot chain.\n            asyncEntry.initAsyncContext();\n            // The asynchronous call may take time in background, and current context should not be hanged on it.\n            // So we need to remove current async entry from current context.\n            asyncEntry.cleanCurrentEntryInLocal();\n        } catch (BlockException e1) {\n            // When blocked, the async entry will be exited on current context.\n            // The async context will not be initialized.\n            asyncEntry.exitForContext(context, count, args);\n            throw e1;\n        } catch (Throwable e1) {\n            // This should not happen, unless there are errors existing in Sentinel internal.\n            // When this happens, async context is not initialized.\n            RecordLog.warn(\"Sentinel unexpected exception in asyncEntryInternal\", e1);\n\n            asyncEntry.cleanCurrentEntryInLocal();\n        }\n        return asyncEntry;\n    }",
+        "position": {
+            "line": 64,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getContext",
+                "position": {
+                    "line": 66,
+                    "column": 39
+                }
+            },
+            {
+                "name": "asyncEntryWithNoChain",
+                "position": {
+                    "line": 70,
+                    "column": 20
+                }
+            },
+            {
+                "name": "internalEnter",
+                "position": {
+                    "line": 74,
+                    "column": 43
+                }
+            },
+            {
+                "name": "asyncEntryWithNoChain",
+                "position": {
+                    "line": 79,
+                    "column": 20
+                }
+            },
+            {
+                "name": "lookProcessChain",
+                "position": {
+                    "line": 82,
+                    "column": 39
+                }
+            },
+            {
+                "name": "asyncEntryWithNoChain",
+                "position": {
+                    "line": 86,
+                    "column": 20
+                }
+            },
+            {
+                "name": "entry",
+                "position": {
+                    "line": 91,
+                    "column": 19
+                }
+            },
+            {
+                "name": "initAsyncContext",
+                "position": {
+                    "line": 93,
+                    "column": 24
+                }
+            },
+            {
+                "name": "cleanCurrentEntryInLocal",
+                "position": {
+                    "line": 96,
+                    "column": 24
+                }
+            },
+            {
+                "name": "exitForContext",
+                "position": {
+                    "line": 100,
+                    "column": 24
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 105,
+                    "column": 23
+                }
+            },
+            {
+                "name": "cleanCurrentEntryInLocal",
+                "position": {
+                    "line": 107,
+                    "column": 24
+                }
+            },
+            {
+                "name": "AsyncEntry",
+                "position": {
+                    "line": 89,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.asyncEntryWithNoChain(ResourceWrapper resourceWrapper, Context context)",
+            "InternalContextUtil.internalEnter(String name)",
+            "CtSph.asyncEntryWithNoChain(ResourceWrapper resourceWrapper, Context context)",
+            "CtSph.lookProcessChain(ResourceWrapper resourceWrapper)",
+            "CtSph.asyncEntryWithNoChain(ResourceWrapper resourceWrapper, Context context)"
+        ],
+        "priority": 22
+    },
+    {
+        "name": "asyncEntryInternal",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "asyncEntryInternal(ResourceWrapper resourceWrapper, int count, Object... args)",
+        "class_signature": "CtSph.asyncEntryInternal(ResourceWrapper resourceWrapper, int count, Object... args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "Object...",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        return asyncEntryWithPriorityInternal(resourceWrapper, count, false, args);\n    }",
+        "position": {
+            "line": 112,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "asyncEntryWithPriorityInternal",
+                "position": {
+                    "line": 114,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.asyncEntryWithPriorityInternal(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "entryWithPriority",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entryWithPriority(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)",
+        "class_signature": "CtSph.entryWithPriority(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ],
+            [
+                "Object...",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        Context context = ContextUtil.getContext();\n        if (context instanceof NullContext) {\n            // The {@link NullContext} indicates that the amount of context has exceeded the threshold,\n            // so here init the entry only. No rule checking will be done.\n            return new CtEntry(resourceWrapper, null, context);\n        }\n\n        if (context == null) {\n            // Using default context.\n            context = InternalContextUtil.internalEnter(Constants.CONTEXT_DEFAULT_NAME);\n        }\n\n        // Global switch is close, no rule checking will do.\n        if (!Constants.ON) {\n            return new CtEntry(resourceWrapper, null, context);\n        }\n\n        ProcessorSlot<Object> chain = lookProcessChain(resourceWrapper);\n\n        /*\n         * Means amount of resources (slot chain) exceeds {@link Constants.MAX_SLOT_CHAIN_SIZE},\n         * so no rule checking will be done.\n         */\n        if (chain == null) {\n            return new CtEntry(resourceWrapper, null, context);\n        }\n\n        Entry e = new CtEntry(resourceWrapper, chain, context, count, args);\n        try {\n            chain.entry(context, resourceWrapper, null, count, prioritized, args);\n        } catch (BlockException e1) {\n            e.exit(count, args);\n            throw e1;\n        } catch (Throwable e1) {\n            // This should not happen, unless there are errors existing in Sentinel internal.\n            RecordLog.info(\"Sentinel unexpected exception\", e1);\n        }\n        return e;\n    }",
+        "position": {
+            "line": 117,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getContext",
+                "position": {
+                    "line": 119,
+                    "column": 39
+                }
+            },
+            {
+                "name": "internalEnter",
+                "position": {
+                    "line": 128,
+                    "column": 43
+                }
+            },
+            {
+                "name": "lookProcessChain",
+                "position": {
+                    "line": 136,
+                    "column": 39
+                }
+            },
+            {
+                "name": "entry",
+                "position": {
+                    "line": 148,
+                    "column": 19
+                }
+            },
+            {
+                "name": "exit",
+                "position": {
+                    "line": 150,
+                    "column": 15
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 154,
+                    "column": 23
+                }
+            },
+            {
+                "name": "CtEntry",
+                "position": {
+                    "line": 123,
+                    "column": 24
+                }
+            },
+            {
+                "name": "CtEntry",
+                "position": {
+                    "line": 133,
+                    "column": 24
+                }
+            },
+            {
+                "name": "CtEntry",
+                "position": {
+                    "line": 143,
+                    "column": 24
+                }
+            },
+            {
+                "name": "CtEntry",
+                "position": {
+                    "line": 146,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "InternalContextUtil.internalEnter(String name)",
+            "CtSph.lookProcessChain(ResourceWrapper resourceWrapper)"
+        ],
+        "priority": 23
+    },
+    {
+        "name": "entry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entry(ResourceWrapper resourceWrapper, int count, Object... args)",
+        "class_signature": "CtSph.entry(ResourceWrapper resourceWrapper, int count, Object... args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "Object...",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        return entryWithPriority(resourceWrapper, count, false, args);\n    }",
+        "position": {
+            "line": 175,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entryWithPriority",
+                "position": {
+                    "line": 176,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entryWithPriority(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)"
+        ],
+        "priority": 19
+    },
+    {
+        "name": "lookProcessChain",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "lookProcessChain(ResourceWrapper resourceWrapper)",
+        "class_signature": "CtSph.lookProcessChain(ResourceWrapper resourceWrapper)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ResourceWrapper",
+                "resourceWrapper"
+            ]
+        ],
+        "methodBody": "{\n        ProcessorSlotChain chain = chainMap.get(resourceWrapper);\n        if (chain == null) {\n            synchronized (LOCK) {\n                chain = chainMap.get(resourceWrapper);\n                if (chain == null) {\n                    // Entry size limit.\n                    if (chainMap.size() >= Constants.MAX_SLOT_CHAIN_SIZE) {\n                        return null;\n                    }\n\n                    chain = SlotChainProvider.newSlotChain();\n                    Map<ResourceWrapper, ProcessorSlotChain> newMap = new HashMap<ResourceWrapper, ProcessorSlotChain>(\n                        chainMap.size() + 1);\n                    newMap.putAll(chainMap);\n                    newMap.put(resourceWrapper, chain);\n                    chainMap = newMap;\n                }\n            }\n        }\n        return chain;\n    }",
+        "position": {
+            "line": 194,
+            "column": 27
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "get",
+                "position": {
+                    "line": 195,
+                    "column": 45
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 198,
+                    "column": 34
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 201,
+                    "column": 34
+                }
+            },
+            {
+                "name": "newSlotChain",
+                "position": {
+                    "line": 205,
+                    "column": 47
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 207,
+                    "column": 34
+                }
+            },
+            {
+                "name": "putAll",
+                "position": {
+                    "line": 208,
+                    "column": 28
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 209,
+                    "column": 28
+                }
+            },
+            {
+                "name": "HashMap<ResourceWrapper, ProcessorSlotChain>",
+                "position": {
+                    "line": 206,
+                    "column": 75
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 26
+    },
+    {
+        "name": "entrySize",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entrySize()",
+        "class_signature": "CtSph.entrySize()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return chainMap.size();\n    }",
+        "position": {
+            "line": 223,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "size",
+                "position": {
+                    "line": 224,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "resetChainMap",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "resetChainMap()",
+        "class_signature": "CtSph.resetChainMap()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        chainMap.clear();\n    }",
+        "position": {
+            "line": 232,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "clear",
+                "position": {
+                    "line": 233,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "getChainMap",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "getChainMap()",
+        "class_signature": "CtSph.getChainMap()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return chainMap;\n    }",
+        "position": {
+            "line": 241,
+            "column": 53
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "internalEnter",
+        "category": "method_declaration",
+        "class": "InternalContextUtil",
+        "signature": "internalEnter(String name)",
+        "class_signature": "InternalContextUtil.internalEnter(String name)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ]
+        ],
+        "methodBody": "{\n            return trueEnter(name, \"\");\n        }",
+        "position": {
+            "line": 249,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "trueEnter",
+                "position": {
+                    "line": 250,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 25
+    },
+    {
+        "name": "internalEnter",
+        "category": "method_declaration",
+        "class": "InternalContextUtil",
+        "signature": "internalEnter(String name, String origin)",
+        "class_signature": "InternalContextUtil.internalEnter(String name, String origin)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "String",
+                "origin"
+            ]
+        ],
+        "methodBody": "{\n            return trueEnter(name, origin);\n        }",
+        "position": {
+            "line": 253,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "trueEnter",
+                "position": {
+                    "line": 254,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "entry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entry(String name)",
+        "class_signature": "CtSph.entry(String name)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ]
+        ],
+        "methodBody": "{\n        StringResourceWrapper resource = new StringResourceWrapper(name, EntryType.OUT);\n        return entry(resource, 1, OBJECTS0);\n    }",
+        "position": {
+            "line": 259,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entry",
+                "position": {
+                    "line": 261,
+                    "column": 16
+                }
+            },
+            {
+                "name": "StringResourceWrapper",
+                "position": {
+                    "line": 260,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entry(ResourceWrapper resourceWrapper, int count, Object... args)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "entry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entry(Method method)",
+        "class_signature": "CtSph.entry(Method method)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "method"
+            ]
+        ],
+        "methodBody": "{\n        MethodResourceWrapper resource = new MethodResourceWrapper(method, EntryType.OUT);\n        return entry(resource, 1, OBJECTS0);\n    }",
+        "position": {
+            "line": 265,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entry",
+                "position": {
+                    "line": 267,
+                    "column": 16
+                }
+            },
+            {
+                "name": "MethodResourceWrapper",
+                "position": {
+                    "line": 266,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entry(ResourceWrapper resourceWrapper, int count, Object... args)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "entry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entry(Method method, EntryType type)",
+        "class_signature": "CtSph.entry(Method method, EntryType type)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "method"
+            ],
+            [
+                "EntryType",
+                "type"
+            ]
+        ],
+        "methodBody": "{\n        MethodResourceWrapper resource = new MethodResourceWrapper(method, type);\n        return entry(resource, 1, OBJECTS0);\n    }",
+        "position": {
+            "line": 271,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entry",
+                "position": {
+                    "line": 273,
+                    "column": 16
+                }
+            },
+            {
+                "name": "MethodResourceWrapper",
+                "position": {
+                    "line": 272,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entry(ResourceWrapper resourceWrapper, int count, Object... args)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "entry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entry(String name, EntryType type)",
+        "class_signature": "CtSph.entry(String name, EntryType type)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "EntryType",
+                "type"
+            ]
+        ],
+        "methodBody": "{\n        StringResourceWrapper resource = new StringResourceWrapper(name, type);\n        return entry(resource, 1, OBJECTS0);\n    }",
+        "position": {
+            "line": 277,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entry",
+                "position": {
+                    "line": 279,
+                    "column": 16
+                }
+            },
+            {
+                "name": "StringResourceWrapper",
+                "position": {
+                    "line": 278,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entry(ResourceWrapper resourceWrapper, int count, Object... args)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "entry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entry(Method method, EntryType type, int count)",
+        "class_signature": "CtSph.entry(Method method, EntryType type, int count)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "method"
+            ],
+            [
+                "EntryType",
+                "type"
+            ],
+            [
+                "int",
+                "count"
+            ]
+        ],
+        "methodBody": "{\n        MethodResourceWrapper resource = new MethodResourceWrapper(method, type);\n        return entry(resource, count, OBJECTS0);\n    }",
+        "position": {
+            "line": 283,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entry",
+                "position": {
+                    "line": 285,
+                    "column": 16
+                }
+            },
+            {
+                "name": "MethodResourceWrapper",
+                "position": {
+                    "line": 284,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entry(ResourceWrapper resourceWrapper, int count, Object... args)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "entry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entry(String name, EntryType type, int count)",
+        "class_signature": "CtSph.entry(String name, EntryType type, int count)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "EntryType",
+                "type"
+            ],
+            [
+                "int",
+                "count"
+            ]
+        ],
+        "methodBody": "{\n        StringResourceWrapper resource = new StringResourceWrapper(name, type);\n        return entry(resource, count, OBJECTS0);\n    }",
+        "position": {
+            "line": 289,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entry",
+                "position": {
+                    "line": 291,
+                    "column": 16
+                }
+            },
+            {
+                "name": "StringResourceWrapper",
+                "position": {
+                    "line": 290,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entry(ResourceWrapper resourceWrapper, int count, Object... args)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "entry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entry(Method method, int count)",
+        "class_signature": "CtSph.entry(Method method, int count)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "method"
+            ],
+            [
+                "int",
+                "count"
+            ]
+        ],
+        "methodBody": "{\n        MethodResourceWrapper resource = new MethodResourceWrapper(method, EntryType.OUT);\n        return entry(resource, count, OBJECTS0);\n    }",
+        "position": {
+            "line": 295,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entry",
+                "position": {
+                    "line": 297,
+                    "column": 16
+                }
+            },
+            {
+                "name": "MethodResourceWrapper",
+                "position": {
+                    "line": 296,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entry(ResourceWrapper resourceWrapper, int count, Object... args)"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "entry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entry(String name, int count)",
+        "class_signature": "CtSph.entry(String name, int count)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "int",
+                "count"
+            ]
+        ],
+        "methodBody": "{\n        StringResourceWrapper resource = new StringResourceWrapper(name, EntryType.OUT);\n        return entry(resource, count, OBJECTS0);\n    }",
+        "position": {
+            "line": 301,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entry",
+                "position": {
+                    "line": 303,
+                    "column": 16
+                }
+            },
+            {
+                "name": "StringResourceWrapper",
+                "position": {
+                    "line": 302,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entry(ResourceWrapper resourceWrapper, int count, Object... args)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "entry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entry(Method method, EntryType type, int count, Object... args)",
+        "class_signature": "CtSph.entry(Method method, EntryType type, int count, Object... args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Method",
+                "method"
+            ],
+            [
+                "EntryType",
+                "type"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "Object...",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        MethodResourceWrapper resource = new MethodResourceWrapper(method, type);\n        return entry(resource, count, args);\n    }",
+        "position": {
+            "line": 307,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entry",
+                "position": {
+                    "line": 309,
+                    "column": 16
+                }
+            },
+            {
+                "name": "MethodResourceWrapper",
+                "position": {
+                    "line": 308,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entry(ResourceWrapper resourceWrapper, int count, Object... args)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "entry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entry(String name, EntryType type, int count, Object... args)",
+        "class_signature": "CtSph.entry(String name, EntryType type, int count, Object... args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "EntryType",
+                "type"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "Object...",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        StringResourceWrapper resource = new StringResourceWrapper(name, type);\n        return entry(resource, count, args);\n    }",
+        "position": {
+            "line": 313,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entry",
+                "position": {
+                    "line": 315,
+                    "column": 16
+                }
+            },
+            {
+                "name": "StringResourceWrapper",
+                "position": {
+                    "line": 314,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entry(ResourceWrapper resourceWrapper, int count, Object... args)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "asyncEntry",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "asyncEntry(String name, EntryType type, int count, Object... args)",
+        "class_signature": "CtSph.asyncEntry(String name, EntryType type, int count, Object... args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "EntryType",
+                "type"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "Object...",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        StringResourceWrapper resource = new StringResourceWrapper(name, type);\n        return asyncEntryInternal(resource, count, args);\n    }",
+        "position": {
+            "line": 319,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "asyncEntryInternal",
+                "position": {
+                    "line": 321,
+                    "column": 16
+                }
+            },
+            {
+                "name": "StringResourceWrapper",
+                "position": {
+                    "line": 320,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.asyncEntryInternal(ResourceWrapper resourceWrapper, int count, Object... args)"
+        ],
+        "priority": 14
+    },
+    {
+        "name": "entryWithPriority",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entryWithPriority(String name, EntryType type, int count, boolean prioritized)",
+        "class_signature": "CtSph.entryWithPriority(String name, EntryType type, int count, boolean prioritized)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "EntryType",
+                "type"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ]
+        ],
+        "methodBody": "{\n        StringResourceWrapper resource = new StringResourceWrapper(name, type);\n        return entryWithPriority(resource, count, prioritized);\n    }",
+        "position": {
+            "line": 325,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entryWithPriority",
+                "position": {
+                    "line": 327,
+                    "column": 16
+                }
+            },
+            {
+                "name": "StringResourceWrapper",
+                "position": {
+                    "line": 326,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entryWithPriority(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "entryWithPriority",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entryWithPriority(String name, EntryType type, int count, boolean prioritized, Object... args)",
+        "class_signature": "CtSph.entryWithPriority(String name, EntryType type, int count, boolean prioritized, Object... args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "EntryType",
+                "type"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ],
+            [
+                "Object...",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        StringResourceWrapper resource = new StringResourceWrapper(name, type);\n        return entryWithPriority(resource, count, prioritized, args);\n    }",
+        "position": {
+            "line": 331,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entryWithPriority",
+                "position": {
+                    "line": 334,
+                    "column": 16
+                }
+            },
+            {
+                "name": "StringResourceWrapper",
+                "position": {
+                    "line": 333,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entryWithPriority(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "entryWithType",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entryWithType(String name, int resourceType, EntryType entryType, int count, Object[] args)",
+        "class_signature": "CtSph.entryWithType(String name, int resourceType, EntryType entryType, int count, Object[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "int",
+                "resourceType"
+            ],
+            [
+                "EntryType",
+                "entryType"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "Object[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        return entryWithType(name, resourceType, entryType, count, false, args);\n    }",
+        "position": {
+            "line": 338,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entryWithType",
+                "position": {
+                    "line": 340,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entryWithType(String name, int resourceType, EntryType entryType, int count, boolean prioritized, Object[] args)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "entryWithType",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "entryWithType(String name, int resourceType, EntryType entryType, int count, boolean prioritized, Object[] args)",
+        "class_signature": "CtSph.entryWithType(String name, int resourceType, EntryType entryType, int count, boolean prioritized, Object[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "int",
+                "resourceType"
+            ],
+            [
+                "EntryType",
+                "entryType"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ],
+            [
+                "Object[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        StringResourceWrapper resource = new StringResourceWrapper(name, entryType, resourceType);\n        return entryWithPriority(resource, count, prioritized, args);\n    }",
+        "position": {
+            "line": 344,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "entryWithPriority",
+                "position": {
+                    "line": 347,
+                    "column": 16
+                }
+            },
+            {
+                "name": "StringResourceWrapper",
+                "position": {
+                    "line": 346,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.entryWithPriority(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)"
+        ],
+        "priority": 21
+    },
+    {
+        "name": "asyncEntryWithType",
+        "category": "method_declaration",
+        "class": "CtSph",
+        "signature": "asyncEntryWithType(String name, int resourceType, EntryType entryType, int count, boolean prioritized, Object[] args)",
+        "class_signature": "CtSph.asyncEntryWithType(String name, int resourceType, EntryType entryType, int count, boolean prioritized, Object[] args)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "name"
+            ],
+            [
+                "int",
+                "resourceType"
+            ],
+            [
+                "EntryType",
+                "entryType"
+            ],
+            [
+                "int",
+                "count"
+            ],
+            [
+                "boolean",
+                "prioritized"
+            ],
+            [
+                "Object[]",
+                "args"
+            ]
+        ],
+        "methodBody": "{\n        StringResourceWrapper resource = new StringResourceWrapper(name, entryType, resourceType);\n        return asyncEntryWithPriorityInternal(resource, count, prioritized, args);\n    }",
+        "position": {
+            "line": 351,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "asyncEntryWithPriorityInternal",
+                "position": {
+                    "line": 354,
+                    "column": 16
+                }
+            },
+            {
+                "name": "StringResourceWrapper",
+                "position": {
+                    "line": 353,
+                    "column": 46
+                }
+            }
+        ],
+        "calledMethods": [
+            "CtSph.asyncEntryWithPriorityInternal(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)"
+        ],
+        "priority": 18
+    }
+]

@@ -1,0 +1,558 @@
+[
+    {
+        "name": "WatchKeysUtil",
+        "category": "constructor_declaration",
+        "class": "WatchKeysUtil",
+        "signature": "WatchKeysUtil(AppNamespaceServiceWithCache appNamespaceService)",
+        "class_signature": "WatchKeysUtil.WatchKeysUtil(AppNamespaceServiceWithCache appNamespaceService)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "AppNamespaceServiceWithCache",
+                "appNamespaceService"
+            ]
+        ],
+        "methodBody": "{\n    this.appNamespaceService = appNamespaceService;\n  }",
+        "position": {
+            "line": 43,
+            "column": 10
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "assembleAllWatchKeys",
+        "category": "method_declaration",
+        "class": "WatchKeysUtil",
+        "signature": "assembleAllWatchKeys(String appId, String clusterName, String namespace, String dataCenter)",
+        "class_signature": "WatchKeysUtil.assembleAllWatchKeys(String appId, String clusterName, String namespace, String dataCenter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespace"
+            ],
+            [
+                "String",
+                "dataCenter"
+            ]
+        ],
+        "methodBody": "{\n    Multimap<String, String> watchedKeysMap =\n        assembleAllWatchKeys(appId, clusterName, Sets.newHashSet(namespace), dataCenter);\n    return Sets.newHashSet(watchedKeysMap.get(namespace));\n  }",
+        "position": {
+            "line": 50,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "assembleAllWatchKeys",
+                "position": {
+                    "line": 53,
+                    "column": 9
+                }
+            },
+            {
+                "name": "newHashSet",
+                "position": {
+                    "line": 53,
+                    "column": 55
+                }
+            },
+            {
+                "name": "newHashSet",
+                "position": {
+                    "line": 54,
+                    "column": 17
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 54,
+                    "column": 43
+                }
+            }
+        ],
+        "calledMethods": [
+            "WatchKeysUtil.assembleAllWatchKeys(String appId, String clusterName, Set<String> namespaces, String dataCenter)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "assembleAllWatchKeys",
+        "category": "method_declaration",
+        "class": "WatchKeysUtil",
+        "signature": "assembleAllWatchKeys(String appId, String clusterName, Set<String> namespaces, String dataCenter)",
+        "class_signature": "WatchKeysUtil.assembleAllWatchKeys(String appId, String clusterName, Set<String> namespaces, String dataCenter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "Set<String>",
+                "namespaces"
+            ],
+            [
+                "String",
+                "dataCenter"
+            ]
+        ],
+        "methodBody": "{\n    Multimap<String, String> watchedKeysMap =\n        assembleWatchKeys(appId, clusterName, namespaces, dataCenter);\n\n    //Every app has an 'application' namespace\n    if (!(namespaces.size() == 1 && namespaces.contains(ConfigConsts.NAMESPACE_APPLICATION))) {\n      Set<String> namespacesBelongToAppId = namespacesBelongToAppId(appId, namespaces);\n      Set<String> publicNamespaces = Sets.difference(namespaces, namespacesBelongToAppId);\n\n      //Listen on more namespaces if it's a public namespace\n      if (!publicNamespaces.isEmpty()) {\n        watchedKeysMap\n            .putAll(findPublicConfigWatchKeys(appId, clusterName, publicNamespaces, dataCenter));\n      }\n    }\n\n    return watchedKeysMap;\n  }",
+        "position": {
+            "line": 62,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "assembleWatchKeys",
+                "position": {
+                    "line": 66,
+                    "column": 9
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 69,
+                    "column": 22
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 69,
+                    "column": 48
+                }
+            },
+            {
+                "name": "namespacesBelongToAppId",
+                "position": {
+                    "line": 70,
+                    "column": 45
+                }
+            },
+            {
+                "name": "difference",
+                "position": {
+                    "line": 71,
+                    "column": 43
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 74,
+                    "column": 29
+                }
+            },
+            {
+                "name": "putAll",
+                "position": {
+                    "line": 76,
+                    "column": 14
+                }
+            },
+            {
+                "name": "findPublicConfigWatchKeys",
+                "position": {
+                    "line": 76,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "WatchKeysUtil.assembleWatchKeys(String appId, String clusterName, Set<String> namespaces, String dataCenter)",
+            "WatchKeysUtil.namespacesBelongToAppId(String appId, Set<String> namespaces)",
+            "WatchKeysUtil.findPublicConfigWatchKeys(String applicationId, String clusterName, Set<String> namespaces, String dataCenter)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "findPublicConfigWatchKeys",
+        "category": "method_declaration",
+        "class": "WatchKeysUtil",
+        "signature": "findPublicConfigWatchKeys(String applicationId, String clusterName, Set<String> namespaces, String dataCenter)",
+        "class_signature": "WatchKeysUtil.findPublicConfigWatchKeys(String applicationId, String clusterName, Set<String> namespaces, String dataCenter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "applicationId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "Set<String>",
+                "namespaces"
+            ],
+            [
+                "String",
+                "dataCenter"
+            ]
+        ],
+        "methodBody": "{\n    Multimap<String, String> watchedKeysMap = HashMultimap.create();\n    List<AppNamespace> appNamespaces = appNamespaceService.findPublicNamespacesByNames(namespaces);\n\n    for (AppNamespace appNamespace : appNamespaces) {\n      //check whether the namespace's appId equals to current one\n      if (Objects.equals(applicationId, appNamespace.getAppId())) {\n        continue;\n      }\n\n      String publicConfigAppId = appNamespace.getAppId();\n\n      watchedKeysMap.putAll(appNamespace.getName(),\n          assembleWatchKeys(publicConfigAppId, clusterName, appNamespace.getName(), dataCenter));\n    }\n\n    return watchedKeysMap;\n  }",
+        "position": {
+            "line": 83,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "create",
+                "position": {
+                    "line": 87,
+                    "column": 60
+                }
+            },
+            {
+                "name": "findPublicNamespacesByNames",
+                "position": {
+                    "line": 88,
+                    "column": 60
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 92,
+                    "column": 19
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 92,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getAppId",
+                "position": {
+                    "line": 96,
+                    "column": 47
+                }
+            },
+            {
+                "name": "putAll",
+                "position": {
+                    "line": 98,
+                    "column": 22
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 98,
+                    "column": 42
+                }
+            },
+            {
+                "name": "assembleWatchKeys",
+                "position": {
+                    "line": 99,
+                    "column": 11
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 99,
+                    "column": 74
+                }
+            }
+        ],
+        "calledMethods": [
+            "WatchKeysUtil.assembleWatchKeys(String appId, String clusterName, String namespace, String dataCenter)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "assembleWatchKeys",
+        "category": "method_declaration",
+        "class": "WatchKeysUtil",
+        "signature": "assembleWatchKeys(String appId, String clusterName, String namespace, String dataCenter)",
+        "class_signature": "WatchKeysUtil.assembleWatchKeys(String appId, String clusterName, String namespace, String dataCenter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespace"
+            ],
+            [
+                "String",
+                "dataCenter"
+            ]
+        ],
+        "methodBody": "{\n    if (ConfigConsts.NO_APPID_PLACEHOLDER.equalsIgnoreCase(appId)) {\n      return Collections.emptySet();\n    }\n    Set<String> watchedKeys = Sets.newHashSet();\n\n    //watch specified cluster config change\n    if (!Objects.equals(ConfigConsts.CLUSTER_NAME_DEFAULT, clusterName)) {\n      watchedKeys.add(generate(appId, clusterName, namespace));\n    }\n\n    //watch data center config change\n    if (!Strings.isNullOrEmpty(dataCenter) && !Objects.equals(dataCenter, clusterName)) {\n      watchedKeys.add(generate(appId, dataCenter, namespace));\n    }\n\n    //watch default cluster config change\n    watchedKeys.add(generate(appId, ConfigConsts.CLUSTER_NAME_DEFAULT, namespace));\n\n    return watchedKeys;\n  }",
+        "position": {
+            "line": 105,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equalsIgnoreCase",
+                "position": {
+                    "line": 107,
+                    "column": 43
+                }
+            },
+            {
+                "name": "emptySet",
+                "position": {
+                    "line": 108,
+                    "column": 26
+                }
+            },
+            {
+                "name": "newHashSet",
+                "position": {
+                    "line": 110,
+                    "column": 36
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 113,
+                    "column": 18
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 114,
+                    "column": 19
+                }
+            },
+            {
+                "name": "generate",
+                "position": {
+                    "line": 114,
+                    "column": 23
+                }
+            },
+            {
+                "name": "isNullOrEmpty",
+                "position": {
+                    "line": 118,
+                    "column": 18
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 118,
+                    "column": 56
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 119,
+                    "column": 19
+                }
+            },
+            {
+                "name": "generate",
+                "position": {
+                    "line": 119,
+                    "column": 23
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 123,
+                    "column": 17
+                }
+            },
+            {
+                "name": "generate",
+                "position": {
+                    "line": 123,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "assembleWatchKeys",
+        "category": "method_declaration",
+        "class": "WatchKeysUtil",
+        "signature": "assembleWatchKeys(String appId, String clusterName, Set<String> namespaces, String dataCenter)",
+        "class_signature": "WatchKeysUtil.assembleWatchKeys(String appId, String clusterName, Set<String> namespaces, String dataCenter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "Set<String>",
+                "namespaces"
+            ],
+            [
+                "String",
+                "dataCenter"
+            ]
+        ],
+        "methodBody": "{\n    Multimap<String, String> watchedKeysMap = HashMultimap.create();\n\n    for (String namespace : namespaces) {\n      watchedKeysMap\n          .putAll(namespace, assembleWatchKeys(appId, clusterName, namespace, dataCenter));\n    }\n\n    return watchedKeysMap;\n  }",
+        "position": {
+            "line": 128,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "create",
+                "position": {
+                    "line": 131,
+                    "column": 60
+                }
+            },
+            {
+                "name": "putAll",
+                "position": {
+                    "line": 135,
+                    "column": 12
+                }
+            },
+            {
+                "name": "assembleWatchKeys",
+                "position": {
+                    "line": 135,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "WatchKeysUtil.assembleWatchKeys(String appId, String clusterName, String namespace, String dataCenter)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "namespacesBelongToAppId",
+        "category": "method_declaration",
+        "class": "WatchKeysUtil",
+        "signature": "namespacesBelongToAppId(String appId, Set<String> namespaces)",
+        "class_signature": "WatchKeysUtil.namespacesBelongToAppId(String appId, Set<String> namespaces)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "Set<String>",
+                "namespaces"
+            ]
+        ],
+        "methodBody": "{\n    if (ConfigConsts.NO_APPID_PLACEHOLDER.equalsIgnoreCase(appId)) {\n      return Collections.emptySet();\n    }\n    List<AppNamespace> appNamespaces =\n        appNamespaceService.findByAppIdAndNamespaces(appId, namespaces);\n\n    if (appNamespaces == null || appNamespaces.isEmpty()) {\n      return Collections.emptySet();\n    }\n\n    return appNamespaces.stream().map(AppNamespace::getName).collect(Collectors.toSet());\n  }",
+        "position": {
+            "line": 141,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equalsIgnoreCase",
+                "position": {
+                    "line": 142,
+                    "column": 43
+                }
+            },
+            {
+                "name": "emptySet",
+                "position": {
+                    "line": 143,
+                    "column": 26
+                }
+            },
+            {
+                "name": "findByAppIdAndNamespaces",
+                "position": {
+                    "line": 146,
+                    "column": 29
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 148,
+                    "column": 48
+                }
+            },
+            {
+                "name": "emptySet",
+                "position": {
+                    "line": 149,
+                    "column": 26
+                }
+            },
+            {
+                "name": "collect",
+                "position": {
+                    "line": 152,
+                    "column": 62
+                }
+            },
+            {
+                "name": "map",
+                "position": {
+                    "line": 152,
+                    "column": 35
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 152,
+                    "column": 26
+                }
+            },
+            {
+                "name": "toSet",
+                "position": {
+                    "line": 152,
+                    "column": 81
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    }
+]

@@ -1,0 +1,850 @@
+[
+    {
+        "name": "ConfigFileController",
+        "category": "constructor_declaration",
+        "class": "ConfigFileController",
+        "signature": "ConfigFileController(ConfigController configController, NamespaceUtil namespaceUtil, WatchKeysUtil watchKeysUtil, GrayReleaseRulesHolder grayReleaseRulesHolder)",
+        "class_signature": "ConfigFileController.ConfigFileController(ConfigController configController, NamespaceUtil namespaceUtil, WatchKeysUtil watchKeysUtil, GrayReleaseRulesHolder grayReleaseRulesHolder)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConfigController",
+                "configController"
+            ],
+            [
+                "NamespaceUtil",
+                "namespaceUtil"
+            ],
+            [
+                "WatchKeysUtil",
+                "watchKeysUtil"
+            ],
+            [
+                "GrayReleaseRulesHolder",
+                "grayReleaseRulesHolder"
+            ]
+        ],
+        "methodBody": "{\n    localCache = CacheBuilder.newBuilder()\n        .expireAfterWrite(EXPIRE_AFTER_WRITE, TimeUnit.MINUTES)\n        .weigher((Weigher<String, String>) (key, value) -> value == null ? 0 : value.length())\n        .maximumWeight(MAX_CACHE_SIZE)\n        .removalListener(notification -> {\n          String cacheKey = notification.getKey();\n          logger.debug(\"removing cache key: {}\", cacheKey);\n          if (!cacheKey2WatchedKeys.containsKey(cacheKey)) {\n            return;\n          }\n          //create a new list to avoid ConcurrentModificationException\n          List<String> watchedKeys = new ArrayList<>(cacheKey2WatchedKeys.get(cacheKey));\n          for (String watchedKey : watchedKeys) {\n            watchedKeys2CacheKey.remove(watchedKey, cacheKey);\n          }\n          cacheKey2WatchedKeys.removeAll(cacheKey);\n          logger.debug(\"removed cache key: {}\", cacheKey);\n        })\n        .build();\n    propertiesResponseHeaders = new HttpHeaders();\n    propertiesResponseHeaders.add(\"Content-Type\", \"text/plain;charset=UTF-8\");\n    jsonResponseHeaders = new HttpHeaders();\n    jsonResponseHeaders.add(\"Content-Type\", \"application/json;charset=UTF-8\");\n    NOT_FOUND_RESPONSE = new ResponseEntity<>(HttpStatus.NOT_FOUND);\n    this.configController = configController;\n    this.namespaceUtil = namespaceUtil;\n    this.watchKeysUtil = watchKeysUtil;\n    this.grayReleaseRulesHolder = grayReleaseRulesHolder;\n  }",
+        "position": {
+            "line": 85,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "build",
+                "position": {
+                    "line": 108,
+                    "column": 10
+                }
+            },
+            {
+                "name": "removalListener",
+                "position": {
+                    "line": 94,
+                    "column": 10
+                }
+            },
+            {
+                "name": "maximumWeight",
+                "position": {
+                    "line": 93,
+                    "column": 10
+                }
+            },
+            {
+                "name": "weigher",
+                "position": {
+                    "line": 92,
+                    "column": 10
+                }
+            },
+            {
+                "name": "expireAfterWrite",
+                "position": {
+                    "line": 91,
+                    "column": 10
+                }
+            },
+            {
+                "name": "newBuilder",
+                "position": {
+                    "line": 90,
+                    "column": 31
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 92,
+                    "column": 86
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 95,
+                    "column": 42
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 96,
+                    "column": 18
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 97,
+                    "column": 37
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 101,
+                    "column": 75
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 103,
+                    "column": 34
+                }
+            },
+            {
+                "name": "removeAll",
+                "position": {
+                    "line": 105,
+                    "column": 32
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 106,
+                    "column": 18
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 110,
+                    "column": 31
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 112,
+                    "column": 25
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 101,
+                    "column": 42
+                }
+            },
+            {
+                "name": "HttpHeaders",
+                "position": {
+                    "line": 109,
+                    "column": 37
+                }
+            },
+            {
+                "name": "HttpHeaders",
+                "position": {
+                    "line": 111,
+                    "column": 31
+                }
+            },
+            {
+                "name": "ResponseEntity<>",
+                "position": {
+                    "line": 113,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "queryConfigAsProperties",
+        "category": "method_declaration",
+        "class": "ConfigFileController",
+        "signature": "queryConfigAsProperties(String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)",
+        "class_signature": "ConfigFileController.queryConfigAsProperties(String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespace"
+            ],
+            [
+                "String",
+                "dataCenter"
+            ],
+            [
+                "String",
+                "clientIp"
+            ],
+            [
+                "String",
+                "clientLabel"
+            ],
+            [
+                "HttpServletRequest",
+                "request"
+            ],
+            [
+                "HttpServletResponse",
+                "response"
+            ]
+        ],
+        "methodBody": "{\n\n    String result =\n        queryConfig(ConfigFileOutputFormat.PROPERTIES, appId, clusterName, namespace, dataCenter,\n            clientIp, clientLabel, request, response);\n\n    if (result == null) {\n      return NOT_FOUND_RESPONSE;\n    }\n\n    return new ResponseEntity<>(result, propertiesResponseHeaders, HttpStatus.OK);\n  }",
+        "position": {
+            "line": 121,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "queryConfig",
+                "position": {
+                    "line": 132,
+                    "column": 9
+                }
+            },
+            {
+                "name": "ResponseEntity<>",
+                "position": {
+                    "line": 139,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigFileController.queryConfig(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "queryConfigAsJson",
+        "category": "method_declaration",
+        "class": "ConfigFileController",
+        "signature": "queryConfigAsJson(String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)",
+        "class_signature": "ConfigFileController.queryConfigAsJson(String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespace"
+            ],
+            [
+                "String",
+                "dataCenter"
+            ],
+            [
+                "String",
+                "clientIp"
+            ],
+            [
+                "String",
+                "clientLabel"
+            ],
+            [
+                "HttpServletRequest",
+                "request"
+            ],
+            [
+                "HttpServletResponse",
+                "response"
+            ]
+        ],
+        "methodBody": "{\n\n    String result =\n        queryConfig(ConfigFileOutputFormat.JSON, appId, clusterName, namespace, dataCenter,\n            clientIp, clientLabel, request, response);\n\n    if (result == null) {\n      return NOT_FOUND_RESPONSE;\n    }\n\n    return new ResponseEntity<>(result, jsonResponseHeaders, HttpStatus.OK);\n  }",
+        "position": {
+            "line": 143,
+            "column": 33
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "queryConfig",
+                "position": {
+                    "line": 153,
+                    "column": 9
+                }
+            },
+            {
+                "name": "ResponseEntity<>",
+                "position": {
+                    "line": 160,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigFileController.queryConfig(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "queryConfig",
+        "category": "method_declaration",
+        "class": "ConfigFileController",
+        "signature": "queryConfig(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)",
+        "class_signature": "ConfigFileController.queryConfig(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConfigFileOutputFormat",
+                "outputFormat"
+            ],
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespace"
+            ],
+            [
+                "String",
+                "dataCenter"
+            ],
+            [
+                "String",
+                "clientIp"
+            ],
+            [
+                "String",
+                "clientLabel"
+            ],
+            [
+                "HttpServletRequest",
+                "request"
+            ],
+            [
+                "HttpServletResponse",
+                "response"
+            ]
+        ],
+        "methodBody": "{\n    //strip out .properties suffix\n    namespace = namespaceUtil.filterNamespaceName(namespace);\n    //fix the character case issue, such as FX.apollo <-> fx.apollo\n    namespace = namespaceUtil.normalizeNamespace(appId, namespace);\n\n    if (Strings.isNullOrEmpty(clientIp)) {\n      clientIp = WebUtils.tryToGetClientIp(request);\n    }\n\n    //1. check whether this client has gray release rules\n    boolean hasGrayReleaseRule = grayReleaseRulesHolder.hasGrayReleaseRule(appId, clientIp,\n        namespace);\n\n    String cacheKey = assembleCacheKey(outputFormat, appId, clusterName, namespace, dataCenter);\n\n    //2. try to load gray release and return\n    if (hasGrayReleaseRule) {\n      Tracer.logEvent(\"ConfigFile.Cache.GrayRelease\", cacheKey);\n      return loadConfig(outputFormat, appId, clusterName, namespace, dataCenter, clientIp, clientLabel,\n          request, response);\n    }\n\n    //3. if not gray release, check weather cache exists, if exists, return\n    String result = localCache.getIfPresent(cacheKey);\n\n    //4. if not exists, load from ConfigController\n    if (Strings.isNullOrEmpty(result)) {\n      Tracer.logEvent(\"ConfigFile.Cache.Miss\", cacheKey);\n      result = loadConfig(outputFormat, appId, clusterName, namespace, dataCenter, clientIp, clientLabel,\n          request, response);\n\n      if (result == null) {\n        return null;\n      }\n      //5. Double check if this client needs to load gray release, if yes, load from db again\n      //This step is mainly to avoid cache pollution\n      if (grayReleaseRulesHolder.hasGrayReleaseRule(appId, clientIp, namespace)) {\n        Tracer.logEvent(\"ConfigFile.Cache.GrayReleaseConflict\", cacheKey);\n        return loadConfig(outputFormat, appId, clusterName, namespace, dataCenter, clientIp, clientLabel,\n            request, response);\n      }\n\n      localCache.put(cacheKey, result);\n      logger.debug(\"adding cache for key: {}\", cacheKey);\n\n      Set<String> watchedKeys =\n          watchKeysUtil.assembleAllWatchKeys(appId, clusterName, namespace, dataCenter);\n\n      for (String watchedKey : watchedKeys) {\n        watchedKeys2CacheKey.put(watchedKey, cacheKey);\n      }\n\n      cacheKey2WatchedKeys.putAll(cacheKey, watchedKeys);\n      logger.debug(\"added cache for key: {}\", cacheKey);\n    } else {\n      Tracer.logEvent(\"ConfigFile.Cache.Hit\", cacheKey);\n    }\n\n    return result;\n  }",
+        "position": {
+            "line": 163,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "filterNamespaceName",
+                "position": {
+                    "line": 168,
+                    "column": 31
+                }
+            },
+            {
+                "name": "normalizeNamespace",
+                "position": {
+                    "line": 170,
+                    "column": 31
+                }
+            },
+            {
+                "name": "isNullOrEmpty",
+                "position": {
+                    "line": 172,
+                    "column": 17
+                }
+            },
+            {
+                "name": "tryToGetClientIp",
+                "position": {
+                    "line": 173,
+                    "column": 27
+                }
+            },
+            {
+                "name": "hasGrayReleaseRule",
+                "position": {
+                    "line": 177,
+                    "column": 57
+                }
+            },
+            {
+                "name": "assembleCacheKey",
+                "position": {
+                    "line": 180,
+                    "column": 23
+                }
+            },
+            {
+                "name": "logEvent",
+                "position": {
+                    "line": 184,
+                    "column": 14
+                }
+            },
+            {
+                "name": "loadConfig",
+                "position": {
+                    "line": 185,
+                    "column": 14
+                }
+            },
+            {
+                "name": "getIfPresent",
+                "position": {
+                    "line": 190,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isNullOrEmpty",
+                "position": {
+                    "line": 193,
+                    "column": 17
+                }
+            },
+            {
+                "name": "logEvent",
+                "position": {
+                    "line": 194,
+                    "column": 14
+                }
+            },
+            {
+                "name": "loadConfig",
+                "position": {
+                    "line": 195,
+                    "column": 16
+                }
+            },
+            {
+                "name": "hasGrayReleaseRule",
+                "position": {
+                    "line": 203,
+                    "column": 34
+                }
+            },
+            {
+                "name": "logEvent",
+                "position": {
+                    "line": 204,
+                    "column": 16
+                }
+            },
+            {
+                "name": "loadConfig",
+                "position": {
+                    "line": 205,
+                    "column": 16
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 209,
+                    "column": 18
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 210,
+                    "column": 14
+                }
+            },
+            {
+                "name": "assembleAllWatchKeys",
+                "position": {
+                    "line": 213,
+                    "column": 25
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 216,
+                    "column": 30
+                }
+            },
+            {
+                "name": "putAll",
+                "position": {
+                    "line": 219,
+                    "column": 28
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 220,
+                    "column": 14
+                }
+            },
+            {
+                "name": "logEvent",
+                "position": {
+                    "line": 222,
+                    "column": 14
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigFileController.assembleCacheKey(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter)",
+            "ConfigFileController.loadConfig(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)",
+            "ConfigFileController.loadConfig(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)",
+            "ConfigFileController.loadConfig(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "loadConfig",
+        "category": "method_declaration",
+        "class": "ConfigFileController",
+        "signature": "loadConfig(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)",
+        "class_signature": "ConfigFileController.loadConfig(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter, String clientIp, String clientLabel, HttpServletRequest request, HttpServletResponse response)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConfigFileOutputFormat",
+                "outputFormat"
+            ],
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespace"
+            ],
+            [
+                "String",
+                "dataCenter"
+            ],
+            [
+                "String",
+                "clientIp"
+            ],
+            [
+                "String",
+                "clientLabel"
+            ],
+            [
+                "HttpServletRequest",
+                "request"
+            ],
+            [
+                "HttpServletResponse",
+                "response"
+            ]
+        ],
+        "methodBody": "{\n    ApolloConfig apolloConfig = configController.queryConfig(appId, clusterName, namespace,\n        dataCenter, \"-1\", clientIp, clientLabel, null, request, response);\n\n    if (apolloConfig == null || apolloConfig.getConfigurations() == null) {\n      return null;\n    }\n\n    String result = null;\n\n    switch (outputFormat) {\n      case PROPERTIES:\n        Properties properties = new Properties();\n        properties.putAll(apolloConfig.getConfigurations());\n        result = PropertiesUtil.toString(properties);\n        break;\n      case JSON:\n        result = GSON.toJson(apolloConfig.getConfigurations());\n        break;\n    }\n\n    return result;\n  }",
+        "position": {
+            "line": 228,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "queryConfig",
+                "position": {
+                    "line": 232,
+                    "column": 50
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 235,
+                    "column": 46
+                }
+            },
+            {
+                "name": "putAll",
+                "position": {
+                    "line": 244,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 244,
+                    "column": 40
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 245,
+                    "column": 33
+                }
+            },
+            {
+                "name": "toJson",
+                "position": {
+                    "line": 248,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 248,
+                    "column": 43
+                }
+            },
+            {
+                "name": "Properties",
+                "position": {
+                    "line": 243,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "assembleCacheKey",
+        "category": "method_declaration",
+        "class": "ConfigFileController",
+        "signature": "assembleCacheKey(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter)",
+        "class_signature": "ConfigFileController.assembleCacheKey(ConfigFileOutputFormat outputFormat, String appId, String clusterName, String namespace, String dataCenter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ConfigFileOutputFormat",
+                "outputFormat"
+            ],
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespace"
+            ],
+            [
+                "String",
+                "dataCenter"
+            ]
+        ],
+        "methodBody": "{\n    List<String> keyParts =\n        Lists.newArrayList(outputFormat.getValue(), appId, clusterName, namespace);\n    if (!Strings.isNullOrEmpty(dataCenter)) {\n      keyParts.add(dataCenter);\n    }\n    return STRING_JOINER.join(keyParts);\n  }",
+        "position": {
+            "line": 255,
+            "column": 10
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "newArrayList",
+                "position": {
+                    "line": 259,
+                    "column": 15
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 259,
+                    "column": 41
+                }
+            },
+            {
+                "name": "isNullOrEmpty",
+                "position": {
+                    "line": 260,
+                    "column": 18
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 261,
+                    "column": 16
+                }
+            },
+            {
+                "name": "join",
+                "position": {
+                    "line": 263,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [
+            "ConfigFileController.getValue()"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "handleMessage",
+        "category": "method_declaration",
+        "class": "ConfigFileController",
+        "signature": "handleMessage(ReleaseMessage message, String channel)",
+        "class_signature": "ConfigFileController.handleMessage(ReleaseMessage message, String channel)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "ReleaseMessage",
+                "message"
+            ],
+            [
+                "String",
+                "channel"
+            ]
+        ],
+        "methodBody": "{\n    logger.info(\"message received - channel: {}, message: {}\", channel, message);\n\n    String content = message.getMessage();\n    if (!Topics.APOLLO_RELEASE_TOPIC.equals(channel) || Strings.isNullOrEmpty(content)) {\n      return;\n    }\n\n    if (!watchedKeys2CacheKey.containsKey(content)) {\n      return;\n    }\n\n    //create a new list to avoid ConcurrentModificationException\n    List<String> cacheKeys = new ArrayList<>(watchedKeys2CacheKey.get(content));\n\n    for (String cacheKey : cacheKeys) {\n      logger.debug(\"invalidate cache key: {}\", cacheKey);\n      localCache.invalidate(cacheKey);\n    }\n  }",
+        "position": {
+            "line": 267,
+            "column": 15
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "info",
+                "position": {
+                    "line": 268,
+                    "column": 12
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 270,
+                    "column": 30
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 271,
+                    "column": 38
+                }
+            },
+            {
+                "name": "isNullOrEmpty",
+                "position": {
+                    "line": 271,
+                    "column": 65
+                }
+            },
+            {
+                "name": "containsKey",
+                "position": {
+                    "line": 275,
+                    "column": 31
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 280,
+                    "column": 67
+                }
+            },
+            {
+                "name": "debug",
+                "position": {
+                    "line": 283,
+                    "column": 14
+                }
+            },
+            {
+                "name": "invalidate",
+                "position": {
+                    "line": 284,
+                    "column": 18
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 280,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 3
+    },
+    {
+        "name": "ConfigFileOutputFormat",
+        "category": "constructor_declaration",
+        "class": "ConfigFileController",
+        "signature": "ConfigFileOutputFormat(String value)",
+        "class_signature": "ConfigFileController.ConfigFileOutputFormat(String value)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "value"
+            ]
+        ],
+        "methodBody": "{\n      this.value = value;\n    }",
+        "position": {
+            "line": 293,
+            "column": 5
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "getValue",
+        "category": "method_declaration",
+        "class": "ConfigFileController",
+        "signature": "getValue()",
+        "class_signature": "ConfigFileController.getValue()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n      return value;\n    }",
+        "position": {
+            "line": 297,
+            "column": 19
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 8
+    }
+]

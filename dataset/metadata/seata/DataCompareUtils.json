@@ -1,0 +1,1403 @@
+[
+    {
+        "name": "DataCompareUtils",
+        "category": "constructor_declaration",
+        "class": "DataCompareUtils",
+        "signature": "DataCompareUtils()",
+        "class_signature": "DataCompareUtils.DataCompareUtils()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n\n    }",
+        "position": {
+            "line": 48,
+            "column": 13
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0
+    },
+    {
+        "name": "isFieldEquals",
+        "category": "method_declaration",
+        "class": "DataCompareUtils",
+        "signature": "isFieldEquals(Field f0, Field f1)",
+        "class_signature": "DataCompareUtils.isFieldEquals(Field f0, Field f1)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Field",
+                "f0"
+            ],
+            [
+                "Field",
+                "f1"
+            ]
+        ],
+        "methodBody": "{\n        if (f0 == null) {\n            return Result.build(f1 == null);\n        } else {\n            if (f1 == null) {\n                return Result.build(false);\n            } else {\n                if (StringUtils.equalsIgnoreCase(f0.getName(), f1.getName())\n                        && f0.getType() == f1.getType()) {\n                    if (f0.getValue() == null) {\n                        return Result.build(f1.getValue() == null);\n                    } else {\n                        if (f1.getValue() == null) {\n                            return Result.buildWithParams(false, \"Field not equals, name {}, new value is null\", f0.getName());\n                        } else {\n                            String currentSerializer = AbstractUndoLogManager.getCurrentSerializer();\n                            if (StringUtils.equals(currentSerializer, FastjsonUndoLogParser.NAME)) {\n                                convertType(f0, f1);\n                            }\n                            boolean result = Objects.deepEquals(f0.getValue(), f1.getValue());\n                            if (result) {\n                                return Result.ok();\n                            } else {\n                                return Result.buildWithParams(false, \"Field not equals, name {}, old value {}, new value {}\", f0.getName(), f0.getValue(), f1.getValue());\n                            }\n                        }\n                    }\n                } else {\n                    return Result.buildWithParams(false, \"Field not equals, old name {} type {}, new name {} type {}\", f0.getName(), f0.getType(), f1.getName(), f1.getType());\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 59,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "build",
+                "position": {
+                    "line": 61,
+                    "column": 27
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 64,
+                    "column": 31
+                }
+            },
+            {
+                "name": "equalsIgnoreCase",
+                "position": {
+                    "line": 66,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 66,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 66,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 67,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 67,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 68,
+                    "column": 28
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 69,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 69,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 71,
+                    "column": 32
+                }
+            },
+            {
+                "name": "buildWithParams",
+                "position": {
+                    "line": 72,
+                    "column": 43
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 72,
+                    "column": 117
+                }
+            },
+            {
+                "name": "getCurrentSerializer",
+                "position": {
+                    "line": 74,
+                    "column": 79
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 75,
+                    "column": 45
+                }
+            },
+            {
+                "name": "convertType",
+                "position": {
+                    "line": 76,
+                    "column": 33
+                }
+            },
+            {
+                "name": "deepEquals",
+                "position": {
+                    "line": 78,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 78,
+                    "column": 68
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 78,
+                    "column": 83
+                }
+            },
+            {
+                "name": "ok",
+                "position": {
+                    "line": 80,
+                    "column": 47
+                }
+            },
+            {
+                "name": "buildWithParams",
+                "position": {
+                    "line": 82,
+                    "column": 47
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 82,
+                    "column": 130
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 82,
+                    "column": 144
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 82,
+                    "column": 159
+                }
+            },
+            {
+                "name": "buildWithParams",
+                "position": {
+                    "line": 87,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 87,
+                    "column": 123
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 87,
+                    "column": 137
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 87,
+                    "column": 151
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 87,
+                    "column": 165
+                }
+            }
+        ],
+        "calledMethods": [
+            "DataCompareUtils.convertType(Field f0, Field f1)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "convertType",
+        "category": "method_declaration",
+        "class": "DataCompareUtils",
+        "signature": "convertType(Field f0, Field f1)",
+        "class_signature": "DataCompareUtils.convertType(Field f0, Field f1)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Field",
+                "f0"
+            ],
+            [
+                "Field",
+                "f1"
+            ]
+        ],
+        "methodBody": "{\n        int f0Type = f0.getType();\n        int f1Type = f1.getType();\n        if (f0Type == Types.DATE && f0.getValue().getClass().equals(String.class)) {\n            String[] strings = f0.getValue().toString().split(\" \");\n            f0.setValue(Date.valueOf(strings[0]));\n        }\n        if (f1Type == Types.DATE && f1.getValue().getClass().equals(String.class)) {\n            String[] strings = f1.getValue().toString().split(\" \");\n            f1.setValue(Date.valueOf(strings[0]));\n        }\n        if (f0Type == Types.TIME && f0.getValue().getClass().equals(String.class)) {\n            f0.setValue(Time.valueOf(f0.getValue().toString()));\n        }\n        if (f1Type == Types.TIME && f1.getValue().getClass().equals(String.class)) {\n            f1.setValue(Time.valueOf(f1.getValue().toString()));\n        }\n        if (f0Type == Types.TIMESTAMP && f0.getValue().getClass().equals(String.class)) {\n            if (f1.getValue().getClass().equals(LocalDateTime.class)) {\n                f0.setValue(LocalDateTime.parse(f0.getValue().toString()));\n            } else {\n                f0.setValue(Timestamp.valueOf(f0.getValue().toString()));\n            }\n        }\n        if (f1Type == Types.TIMESTAMP && f1.getValue().getClass().equals(String.class)) {\n            f1.setValue(Timestamp.valueOf(f1.getValue().toString()));\n        }\n        if (f0Type == Types.DECIMAL && f0.getValue().getClass().equals(Integer.class)) {\n            f0.setValue(new BigDecimal(f0.getValue().toString()));\n        }\n        if (f1Type == Types.DECIMAL && f1.getValue().getClass().equals(Integer.class)) {\n            f1.setValue(new BigDecimal(f1.getValue().toString()));\n        }\n        if (f0Type == Types.BIGINT && f0.getValue().getClass().equals(Integer.class)) {\n            f0.setValue(Long.parseLong(f0.getValue().toString()));\n        }\n        if (f1Type == Types.BIGINT && f1.getValue().getClass().equals(Integer.class)) {\n            f1.setValue(Long.parseLong(f1.getValue().toString()));\n        }\n    }",
+        "position": {
+            "line": 93,
+            "column": 25
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getType",
+                "position": {
+                    "line": 94,
+                    "column": 25
+                }
+            },
+            {
+                "name": "getType",
+                "position": {
+                    "line": 95,
+                    "column": 25
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 96,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 96,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 96,
+                    "column": 40
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 97,
+                    "column": 57
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 97,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 97,
+                    "column": 35
+                }
+            },
+            {
+                "name": "setValue",
+                "position": {
+                    "line": 98,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 98,
+                    "column": 30
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 100,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 100,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 100,
+                    "column": 40
+                }
+            },
+            {
+                "name": "split",
+                "position": {
+                    "line": 101,
+                    "column": 57
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 101,
+                    "column": 46
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 101,
+                    "column": 35
+                }
+            },
+            {
+                "name": "setValue",
+                "position": {
+                    "line": 102,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 102,
+                    "column": 30
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 104,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 104,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 104,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setValue",
+                "position": {
+                    "line": 105,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 105,
+                    "column": 30
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 105,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 105,
+                    "column": 41
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 107,
+                    "column": 62
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 107,
+                    "column": 51
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 107,
+                    "column": 40
+                }
+            },
+            {
+                "name": "setValue",
+                "position": {
+                    "line": 108,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 108,
+                    "column": 30
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 108,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 108,
+                    "column": 41
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 110,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 110,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 110,
+                    "column": 45
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 111,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 111,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 111,
+                    "column": 20
+                }
+            },
+            {
+                "name": "setValue",
+                "position": {
+                    "line": 112,
+                    "column": 20
+                }
+            },
+            {
+                "name": "parse",
+                "position": {
+                    "line": 112,
+                    "column": 43
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 112,
+                    "column": 63
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 112,
+                    "column": 52
+                }
+            },
+            {
+                "name": "setValue",
+                "position": {
+                    "line": 114,
+                    "column": 20
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 114,
+                    "column": 39
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 114,
+                    "column": 61
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 114,
+                    "column": 50
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 117,
+                    "column": 67
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 117,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 117,
+                    "column": 45
+                }
+            },
+            {
+                "name": "setValue",
+                "position": {
+                    "line": 118,
+                    "column": 16
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 118,
+                    "column": 35
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 118,
+                    "column": 57
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 118,
+                    "column": 46
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 120,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 120,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 120,
+                    "column": 43
+                }
+            },
+            {
+                "name": "setValue",
+                "position": {
+                    "line": 121,
+                    "column": 16
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 121,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 121,
+                    "column": 43
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 123,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 123,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 123,
+                    "column": 43
+                }
+            },
+            {
+                "name": "setValue",
+                "position": {
+                    "line": 124,
+                    "column": 16
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 124,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 124,
+                    "column": 43
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 126,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 126,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 126,
+                    "column": 42
+                }
+            },
+            {
+                "name": "setValue",
+                "position": {
+                    "line": 127,
+                    "column": 16
+                }
+            },
+            {
+                "name": "parseLong",
+                "position": {
+                    "line": 127,
+                    "column": 30
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 127,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 127,
+                    "column": 43
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 129,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getClass",
+                "position": {
+                    "line": 129,
+                    "column": 53
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 129,
+                    "column": 42
+                }
+            },
+            {
+                "name": "setValue",
+                "position": {
+                    "line": 130,
+                    "column": 16
+                }
+            },
+            {
+                "name": "parseLong",
+                "position": {
+                    "line": 130,
+                    "column": 30
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 130,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 130,
+                    "column": 43
+                }
+            },
+            {
+                "name": "BigDecimal",
+                "position": {
+                    "line": 121,
+                    "column": 29
+                }
+            },
+            {
+                "name": "BigDecimal",
+                "position": {
+                    "line": 124,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 6
+    },
+    {
+        "name": "isRecordsEquals",
+        "category": "method_declaration",
+        "class": "DataCompareUtils",
+        "signature": "isRecordsEquals(TableRecords beforeImage, TableRecords afterImage)",
+        "class_signature": "DataCompareUtils.isRecordsEquals(TableRecords beforeImage, TableRecords afterImage)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "TableRecords",
+                "beforeImage"
+            ],
+            [
+                "TableRecords",
+                "afterImage"
+            ]
+        ],
+        "methodBody": "{\n        if (beforeImage == null) {\n            return Result.build(afterImage == null, null);\n        } else {\n            if (afterImage == null) {\n                return Result.build(false, null);\n            }\n            if (beforeImage.getTableName().equalsIgnoreCase(afterImage.getTableName())\n                    && CollectionUtils.isSizeEquals(beforeImage.getRows(), afterImage.getRows())) {\n                //when image is EmptyTableRecords, getTableMeta will throw an exception\n                if (CollectionUtils.isEmpty(beforeImage.getRows())) {\n                    return Result.ok();\n                }\n                return compareRows(beforeImage.getTableMeta(), beforeImage.getRows(), afterImage.getRows());\n            } else {\n                return Result.build(false, null);\n            }\n        }\n    }",
+        "position": {
+            "line": 141,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "build",
+                "position": {
+                    "line": 143,
+                    "column": 27
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 146,
+                    "column": 31
+                }
+            },
+            {
+                "name": "equalsIgnoreCase",
+                "position": {
+                    "line": 148,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getTableName",
+                "position": {
+                    "line": 148,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getTableName",
+                "position": {
+                    "line": 148,
+                    "column": 72
+                }
+            },
+            {
+                "name": "isSizeEquals",
+                "position": {
+                    "line": 149,
+                    "column": 40
+                }
+            },
+            {
+                "name": "getRows",
+                "position": {
+                    "line": 149,
+                    "column": 65
+                }
+            },
+            {
+                "name": "getRows",
+                "position": {
+                    "line": 149,
+                    "column": 87
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 151,
+                    "column": 37
+                }
+            },
+            {
+                "name": "getRows",
+                "position": {
+                    "line": 151,
+                    "column": 57
+                }
+            },
+            {
+                "name": "ok",
+                "position": {
+                    "line": 152,
+                    "column": 35
+                }
+            },
+            {
+                "name": "compareRows",
+                "position": {
+                    "line": 154,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getTableMeta",
+                "position": {
+                    "line": 154,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getRows",
+                "position": {
+                    "line": 154,
+                    "column": 76
+                }
+            },
+            {
+                "name": "getRows",
+                "position": {
+                    "line": 154,
+                    "column": 98
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 156,
+                    "column": 31
+                }
+            }
+        ],
+        "calledMethods": [
+            "DataCompareUtils.compareRows(TableMeta tableMetaData, List<Row> oldRows, List<Row> newRows)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "isRowsEquals",
+        "category": "method_declaration",
+        "class": "DataCompareUtils",
+        "signature": "isRowsEquals(TableMeta tableMetaData, List<Row> oldRows, List<Row> newRows)",
+        "class_signature": "DataCompareUtils.isRowsEquals(TableMeta tableMetaData, List<Row> oldRows, List<Row> newRows)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "TableMeta",
+                "tableMetaData"
+            ],
+            [
+                "List<Row>",
+                "oldRows"
+            ],
+            [
+                "List<Row>",
+                "newRows"
+            ]
+        ],
+        "methodBody": "{\n        if (!CollectionUtils.isSizeEquals(oldRows, newRows)) {\n            return Result.build(false, null);\n        }\n        return compareRows(tableMetaData, oldRows, newRows);\n    }",
+        "position": {
+            "line": 169,
+            "column": 35
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isSizeEquals",
+                "position": {
+                    "line": 170,
+                    "column": 30
+                }
+            },
+            {
+                "name": "build",
+                "position": {
+                    "line": 171,
+                    "column": 27
+                }
+            },
+            {
+                "name": "compareRows",
+                "position": {
+                    "line": 173,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "DataCompareUtils.compareRows(TableMeta tableMetaData, List<Row> oldRows, List<Row> newRows)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "compareRows",
+        "category": "method_declaration",
+        "class": "DataCompareUtils",
+        "signature": "compareRows(TableMeta tableMetaData, List<Row> oldRows, List<Row> newRows)",
+        "class_signature": "DataCompareUtils.compareRows(TableMeta tableMetaData, List<Row> oldRows, List<Row> newRows)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "TableMeta",
+                "tableMetaData"
+            ],
+            [
+                "List<Row>",
+                "oldRows"
+            ],
+            [
+                "List<Row>",
+                "newRows"
+            ]
+        ],
+        "methodBody": "{\n        // old row to map\n        Map<String, Map<String, Field>> oldRowsMap = rowListToMap(oldRows, tableMetaData.getPrimaryKeyOnlyName());\n        // new row to map\n        Map<String, Map<String, Field>> newRowsMap = rowListToMap(newRows, tableMetaData.getPrimaryKeyOnlyName());\n        // compare data\n        for (Map.Entry<String, Map<String, Field>> oldEntry : oldRowsMap.entrySet()) {\n            String key = oldEntry.getKey();\n            Map<String, Field> oldRow = oldEntry.getValue();\n            Map<String, Field> newRow = newRowsMap.get(key);\n            if (newRow == null) {\n                return Result.buildWithParams(false, \"compare row failed, rowKey {}, reason [newRow is null]\", key);\n            }\n            for (Map.Entry<String, Field> oldRowEntry : oldRow.entrySet()) {\n                String fieldName = oldRowEntry.getKey();\n                Field oldField = oldRowEntry.getValue();\n                Field newField = newRow.get(fieldName);\n                if (newField == null) {\n                    return Result.buildWithParams(false, \"compare row failed, rowKey {}, fieldName {}, reason [newField is null]\", key, fieldName);\n                }\n                Result<Boolean> oldEqualsNewFieldResult = isFieldEquals(oldField, newField);\n                if (!oldEqualsNewFieldResult.getResult()) {\n                    return oldEqualsNewFieldResult;\n                }\n            }\n        }\n        return Result.ok();\n    }",
+        "position": {
+            "line": 176,
+            "column": 36
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "rowListToMap",
+                "position": {
+                    "line": 178,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getPrimaryKeyOnlyName",
+                "position": {
+                    "line": 178,
+                    "column": 90
+                }
+            },
+            {
+                "name": "rowListToMap",
+                "position": {
+                    "line": 180,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getPrimaryKeyOnlyName",
+                "position": {
+                    "line": 180,
+                    "column": 90
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 182,
+                    "column": 74
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 183,
+                    "column": 35
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 184,
+                    "column": 50
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 185,
+                    "column": 52
+                }
+            },
+            {
+                "name": "buildWithParams",
+                "position": {
+                    "line": 187,
+                    "column": 31
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 189,
+                    "column": 64
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 190,
+                    "column": 48
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 191,
+                    "column": 46
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 192,
+                    "column": 41
+                }
+            },
+            {
+                "name": "buildWithParams",
+                "position": {
+                    "line": 194,
+                    "column": 35
+                }
+            },
+            {
+                "name": "isFieldEquals",
+                "position": {
+                    "line": 196,
+                    "column": 59
+                }
+            },
+            {
+                "name": "getResult",
+                "position": {
+                    "line": 197,
+                    "column": 46
+                }
+            },
+            {
+                "name": "ok",
+                "position": {
+                    "line": 202,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "DataCompareUtils.rowListToMap(List<Row> rowList, List<String> primaryKeyList)",
+            "DataCompareUtils.rowListToMap(List<Row> rowList, List<String> primaryKeyList)",
+            "DataCompareUtils.isFieldEquals(Field f0, Field f1)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "rowListToMap",
+        "category": "method_declaration",
+        "class": "DataCompareUtils",
+        "signature": "rowListToMap(List<Row> rowList, List<String> primaryKeyList)",
+        "class_signature": "DataCompareUtils.rowListToMap(List<Row> rowList, List<String> primaryKeyList)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<Row>",
+                "rowList"
+            ],
+            [
+                "List<String>",
+                "primaryKeyList"
+            ]
+        ],
+        "methodBody": "{\n        // {value of primaryKey, value of all columns}\n        Map<String, Map<String, Field>> rowMap = new HashMap<>();\n        for (Row row : rowList) {\n            //ensure the order of column\n            List<Field> rowFieldList = row.getFields().stream()\n                    .sorted(Comparator.comparing(Field::getName))\n                    .collect(Collectors.toList());\n            // {uppercase fieldName : field}\n            Map<String, Field> colsMap = new HashMap<>();\n            StringBuilder rowKey = new StringBuilder();\n            boolean firstUnderline = false;\n            for (int j = 0; j < rowFieldList.size(); j++) {\n                Field field = rowFieldList.get(j);\n                if (primaryKeyList.stream().anyMatch(e -> field.getName().equals(e))) {\n                    if (firstUnderline && j > 0) {\n                        rowKey.append(\"_\");\n                    }\n                    rowKey.append(String.valueOf(field.getValue()));\n                    firstUnderline = true;\n                }\n                colsMap.put(field.getName().trim().toUpperCase(), field);\n            }\n            rowMap.put(rowKey.toString(), colsMap);\n        }\n        return rowMap;\n    }",
+        "position": {
+            "line": 212,
+            "column": 51
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "collect",
+                "position": {
+                    "line": 219,
+                    "column": 22
+                }
+            },
+            {
+                "name": "sorted",
+                "position": {
+                    "line": 218,
+                    "column": 22
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 217,
+                    "column": 56
+                }
+            },
+            {
+                "name": "getFields",
+                "position": {
+                    "line": 217,
+                    "column": 44
+                }
+            },
+            {
+                "name": "comparing",
+                "position": {
+                    "line": 218,
+                    "column": 40
+                }
+            },
+            {
+                "name": "toList",
+                "position": {
+                    "line": 219,
+                    "column": 41
+                }
+            },
+            {
+                "name": "size",
+                "position": {
+                    "line": 224,
+                    "column": 46
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 225,
+                    "column": 44
+                }
+            },
+            {
+                "name": "anyMatch",
+                "position": {
+                    "line": 226,
+                    "column": 45
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 226,
+                    "column": 36
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 226,
+                    "column": 75
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 226,
+                    "column": 65
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 228,
+                    "column": 32
+                }
+            },
+            {
+                "name": "append",
+                "position": {
+                    "line": 230,
+                    "column": 28
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 230,
+                    "column": 42
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 230,
+                    "column": 56
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 233,
+                    "column": 25
+                }
+            },
+            {
+                "name": "toUpperCase",
+                "position": {
+                    "line": 233,
+                    "column": 52
+                }
+            },
+            {
+                "name": "trim",
+                "position": {
+                    "line": 233,
+                    "column": 45
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 233,
+                    "column": 35
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 235,
+                    "column": 20
+                }
+            },
+            {
+                "name": "toString",
+                "position": {
+                    "line": 235,
+                    "column": 31
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 214,
+                    "column": 54
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 221,
+                    "column": 46
+                }
+            },
+            {
+                "name": "StringBuilder",
+                "position": {
+                    "line": 222,
+                    "column": 40
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    }
+]

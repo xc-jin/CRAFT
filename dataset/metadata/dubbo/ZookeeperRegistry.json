@@ -1,0 +1,1684 @@
+[
+    {
+        "name": "ZookeeperRegistry",
+        "category": "constructor_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "ZookeeperRegistry(URL url, ZookeeperTransporter zookeeperTransporter)",
+        "class_signature": "ZookeeperRegistry.ZookeeperRegistry(URL url, ZookeeperTransporter zookeeperTransporter)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "ZookeeperTransporter",
+                "zookeeperTransporter"
+            ]
+        ],
+        "methodBody": "{\n        super(url);\n\n        if (url.isAnyHost()) {\n            throw new IllegalStateException(\"registry address == null\");\n        }\n\n        String group = url.getGroup(DEFAULT_ROOT);\n        if (!group.startsWith(PATH_SEPARATOR)) {\n            group = PATH_SEPARATOR + group;\n        }\n\n        this.root = group;\n        this.zkClient = zookeeperTransporter.connect(url);\n\n        this.zkClient.addStateListener((state) -> {\n            if (state == StateListener.RECONNECTED) {\n                logger.warn(\n                        REGISTRY_ZOOKEEPER_EXCEPTION,\n                        \"\",\n                        \"\",\n                        \"Trying to fetch the latest urls, in case there are provider changes during connection loss.\\n\"\n                                + \" Since ephemeral ZNode will not get deleted for a connection lose, \"\n                                + \"there's no need to re-register url of this instance.\");\n                ZookeeperRegistry.this.fetchLatestAddresses();\n            } else if (state == StateListener.NEW_SESSION_CREATED) {\n                logger.warn(\n                        REGISTRY_ZOOKEEPER_EXCEPTION,\n                        \"\",\n                        \"\",\n                        \"Trying to re-register urls and re-subscribe listeners of this instance to registry...\");\n\n                try {\n                    ZookeeperRegistry.this.recover();\n                } catch (Exception e) {\n                    logger.error(REGISTRY_ZOOKEEPER_EXCEPTION, \"\", \"\", e.getMessage(), e);\n                }\n            } else if (state == StateListener.SESSION_LOST) {\n                logger.warn(\n                        REGISTRY_ZOOKEEPER_EXCEPTION,\n                        \"\",\n                        \"\",\n                        \"Url of this instance will be deleted from registry soon. \"\n                                + \"Dubbo client will try to re-register once a new session is created.\");\n            } else if (state == StateListener.SUSPENDED) {\n\n            } else if (state == StateListener.CONNECTED) {\n\n            }\n        });\n    }",
+        "position": {
+            "line": 77,
+            "column": 12
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isAnyHost",
+                "position": {
+                    "line": 80,
+                    "column": 17
+                }
+            },
+            {
+                "name": "getGroup",
+                "position": {
+                    "line": 84,
+                    "column": 28
+                }
+            },
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 85,
+                    "column": 20
+                }
+            },
+            {
+                "name": "connect",
+                "position": {
+                    "line": 90,
+                    "column": 46
+                }
+            },
+            {
+                "name": "addStateListener",
+                "position": {
+                    "line": 92,
+                    "column": 23
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 94,
+                    "column": 24
+                }
+            },
+            {
+                "name": "fetchLatestAddresses",
+                "position": {
+                    "line": 101,
+                    "column": 40
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 103,
+                    "column": 24
+                }
+            },
+            {
+                "name": "recover",
+                "position": {
+                    "line": 110,
+                    "column": 44
+                }
+            },
+            {
+                "name": "error",
+                "position": {
+                    "line": 112,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 112,
+                    "column": 74
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 115,
+                    "column": 24
+                }
+            },
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 81,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistry.fetchLatestAddresses()"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "isAvailable",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "isAvailable()",
+        "class_signature": "ZookeeperRegistry.isAvailable()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return zkClient != null && zkClient.isConnected();\n    }",
+        "position": {
+            "line": 130,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isConnected",
+                "position": {
+                    "line": 131,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "destroy",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "destroy()",
+        "class_signature": "ZookeeperRegistry.destroy()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        super.destroy();\n\n        // remove child listener\n        Set<URL> urls = zkListeners.keySet();\n        for (URL url : urls) {\n            ConcurrentMap<NotifyListener, ChildListener> map = zkListeners.get(url);\n            if (CollectionUtils.isEmptyMap(map)) {\n                continue;\n            }\n            Collection<ChildListener> childListeners = map.values();\n            if (CollectionUtils.isEmpty(childListeners)) {\n                continue;\n            }\n            if (ANY_VALUE.equals(url.getServiceInterface())) {\n                String root = toRootPath();\n                childListeners.stream().forEach(childListener -> zkClient.removeChildListener(root, childListener));\n            } else {\n                for (String path : toCategoriesPath(url)) {\n                    childListeners.stream().forEach(childListener -> zkClient.removeChildListener(path, childListener));\n                }\n            }\n        }\n        zkListeners.clear();\n\n        // Just release zkClient reference, but can not close zk client here for zk client is shared somewhere else.\n        // See org.apache.dubbo.remoting.zookeeper.AbstractZookeeperTransporter#destroy()\n        zkClient = null;\n    }",
+        "position": {
+            "line": 135,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "destroy",
+                "position": {
+                    "line": 136,
+                    "column": 15
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 139,
+                    "column": 37
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 141,
+                    "column": 76
+                }
+            },
+            {
+                "name": "isEmptyMap",
+                "position": {
+                    "line": 142,
+                    "column": 33
+                }
+            },
+            {
+                "name": "values",
+                "position": {
+                    "line": 145,
+                    "column": 60
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 146,
+                    "column": 33
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 149,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getServiceInterface",
+                "position": {
+                    "line": 149,
+                    "column": 38
+                }
+            },
+            {
+                "name": "toRootPath",
+                "position": {
+                    "line": 150,
+                    "column": 31
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 151,
+                    "column": 41
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 151,
+                    "column": 32
+                }
+            },
+            {
+                "name": "removeChildListener",
+                "position": {
+                    "line": 151,
+                    "column": 75
+                }
+            },
+            {
+                "name": "toCategoriesPath",
+                "position": {
+                    "line": 153,
+                    "column": 36
+                }
+            },
+            {
+                "name": "forEach",
+                "position": {
+                    "line": 154,
+                    "column": 45
+                }
+            },
+            {
+                "name": "stream",
+                "position": {
+                    "line": 154,
+                    "column": 36
+                }
+            },
+            {
+                "name": "removeChildListener",
+                "position": {
+                    "line": 154,
+                    "column": 79
+                }
+            },
+            {
+                "name": "clear",
+                "position": {
+                    "line": 158,
+                    "column": 21
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistry.toRootPath()",
+            "ZookeeperRegistry.toCategoriesPath(URL url)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "checkDestroyed",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "checkDestroyed()",
+        "class_signature": "ZookeeperRegistry.checkDestroyed()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (zkClient == null) {\n            throw new IllegalStateException(\"registry is destroyed\");\n        }\n    }",
+        "position": {
+            "line": 165,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "IllegalStateException",
+                "position": {
+                    "line": 167,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 14
+    },
+    {
+        "name": "doRegister",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "doRegister(URL url)",
+        "class_signature": "ZookeeperRegistry.doRegister(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            checkDestroyed();\n            zkClient.create(toUrlPath(url), url.getParameter(DYNAMIC_KEY, true), true);\n        } catch (Throwable e) {\n            throw new RpcException(\n                    \"Failed to register \" + url + \" to zookeeper \" + getUrl() + \", cause: \" + e.getMessage(), e);\n        }\n    }",
+        "position": {
+            "line": 172,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkDestroyed",
+                "position": {
+                    "line": 174,
+                    "column": 13
+                }
+            },
+            {
+                "name": "create",
+                "position": {
+                    "line": 175,
+                    "column": 22
+                }
+            },
+            {
+                "name": "toUrlPath",
+                "position": {
+                    "line": 175,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 175,
+                    "column": 49
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 178,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 178,
+                    "column": 97
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 177,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistry.checkDestroyed()",
+            "ZookeeperRegistry.toUrlPath(URL url)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "doUnregister",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "doUnregister(URL url)",
+        "class_signature": "ZookeeperRegistry.doUnregister(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            checkDestroyed();\n            zkClient.delete(toUrlPath(url));\n        } catch (Throwable e) {\n            throw new RpcException(\n                    \"Failed to unregister \" + url + \" to zookeeper \" + getUrl() + \", cause: \" + e.getMessage(), e);\n        }\n    }",
+        "position": {
+            "line": 183,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkDestroyed",
+                "position": {
+                    "line": 185,
+                    "column": 13
+                }
+            },
+            {
+                "name": "delete",
+                "position": {
+                    "line": 186,
+                    "column": 22
+                }
+            },
+            {
+                "name": "toUrlPath",
+                "position": {
+                    "line": 186,
+                    "column": 29
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 189,
+                    "column": 72
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 189,
+                    "column": 99
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 188,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistry.checkDestroyed()",
+            "ZookeeperRegistry.toUrlPath(URL url)"
+        ],
+        "priority": 4
+    },
+    {
+        "name": "doSubscribe",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "doSubscribe(URL url, NotifyListener listener)",
+        "class_signature": "ZookeeperRegistry.doSubscribe(URL url, NotifyListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "NotifyListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            checkDestroyed();\n            if (ANY_VALUE.equals(url.getServiceInterface())) {\n                String root = toRootPath();\n                boolean check = url.getParameter(CHECK_KEY, false);\n                ConcurrentMap<NotifyListener, ChildListener> listeners =\n                        ConcurrentHashMapUtils.computeIfAbsent(zkListeners, url, k -> new ConcurrentHashMap<>());\n\n                ChildListener zkListener = ConcurrentHashMapUtils.computeIfAbsent(\n                        listeners, listener, k -> (parentPath, currentChildren) -> {\n                            for (String child : currentChildren) {\n                                try {\n                                    child = URL.decode(child);\n                                    if (!(JsonUtils.checkJson(child))) {\n                                        throw new Exception(\"dubbo-admin subscribe \" + child + \" failed,beacause \"\n                                                + child + \"is root path in \" + url);\n                                    }\n                                } catch (Exception e) {\n                                    logger.warn(PROTOCOL_ERROR_DESERIALIZE, \"\", \"\", e.getMessage());\n                                }\n                                if (!anyServices.contains(child)) {\n                                    anyServices.add(child);\n                                    subscribe(\n                                            url.setPath(child)\n                                                    .addParameters(\n                                                            INTERFACE_KEY,\n                                                            child,\n                                                            Constants.CHECK_KEY,\n                                                            String.valueOf(check)),\n                                            k);\n                                }\n                            }\n                        });\n\n                zkClient.create(root, false, true);\n\n                List<String> services = zkClient.addChildListener(root, zkListener);\n                if (CollectionUtils.isNotEmpty(services)) {\n                    for (String service : services) {\n                        service = URL.decode(service);\n                        anyServices.add(service);\n                        subscribe(\n                                url.setPath(service)\n                                        .addParameters(\n                                                INTERFACE_KEY, service, Constants.CHECK_KEY, String.valueOf(check)),\n                                listener);\n                    }\n                }\n            } else {\n                CountDownLatch latch = new CountDownLatch(1);\n\n                try {\n                    List<URL> urls = new ArrayList<>();\n\n                    /*\n                        Iterate over the category value in URL.\n                        With default settings, the path variable can be when url is a consumer URL:\n\n                            /dubbo/[service name]/providers,\n                            /dubbo/[service name]/configurators\n                            /dubbo/[service name]/routers\n                    */\n                    for (String path : toCategoriesPath(url)) {\n                        ConcurrentMap<NotifyListener, ChildListener> listeners = ConcurrentHashMapUtils.computeIfAbsent(\n                                zkListeners, url, k -> new ConcurrentHashMap<>());\n                        ChildListener zkListener = ConcurrentHashMapUtils.computeIfAbsent(\n                                listeners, listener, k -> new RegistryChildListenerImpl(url, k, latch));\n\n                        if (zkListener instanceof RegistryChildListenerImpl) {\n                            ((RegistryChildListenerImpl) zkListener).setLatch(latch);\n                        }\n\n                        // create \"directories\".\n                        zkClient.create(path, false, true);\n\n                        // Add children (i.e. service items).\n                        List<String> children = zkClient.addChildListener(path, zkListener);\n                        if (children != null) {\n                            // The invocation point that may cause 1-1.\n                            urls.addAll(toUrlsWithEmpty(url, path, children));\n                        }\n                    }\n\n                    notify(url, listener, urls);\n                } finally {\n                    // tells the listener to run only after the sync notification of main thread finishes.\n                    latch.countDown();\n                }\n            }\n        } catch (Throwable e) {\n            throw new RpcException(\n                    \"Failed to subscribe \" + url + \" to zookeeper \" + getUrl() + \", cause: \" + e.getMessage(), e);\n        }\n    }",
+        "position": {
+            "line": 194,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkDestroyed",
+                "position": {
+                    "line": 196,
+                    "column": 13
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 197,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getServiceInterface",
+                "position": {
+                    "line": 197,
+                    "column": 38
+                }
+            },
+            {
+                "name": "toRootPath",
+                "position": {
+                    "line": 198,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getParameter",
+                "position": {
+                    "line": 199,
+                    "column": 37
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 201,
+                    "column": 48
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 203,
+                    "column": 67
+                }
+            },
+            {
+                "name": "decode",
+                "position": {
+                    "line": 207,
+                    "column": 49
+                }
+            },
+            {
+                "name": "checkJson",
+                "position": {
+                    "line": 208,
+                    "column": 53
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 213,
+                    "column": 44
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 213,
+                    "column": 87
+                }
+            },
+            {
+                "name": "contains",
+                "position": {
+                    "line": 215,
+                    "column": 50
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 216,
+                    "column": 49
+                }
+            },
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 217,
+                    "column": 37
+                }
+            },
+            {
+                "name": "addParameters",
+                "position": {
+                    "line": 219,
+                    "column": 54
+                }
+            },
+            {
+                "name": "setPath",
+                "position": {
+                    "line": 218,
+                    "column": 49
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 223,
+                    "column": 68
+                }
+            },
+            {
+                "name": "create",
+                "position": {
+                    "line": 229,
+                    "column": 26
+                }
+            },
+            {
+                "name": "addChildListener",
+                "position": {
+                    "line": 231,
+                    "column": 50
+                }
+            },
+            {
+                "name": "isNotEmpty",
+                "position": {
+                    "line": 232,
+                    "column": 37
+                }
+            },
+            {
+                "name": "decode",
+                "position": {
+                    "line": 234,
+                    "column": 39
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 235,
+                    "column": 37
+                }
+            },
+            {
+                "name": "subscribe",
+                "position": {
+                    "line": 236,
+                    "column": 25
+                }
+            },
+            {
+                "name": "addParameters",
+                "position": {
+                    "line": 238,
+                    "column": 42
+                }
+            },
+            {
+                "name": "setPath",
+                "position": {
+                    "line": 237,
+                    "column": 37
+                }
+            },
+            {
+                "name": "valueOf",
+                "position": {
+                    "line": 239,
+                    "column": 101
+                }
+            },
+            {
+                "name": "toCategoriesPath",
+                "position": {
+                    "line": 257,
+                    "column": 40
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 258,
+                    "column": 105
+                }
+            },
+            {
+                "name": "computeIfAbsent",
+                "position": {
+                    "line": 260,
+                    "column": 75
+                }
+            },
+            {
+                "name": "setLatch",
+                "position": {
+                    "line": 264,
+                    "column": 70
+                }
+            },
+            {
+                "name": "create",
+                "position": {
+                    "line": 268,
+                    "column": 34
+                }
+            },
+            {
+                "name": "addChildListener",
+                "position": {
+                    "line": 271,
+                    "column": 58
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 274,
+                    "column": 34
+                }
+            },
+            {
+                "name": "toUrlsWithEmpty",
+                "position": {
+                    "line": 274,
+                    "column": 41
+                }
+            },
+            {
+                "name": "notify",
+                "position": {
+                    "line": 278,
+                    "column": 21
+                }
+            },
+            {
+                "name": "countDown",
+                "position": {
+                    "line": 281,
+                    "column": 27
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 286,
+                    "column": 71
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 286,
+                    "column": 98
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 201,
+                    "column": 91
+                }
+            },
+            {
+                "name": "Exception",
+                "position": {
+                    "line": 209,
+                    "column": 51
+                }
+            },
+            {
+                "name": "CountDownLatch",
+                "position": {
+                    "line": 244,
+                    "column": 44
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 247,
+                    "column": 42
+                }
+            },
+            {
+                "name": "ConcurrentHashMap<>",
+                "position": {
+                    "line": 259,
+                    "column": 60
+                }
+            },
+            {
+                "name": "RegistryChildListenerImpl",
+                "position": {
+                    "line": 261,
+                    "column": 63
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 285,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistry.checkDestroyed()",
+            "ZookeeperRegistry.toRootPath()",
+            "ZookeeperRegistry.toCategoriesPath(URL url)",
+            "RegistryChildListenerImpl.setLatch(CountDownLatch latch)",
+            "RegistryChildListenerImpl.RegistryChildListenerImpl(URL consumerUrl, NotifyListener listener, CountDownLatch latch)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "doUnsubscribe",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "doUnsubscribe(URL url, NotifyListener listener)",
+        "class_signature": "ZookeeperRegistry.doUnsubscribe(URL url, NotifyListener listener)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ],
+            [
+                "NotifyListener",
+                "listener"
+            ]
+        ],
+        "methodBody": "{\n        super.doUnsubscribe(url, listener);\n        checkDestroyed();\n        ConcurrentMap<NotifyListener, ChildListener> listeners = zkListeners.get(url);\n        if (listeners != null) {\n            ChildListener zkListener = listeners.remove(listener);\n            if (zkListener != null) {\n                if (ANY_VALUE.equals(url.getServiceInterface())) {\n                    String root = toRootPath();\n                    zkClient.removeChildListener(root, zkListener);\n                } else {\n                    for (String path : toCategoriesPath(url)) {\n                        zkClient.removeChildListener(path, zkListener);\n                    }\n                }\n            }\n\n            if (listeners.isEmpty()) {\n                zkListeners.remove(url);\n            }\n        }\n    }",
+        "position": {
+            "line": 291,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "doUnsubscribe",
+                "position": {
+                    "line": 292,
+                    "column": 15
+                }
+            },
+            {
+                "name": "checkDestroyed",
+                "position": {
+                    "line": 293,
+                    "column": 9
+                }
+            },
+            {
+                "name": "get",
+                "position": {
+                    "line": 294,
+                    "column": 78
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 296,
+                    "column": 50
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 298,
+                    "column": 31
+                }
+            },
+            {
+                "name": "getServiceInterface",
+                "position": {
+                    "line": 298,
+                    "column": 42
+                }
+            },
+            {
+                "name": "toRootPath",
+                "position": {
+                    "line": 299,
+                    "column": 35
+                }
+            },
+            {
+                "name": "removeChildListener",
+                "position": {
+                    "line": 300,
+                    "column": 30
+                }
+            },
+            {
+                "name": "toCategoriesPath",
+                "position": {
+                    "line": 302,
+                    "column": 40
+                }
+            },
+            {
+                "name": "removeChildListener",
+                "position": {
+                    "line": 303,
+                    "column": 34
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 308,
+                    "column": 27
+                }
+            },
+            {
+                "name": "remove",
+                "position": {
+                    "line": 309,
+                    "column": 29
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistry.checkDestroyed()",
+            "ZookeeperRegistry.toRootPath()",
+            "ZookeeperRegistry.toCategoriesPath(URL url)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "lookup",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "lookup(URL url)",
+        "class_signature": "ZookeeperRegistry.lookup(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        if (url == null) {\n            throw new IllegalArgumentException(\"lookup url == null\");\n        }\n        try {\n            checkDestroyed();\n            List<String> providers = new ArrayList<>();\n            for (String path : toCategoriesPath(url)) {\n                List<String> children = zkClient.getChildren(path);\n                if (children != null) {\n                    providers.addAll(children);\n                }\n            }\n            return toUrlsWithoutEmpty(url, providers);\n        } catch (Throwable e) {\n            throw new RpcException(\n                    \"Failed to lookup \" + url + \" from zookeeper \" + getUrl() + \", cause: \" + e.getMessage(), e);\n        }\n    }",
+        "position": {
+            "line": 315,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkDestroyed",
+                "position": {
+                    "line": 320,
+                    "column": 13
+                }
+            },
+            {
+                "name": "toCategoriesPath",
+                "position": {
+                    "line": 322,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getChildren",
+                "position": {
+                    "line": 323,
+                    "column": 50
+                }
+            },
+            {
+                "name": "addAll",
+                "position": {
+                    "line": 325,
+                    "column": 31
+                }
+            },
+            {
+                "name": "toUrlsWithoutEmpty",
+                "position": {
+                    "line": 328,
+                    "column": 20
+                }
+            },
+            {
+                "name": "getUrl",
+                "position": {
+                    "line": 331,
+                    "column": 70
+                }
+            },
+            {
+                "name": "getMessage",
+                "position": {
+                    "line": 331,
+                    "column": 97
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 317,
+                    "column": 23
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 321,
+                    "column": 42
+                }
+            },
+            {
+                "name": "RpcException",
+                "position": {
+                    "line": 330,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistry.checkDestroyed()",
+            "ZookeeperRegistry.toCategoriesPath(URL url)"
+        ],
+        "priority": 7
+    },
+    {
+        "name": "toRootDir",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "toRootDir()",
+        "class_signature": "ZookeeperRegistry.toRootDir()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        if (root.equals(PATH_SEPARATOR)) {\n            return root;\n        }\n        return root + PATH_SEPARATOR;\n    }",
+        "position": {
+            "line": 335,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 336,
+                    "column": 18
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 22
+    },
+    {
+        "name": "toRootPath",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "toRootPath()",
+        "class_signature": "ZookeeperRegistry.toRootPath()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        return root;\n    }",
+        "position": {
+            "line": 342,
+            "column": 20
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 21
+    },
+    {
+        "name": "toServicePath",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "toServicePath(URL url)",
+        "class_signature": "ZookeeperRegistry.toServicePath(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        String name = url.getServiceInterface();\n        if (ANY_VALUE.equals(name)) {\n            return toRootPath();\n        }\n        return toRootDir() + URL.encode(name);\n    }",
+        "position": {
+            "line": 346,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getServiceInterface",
+                "position": {
+                    "line": 347,
+                    "column": 27
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 348,
+                    "column": 23
+                }
+            },
+            {
+                "name": "toRootPath",
+                "position": {
+                    "line": 349,
+                    "column": 20
+                }
+            },
+            {
+                "name": "toRootDir",
+                "position": {
+                    "line": 351,
+                    "column": 16
+                }
+            },
+            {
+                "name": "encode",
+                "position": {
+                    "line": 351,
+                    "column": 34
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistry.toRootPath()",
+            "ZookeeperRegistry.toRootDir()"
+        ],
+        "priority": 20
+    },
+    {
+        "name": "toCategoriesPath",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "toCategoriesPath(URL url)",
+        "class_signature": "ZookeeperRegistry.toCategoriesPath(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        String[] categories;\n        if (ANY_VALUE.equals(url.getCategory())) {\n            categories =\n                    new String[] {PROVIDERS_CATEGORY, CONSUMERS_CATEGORY, ROUTERS_CATEGORY, CONFIGURATORS_CATEGORY};\n        } else {\n            categories = url.getCategory(new String[] {DEFAULT_CATEGORY});\n        }\n        String[] paths = new String[categories.length];\n        for (int i = 0; i < categories.length; i++) {\n            paths[i] = toServicePath(url) + PATH_SEPARATOR + categories[i];\n        }\n        return paths;\n    }",
+        "position": {
+            "line": 354,
+            "column": 22
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 356,
+                    "column": 23
+                }
+            },
+            {
+                "name": "getCategory",
+                "position": {
+                    "line": 356,
+                    "column": 34
+                }
+            },
+            {
+                "name": "getCategory",
+                "position": {
+                    "line": 360,
+                    "column": 30
+                }
+            },
+            {
+                "name": "toServicePath",
+                "position": {
+                    "line": 364,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistry.toServicePath(URL url)"
+        ],
+        "priority": 15
+    },
+    {
+        "name": "toCategoryPath",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "toCategoryPath(URL url)",
+        "class_signature": "ZookeeperRegistry.toCategoryPath(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        return toServicePath(url) + PATH_SEPARATOR + url.getCategory(DEFAULT_CATEGORY);\n    }",
+        "position": {
+            "line": 369,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "toServicePath",
+                "position": {
+                    "line": 370,
+                    "column": 16
+                }
+            },
+            {
+                "name": "getCategory",
+                "position": {
+                    "line": 370,
+                    "column": 58
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistry.toServicePath(URL url)"
+        ],
+        "priority": 17
+    },
+    {
+        "name": "toUrlPath",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "toUrlPath(URL url)",
+        "class_signature": "ZookeeperRegistry.toUrlPath(URL url)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "url"
+            ]
+        ],
+        "methodBody": "{\n        return toCategoryPath(url) + PATH_SEPARATOR + URL.encode(url.toFullString());\n    }",
+        "position": {
+            "line": 373,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "toCategoryPath",
+                "position": {
+                    "line": 374,
+                    "column": 16
+                }
+            },
+            {
+                "name": "encode",
+                "position": {
+                    "line": 374,
+                    "column": 59
+                }
+            },
+            {
+                "name": "toFullString",
+                "position": {
+                    "line": 374,
+                    "column": 70
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistry.toCategoryPath(URL url)"
+        ],
+        "priority": 11
+    },
+    {
+        "name": "fetchLatestAddresses",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "fetchLatestAddresses()",
+        "class_signature": "ZookeeperRegistry.fetchLatestAddresses()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        // subscribe\n        Map<URL, Set<NotifyListener>> recoverSubscribed = new HashMap<>(getSubscribed());\n        if (!recoverSubscribed.isEmpty()) {\n            if (logger.isInfoEnabled()) {\n                logger.info(\"Fetching the latest urls of \" + recoverSubscribed.keySet());\n            }\n            for (Map.Entry<URL, Set<NotifyListener>> entry : recoverSubscribed.entrySet()) {\n                URL url = entry.getKey();\n                for (NotifyListener listener : entry.getValue()) {\n                    removeFailedSubscribed(url, listener);\n                    addFailedSubscribed(url, listener);\n                }\n            }\n        }\n    }",
+        "position": {
+            "line": 381,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getSubscribed",
+                "position": {
+                    "line": 383,
+                    "column": 73
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 384,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isInfoEnabled",
+                "position": {
+                    "line": 385,
+                    "column": 24
+                }
+            },
+            {
+                "name": "info",
+                "position": {
+                    "line": 386,
+                    "column": 24
+                }
+            },
+            {
+                "name": "keySet",
+                "position": {
+                    "line": 386,
+                    "column": 80
+                }
+            },
+            {
+                "name": "entrySet",
+                "position": {
+                    "line": 388,
+                    "column": 80
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 389,
+                    "column": 33
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 390,
+                    "column": 54
+                }
+            },
+            {
+                "name": "removeFailedSubscribed",
+                "position": {
+                    "line": 391,
+                    "column": 21
+                }
+            },
+            {
+                "name": "addFailedSubscribed",
+                "position": {
+                    "line": 392,
+                    "column": 21
+                }
+            },
+            {
+                "name": "HashMap<>",
+                "position": {
+                    "line": 383,
+                    "column": 63
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 10
+    },
+    {
+        "name": "isMatch",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistry",
+        "signature": "isMatch(URL subscribeUrl, URL providerUrl)",
+        "class_signature": "ZookeeperRegistry.isMatch(URL subscribeUrl, URL providerUrl)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "subscribeUrl"
+            ],
+            [
+                "URL",
+                "providerUrl"
+            ]
+        ],
+        "methodBody": "{\n        return UrlUtils.isMatch(subscribeUrl, providerUrl);\n    }",
+        "position": {
+            "line": 399,
+            "column": 23
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isMatch",
+                "position": {
+                    "line": 400,
+                    "column": 25
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 8
+    },
+    {
+        "name": "RegistryChildListenerImpl",
+        "category": "constructor_declaration",
+        "class": "RegistryChildListenerImpl",
+        "signature": "RegistryChildListenerImpl(URL consumerUrl, NotifyListener listener, CountDownLatch latch)",
+        "class_signature": "RegistryChildListenerImpl.RegistryChildListenerImpl(URL consumerUrl, NotifyListener listener, CountDownLatch latch)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "consumerUrl"
+            ],
+            [
+                "NotifyListener",
+                "listener"
+            ],
+            [
+                "CountDownLatch",
+                "latch"
+            ]
+        ],
+        "methodBody": "{\n            this.latch = latch;\n            this.notifier = new ZookeeperRegistryNotifier(consumerUrl, listener, ZookeeperRegistry.this.getDelay());\n        }",
+        "position": {
+            "line": 412,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getDelay",
+                "position": {
+                    "line": 414,
+                    "column": 105
+                }
+            },
+            {
+                "name": "ZookeeperRegistryNotifier",
+                "position": {
+                    "line": 414,
+                    "column": 33
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistryNotifier.ZookeeperRegistryNotifier(URL consumerUrl, NotifyListener listener, long delayTime)"
+        ],
+        "priority": 13
+    },
+    {
+        "name": "setLatch",
+        "category": "method_declaration",
+        "class": "RegistryChildListenerImpl",
+        "signature": "setLatch(CountDownLatch latch)",
+        "class_signature": "RegistryChildListenerImpl.setLatch(CountDownLatch latch)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "CountDownLatch",
+                "latch"
+            ]
+        ],
+        "methodBody": "{\n            this.latch = latch;\n        }",
+        "position": {
+            "line": 417,
+            "column": 21
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 12
+    },
+    {
+        "name": "childChanged",
+        "category": "method_declaration",
+        "class": "RegistryChildListenerImpl",
+        "signature": "childChanged(String path, List<String> children)",
+        "class_signature": "RegistryChildListenerImpl.childChanged(String path, List<String> children)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "path"
+            ],
+            [
+                "List<String>",
+                "children"
+            ]
+        ],
+        "methodBody": "{\n            // Notify 'notifiers' one by one.\n            try {\n                latch.await();\n            } catch (InterruptedException e) {\n                logger.warn(\n                        REGISTRY_ZOOKEEPER_EXCEPTION,\n                        \"\",\n                        \"\",\n                        \"Zookeeper children listener thread was interrupted unexpectedly, may cause race condition with the main thread.\");\n            }\n\n            notifier.notify(path, children);\n        }",
+        "position": {
+            "line": 422,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "await",
+                "position": {
+                    "line": 425,
+                    "column": 23
+                }
+            },
+            {
+                "name": "warn",
+                "position": {
+                    "line": 427,
+                    "column": 24
+                }
+            },
+            {
+                "name": "notify",
+                "position": {
+                    "line": 434,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistryNotifier.notify(String path, Object rawAddresses)"
+        ],
+        "priority": 9
+    },
+    {
+        "name": "ZookeeperRegistryNotifier",
+        "category": "constructor_declaration",
+        "class": "ZookeeperRegistryNotifier",
+        "signature": "ZookeeperRegistryNotifier(URL consumerUrl, NotifyListener listener, long delayTime)",
+        "class_signature": "ZookeeperRegistryNotifier.ZookeeperRegistryNotifier(URL consumerUrl, NotifyListener listener, long delayTime)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "URL",
+                "consumerUrl"
+            ],
+            [
+                "NotifyListener",
+                "listener"
+            ],
+            [
+                "long",
+                "delayTime"
+            ]
+        ],
+        "methodBody": "{\n            this.consumerUrl = consumerUrl;\n            this.listener = listener;\n            this.delayTime = delayTime;\n        }",
+        "position": {
+            "line": 447,
+            "column": 16
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 18
+    },
+    {
+        "name": "notify",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistryNotifier",
+        "signature": "notify(String path, Object rawAddresses)",
+        "class_signature": "ZookeeperRegistryNotifier.notify(String path, Object rawAddresses)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "path"
+            ],
+            [
+                "Object",
+                "rawAddresses"
+            ]
+        ],
+        "methodBody": "{\n            // notify immediately if it's notification of governance rules.\n            if (path.endsWith(CONFIGURATORS_CATEGORY) || path.endsWith(ROUTERS_CATEGORY)) {\n                this.doNotify(path, rawAddresses);\n            }\n\n            // if address notification, check if delay is necessary.\n            if (delayTime <= 0) {\n                this.doNotify(path, rawAddresses);\n            } else {\n                long interval = delayTime - (System.currentTimeMillis() - lastExecuteTime);\n                if (interval > 0) {\n                    try {\n                        Thread.sleep(interval);\n                    } catch (InterruptedException e) {\n                        // ignore\n                    }\n                }\n                lastExecuteTime = System.currentTimeMillis();\n                this.doNotify(path, rawAddresses);\n            }\n        }",
+        "position": {
+            "line": 453,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "endsWith",
+                "position": {
+                    "line": 455,
+                    "column": 22
+                }
+            },
+            {
+                "name": "endsWith",
+                "position": {
+                    "line": 455,
+                    "column": 63
+                }
+            },
+            {
+                "name": "doNotify",
+                "position": {
+                    "line": 456,
+                    "column": 22
+                }
+            },
+            {
+                "name": "doNotify",
+                "position": {
+                    "line": 461,
+                    "column": 22
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 463,
+                    "column": 53
+                }
+            },
+            {
+                "name": "sleep",
+                "position": {
+                    "line": 466,
+                    "column": 32
+                }
+            },
+            {
+                "name": "currentTimeMillis",
+                "position": {
+                    "line": 471,
+                    "column": 42
+                }
+            },
+            {
+                "name": "doNotify",
+                "position": {
+                    "line": 472,
+                    "column": 22
+                }
+            }
+        ],
+        "calledMethods": [
+            "ZookeeperRegistryNotifier.doNotify(String path, Object rawAddresses)",
+            "ZookeeperRegistryNotifier.doNotify(String path, Object rawAddresses)",
+            "ZookeeperRegistryNotifier.doNotify(String path, Object rawAddresses)"
+        ],
+        "priority": 16
+    },
+    {
+        "name": "doNotify",
+        "category": "method_declaration",
+        "class": "ZookeeperRegistryNotifier",
+        "signature": "doNotify(String path, Object rawAddresses)",
+        "class_signature": "ZookeeperRegistryNotifier.doNotify(String path, Object rawAddresses)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "path"
+            ],
+            [
+                "Object",
+                "rawAddresses"
+            ]
+        ],
+        "methodBody": "{\n            ZookeeperRegistry.this.notify(\n                    consumerUrl, listener, ZookeeperRegistry.this.toUrlsWithEmpty(consumerUrl, path, (List<String>)\n                            rawAddresses));\n        }",
+        "position": {
+            "line": 476,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "notify",
+                "position": {
+                    "line": 477,
+                    "column": 36
+                }
+            },
+            {
+                "name": "toUrlsWithEmpty",
+                "position": {
+                    "line": 478,
+                    "column": 67
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 19
+    }
+]

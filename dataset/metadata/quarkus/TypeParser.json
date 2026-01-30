@@ -1,0 +1,1158 @@
+[
+    {
+        "name": "parse",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "parse(String str)",
+        "class_signature": "TypeParser.parse(String str)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "str"
+            ]
+        ],
+        "methodBody": "{\n        return new TypeParser(str).parse();\n    }",
+        "position": {
+            "line": 35,
+            "column": 24
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "parse",
+                "position": {
+                    "line": 36,
+                    "column": 36
+                }
+            },
+            {
+                "name": "TypeParser",
+                "position": {
+                    "line": 36,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "TypeParser.parse()",
+            "TypeParser.TypeParser(String str)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "TypeParser",
+        "category": "constructor_declaration",
+        "class": "TypeParser",
+        "signature": "TypeParser(String str)",
+        "class_signature": "TypeParser.TypeParser(String str)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "str"
+            ]
+        ],
+        "methodBody": "{\n        this.str = Objects.requireNonNull(str);\n    }",
+        "position": {
+            "line": 43,
+            "column": 13
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "requireNonNull",
+                "position": {
+                    "line": 44,
+                    "column": 28
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 2
+    },
+    {
+        "name": "parse",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "parse()",
+        "class_signature": "TypeParser.parse()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        Type result;\n\n        String token = nextToken();\n        if (token.isEmpty()) {\n            throw unexpected(token);\n        } else if (token.equals(\"void\")) {\n            result = void.class;\n        } else if (isPrimitiveType(token) && peekToken().isEmpty()) {\n            result = parsePrimitiveType(token);\n        } else {\n            result = parseReferenceType(token);\n        }\n\n        expect(\"\");\n        return result;\n    }",
+        "position": {
+            "line": 47,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "nextToken",
+                "position": {
+                    "line": 50,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 51,
+                    "column": 19
+                }
+            },
+            {
+                "name": "unexpected",
+                "position": {
+                    "line": 52,
+                    "column": 19
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 53,
+                    "column": 26
+                }
+            },
+            {
+                "name": "isPrimitiveType",
+                "position": {
+                    "line": 55,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 55,
+                    "column": 58
+                }
+            },
+            {
+                "name": "peekToken",
+                "position": {
+                    "line": 55,
+                    "column": 46
+                }
+            },
+            {
+                "name": "parsePrimitiveType",
+                "position": {
+                    "line": 56,
+                    "column": 22
+                }
+            },
+            {
+                "name": "parseReferenceType",
+                "position": {
+                    "line": 58,
+                    "column": 22
+                }
+            },
+            {
+                "name": "expect",
+                "position": {
+                    "line": 61,
+                    "column": 9
+                }
+            }
+        ],
+        "calledMethods": [
+            "TypeParser.nextToken()",
+            "TypeParser.unexpected(String token)",
+            "TypeParser.isPrimitiveType(String token)",
+            "TypeParser.peekToken()",
+            "TypeParser.parsePrimitiveType(String token)",
+            "TypeParser.parseReferenceType(String token)",
+            "TypeParser.expect(String expected)"
+        ],
+        "priority": 1
+    },
+    {
+        "name": "parseReferenceType",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "parseReferenceType(String token)",
+        "class_signature": "TypeParser.parseReferenceType(String token)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "token"
+            ]
+        ],
+        "methodBody": "{\n        if (isPrimitiveType(token)) {\n            Type primitive = parsePrimitiveType(token);\n            return parseArrayType(primitive);\n        } else if (isClassType(token)) {\n            Type result = parseClassType(token);\n            if (peekToken().equals(\"<\")) {\n                expect(\"<\");\n                List<Type> typeArguments = new ArrayList<>();\n                typeArguments.add(parseTypeArgument());\n                while (peekToken().equals(\",\")) {\n                    expect(\",\");\n                    typeArguments.add(parseTypeArgument());\n                }\n                expect(\">\");\n                result = new ParameterizedTypeImpl(result, typeArguments.toArray(Type[]::new));\n            }\n            if (peekToken().equals(\"[\")) {\n                return parseArrayType(result);\n            }\n            return result;\n        } else {\n            throw unexpected(token);\n        }\n    }",
+        "position": {
+            "line": 65,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isPrimitiveType",
+                "position": {
+                    "line": 66,
+                    "column": 13
+                }
+            },
+            {
+                "name": "parsePrimitiveType",
+                "position": {
+                    "line": 67,
+                    "column": 30
+                }
+            },
+            {
+                "name": "parseArrayType",
+                "position": {
+                    "line": 68,
+                    "column": 20
+                }
+            },
+            {
+                "name": "isClassType",
+                "position": {
+                    "line": 69,
+                    "column": 20
+                }
+            },
+            {
+                "name": "parseClassType",
+                "position": {
+                    "line": 70,
+                    "column": 27
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 71,
+                    "column": 29
+                }
+            },
+            {
+                "name": "peekToken",
+                "position": {
+                    "line": 71,
+                    "column": 17
+                }
+            },
+            {
+                "name": "expect",
+                "position": {
+                    "line": 72,
+                    "column": 17
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 74,
+                    "column": 31
+                }
+            },
+            {
+                "name": "parseTypeArgument",
+                "position": {
+                    "line": 74,
+                    "column": 35
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 75,
+                    "column": 36
+                }
+            },
+            {
+                "name": "peekToken",
+                "position": {
+                    "line": 75,
+                    "column": 24
+                }
+            },
+            {
+                "name": "expect",
+                "position": {
+                    "line": 76,
+                    "column": 21
+                }
+            },
+            {
+                "name": "add",
+                "position": {
+                    "line": 77,
+                    "column": 35
+                }
+            },
+            {
+                "name": "parseTypeArgument",
+                "position": {
+                    "line": 77,
+                    "column": 39
+                }
+            },
+            {
+                "name": "expect",
+                "position": {
+                    "line": 79,
+                    "column": 17
+                }
+            },
+            {
+                "name": "toArray",
+                "position": {
+                    "line": 80,
+                    "column": 74
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 82,
+                    "column": 29
+                }
+            },
+            {
+                "name": "peekToken",
+                "position": {
+                    "line": 82,
+                    "column": 17
+                }
+            },
+            {
+                "name": "parseArrayType",
+                "position": {
+                    "line": 83,
+                    "column": 24
+                }
+            },
+            {
+                "name": "unexpected",
+                "position": {
+                    "line": 87,
+                    "column": 19
+                }
+            },
+            {
+                "name": "ArrayList<>",
+                "position": {
+                    "line": 73,
+                    "column": 48
+                }
+            },
+            {
+                "name": "ParameterizedTypeImpl",
+                "position": {
+                    "line": 80,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "TypeParser.isPrimitiveType(String token)",
+            "TypeParser.parsePrimitiveType(String token)",
+            "TypeParser.parseArrayType(Type elementType)",
+            "TypeParser.isClassType(String token)",
+            "TypeParser.parseClassType(String token)",
+            "TypeParser.peekToken()",
+            "TypeParser.expect(String expected)",
+            "TypeParser.parseTypeArgument()",
+            "TypeParser.peekToken()",
+            "TypeParser.expect(String expected)",
+            "TypeParser.parseTypeArgument()",
+            "TypeParser.expect(String expected)",
+            "TypeParser.peekToken()",
+            "TypeParser.parseArrayType(Type elementType)",
+            "TypeParser.unexpected(String token)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "parseArrayType",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "parseArrayType(Type elementType)",
+        "class_signature": "TypeParser.parseArrayType(Type elementType)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Type",
+                "elementType"
+            ]
+        ],
+        "methodBody": "{\n        expect(\"[\");\n        expect(\"]\");\n        int dimensions = 1;\n        while (peekToken().equals(\"[\")) {\n            expect(\"[\");\n            expect(\"]\");\n            dimensions++;\n        }\n\n        if (elementType instanceof Class<?> clazz) {\n            return parseClassType(\"[\".repeat(dimensions)\n                    + (clazz.isPrimitive() ? clazz.descriptorString() : \"L\" + clazz.getName() + \";\"));\n        } else {\n            Type result = elementType;\n            for (int i = 0; i < dimensions; i++) {\n                result = new GenericArrayTypeImpl(result);\n            }\n            return result;\n        }\n    }",
+        "position": {
+            "line": 91,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "expect",
+                "position": {
+                    "line": 92,
+                    "column": 9
+                }
+            },
+            {
+                "name": "expect",
+                "position": {
+                    "line": 93,
+                    "column": 9
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 95,
+                    "column": 28
+                }
+            },
+            {
+                "name": "peekToken",
+                "position": {
+                    "line": 95,
+                    "column": 16
+                }
+            },
+            {
+                "name": "expect",
+                "position": {
+                    "line": 96,
+                    "column": 13
+                }
+            },
+            {
+                "name": "expect",
+                "position": {
+                    "line": 97,
+                    "column": 13
+                }
+            },
+            {
+                "name": "parseClassType",
+                "position": {
+                    "line": 102,
+                    "column": 20
+                }
+            },
+            {
+                "name": "repeat",
+                "position": {
+                    "line": 102,
+                    "column": 39
+                }
+            },
+            {
+                "name": "isPrimitive",
+                "position": {
+                    "line": 103,
+                    "column": 30
+                }
+            },
+            {
+                "name": "descriptorString",
+                "position": {
+                    "line": 103,
+                    "column": 52
+                }
+            },
+            {
+                "name": "getName",
+                "position": {
+                    "line": 103,
+                    "column": 85
+                }
+            },
+            {
+                "name": "GenericArrayTypeImpl",
+                "position": {
+                    "line": 107,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "TypeParser.expect(String expected)",
+            "TypeParser.expect(String expected)",
+            "TypeParser.peekToken()",
+            "TypeParser.expect(String expected)",
+            "TypeParser.expect(String expected)",
+            "TypeParser.parseClassType(String token)"
+        ],
+        "priority": 6
+    },
+    {
+        "name": "parseTypeArgument",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "parseTypeArgument()",
+        "class_signature": "TypeParser.parseTypeArgument()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        String token = nextToken();\n        if (token.equals(\"?\")) {\n            if (peekToken().equals(\"extends\")) {\n                expect(\"extends\");\n                Type bound = parseReferenceType(nextToken());\n                return WildcardTypeImpl.withUpperBound(bound);\n            } else if (peekToken().equals(\"super\")) {\n                expect(\"super\");\n                Type bound = parseReferenceType(nextToken());\n                return WildcardTypeImpl.withLowerBound(bound);\n            } else {\n                return WildcardTypeImpl.defaultInstance();\n            }\n        } else {\n            return parseReferenceType(token);\n        }\n    }",
+        "position": {
+            "line": 113,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "nextToken",
+                "position": {
+                    "line": 114,
+                    "column": 24
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 115,
+                    "column": 19
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 116,
+                    "column": 29
+                }
+            },
+            {
+                "name": "peekToken",
+                "position": {
+                    "line": 116,
+                    "column": 17
+                }
+            },
+            {
+                "name": "expect",
+                "position": {
+                    "line": 117,
+                    "column": 17
+                }
+            },
+            {
+                "name": "parseReferenceType",
+                "position": {
+                    "line": 118,
+                    "column": 30
+                }
+            },
+            {
+                "name": "nextToken",
+                "position": {
+                    "line": 118,
+                    "column": 49
+                }
+            },
+            {
+                "name": "withUpperBound",
+                "position": {
+                    "line": 119,
+                    "column": 41
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 120,
+                    "column": 36
+                }
+            },
+            {
+                "name": "peekToken",
+                "position": {
+                    "line": 120,
+                    "column": 24
+                }
+            },
+            {
+                "name": "expect",
+                "position": {
+                    "line": 121,
+                    "column": 17
+                }
+            },
+            {
+                "name": "parseReferenceType",
+                "position": {
+                    "line": 122,
+                    "column": 30
+                }
+            },
+            {
+                "name": "nextToken",
+                "position": {
+                    "line": 122,
+                    "column": 49
+                }
+            },
+            {
+                "name": "withLowerBound",
+                "position": {
+                    "line": 123,
+                    "column": 41
+                }
+            },
+            {
+                "name": "defaultInstance",
+                "position": {
+                    "line": 125,
+                    "column": 41
+                }
+            },
+            {
+                "name": "parseReferenceType",
+                "position": {
+                    "line": 128,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [
+            "TypeParser.nextToken()",
+            "TypeParser.peekToken()",
+            "TypeParser.expect(String expected)",
+            "TypeParser.parseReferenceType(String token)",
+            "TypeParser.nextToken()",
+            "TypeParser.peekToken()",
+            "TypeParser.expect(String expected)",
+            "TypeParser.parseReferenceType(String token)",
+            "TypeParser.nextToken()",
+            "TypeParser.parseReferenceType(String token)"
+        ],
+        "priority": 3
+    },
+    {
+        "name": "isPrimitiveType",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "isPrimitiveType(String token)",
+        "class_signature": "TypeParser.isPrimitiveType(String token)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "token"
+            ]
+        ],
+        "methodBody": "{\n        return token.equals(\"boolean\")\n                || token.equals(\"byte\")\n                || token.equals(\"short\")\n                || token.equals(\"int\")\n                || token.equals(\"long\")\n                || token.equals(\"float\")\n                || token.equals(\"double\")\n                || token.equals(\"char\");\n    }",
+        "position": {
+            "line": 132,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "equals",
+                "position": {
+                    "line": 133,
+                    "column": 22
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 134,
+                    "column": 26
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 135,
+                    "column": 26
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 136,
+                    "column": 26
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 137,
+                    "column": 26
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 138,
+                    "column": 26
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 139,
+                    "column": 26
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 140,
+                    "column": 26
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "parsePrimitiveType",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "parsePrimitiveType(String token)",
+        "class_signature": "TypeParser.parsePrimitiveType(String token)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "token"
+            ]
+        ],
+        "methodBody": "{\n        return switch (token) {\n            case \"boolean\" -> boolean.class;\n            case \"byte\" -> byte.class;\n            case \"short\" -> short.class;\n            case \"int\" -> int.class;\n            case \"long\" -> long.class;\n            case \"float\" -> float.class;\n            case \"double\" -> double.class;\n            case \"char\" -> char.class;\n            default -> throw unexpected(token);\n        };\n    }",
+        "position": {
+            "line": 143,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "unexpected",
+                "position": {
+                    "line": 153,
+                    "column": 30
+                }
+            }
+        ],
+        "calledMethods": [
+            "TypeParser.unexpected(String token)"
+        ],
+        "priority": 5
+    },
+    {
+        "name": "isClassType",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "isClassType(String token)",
+        "class_signature": "TypeParser.isClassType(String token)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "token"
+            ]
+        ],
+        "methodBody": "{\n        return !token.isEmpty() && Character.isJavaIdentifierStart(token.charAt(0));\n    }",
+        "position": {
+            "line": 157,
+            "column": 21
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 158,
+                    "column": 23
+                }
+            },
+            {
+                "name": "isJavaIdentifierStart",
+                "position": {
+                    "line": 158,
+                    "column": 46
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 158,
+                    "column": 74
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7
+    },
+    {
+        "name": "parseClassType",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "parseClassType(String token)",
+        "class_signature": "TypeParser.parseClassType(String token)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "token"
+            ]
+        ],
+        "methodBody": "{\n        try {\n            return Class.forName(token, true, Thread.currentThread().getContextClassLoader());\n        } catch (ClassNotFoundException e) {\n            throw new IllegalArgumentException(\"Unknown class: \" + token, e);\n        }\n    }",
+        "position": {
+            "line": 161,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "forName",
+                "position": {
+                    "line": 163,
+                    "column": 26
+                }
+            },
+            {
+                "name": "getContextClassLoader",
+                "position": {
+                    "line": 163,
+                    "column": 70
+                }
+            },
+            {
+                "name": "currentThread",
+                "position": {
+                    "line": 163,
+                    "column": 54
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 165,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9
+    },
+    {
+        "name": "expect",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "expect(String expected)",
+        "class_signature": "TypeParser.expect(String expected)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "expected"
+            ]
+        ],
+        "methodBody": "{\n        String token = nextToken();\n        if (!expected.equals(token)) {\n            throw unexpected(token);\n        }\n    }",
+        "position": {
+            "line": 171,
+            "column": 18
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "nextToken",
+                "position": {
+                    "line": 172,
+                    "column": 24
+                }
+            },
+            {
+                "name": "equals",
+                "position": {
+                    "line": 173,
+                    "column": 23
+                }
+            },
+            {
+                "name": "unexpected",
+                "position": {
+                    "line": 174,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [
+            "TypeParser.nextToken()",
+            "TypeParser.unexpected(String token)"
+        ],
+        "priority": 8
+    },
+    {
+        "name": "unexpected",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "unexpected(String token)",
+        "class_signature": "TypeParser.unexpected(String token)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "token"
+            ]
+        ],
+        "methodBody": "{\n        if (token.isEmpty()) {\n            throw new IllegalArgumentException(\"Unexpected end of input: \" + str);\n        }\n        return new IllegalArgumentException(\"Unexpected token '\" + token + \"' at position \" + (pos - token.length())\n                + \": \" + str);\n    }",
+        "position": {
+            "line": 178,
+            "column": 38
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 179,
+                    "column": 19
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 182,
+                    "column": 108
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 180,
+                    "column": 23
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 182,
+                    "column": 20
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 11
+    },
+    {
+        "name": "peekToken",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "peekToken()",
+        "class_signature": "TypeParser.peekToken()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        // skip whitespace\n        while (pos < str.length() && Character.isWhitespace(str.charAt(pos))) {\n            pos++;\n        }\n\n        // end of input\n        if (pos == str.length()) {\n            return \"\";\n        }\n\n        int pos = this.pos;\n\n        // current char is a token on its own\n        if (isSpecial(str.charAt(pos))) {\n            return str.substring(pos, pos + 1);\n        }\n\n        // token is a keyword or fully qualified name\n        int begin = pos;\n        while (pos < str.length() && Character.isJavaIdentifierStart(str.charAt(pos))) {\n            do {\n                pos++;\n            } while (pos < str.length() && Character.isJavaIdentifierPart(str.charAt(pos)));\n\n            if (pos < str.length() && str.charAt(pos) == '.') {\n                pos++;\n            } else {\n                return str.substring(begin, pos);\n            }\n        }\n\n        if (pos == str.length()) {\n            throw new IllegalArgumentException(\"Unexpected end of input: \" + str);\n        }\n        throw new IllegalArgumentException(\"Unexpected character '\" + str.charAt(pos) + \"' at position \" + pos + \": \" + str);\n    }",
+        "position": {
+            "line": 186,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "length",
+                "position": {
+                    "line": 188,
+                    "column": 26
+                }
+            },
+            {
+                "name": "isWhitespace",
+                "position": {
+                    "line": 188,
+                    "column": 48
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 188,
+                    "column": 65
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 193,
+                    "column": 24
+                }
+            },
+            {
+                "name": "isSpecial",
+                "position": {
+                    "line": 200,
+                    "column": 13
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 200,
+                    "column": 27
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 201,
+                    "column": 24
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 206,
+                    "column": 26
+                }
+            },
+            {
+                "name": "isJavaIdentifierStart",
+                "position": {
+                    "line": 206,
+                    "column": 48
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 206,
+                    "column": 74
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 209,
+                    "column": 32
+                }
+            },
+            {
+                "name": "isJavaIdentifierPart",
+                "position": {
+                    "line": 209,
+                    "column": 54
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 209,
+                    "column": 79
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 211,
+                    "column": 27
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 211,
+                    "column": 43
+                }
+            },
+            {
+                "name": "substring",
+                "position": {
+                    "line": 214,
+                    "column": 28
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 218,
+                    "column": 24
+                }
+            },
+            {
+                "name": "charAt",
+                "position": {
+                    "line": 221,
+                    "column": 75
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 219,
+                    "column": 23
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 221,
+                    "column": 19
+                }
+            }
+        ],
+        "calledMethods": [
+            "TypeParser.isSpecial(char c)"
+        ],
+        "priority": 12
+    },
+    {
+        "name": "nextToken",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "nextToken()",
+        "class_signature": "TypeParser.nextToken()",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [],
+        "methodBody": "{\n        String result = peekToken();\n        pos += result.length();\n        return result;\n    }",
+        "position": {
+            "line": 224,
+            "column": 20
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "peekToken",
+                "position": {
+                    "line": 225,
+                    "column": 25
+                }
+            },
+            {
+                "name": "length",
+                "position": {
+                    "line": 226,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "TypeParser.peekToken()"
+        ],
+        "priority": 10
+    },
+    {
+        "name": "isSpecial",
+        "category": "method_declaration",
+        "class": "TypeParser",
+        "signature": "isSpecial(char c)",
+        "class_signature": "TypeParser.isSpecial(char c)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "char",
+                "c"
+            ]
+        ],
+        "methodBody": "{\n        return c == ',' || c == '?' || c == '<' || c == '>' || c == '[' || c == ']';\n    }",
+        "position": {
+            "line": 230,
+            "column": 21
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 13
+    }
+]
