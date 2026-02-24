@@ -1,0 +1,594 @@
+[
+    {
+        "name": "NamespaceUnlockAspect",
+        "category": "constructor_declaration",
+        "class": "NamespaceUnlockAspect",
+        "signature": "NamespaceUnlockAspect(NamespaceLockService namespaceLockService, NamespaceService namespaceService, ItemService itemService, ReleaseService releaseService, BizConfig bizConfig)",
+        "class_signature": "NamespaceUnlockAspect.NamespaceUnlockAspect(NamespaceLockService namespaceLockService, NamespaceService namespaceService, ItemService itemService, ReleaseService releaseService, BizConfig bizConfig)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "NamespaceLockService",
+                "namespaceLockService"
+            ],
+            [
+                "NamespaceService",
+                "namespaceService"
+            ],
+            [
+                "ItemService",
+                "itemService"
+            ],
+            [
+                "ReleaseService",
+                "releaseService"
+            ],
+            [
+                "BizConfig",
+                "bizConfig"
+            ]
+        ],
+        "methodBody": "{\n    this.namespaceLockService = namespaceLockService;\n    this.namespaceService = namespaceService;\n    this.itemService = itemService;\n    this.releaseService = releaseService;\n    this.bizConfig = bizConfig;\n  }",
+        "position": {
+            "line": 64,
+            "column": 10
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 0,
+        "specification": "\n### Method Detailed Purpose (Required)\n- This is a constructor for the `NamespaceUnlockAspect` class that initializes its dependencies. It sets up the necessary services (`NamespaceLockService`, `NamespaceService`, `ItemService`, `ReleaseService`) and configuration (`BizConfig`) required for the class to operate.\n\n### Inputs / Preconditions (Optional)\n- `namespaceLockService`: Must be a non-null instance of `NamespaceLockService`.\n- `namespaceService`: Must be a non-null instance of `NamespaceService`.\n- `itemService`: Must be a non-null instance of `ItemService`.\n- `releaseService`: Must be a non-null instance of `ReleaseService`.\n- `bizConfig`: Must be a non-null instance of `BizConfig`.\n\n### State Changes (Optional)\n- Initializes the fields `namespaceLockService`, `namespaceService`, `itemService`, `releaseService`, and `bizConfig` with the provided arguments.\n"
+    },
+    {
+        "name": "requireLockAdvice",
+        "category": "method_declaration",
+        "class": "NamespaceUnlockAspect",
+        "signature": "requireLockAdvice(String appId, String clusterName, String namespaceName, ItemDTO item)",
+        "class_signature": "NamespaceUnlockAspect.requireLockAdvice(String appId, String clusterName, String namespaceName, ItemDTO item)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ],
+            [
+                "ItemDTO",
+                "item"
+            ]
+        ],
+        "methodBody": "{\n    tryUnlock(namespaceService.findOne(appId, clusterName, namespaceName));\n  }",
+        "position": {
+            "line": 80,
+            "column": 15
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "tryUnlock",
+                "position": {
+                    "line": 82,
+                    "column": 5
+                }
+            },
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 82,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUnlockAspect.tryUnlock(Namespace namespace)"
+        ],
+        "priority": 1,
+        "specification": "\n### Method Detailed Purpose (Required)\n- The method `requireLockAdvice` serves as an aspect advice to attempt unlocking a namespace identified by `appId`, `clusterName`, and `namespaceName`. It retrieves the namespace using these parameters and delegates the unlocking logic to `tryUnlock`.\n\n### Inputs / Preconditions (Optional)\n- `appId`: The application ID of the namespace. Must not be `null`.\n- `clusterName`: The cluster name of the namespace. Must not be `null`.\n- `namespaceName`: The namespace name. Must not be `null`.\n- `item`: An `ItemDTO` object, though it is not directly used in the method body. Must not be `null`.\n\n### Outputs / Return Values (Optional)\n- The method does not return any value (`void`).\n\n### Exception Handling (Optional)\n- The method does not explicitly throw exceptions but relies on `namespaceService.findOne` and `tryUnlock` to handle their own exceptions.\n\n### State Changes (Optional)\n- The method may indirectly modify the state by unlocking the namespace if `tryUnlock` determines it is appropriate.\n\n### Additional info (Optional)\n- The method depends on `namespaceService.findOne` to retrieve the namespace. Ensure `namespaceService` is properly initialized.\n- The actual unlocking logic is handled by `tryUnlock`, which checks conditions like the namespace lock switch and modification status.\n"
+    },
+    {
+        "name": "requireLockAdvice",
+        "category": "method_declaration",
+        "class": "NamespaceUnlockAspect",
+        "signature": "requireLockAdvice(String appId, String clusterName, String namespaceName, long itemId, ItemDTO item)",
+        "class_signature": "NamespaceUnlockAspect.requireLockAdvice(String appId, String clusterName, String namespaceName, long itemId, ItemDTO item)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ],
+            [
+                "long",
+                "itemId"
+            ],
+            [
+                "ItemDTO",
+                "item"
+            ]
+        ],
+        "methodBody": "{\n    tryUnlock(namespaceService.findOne(appId, clusterName, namespaceName));\n  }",
+        "position": {
+            "line": 87,
+            "column": 15
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "tryUnlock",
+                "position": {
+                    "line": 89,
+                    "column": 5
+                }
+            },
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 89,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUnlockAspect.tryUnlock(Namespace namespace)"
+        ],
+        "priority": 2,
+        "specification": "\n### Method Detailed Purpose (Required)\n- The method `requireLockAdvice` is responsible for initiating the unlocking process of a namespace by first retrieving the namespace using the provided identifiers (`appId`, `clusterName`, `namespaceName`) and then attempting to unlock it via `tryUnlock`.\n\n### Inputs / Preconditions (Optional)\n- `appId`: The application ID for the namespace. Must not be `null` or empty.\n- `clusterName`: The cluster name for the namespace. Must not be `null` or empty.\n- `namespaceName`: The namespace name. Must not be `null` or empty.\n- `itemId`: The ID of the item (unused in the method body but part of the signature).\n- `item`: The `ItemDTO` object (unused in the method body but part of the signature).\n\n### Outputs / Return Values (Optional)\n- The method does not return any value (`void`).\n\n### Exception Handling (Optional)\n- The method does not explicitly throw exceptions but relies on `namespaceService.findOne` and `tryUnlock` to handle their own exceptions.\n\n### State Changes (Optional)\n- The method may indirectly modify the state of the namespace by unlocking it if the conditions in `tryUnlock` are met.\n\n### Additional info (Optional)\n- The method delegates the actual unlocking logic to `tryUnlock`, which depends on `bizConfig.isNamespaceLockSwitchOff()` and `isModified` checks. Ensure these dependencies are properly initialized and tested.\n"
+    },
+    {
+        "name": "requireLockAdvice",
+        "category": "method_declaration",
+        "class": "NamespaceUnlockAspect",
+        "signature": "requireLockAdvice(String appId, String clusterName, String namespaceName, ItemChangeSets changeSet)",
+        "class_signature": "NamespaceUnlockAspect.requireLockAdvice(String appId, String clusterName, String namespaceName, ItemChangeSets changeSet)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "appId"
+            ],
+            [
+                "String",
+                "clusterName"
+            ],
+            [
+                "String",
+                "namespaceName"
+            ],
+            [
+                "ItemChangeSets",
+                "changeSet"
+            ]
+        ],
+        "methodBody": "{\n    tryUnlock(namespaceService.findOne(appId, clusterName, namespaceName));\n  }",
+        "position": {
+            "line": 94,
+            "column": 15
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "tryUnlock",
+                "position": {
+                    "line": 96,
+                    "column": 5
+                }
+            },
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 96,
+                    "column": 32
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUnlockAspect.tryUnlock(Namespace namespace)"
+        ],
+        "priority": 3,
+        "specification": "\n### Method Detailed Purpose (Required)\n- The method `requireLockAdvice` ensures that a namespace is unlocked if it meets the criteria (lock switch enabled and no modifications). It retrieves the namespace using the provided `appId`, `clusterName`, and `namespaceName`, then delegates the unlocking logic to `tryUnlock`.\n\n### Inputs / Preconditions (Optional)\n- `appId`: The application ID for the namespace. Must not be `null`.\n- `clusterName`: The cluster name for the namespace. Must not be `null`.\n- `namespaceName`: The namespace name. Must not be `null`.\n- `changeSet`: An `ItemChangeSets` object representing changes to the namespace. Must not be `null`.\n\n### Outputs / Return Values (Optional)\n- The method does not return any value (`void`).\n\n### Exception Handling (Optional)\n- The method does not explicitly throw exceptions but relies on `namespaceService.findOne` and `tryUnlock` to handle their own exceptions.\n\n### State Changes (Optional)\n- If the namespace is found and meets the unlocking criteria, the method may modify the state by unlocking the namespace via `tryUnlock`.\n\n### Additional info (Optional)\n- The method depends on `namespaceService.findOne` to retrieve the namespace. Ensure `namespaceService` is properly initialized.\n- The unlocking logic is delegated to `tryUnlock`, which checks the lock switch and modification status. Ensure `bizConfig` and `isModified` are correctly configured.\n"
+    },
+    {
+        "name": "requireLockAdvice",
+        "category": "method_declaration",
+        "class": "NamespaceUnlockAspect",
+        "signature": "requireLockAdvice(long itemId, String operator)",
+        "class_signature": "NamespaceUnlockAspect.requireLockAdvice(long itemId, String operator)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "long",
+                "itemId"
+            ],
+            [
+                "String",
+                "operator"
+            ]
+        ],
+        "methodBody": "{\n    Item item = itemService.findOne(itemId);\n    if (item == null) {\n      throw BadRequestException.itemNotExists(itemId);\n    }\n    tryUnlock(namespaceService.findOne(item.getNamespaceId()));\n  }",
+        "position": {
+            "line": 101,
+            "column": 15
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 102,
+                    "column": 29
+                }
+            },
+            {
+                "name": "itemNotExists",
+                "position": {
+                    "line": 104,
+                    "column": 33
+                }
+            },
+            {
+                "name": "tryUnlock",
+                "position": {
+                    "line": 106,
+                    "column": 5
+                }
+            },
+            {
+                "name": "findOne",
+                "position": {
+                    "line": 106,
+                    "column": 32
+                }
+            },
+            {
+                "name": "getNamespaceId",
+                "position": {
+                    "line": 106,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUnlockAspect.tryUnlock(Namespace namespace)"
+        ],
+        "priority": 4,
+        "specification": "\n### Method Detailed Purpose (Required)\n- The method ensures that a specified item is locked in its namespace by first verifying the item's existence and then attempting to unlock the associated namespace if necessary. It acts as an advice for locking operations, ensuring proper precondition checks before unlocking.\n\n### Inputs / Preconditions (Optional)\n- `itemId`: A `long` representing the ID of the item to check. Must correspond to an existing item.\n- `operator`: A `String` representing the operator performing the action. No specific constraints, but must not be `null`.\n\n### Exception Handling (Optional)\n- Throws `BadRequestException.itemNotExists(itemId)` if the item with the given `itemId` does not exist.\n\n### State Changes (Optional)\n- The method may modify the state of the namespace associated with the item by unlocking it, depending on the conditions checked in `tryUnlock`.\n\n### Additional info (Optional)\n- The method relies on `itemService.findOne(itemId)` to retrieve the item and `namespaceService.findOne(item.getNamespaceId())` to fetch the associated namespace. Ensure these services are properly initialized and functional.\n- The actual unlocking logic is delegated to `tryUnlock`, which depends on `bizConfig.isNamespaceLockSwitchOff()` and other checks. Ensure `bizConfig` is correctly configured.\n"
+    },
+    {
+        "name": "tryUnlock",
+        "category": "method_declaration",
+        "class": "NamespaceUnlockAspect",
+        "signature": "tryUnlock(Namespace namespace)",
+        "class_signature": "NamespaceUnlockAspect.tryUnlock(Namespace namespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ]
+        ],
+        "methodBody": "{\n    if (bizConfig.isNamespaceLockSwitchOff()) {\n      return;\n    }\n\n    if (!isModified(namespace)) {\n      namespaceLockService.unlock(namespace.getId());\n    }\n\n  }",
+        "position": {
+            "line": 109,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isNamespaceLockSwitchOff",
+                "position": {
+                    "line": 110,
+                    "column": 19
+                }
+            },
+            {
+                "name": "isModified",
+                "position": {
+                    "line": 114,
+                    "column": 10
+                }
+            },
+            {
+                "name": "unlock",
+                "position": {
+                    "line": 115,
+                    "column": 28
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 115,
+                    "column": 45
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUnlockAspect.isModified(Namespace namespace)"
+        ],
+        "priority": 5,
+        "specification": "\n### Method Detailed Purpose (Required)\n- The method attempts to unlock a `Namespace` if the namespace lock switch is enabled and the namespace has not been modified. It checks the modification status of the namespace and unlocks it if no modifications are detected.\n\n### Inputs / Preconditions (Optional)\n- `namespace`: A `Namespace` object representing the namespace to be unlocked. Must not be `null`.\n\n### Outputs / Return Values (Optional)\n- The method does not return any value (`void`).\n\n### Exception Handling (Optional)\n- The method does not explicitly throw exceptions but relies on `namespaceLockService.unlock` and `isModified` to handle their own exceptions.\n\n### State Changes (Optional)\n- If the namespace is not modified and the lock switch is enabled, the method modifies the state by unlocking the namespace via `namespaceLockService.unlock`.\n\n### Additional info (Optional)\n- The method depends on `bizConfig.isNamespaceLockSwitchOff()` to determine if unlocking is allowed. Ensure `bizConfig` is properly initialized.\n- The method uses `isModified` to check for namespace modifications, which involves comparing configurations. Ensure `isModified` is correctly implemented and tested.\n"
+    },
+    {
+        "name": "isModified",
+        "category": "method_declaration",
+        "class": "NamespaceUnlockAspect",
+        "signature": "isModified(Namespace namespace)",
+        "class_signature": "NamespaceUnlockAspect.isModified(Namespace namespace)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ]
+        ],
+        "methodBody": "{\n    Release release = releaseService.findLatestActiveRelease(namespace);\n    List<Item> items = itemService.findItemsWithoutOrdered(namespace.getId());\n\n    if (release == null) {\n      return hasNormalItems(items);\n    }\n\n    Map<String, String> releasedConfiguration = GSON.fromJson(release.getConfigurations(), GsonType.CONFIG);\n    Map<String, String> configurationFromItems = generateConfigurationFromItems(namespace, items);\n\n    MapDifference<String, String> difference = Maps.difference(releasedConfiguration, configurationFromItems);\n\n    return !difference.areEqual();\n\n  }",
+        "position": {
+            "line": 120,
+            "column": 11
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 121,
+                    "column": 38
+                }
+            },
+            {
+                "name": "findItemsWithoutOrdered",
+                "position": {
+                    "line": 122,
+                    "column": 36
+                }
+            },
+            {
+                "name": "getId",
+                "position": {
+                    "line": 122,
+                    "column": 70
+                }
+            },
+            {
+                "name": "hasNormalItems",
+                "position": {
+                    "line": 125,
+                    "column": 14
+                }
+            },
+            {
+                "name": "fromJson",
+                "position": {
+                    "line": 128,
+                    "column": 54
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 128,
+                    "column": 71
+                }
+            },
+            {
+                "name": "generateConfigurationFromItems",
+                "position": {
+                    "line": 129,
+                    "column": 50
+                }
+            },
+            {
+                "name": "difference",
+                "position": {
+                    "line": 131,
+                    "column": 53
+                }
+            },
+            {
+                "name": "areEqual",
+                "position": {
+                    "line": 133,
+                    "column": 24
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUnlockAspect.hasNormalItems(List<Item> items)",
+            "NamespaceUnlockAspect.generateConfigurationFromItems(Namespace namespace, List<Item> namespaceItems)"
+        ],
+        "priority": 6,
+        "specification": "\n### Method Detailed Purpose (Required)\n- The method checks if a given `Namespace` has been modified by comparing its current configuration (derived from items) with the latest active release's configuration. It returns `true` if there are differences, indicating modification, otherwise `false`.\n\n### Inputs / Preconditions (Optional)\n- `namespace`: A `Namespace` object representing the namespace to check for modifications. Must not be `null`.\n\n### Outputs / Return Values (Optional)\n- Returns `true` if the current configuration (from items) differs from the latest active release's configuration.\n- Returns `false` if configurations are identical or if there is no active release and no normal items (items with non-empty keys).\n\n### Exception Handling (Optional)\n- The method does not explicitly throw exceptions but relies on called methods (`releaseService.findLatestActiveRelease`, `itemService.findItemsWithoutOrdered`, `GSON.fromJson`) to handle their own exceptions.\n\n### Boundary Value Analysis (Optional)\n- **No active release**: Should return `hasNormalItems(items)` result.\n- **Active release but no items**: Should compare an empty item configuration with the release configuration.\n- **Active release and items**: Should compare the generated item configuration with the release configuration.\n- **Identical configurations**: Should return `false`.\n- **Different configurations**: Should return `true`.\n\n### State Changes (Optional)\n- The method does not modify any object or global state; it only performs comparisons.\n\n### Additional info (Optional)\n- The method uses `GSON.fromJson` to deserialize the release's configurations into a map. Ensure the JSON is valid and properly formatted.\n- The method relies on `Maps.difference` to compare configurations, which checks for both key and value differences.\n"
+    },
+    {
+        "name": "hasNormalItems",
+        "category": "method_declaration",
+        "class": "NamespaceUnlockAspect",
+        "signature": "hasNormalItems(List<Item> items)",
+        "class_signature": "NamespaceUnlockAspect.hasNormalItems(List<Item> items)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<Item>",
+                "items"
+            ]
+        ],
+        "methodBody": "{\n    for (Item item : items) {\n      if (!StringUtils.isEmpty(item.getKey())) {\n        return true;\n      }\n    }\n\n    return false;\n  }",
+        "position": {
+            "line": 137,
+            "column": 19
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "isEmpty",
+                "position": {
+                    "line": 139,
+                    "column": 24
+                }
+            },
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 139,
+                    "column": 37
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 7,
+        "specification": "\n### Method Detailed Purpose (Required)\n- The method checks if any item in the provided list has a non-empty key. It returns `true` if at least one item meets this condition, otherwise it returns `false`.\n\n### Inputs / Preconditions (Optional)\n- `items`: A list of `Item` objects. The list can be empty or contain `null` items, but the method will handle these cases gracefully.\n\n### Outputs / Return Values (Optional)\n- Returns `true` if any item in the list has a non-empty key.\n- Returns `false` if all items have empty keys or the list is empty.\n\n### Boundary Value Analysis (Optional)\n- **Empty list**: Should return `false`.\n- **List with all items having empty keys**: Should return `false`.\n- **List with at least one item having a non-empty key**: Should return `true`.\n- **List containing `null` items**: Should skip `null` items and only check non-null items for non-empty keys.\n\n### Additional info (Optional)\n- The method relies on `StringUtils.isEmpty()` to check if the key is empty. This means keys with only whitespace may be considered empty depending on the implementation of `StringUtils.isEmpty()`.\n"
+    },
+    {
+        "name": "generateConfigurationFromItems",
+        "category": "method_declaration",
+        "class": "NamespaceUnlockAspect",
+        "signature": "generateConfigurationFromItems(Namespace namespace, List<Item> namespaceItems)",
+        "class_signature": "NamespaceUnlockAspect.generateConfigurationFromItems(Namespace namespace, List<Item> namespaceItems)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "Namespace",
+                "namespace"
+            ],
+            [
+                "List<Item>",
+                "namespaceItems"
+            ]
+        ],
+        "methodBody": "{\n\n    Map<String, String> configurationFromItems = Maps.newHashMap();\n\n    Namespace parentNamespace = namespaceService.findParentNamespace(namespace);\n    //parent namespace\n    if (parentNamespace == null) {\n      generateMapFromItems(namespaceItems, configurationFromItems);\n    } else {//child namespace\n      Release parentRelease = releaseService.findLatestActiveRelease(parentNamespace);\n      if (parentRelease != null) {\n        configurationFromItems = GSON.fromJson(parentRelease.getConfigurations(), GsonType.CONFIG);\n      }\n      generateMapFromItems(namespaceItems, configurationFromItems);\n    }\n\n    return configurationFromItems;\n  }",
+        "position": {
+            "line": 147,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "newHashMap",
+                "position": {
+                    "line": 149,
+                    "column": 55
+                }
+            },
+            {
+                "name": "findParentNamespace",
+                "position": {
+                    "line": 151,
+                    "column": 50
+                }
+            },
+            {
+                "name": "generateMapFromItems",
+                "position": {
+                    "line": 154,
+                    "column": 7
+                }
+            },
+            {
+                "name": "findLatestActiveRelease",
+                "position": {
+                    "line": 156,
+                    "column": 46
+                }
+            },
+            {
+                "name": "fromJson",
+                "position": {
+                    "line": 158,
+                    "column": 39
+                }
+            },
+            {
+                "name": "getConfigurations",
+                "position": {
+                    "line": 158,
+                    "column": 62
+                }
+            },
+            {
+                "name": "generateMapFromItems",
+                "position": {
+                    "line": 160,
+                    "column": 7
+                }
+            }
+        ],
+        "calledMethods": [
+            "NamespaceUnlockAspect.generateMapFromItems(List<Item> items, Map<String, String> configurationFromItems)",
+            "NamespaceUnlockAspect.generateMapFromItems(List<Item> items, Map<String, String> configurationFromItems)"
+        ],
+        "priority": 8,
+        "specification": "\n### Method Detailed Purpose (Required)\n- The method generates a configuration map (`Map<String, String>`) by combining configurations from a parent namespace (if it exists) and the provided list of items. If no parent namespace exists, it directly generates the map from the items. If a parent namespace exists, it retrieves the latest active release's configurations and merges them with the item configurations.\n\n### Inputs / Preconditions (Optional)\n- `namespace`: A `Namespace` object representing the namespace for which configurations are being generated. Must not be null.\n- `namespaceItems`: A list of `Item` objects containing key-value pairs to be included in the configuration. Each `Item` must have `getKey()` and `getValue()` methods.\n\n### Outputs / Return Values (Optional)\n- Returns a `Map<String, String>` containing the merged configurations from the parent namespace (if applicable) and the provided items.\n\n### Exception Handling (Optional)\n- The method does not explicitly throw exceptions but relies on called methods (`namespaceService.findParentNamespace`, `releaseService.findLatestActiveRelease`, `generateMapFromItems`) to handle their own exceptions.\n\n### State Changes (Optional)\n- Modifies the `configurationFromItems` map by adding entries from the `namespaceItems` list and, if applicable, the parent namespace's latest active release configurations.\n\n### Boundary Value Analysis (Optional)\n- Test cases should include:\n  - `namespace` with no parent namespace (should generate map only from `namespaceItems`).\n  - `namespace` with a parent namespace but no active release (should generate map only from `namespaceItems`).\n  - `namespace` with a parent namespace and an active release (should merge configurations from the release and `namespaceItems`).\n  - Empty `namespaceItems` list (should return configurations from the parent release or an empty map if no parent exists).\n\n### Additional info (Optional)\n- The method uses `GSON.fromJson` to deserialize the parent release's configurations into a map. Ensure the JSON is valid and properly formatted.\n"
+    },
+    {
+        "name": "generateMapFromItems",
+        "category": "method_declaration",
+        "class": "NamespaceUnlockAspect",
+        "signature": "generateMapFromItems(List<Item> items, Map<String, String> configurationFromItems)",
+        "class_signature": "NamespaceUnlockAspect.generateMapFromItems(List<Item> items, Map<String, String> configurationFromItems)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "List<Item>",
+                "items"
+            ],
+            [
+                "Map<String, String>",
+                "configurationFromItems"
+            ]
+        ],
+        "methodBody": "{\n    for (Item item : items) {\n      String key = item.getKey();\n      if (StringUtils.isBlank(key)) {\n        continue;\n      }\n      configurationFromItems.put(key, item.getValue());\n    }\n\n    return configurationFromItems;\n  }",
+        "position": {
+            "line": 166,
+            "column": 31
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "getKey",
+                "position": {
+                    "line": 168,
+                    "column": 25
+                }
+            },
+            {
+                "name": "isBlank",
+                "position": {
+                    "line": 169,
+                    "column": 23
+                }
+            },
+            {
+                "name": "put",
+                "position": {
+                    "line": 172,
+                    "column": 30
+                }
+            },
+            {
+                "name": "getValue",
+                "position": {
+                    "line": 172,
+                    "column": 44
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 9,
+        "specification": "\n### Method Detailed Purpose (Required)\n- The method iterates over a list of `Item` objects and populates a provided `Map<String, String>` with key-value pairs extracted from each `Item`. It skips items with blank or null keys.\n\n### Inputs / Preconditions (Optional)\n- `items`: A list of `Item` objects. Each `Item` must have `getKey()` and `getValue()` methods.\n- `configurationFromItems`: A `Map<String, String>` that will be modified by adding non-blank key-value pairs from the `items`.\n\n### Outputs / Return Values (Optional)\n- Returns the modified `configurationFromItems` map, now containing key-value pairs from the valid `Item` objects.\n\n### Exception Handling (Optional)\n- The method does not throw exceptions but skips `Item` objects with blank or null keys.\n\n### State Changes (Optional)\n- Modifies the input `configurationFromItems` map by adding entries from the `items` list.\n\n### Boundary Value Analysis (Optional)\n- Test cases should include:\n  - An empty `items` list (should return the original map unchanged).\n  - `Item` objects with blank or null keys (should be skipped).\n  - `Item` objects with valid keys and values (should be added to the map).\n"
+    }
+]
