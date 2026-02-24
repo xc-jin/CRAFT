@@ -1,0 +1,116 @@
+{
+    "imports": [
+        "import com.ctrip.framework.apollo.biz.entity.Item;",
+        "import com.ctrip.framework.apollo.biz.entity.Namespace;",
+        "import com.ctrip.framework.apollo.biz.entity.Release;",
+        "import com.ctrip.framework.apollo.biz.service.ItemService;",
+        "import com.ctrip.framework.apollo.biz.service.NamespaceService;",
+        "import com.ctrip.framework.apollo.biz.service.ReleaseService;",
+        "import org.junit.Assert;",
+        "import org.junit.Test;",
+        "import org.junit.runner.RunWith;",
+        "import org.mockito.InjectMocks;",
+        "import org.mockito.Mock;",
+        "import org.mockito.junit.MockitoJUnitRunner;",
+        "import java.util.Arrays;",
+        "import java.util.Collections;",
+        "import java.util.List;",
+        "import static org.mockito.Mockito.when;"
+    ],
+    "focal_imports": [
+        "import com.ctrip.framework.apollo.biz.config.BizConfig;",
+        "import com.ctrip.framework.apollo.biz.entity.Item;",
+        "import com.ctrip.framework.apollo.biz.entity.Namespace;",
+        "import com.ctrip.framework.apollo.biz.entity.Release;",
+        "import com.ctrip.framework.apollo.biz.service.ItemService;",
+        "import com.ctrip.framework.apollo.biz.service.NamespaceLockService;",
+        "import com.ctrip.framework.apollo.biz.service.NamespaceService;",
+        "import com.ctrip.framework.apollo.biz.service.ReleaseService;",
+        "import com.ctrip.framework.apollo.common.constants.GsonType;",
+        "import com.ctrip.framework.apollo.common.dto.ItemChangeSets;",
+        "import com.ctrip.framework.apollo.common.dto.ItemDTO;",
+        "import com.ctrip.framework.apollo.common.exception.BadRequestException;",
+        "import com.ctrip.framework.apollo.core.utils.StringUtils;",
+        "import com.google.common.collect.MapDifference;",
+        "import com.google.common.collect.Maps;",
+        "import com.google.gson.Gson;",
+        "import org.aspectj.lang.annotation.After;",
+        "import org.aspectj.lang.annotation.Aspect;",
+        "import org.springframework.stereotype.Component;",
+        "import java.util.List;",
+        "import java.util.Map;"
+    ],
+    "classes": [
+        "@Aspect\n@Component\npublic class NamespaceUnlockAspect"
+    ],
+    "constructors": [
+        {
+            "signature": "public NamespaceUnlockAspect(\n      final NamespaceLockService namespaceLockService,\n      final NamespaceService namespaceService,\n      final ItemService itemService,\n      final ReleaseService releaseService,\n      final BizConfig bizConfig)",
+            "line": 64
+        }
+    ],
+    "methods": [
+        {
+            "signature": "@After(\"@annotation(PreAcquireNamespaceLock) && args(appId, clusterName, namespaceName, item, ..)\")\n  public void requireLockAdvice(String appId, String clusterName, String namespaceName,\n                                ItemDTO item)",
+            "line": 79
+        },
+        {
+            "signature": "@After(\"@annotation(PreAcquireNamespaceLock) && args(appId, clusterName, namespaceName, itemId, item, ..)\")\n  public void requireLockAdvice(String appId, String clusterName, String namespaceName, long itemId,\n                                ItemDTO item)",
+            "line": 86
+        },
+        {
+            "signature": "@After(\"@annotation(PreAcquireNamespaceLock) && args(appId, clusterName, namespaceName, changeSet, ..)\")\n  public void requireLockAdvice(String appId, String clusterName, String namespaceName,\n                                ItemChangeSets changeSet)",
+            "line": 93
+        },
+        {
+            "signature": "@After(\"@annotation(PreAcquireNamespaceLock) && args(itemId, operator, ..)\")\n  public void requireLockAdvice(long itemId, String operator)",
+            "line": 100
+        },
+        {
+            "signature": "private void tryUnlock(Namespace namespace)",
+            "line": 109
+        },
+        {
+            "signature": "boolean isModified(Namespace namespace)",
+            "line": 120
+        },
+        {
+            "signature": "private boolean hasNormalItems(List<Item> items)",
+            "line": 137
+        },
+        {
+            "signature": "private Map<String, String> generateConfigurationFromItems(Namespace namespace, List<Item> namespaceItems)",
+            "line": 147
+        },
+        {
+            "signature": "private Map<String, String> generateMapFromItems(List<Item> items, Map<String, String> configurationFromItems)",
+            "line": 166
+        }
+    ],
+    "fields": [
+        {
+            "code": "private static final Gson GSON = new Gson();",
+            "line": 56
+        },
+        {
+            "code": "private final NamespaceLockService namespaceLockService;",
+            "line": 58
+        },
+        {
+            "code": "private final NamespaceService namespaceService;",
+            "line": 59
+        },
+        {
+            "code": "private final ItemService itemService;",
+            "line": 60
+        },
+        {
+            "code": "private final ReleaseService releaseService;",
+            "line": 61
+        },
+        {
+            "code": "private final BizConfig bizConfig;",
+            "line": 62
+        }
+    ]
+}
