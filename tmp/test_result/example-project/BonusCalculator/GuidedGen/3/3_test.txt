@@ -1,0 +1,32 @@
+
+@Test
+public void testCheckMinimum_ValidScore() {
+    BonusCalculator calculator = new BonusCalculator();
+    // Test with minimum valid score (50)
+    calculator.checkMinimum(50);
+    // Test with score above minimum (51)
+    calculator.checkMinimum(51);
+    // No exception should be thrown for these cases
+}
+
+@Test
+public void testCheckMinimum_InvalidScore() {
+    BonusCalculator calculator = new BonusCalculator();
+    // Test with score below minimum (49)
+    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        calculator.checkMinimum(49);
+    });
+    assertEquals("Score A must be at least 50", exception.getMessage());
+    
+    // Test with negative score
+    exception = assertThrows(IllegalArgumentException.class, () -> {
+        calculator.checkMinimum(-1);
+    });
+    assertEquals("Score A must be at least 50", exception.getMessage());
+    
+    // Test with zero
+    exception = assertThrows(IllegalArgumentException.class, () -> {
+        calculator.checkMinimum(0);
+    });
+    assertEquals("Score A must be at least 50", exception.getMessage());
+}

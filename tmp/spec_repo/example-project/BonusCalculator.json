@@ -1,0 +1,204 @@
+[
+    {
+        "name": "calculateBonus",
+        "category": "method_declaration",
+        "class": "BonusCalculator",
+        "signature": "calculateBonus(String userId, int scoreA, int scoreB)",
+        "class_signature": "BonusCalculator.calculateBonus(String userId, int scoreA, int scoreB)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "userId"
+            ],
+            [
+                "int",
+                "scoreA"
+            ],
+            [
+                "int",
+                "scoreB"
+            ]
+        ],
+        "methodBody": "{\n        validateUser(userId);\n        validateScores(scoreA, scoreB);\n        return computeReward(scoreA, scoreB);\n    }",
+        "position": {
+            "line": 6,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "validateUser",
+                "position": {
+                    "line": 7,
+                    "column": 9
+                }
+            },
+            {
+                "name": "validateScores",
+                "position": {
+                    "line": 8,
+                    "column": 9
+                }
+            },
+            {
+                "name": "computeReward",
+                "position": {
+                    "line": 9,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "BonusCalculator.validateUser(String userId)",
+            "BonusCalculator.validateScores(int scoreA, int scoreB)",
+            "BonusCalculator.computeReward(int scoreA, int scoreB)"
+        ],
+        "priority": 0,
+        "specification": "\n### Method Detailed Purpose (Required)\n- Calculates a bonus for a user based on two scores (`scoreA` and `scoreB`). The method first validates the user ID and the scores, then computes the reward by doubling `scoreA` and adding `scoreB`.\n\n### Inputs / Preconditions (Optional)\n- `userId`: Must be a non-null String starting with \"USR-\".\n- `scoreA` and `scoreB`: Integers where `scoreA` must be at least 50, and the sum of `scoreA` and `scoreB` must be exactly 100.\n\n### Outputs / Return Values (Optional)\n- Returns an integer representing the computed reward, calculated as `(scoreA * 2) + scoreB`.\n\n### Exception Handling (Optional)\n- Throws `IllegalArgumentException` if:\n  - `userId` is `null` or does not start with \"USR-\" (via `validateUser`).\n  - `scoreA` is less than 50 or `scoreA + scoreB` does not equal 100 (via `validateScores`).\n\n### Boundary Value Analysis (Optional)\n- **User ID validation**:\n  - Valid: `\"USR-123\"`.\n  - Invalid: `null`, `\"ABC-123\"`.\n- **Score validation**:\n  - Valid: `scoreA = 50`, `scoreB = 50` (sum = 100).\n  - Invalid: `scoreA = 49`, `scoreB = 51` (sum = 100 but `scoreA < 50`).\n  - Invalid: `scoreA = 50`, `scoreB = 49` (sum ≠ 100).\n- **Reward computation**:\n  - Test with `scoreA = 50`, `scoreB = 50` (reward = 150).\n  - Test with `scoreA = 60`, `scoreB = 40` (reward = 160).\n\n### State Changes (Optional)\n- This method does not modify any object or global state.\n\n### Additional info (Optional)\n- The method relies on helper methods (`validateUser`, `validateScores`, `computeReward`) for validation and computation, each with their own specifications.\n"
+    },
+    {
+        "name": "validateUser",
+        "category": "method_declaration",
+        "class": "BonusCalculator",
+        "signature": "validateUser(String userId)",
+        "class_signature": "BonusCalculator.validateUser(String userId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "userId"
+            ]
+        ],
+        "methodBody": "{\n        if (userId == null || !userId.startsWith(\"USR-\")) {\n            throw new IllegalArgumentException(\"Invalid user ID format\");\n        }\n    }",
+        "position": {
+            "line": 13,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 14,
+                    "column": 39
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 15,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1,
+        "specification": "\n### Method Detailed Purpose (Required)\n- Validates the format of a user ID to ensure it meets specific criteria (non-null and starts with \"USR-\"). Throws an exception if the ID is invalid.\n\n### Inputs / Preconditions (Optional)\n- `userId`: Must be a non-null String starting with \"USR-\".\n\n### Outputs / Return Values (Optional)\n- This method does not return any value (void). It either passes silently or throws an exception.\n\n### Exception Handling (Optional)\n- Throws `IllegalArgumentException` if:\n  - `userId` is `null`.\n  - `userId` does not start with \"USR-\".\n\n### Boundary Value Analysis (Optional)\n- **Valid case**: `userId = \"USR-123\"` (passes validation).\n- **Invalid cases**:\n  - `userId = null` (throws exception).\n  - `userId = \"ABC-123\"` (throws exception).\n  - `userId = \"USR-\"` (edge case: technically valid but may need further validation depending on context).\n\n### Additional info (Optional)\n- The method is purely for validation and does not modify any state or perform further processing.\n"
+    },
+    {
+        "name": "validateScores",
+        "category": "method_declaration",
+        "class": "BonusCalculator",
+        "signature": "validateScores(int scoreA, int scoreB)",
+        "class_signature": "BonusCalculator.validateScores(int scoreA, int scoreB)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "scoreA"
+            ],
+            [
+                "int",
+                "scoreB"
+            ]
+        ],
+        "methodBody": "{\n        if (scoreA + scoreB != 100) {\n            throw new IllegalArgumentException(\"Scores must exactly sum up to 100\");\n        }\n        checkMinimum(scoreA);\n    }",
+        "position": {
+            "line": 20,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkMinimum",
+                "position": {
+                    "line": 24,
+                    "column": 9
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 22,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "BonusCalculator.checkMinimum(int scoreA)"
+        ],
+        "priority": 2,
+        "specification": "\n### Method Detailed Purpose (Required)\n- Validates that the sum of two scores (`scoreA` and `scoreB`) equals 100 and checks if `scoreA` meets a minimum requirement of 50. If either condition fails, an exception is thrown.\n\n### Inputs / Preconditions (Optional)\n- `scoreA` and `scoreB`: Integers representing the scores to be validated. Their sum must be exactly 100, and `scoreA` must be at least 50.\n\n### Outputs / Return Values (Optional)\n- This method does not return any value; it performs validation checks and throws exceptions if conditions are not met.\n\n### Exception Handling (Optional)\n- Throws `IllegalArgumentException` with the message \"Scores must exactly sum up to 100\" if `scoreA + scoreB != 100`.\n- Throws `IllegalArgumentException` with the message \"Score A must be at least 50\" if `scoreA < 50` (via `checkMinimum`).\n\n### Boundary Value Analysis (Optional)\n- Key boundaries for `scoreA + scoreB`:\n  - Sum = 100 (valid).\n  - Sum ≠ 100 (invalid, e.g., 99 or 101).\n- Key boundaries for `scoreA`:\n  - `scoreA = 50` (minimum valid value).\n  - `scoreA < 50` (invalid, e.g., 49).\n\n### State Changes (Optional)\n- This method does not modify any object or global state.\n\n### Additional info (Optional)\n- The method delegates the minimum score check to `checkMinimum(int scoreA)`, which has its own validation logic.\n"
+    },
+    {
+        "name": "checkMinimum",
+        "category": "method_declaration",
+        "class": "BonusCalculator",
+        "signature": "checkMinimum(int scoreA)",
+        "class_signature": "BonusCalculator.checkMinimum(int scoreA)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "scoreA"
+            ]
+        ],
+        "methodBody": "{\n        if (scoreA < 50) {\n            throw new IllegalArgumentException(\"Score A must be at least 50\");\n        }\n    }",
+        "position": {
+            "line": 28,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 30,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4,
+        "specification": "\n### Method Detailed Purpose (Required)\n- The method checks if the input score meets a minimum requirement of 50. If the score is below this threshold, it throws an exception to indicate the violation.\n\n### Inputs / Preconditions (Optional)\n- `scoreA`: An integer representing the score to be checked. Must be at least 50.\n\n### Exception Handling (Optional)\n- Throws `IllegalArgumentException` if `scoreA` is less than 50, with the message \"Score A must be at least 50\".\n\n### Boundary Value Analysis (Optional)\n- Key boundary: `scoreA = 50` (minimum valid value).\n- Values below 50 (e.g., 49) should trigger an exception.\n- Values at or above 50 (e.g., 50, 51) should pass without exception.\n\n### State Changes (Optional)\n- This method does not modify any object or global state.\n"
+    },
+    {
+        "name": "computeReward",
+        "category": "method_declaration",
+        "class": "BonusCalculator",
+        "signature": "computeReward(int scoreA, int scoreB)",
+        "class_signature": "BonusCalculator.computeReward(int scoreA, int scoreB)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "scoreA"
+            ],
+            [
+                "int",
+                "scoreB"
+            ]
+        ],
+        "methodBody": "{\n        return (scoreA * 2) + scoreB;\n    }",
+        "position": {
+            "line": 35,
+            "column": 16
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 3,
+        "specification": "\n### Method Detailed Purpose (Required)\n- Computes a reward based on two input scores, where the first score is doubled and then added to the second score.\n\n### Inputs / Preconditions (Optional)\n- `scoreA`: An integer value representing the first score.\n- `scoreB`: An integer value representing the second score.\n\n### Outputs / Return Values (Optional)\n- Returns an integer value representing the computed reward, calculated as `(scoreA * 2) + scoreB`.\n\n### Boundary Value Analysis (Optional)\n- Consider testing with:\n  - Minimum and maximum integer values for `scoreA` and `scoreB` to check for overflow.\n  - Zero values for `scoreA` and `scoreB`.\n  - Negative values for `scoreA` and `scoreB`.\n\n### Additional info (Optional)\n- The method is purely computational and does not depend on any object state or external factors.\n"
+    }
+]

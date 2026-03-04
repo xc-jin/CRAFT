@@ -1,0 +1,32 @@
+
+@Test
+public void testValidateUser_NullUserId_ThrowsException() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertThrows(IllegalArgumentException.class, () -> {
+        calculator.validateUser(null);
+    });
+}
+
+@Test
+public void testValidateUser_InvalidFormat_ThrowsException() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertThrows(IllegalArgumentException.class, () -> {
+        calculator.validateUser("INVALID-123");
+    });
+}
+
+@Test
+public void testValidateUser_ValidFormat_NoException() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertDoesNotThrow(() -> {
+        calculator.validateUser("USR-123");
+    });
+}
+
+@Test
+public void testValidateUser_EmptyString_ThrowsException() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertThrows(IllegalArgumentException.class, () -> {
+        calculator.validateUser("");
+    });
+}

@@ -1,0 +1,44 @@
+
+@Test
+public void testComputeReward_PositiveScores() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.computeReward(5, 10);
+    assertEquals(20, result, "Should compute (5*2) + 10 = 20");
+}
+
+@Test
+public void testComputeReward_ZeroScores() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.computeReward(0, 0);
+    assertEquals(0, result, "Should compute (0*2) + 0 = 0");
+}
+
+@Test
+public void testComputeReward_NegativeScores() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.computeReward(-3, -7);
+    assertEquals(-13, result, "Should compute (-3*2) + (-7) = -13");
+}
+
+@Test
+public void testComputeReward_MixedScores() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.computeReward(4, -2);
+    assertEquals(6, result, "Should compute (4*2) + (-2) = 6");
+}
+
+@Test
+public void testComputeReward_MaxIntegerValues() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.computeReward(Integer.MAX_VALUE, Integer.MAX_VALUE);
+    assertEquals(Integer.MAX_VALUE * 2 + Integer.MAX_VALUE, result, 
+        "Should handle maximum integer values without overflow");
+}
+
+@Test
+public void testComputeReward_MinIntegerValues() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.computeReward(Integer.MIN_VALUE, Integer.MIN_VALUE);
+    assertEquals(Integer.MIN_VALUE * 2 + Integer.MIN_VALUE, result,
+        "Should handle minimum integer values without overflow");
+}

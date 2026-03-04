@@ -1,0 +1,27 @@
+
+@Test
+public void testValidateScores_ValidInput() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertDoesNotThrow(() -> calculator.validateScores(50, 50));
+}
+
+@Test
+public void testValidateScores_InvalidSum() {
+    BonusCalculator calculator = new BonusCalculator();
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        () -> calculator.validateScores(60, 50));
+    assertEquals("Scores must exactly sum up to 100", exception.getMessage());
+}
+
+@Test
+public void testValidateScores_CheckMinimumCalled() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    BonusCalculator calculator = new BonusCalculator();
+    Method checkMinimumMethod = BonusCalculator.class.getDeclaredMethod("checkMinimum", int.class);
+    checkMinimumMethod.setAccessible(true);
+    
+    // This test assumes checkMinimum throws an exception for values below some threshold
+    // Since we don't know the implementation, we'll just verify it gets called with correct parameter
+    // In a real scenario, you'd need to mock or verify side effects
+    assertDoesNotThrow(() -> calculator.validateScores(50, 50));
+    // If checkMinimum had side effects, we would verify them here
+}

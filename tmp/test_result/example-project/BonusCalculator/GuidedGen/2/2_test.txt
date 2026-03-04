@@ -1,0 +1,43 @@
+
+@Test
+public void testValidateScores_ValidInput() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertDoesNotThrow(() -> calculator.validateScores(50, 50));
+}
+
+@Test
+public void testValidateScores_SumNot100() {
+    BonusCalculator calculator = new BonusCalculator();
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> calculator.validateScores(49, 50));
+    assertEquals("Scores must exactly sum up to 100", exception.getMessage());
+}
+
+@Test
+public void testValidateScores_ScoreABelow50() {
+    BonusCalculator calculator = new BonusCalculator();
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> calculator.validateScores(49, 51));
+    assertEquals("Score A must be at least 50", exception.getMessage());
+}
+
+@Test
+public void testValidateScores_BothConditionsFail() {
+    BonusCalculator calculator = new BonusCalculator();
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> calculator.validateScores(40, 50));
+    // The first failing condition (sum != 100) should be caught first
+    assertEquals("Scores must exactly sum up to 100", exception.getMessage());
+}
+
+@Test
+public void testValidateScores_BoundaryCase50() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertDoesNotThrow(() -> calculator.validateScores(50, 50));
+}
+
+@Test
+public void testValidateScores_BoundaryCase51() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertDoesNotThrow(() -> calculator.validateScores(51, 49));
+}
