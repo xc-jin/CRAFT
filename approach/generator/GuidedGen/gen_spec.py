@@ -27,6 +27,7 @@ def main():
 
     metadata_method_path = f"{metadata_method_repo_path}/{project_name}/{class_name}.json"
     metadata_class_path = f"{metadata_class_repo_path}/{project_name}/{class_name}.json"
+    os.makedirs(f"{spec_repo_path}/{project_name}", exist_ok=True)
     spec_path = f"{spec_repo_path}/{project_name}/{class_name}.json"
 
     complete_process(metadata_method_path, metadata_class_path, spec_path)

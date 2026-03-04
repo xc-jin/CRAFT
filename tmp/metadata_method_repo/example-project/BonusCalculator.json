@@ -1,0 +1,199 @@
+[
+    {
+        "name": "calculateBonus",
+        "category": "method_declaration",
+        "class": "BonusCalculator",
+        "signature": "calculateBonus(String userId, int scoreA, int scoreB)",
+        "class_signature": "BonusCalculator.calculateBonus(String userId, int scoreA, int scoreB)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "userId"
+            ],
+            [
+                "int",
+                "scoreA"
+            ],
+            [
+                "int",
+                "scoreB"
+            ]
+        ],
+        "methodBody": "{\n        validateUser(userId);\n        validateScores(scoreA, scoreB);\n        return computeReward(scoreA, scoreB);\n    }",
+        "position": {
+            "line": 6,
+            "column": 16
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "validateUser",
+                "position": {
+                    "line": 7,
+                    "column": 9
+                }
+            },
+            {
+                "name": "validateScores",
+                "position": {
+                    "line": 8,
+                    "column": 9
+                }
+            },
+            {
+                "name": "computeReward",
+                "position": {
+                    "line": 9,
+                    "column": 16
+                }
+            }
+        ],
+        "calledMethods": [
+            "BonusCalculator.validateUser(String userId)",
+            "BonusCalculator.validateScores(int scoreA, int scoreB)",
+            "BonusCalculator.computeReward(int scoreA, int scoreB)"
+        ],
+        "priority": 0
+    },
+    {
+        "name": "validateUser",
+        "category": "method_declaration",
+        "class": "BonusCalculator",
+        "signature": "validateUser(String userId)",
+        "class_signature": "BonusCalculator.validateUser(String userId)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "String",
+                "userId"
+            ]
+        ],
+        "methodBody": "{\n        if (userId == null || !userId.startsWith(\"USR-\")) {\n            throw new IllegalArgumentException(\"Invalid user ID format\");\n        }\n    }",
+        "position": {
+            "line": 13,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "startsWith",
+                "position": {
+                    "line": 14,
+                    "column": 39
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 15,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 1
+    },
+    {
+        "name": "validateScores",
+        "category": "method_declaration",
+        "class": "BonusCalculator",
+        "signature": "validateScores(int scoreA, int scoreB)",
+        "class_signature": "BonusCalculator.validateScores(int scoreA, int scoreB)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "scoreA"
+            ],
+            [
+                "int",
+                "scoreB"
+            ]
+        ],
+        "methodBody": "{\n        if (scoreA + scoreB != 100) {\n            throw new IllegalArgumentException(\"Scores must exactly sum up to 100\");\n        }\n        checkMinimum(scoreA);\n    }",
+        "position": {
+            "line": 20,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "checkMinimum",
+                "position": {
+                    "line": 24,
+                    "column": 9
+                }
+            },
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 22,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [
+            "BonusCalculator.checkMinimum(int scoreA)"
+        ],
+        "priority": 2
+    },
+    {
+        "name": "checkMinimum",
+        "category": "method_declaration",
+        "class": "BonusCalculator",
+        "signature": "checkMinimum(int scoreA)",
+        "class_signature": "BonusCalculator.checkMinimum(int scoreA)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "scoreA"
+            ]
+        ],
+        "methodBody": "{\n        if (scoreA < 50) {\n            throw new IllegalArgumentException(\"Score A must be at least 50\");\n        }\n    }",
+        "position": {
+            "line": 28,
+            "column": 17
+        },
+        "calledMethodsinfo": [
+            {
+                "name": "IllegalArgumentException",
+                "position": {
+                    "line": 30,
+                    "column": 23
+                }
+            }
+        ],
+        "calledMethods": [],
+        "priority": 4
+    },
+    {
+        "name": "computeReward",
+        "category": "method_declaration",
+        "class": "BonusCalculator",
+        "signature": "computeReward(int scoreA, int scoreB)",
+        "class_signature": "BonusCalculator.computeReward(int scoreA, int scoreB)",
+        "returnType": "void",
+        "modifiers": [],
+        "parameters": [
+            [
+                "int",
+                "scoreA"
+            ],
+            [
+                "int",
+                "scoreB"
+            ]
+        ],
+        "methodBody": "{\n        return (scoreA * 2) + scoreB;\n    }",
+        "position": {
+            "line": 35,
+            "column": 16
+        },
+        "calledMethodsinfo": [],
+        "calledMethods": [],
+        "priority": 3
+    }
+]

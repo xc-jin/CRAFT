@@ -1,0 +1,37 @@
+
+@Test
+public void testCheckMinimum_ValidScore() {
+    BonusCalculator calculator = new BonusCalculator();
+    // Should not throw exception for score >= 50
+    assertDoesNotThrow(() -> calculator.checkMinimum(50));
+    assertDoesNotThrow(() -> calculator.checkMinimum(100));
+}
+
+@Test
+public void testCheckMinimum_InvalidScore() {
+    BonusCalculator calculator = new BonusCalculator();
+    // Should throw IllegalArgumentException for score < 50
+    Exception exception = assertThrows(IllegalArgumentException.class, 
+        () -> calculator.checkMinimum(49));
+    assertEquals("Score A must be at least 50", exception.getMessage());
+    
+    exception = assertThrows(IllegalArgumentException.class, 
+        () -> calculator.checkMinimum(0));
+    assertEquals("Score A must be at least 50", exception.getMessage());
+    
+    exception = assertThrows(IllegalArgumentException.class, 
+        () -> calculator.checkMinimum(-1));
+    assertEquals("Score A must be at least 50", exception.getMessage());
+}
+
+@Test
+public void testCheckMinimum_BoundaryValue() {
+    BonusCalculator calculator = new BonusCalculator();
+    // Test boundary value (exactly 50)
+    assertDoesNotThrow(() -> calculator.checkMinimum(50));
+    
+    // Test boundary value - 1 (49)
+    Exception exception = assertThrows(IllegalArgumentException.class, 
+        () -> calculator.checkMinimum(49));
+    assertEquals("Score A must be at least 50", exception.getMessage());
+}

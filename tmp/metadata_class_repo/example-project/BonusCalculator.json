@@ -1,0 +1,35 @@
+{
+    "imports": [
+        "import org.junit.jupiter.api.BeforeEach;",
+        "import org.junit.jupiter.api.Test;",
+        "import static org.junit.jupiter.api.Assertions.*;"
+    ],
+    "focal_imports": [],
+    "classes": [
+        "public class BonusCalculator"
+    ],
+    "constructors": [],
+    "methods": [
+        {
+            "signature": "public int calculateBonus(String userId, int scoreA, int scoreB)",
+            "line": 6
+        },
+        {
+            "signature": "public void validateUser(String userId)",
+            "line": 13
+        },
+        {
+            "signature": "public void validateScores(int scoreA, int scoreB)",
+            "line": 20
+        },
+        {
+            "signature": "public void checkMinimum(int scoreA)",
+            "line": 28
+        },
+        {
+            "signature": "public int computeReward(int scoreA, int scoreB)",
+            "line": 35
+        }
+    ],
+    "fields": []
+}

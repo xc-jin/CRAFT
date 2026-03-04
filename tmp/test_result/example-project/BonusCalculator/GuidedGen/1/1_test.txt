@@ -1,0 +1,32 @@
+
+@Test
+public void testValidateUser_ValidUserId() {
+    BonusCalculator calculator = new BonusCalculator();
+    // Should not throw exception
+    calculator.validateUser("USR-123");
+}
+
+@Test
+public void testValidateUser_NullUserId() {
+    BonusCalculator calculator = new BonusCalculator();
+    // Should throw IllegalArgumentException
+    assertThrows(IllegalArgumentException.class, () -> {
+        calculator.validateUser(null);
+    });
+}
+
+@Test
+public void testValidateUser_InvalidPrefix() {
+    BonusCalculator calculator = new BonusCalculator();
+    // Should throw IllegalArgumentException
+    assertThrows(IllegalArgumentException.class, () -> {
+        calculator.validateUser("ABC-123");
+    });
+}
+
+@Test
+public void testValidateUser_EdgeCaseEmptySuffix() {
+    BonusCalculator calculator = new BonusCalculator();
+    // Should pass as it technically meets the requirement
+    calculator.validateUser("USR-");
+}

@@ -178,7 +178,7 @@ def parse_java_file(file_path):
                     return_type = source_code[child.start_byte:child.end_byte]
                 elif child.type == "formal_parameters":
                     parameters = parse_parameters(child, source_code)
-                elif child.type in ["block", "constructor_body"]:  # 方法体
+                elif child.type in ["block", "constructor_body"]:
                     method_body = source_code[child.start_byte:child.end_byte]
                 method_position = {
                     "line": line,
@@ -264,9 +264,6 @@ def find_methods(node, source_code):
     return methods
 
 def parse_parameters(param_node, source_code):
-    """
-    解析方法的参数列表
-    """
     parameters = []
     
     for child in param_node.children:

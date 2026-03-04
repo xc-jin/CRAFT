@@ -1,0 +1,46 @@
+
+@Test
+public void testCalculateBonus_ValidInput() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.calculateBonus("USR-123", 50, 50);
+    assertEquals(150, result);
+}
+
+@Test
+public void testCalculateBonus_ValidInputDifferentScores() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.calculateBonus("USR-456", 60, 40);
+    assertEquals(160, result);
+}
+
+@Test
+public void testCalculateBonus_InvalidUserIdNull() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertThrows(IllegalArgumentException.class, () -> {
+        calculator.calculateBonus(null, 50, 50);
+    });
+}
+
+@Test
+public void testCalculateBonus_InvalidUserIdFormat() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertThrows(IllegalArgumentException.class, () -> {
+        calculator.calculateBonus("ABC-123", 50, 50);
+    });
+}
+
+@Test
+public void testCalculateBonus_ScoreALessThan50() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertThrows(IllegalArgumentException.class, () -> {
+        calculator.calculateBonus("USR-123", 49, 51);
+    });
+}
+
+@Test
+public void testCalculateBonus_ScoresDoNotSumTo100() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertThrows(IllegalArgumentException.class, () -> {
+        calculator.calculateBonus("USR-123", 50, 49);
+    });
+}

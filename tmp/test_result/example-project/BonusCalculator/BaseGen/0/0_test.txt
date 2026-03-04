@@ -1,0 +1,35 @@
+
+@Test
+public void testCalculateBonus_ValidInput() throws Exception {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.calculateBonus("user123", 80, 90);
+    assertTrue(result > 0);
+}
+
+@Test
+public void testCalculateBonus_InvalidUser() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertThrows(Exception.class, () -> calculator.calculateBonus("", 80, 90));
+}
+
+@Test
+public void testCalculateBonus_InvalidScores() {
+    BonusCalculator calculator = new BonusCalculator();
+    assertThrows(Exception.class, () -> calculator.calculateBonus("user123", -10, 90));
+}
+
+@Test
+public void testCalculateBonus_EdgeCaseScores() throws Exception {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.calculateBonus("user123", 0, 100);
+    assertTrue(result >= 0);
+}
+
+@Test
+public void testComputeReward_PrivateMethod() throws Exception {
+    BonusCalculator calculator = new BonusCalculator();
+    Method method = BonusCalculator.class.getDeclaredMethod("computeReward", int.class, int.class);
+    method.setAccessible(true);
+    int result = (int) method.invoke(calculator, 50, 50);
+    assertEquals(100, result); // Assuming computeReward adds scores
+}

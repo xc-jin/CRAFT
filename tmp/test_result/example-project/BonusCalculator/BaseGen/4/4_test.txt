@@ -1,0 +1,35 @@
+
+@Test
+public void testComputeRewardWithPositiveScores() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.computeReward(5, 3);
+    assertEquals(13, result, "Should compute (5*2) + 3 = 13");
+}
+
+@Test
+public void testComputeRewardWithZeroScores() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.computeReward(0, 0);
+    assertEquals(0, result, "Should compute (0*2) + 0 = 0");
+}
+
+@Test
+public void testComputeRewardWithNegativeScoreA() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.computeReward(-2, 5);
+    assertEquals(1, result, "Should compute (-2*2) + 5 = 1");
+}
+
+@Test
+public void testComputeRewardWithNegativeScoreB() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.computeReward(4, -3);
+    assertEquals(5, result, "Should compute (4*2) + (-3) = 5");
+}
+
+@Test
+public void testComputeRewardWithLargeNumbers() {
+    BonusCalculator calculator = new BonusCalculator();
+    int result = calculator.computeReward(10000, 5000);
+    assertEquals(25000, result, "Should compute (10000*2) + 5000 = 25000");
+}
