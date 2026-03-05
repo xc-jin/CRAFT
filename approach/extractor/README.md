@@ -1,4 +1,4 @@
-# extracter
+# extractor
 extract class-level and method-level metadata, and construct call graph for class.
 
 # Usage
@@ -17,7 +17,7 @@ Follow these 3 steps to extract:
 3. Run the Analysis Script
 
     ```bash
-    cd ./approach/extracter/
+    cd ./approach/extractor/
 
     python main.py --project_name example-project --project_repo_path ../../tmp/project_repo/ --metadata_method_repo_path ../../tmp/metadata_method_repo/ --metadata_class_repo_path ../../tmp/metadata_class_repo/ --focal_class_path /src/main/java/com/example/BonusCalculator.java --test_class_path /src/test/java/com/example/BonusCalculatorTest.java
     ```
